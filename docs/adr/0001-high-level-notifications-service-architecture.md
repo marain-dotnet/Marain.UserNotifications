@@ -15,6 +15,7 @@ Many systems have a requirement to send notifications to users. This is a genera
 
 ## Decision
 
+```
                          +-------------+
   Query notifications    |             |
 <------------------------+ Query API   +-------------+
@@ -43,7 +44,7 @@ Many systems have a requirement to send notifications to users. This is a genera
                   | etc)                    |
                   |                         |
                   +-------------------------+
-
+```
 
 ### Services
 
