@@ -92,6 +92,8 @@ components:
           read:
             description: A boolean indicating whether or not the notification has been read/acknowledged via at least one channel.
             type: boolean
+          correlationIds:
+            $ref: '#/components/schemas/CorrelationIds'
           _links:
             type: object
             properties:
@@ -115,7 +117,13 @@ components:
                 - type: array
                   items:
                     $ref: '#/components/schemas/Notification'
-    
+
+    CorrelationIds:
+      description: A list of Ids that can be used to correlate log entries. 
+      type: array
+      items:
+        type: string
+
     Link:
       type: object
       required:
@@ -175,14 +183,8 @@ components:
 
     PropertyBag:
       type: object
-      additionalProperties:
-        oneOf:
-          - type: array
-          - type: boolean
-          - type: integer
-          - type: number
-          - type: object
-          - type: string
+      additionalProperties: true
+      uniqueItems: true
 
     ResourceCollection:
       description: a collection of resources

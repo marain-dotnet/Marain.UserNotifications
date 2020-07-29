@@ -56,7 +56,7 @@ We expect that Azure Table storage will be used to store raw notifications, with
 
 ### Delivery channels
 
-To make the solution as extensible as possible, the core API will not handle notification delivery. It is envisaged that this will be handled by other "delivery channels" and integrated via WebHooks. An expected implementation approach for many delivery channels would be LogicApps, which has connectors available for many extenal messaging services already (e.g. SendGrid, Twilio).
+To make the solution as extensible as possible, the core API will not handle notification delivery. It is envisaged that this will be handled by other "delivery channels" and integrated via WebHooks. An expected implementation approach for many delivery channels would be Power Automate/LogicApps, which have connectors available for many extenal messaging services already (e.g. SendGrid, Twilio).
 
 We envisage that integration between the management and delivery APIs will be as follows:
 - Available delivery channels will be "registered" with the management API. Registration would likely include an Id, a display name and a Uri to which new notifications will be POSTed using a defined data structure.
@@ -83,6 +83,3 @@ We will support a hierarchy of categories, expressed via dot-notation. For examp
 - `marain.operations.operation-failed`
 
 We then expect to be able to provide configuration at different levels of hierarchy. For example, a user could configure email notifications for the category `marain.workflows`, ensuring that they receive email notifcations of the four subcategories, but they could also configure a more specific SMS notification for the `marain.workflows.instance-faulted` category.
-
-## Consequences
-

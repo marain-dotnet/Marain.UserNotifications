@@ -180,6 +180,8 @@ components:
           type: array
           items:
             type: string
+        correlationIds:
+          $ref: '#/components/schemas/CorrelationIds'
         properties:
           $ref: '#/components/schemas/PropertyBag'
         timestamp:
@@ -208,6 +210,8 @@ components:
             type: string
             format: date-time
             description: The date and time at which the event being notified took place.
+          correlationIds:
+            $ref: '#/components/schemas/CorrelationIds'
           delivered:
             description: A boolean indicating whether or not the notification has been delivered via at least one channel.
             type: boolean
@@ -250,6 +254,8 @@ components:
           description: The time at which the status change occurred
           type: string
           format: date-time
+        correlationIds:
+          $ref: '#/components/schemas/CorrelationIds'
 
     UpdateNotificationReadStatusRequest:
       description: A request to update the "read" status of a notification
@@ -263,6 +269,8 @@ components:
           description: The time at which the status change occurred
           type: string
           format: date-time
+        correlationIds:
+          $ref: '#/components/schemas/CorrelationIds'
 
     NotificationStatus:
       description: The delivery/read status for a notification on a delivery channel.
@@ -289,6 +297,8 @@ components:
             description: The date/time of the last update to the delivery status.
             type: string
             format: date-time
+          correlationIds:
+            $ref: '#/components/schemas/CorrelationIds'
           _links:
             type: object
             properties:
@@ -314,6 +324,12 @@ components:
                 - type: array
                   items:
                     $ref: '#/components/schemas/NotificationStatus'
+
+    CorrelationIds:
+      description: A list of Ids that can be used to correlate log entries. 
+      type: array
+      items:
+        type: string
 
     Link:
       type: object
@@ -374,14 +390,8 @@ components:
 
     PropertyBag:
       type: object
-      additionalProperties:
-        oneOf:
-          - type: array
-          - type: boolean
-          - type: integer
-          - type: number
-          - type: object
-          - type: string
+      additionalProperties: true
+      uniqueItems: true
 
     ResourceCollection:
       description: a collection of resources
