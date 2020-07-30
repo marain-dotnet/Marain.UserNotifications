@@ -13,6 +13,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Marain\UserNotifications\OpenApi\ManagementService.yaml" />
+    <None Remove="Marain\UserNotifications\OpenApi\QueryService.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Marain\UserNotifications\OpenApi\ManagementService.yaml" />
+    <EmbeddedResource Include="Marain\UserNotifications\OpenApi\QueryService.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
