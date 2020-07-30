@@ -1,7 +1,9 @@
 ﻿openapi: '3.0.0'
 info:
   version: 1.0.0
-  title: Marain Notifications Service
+  title: Marain User Notifications Management Service
+servers:
+  - url: http://localhost:7080/
 paths:
   /{tenantId}/marain/usernotifications:
     get:

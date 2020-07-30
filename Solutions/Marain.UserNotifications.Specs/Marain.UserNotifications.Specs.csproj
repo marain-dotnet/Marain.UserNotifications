@@ -13,13 +13,16 @@
          appropriate if they aid understanding within the project.
     -->
     <NoWarn>SA0001;SA1204;SA1600;SA1602;CS1591</NoWarn>
+    <RootNamespace>Marain.UserNotifications.Specs</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Corvus.Testing.SpecFlow" Version="1.0.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="1.1.0-preview.4" />
     <PackageReference Include="SpecFlow.NUnit" Version="3.3.30" />
     <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.3.30" />
     <PackageReference Include="nunit" Version="3.12.0" />
@@ -32,5 +35,23 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\ManagementApi\GetSwagger.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Marain.UserNotifications.ApiDeliveryChannel.Host\Marain.UserNotifications.ApiDeliveryChannel.Host.csproj" />
+    <ProjectReference Include="..\Marain.UserNotifications.Management.Host\Marain.UserNotifications.Management.Host.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="specflow.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
