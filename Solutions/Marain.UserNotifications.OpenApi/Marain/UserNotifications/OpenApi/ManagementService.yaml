@@ -5,7 +5,7 @@ info:
 servers:
   - url: https://notifications.marain.io
 paths:
-  /{tenantId}/marain/notifications:
+  /{tenantId}/marain/usernotifications:
     get:
       summary: Query notifications
       operationId: getNotifications
@@ -66,7 +66,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
 
-  /{tenantId}/marain/notifications/{notificationId}/status:
+  /{tenantId}/marain/usernotifications/{notificationId}/status:
     get:
       summary: Gets the delivery/read status of the notification for each channel it's been dispatched to
       operationId: getNotificationStatus
@@ -95,7 +95,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
 
-  /{tenantId}/marain/notifications/{notificationId}/status/{channelId}/delivery-status:
+  /{tenantId}/marain/usernotifications/{notificationId}/status/{channelId}/delivery-status:
     post:
       description: Update the delivery status for the specific notification and channel
       operationId: updateNotificationDeliveryStatus
@@ -129,7 +129,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
 
-  /{tenantId}/marain/notifications/{notificationId}/status/{channelId}/read-status:
+  /{tenantId}/marain/usernotifications/{notificationId}/status/{channelId}/read-status:
     post:
       description: Update the read status for the specific notification and channel
       operationId: updateNotificationReadStatus
