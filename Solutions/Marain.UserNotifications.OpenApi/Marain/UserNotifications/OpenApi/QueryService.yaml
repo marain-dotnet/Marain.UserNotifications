@@ -5,7 +5,7 @@ info:
 servers:
   - url: https://notifications.marain.io
 paths:
-  /{tenantId}/marain/notifications/{userId}:
+  /{tenantId}/marain/users/{userId}/notifications:
     get:
       summary: Get all notifications for a user
       operationId: getNotifications
@@ -34,21 +34,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-    put:
-      summary: Create a new notification for a user
-      operationId: createNotification
+
+  /{tenantId}/marain/notifications/{notificationId}/read:
+    post:
+      summary: Mark the specified notification as read
+      operationId: markNotificationRead
       parameters:
         - $ref: '#/components/parameters/tenantId'
         - $ref: '#/components/parameters/userId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateNotificationRequest'
+        - $ref: '#/components/parameters/notificationId'
       responses:
-        '201':
-          description: Created
+        '202':
+          description: Accepted
           headers:
             Location:
               schema:
@@ -65,32 +62,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-        
+
 components:
   schemas:
-    CreateNotificationRequest:
-      description: Request data for creating a new notification for a user.
-      required: 
-        - notificationType
-        - timestamp
-      properties:
-        notificationType:
-          type: string
-          description: The type of the notification. These types are defined by the consuming application, so can be arbitrary strings. It is strongly recommended that you version these types, as shown in the example.
-          nullable: false
-        properties:
-          $ref: '#/components/schemas/PropertyBag'
-        timestamp:
-          type: string
-          format: date-time
-          description: The date and time at which the event being notified took place.
-      example:
-        notificationType: 'facebook.friendrequests.requestreceived.v1'
-        timestamp: '2021-07-27T17:32:28Z'
-        properties:
-          fromUserId: 1048294
-          fromUserName: 'John Smith'
-
     Notification:
       description: A single notification for a specific user.
       allOf:
@@ -118,6 +92,8 @@ components:
           read:
             description: A boolean indicating whether or not the notification has been read/acknowledged via at least one channel.
             type: boolean
+          correlationIds:
+            $ref: '#/components/schemas/CorrelationIds'
           _links:
             type: object
             properties:
@@ -141,7 +117,13 @@ components:
                 - type: array
                   items:
                     $ref: '#/components/schemas/Notification'
-    
+
+    CorrelationIds:
+      description: A list of Ids that can be used to correlate log entries. 
+      type: array
+      items:
+        type: string
+
     Link:
       type: object
       required:
@@ -201,14 +183,8 @@ components:
 
     PropertyBag:
       type: object
-      additionalProperties:
-        oneOf:
-          - type: array
-          - type: boolean
-          - type: integer
-          - type: number
-          - type: object
-          - type: string
+      additionalProperties: true
+      uniqueItems: true
 
     ResourceCollection:
       description: a collection of resources
@@ -307,6 +283,14 @@ components:
       in: path
       x-ms-parameter-location: method
       description: The Id of the user for whom data is being operated on
+      required: true
+      schema:
+        type: string
+    notificationId:
+      name: notificationId
+      in: path
+      x-ms-parameter-location: method
+      description: The Id of the notification being updated
       required: true
       schema:
         type: string
