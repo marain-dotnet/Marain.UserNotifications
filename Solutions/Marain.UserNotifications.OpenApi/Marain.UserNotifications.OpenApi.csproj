@@ -14,13 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Marain\UserNotifications\OpenApi\ApiDeliveryChannelService.yaml" />
     <None Remove="Marain\UserNotifications\OpenApi\ManagementService.yaml" />
-    <None Remove="Marain\UserNotifications\OpenApi\QueryService.yaml" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Marain\UserNotifications\OpenApi\ManagementService.yaml" />
-    <EmbeddedResource Include="Marain\UserNotifications\OpenApi\QueryService.yaml" />
+    <EmbeddedResource Include="Marain\UserNotifications\OpenApi\ApiDeliveryChannelService.yaml" />
   </ItemGroup>
 
   <ItemGroup>

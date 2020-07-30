@@ -4,6 +4,9 @@
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    using Marain.UserNotifications.OpenApi.Management;
+    using Menes;
+
     /// <summary>
     /// Configures the user notifications API hosts.
     /// </summary>
@@ -17,6 +20,18 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddTenantedUserNotificationsManagementApi(
             this IServiceCollection services)
         {
+            services.AddManagementOpenApiServices();
+
+            services.AddOpenApiHttpRequestHosting<SimpleOpenApiContext>(
+                hostConfig =>
+                {
+                    hostConfig.Documents.RegisterOpenApiServiceWithEmbeddedDefinition(
+                        typeof(CreateNotificationsService).Assembly,
+                        "Marain.UserNotifications.OpenApi.ManagementService.yaml");
+
+                    hostConfig.Documents.AddSwaggerEndpoint();
+                });
+
             return services;
         }
 
@@ -28,6 +43,18 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddTenantedUserNotificationsApiDeliveryChannel(
             this IServiceCollection services)
         {
+            services.AddApiDeliveryChannelOpenApiServices();
+
+            services.AddOpenApiHttpRequestHosting<SimpleOpenApiContext>(
+                hostConfig =>
+                {
+                    hostConfig.Documents.RegisterOpenApiServiceWithEmbeddedDefinition(
+                        typeof(CreateNotificationsService).Assembly,
+                        "Marain.UserNotifications.OpenApi.ApiDeliveryChannelService.yaml");
+
+                    hostConfig.Documents.AddSwaggerEndpoint();
+                });
+
             return services;
         }
     }

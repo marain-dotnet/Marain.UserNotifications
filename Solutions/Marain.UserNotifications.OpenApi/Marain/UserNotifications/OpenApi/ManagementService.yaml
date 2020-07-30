@@ -2,8 +2,6 @@
 info:
   version: 1.0.0
   title: Marain Notifications Service
-servers:
-  - url: https://notifications.marain.io
 paths:
   /{tenantId}/marain/usernotifications:
     get:

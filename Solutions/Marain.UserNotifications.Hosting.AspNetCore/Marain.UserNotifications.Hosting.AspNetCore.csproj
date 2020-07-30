@@ -15,4 +15,8 @@
     <PackageReference Include="Menes.Hosting.AspNetCore" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Marain.UserNotifications.OpenApi\Marain.UserNotifications.OpenApi.csproj" />
+  </ItemGroup>
+
 </Project>
