@@ -1,9 +1,9 @@
 ﻿openapi: '3.0.0'
 info:
   version: 1.0.0
-  title: Marain Notifications Service
+  title: Marain User Notifications Management Service
 servers:
-  - url: https://notifications.marain.io
+  - url: http://localhost:7080/
 paths:
   /{tenantId}/marain/usernotifications:
     get:
@@ -37,7 +37,7 @@ paths:
 
     put:
       summary: Create a new notification for one or more users
-      operationId: createNotification
+      operationId: createNotifications
       parameters:
         - $ref: '#/components/parameters/tenantId'
       requestBody:
@@ -82,74 +82,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PagedNotificationStatusListResponse'
-        '400':
-          description: Bad request
-        '404':
-          description: Not found
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-
-  /{tenantId}/marain/usernotifications/{notificationId}/status/{channelId}/delivery-status:
-    post:
-      description: Update the delivery status for the specific notification and channel
-      operationId: updateNotificationDeliveryStatus
-      parameters:
-        - $ref: '#/components/parameters/tenantId'
-        - $ref: '#/components/parameters/notificationId'
-        - $ref: '#/components/parameters/channelId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateNotificationDeliveryStatusRequest'
-      responses:
-        '202':
-          description: Accepted
-          headers:
-            Location:
-              schema:
-                type: string
-        '400':
-          description: Bad request
-        '404':
-          description: Not found
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-
-  /{tenantId}/marain/usernotifications/{notificationId}/status/{channelId}/read-status:
-    post:
-      description: Update the read status for the specific notification and channel
-      operationId: updateNotificationReadStatus
-      parameters:
-        - $ref: '#/components/parameters/tenantId'
-        - $ref: '#/components/parameters/notificationId'
-        - $ref: '#/components/parameters/channelId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateNotificationReadStatusRequest'
-      responses:
-        '202':
-          description: Accepted
-          headers:
-            Location:
-              schema:
-                type: string
         '400':
           description: Bad request
         '404':

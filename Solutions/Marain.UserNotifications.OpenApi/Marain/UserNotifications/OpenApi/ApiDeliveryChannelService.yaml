@@ -1,14 +1,14 @@
 ﻿openapi: '3.0.0'
 info:
   version: 1.0.0
-  title: Marain Notifications Service
+  title: Marain User Notifications API Delivery Channel
 servers:
-  - url: https://notifications.marain.io
+  - url: http://localhost:7081/
 paths:
   /{tenantId}/marain/users/{userId}/notifications:
     get:
       summary: Get all notifications for a user
-      operationId: getNotifications
+      operationId: getNotificationsForUser
       parameters:
         - $ref: '#/components/parameters/tenantId'
         - $ref: '#/components/parameters/userId'
@@ -41,7 +41,6 @@ paths:
       operationId: markNotificationRead
       parameters:
         - $ref: '#/components/parameters/tenantId'
-        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/notificationId'
       responses:
         '202':

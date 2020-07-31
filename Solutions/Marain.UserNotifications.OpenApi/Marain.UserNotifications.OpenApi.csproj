@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -13,10 +14,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Marain\UserNotifications\OpenApi\ApiDeliveryChannelService.yaml" />
+    <None Remove="Marain\UserNotifications\OpenApi\ManagementService.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Marain\UserNotifications\OpenApi\ManagementService.yaml" />
+    <EmbeddedResource Include="Marain\UserNotifications\OpenApi\ApiDeliveryChannelService.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Menes.Abstractions" Version="1.1.0-preview.4" />
   </ItemGroup>
 
 </Project>
