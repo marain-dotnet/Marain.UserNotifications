@@ -28,11 +28,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevOps", "DevOps", "{97C784
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosting", "Hosting", "{F87FC0E4-B4B0-4165-AA2F-C0E4E184E1AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.UserNotifications.Management.Host", "Marain.UserNotifications.Management.Host\Marain.UserNotifications.Management.Host.csproj", "{0177A15F-8354-421D-AB5E-435115865630}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Management.Host", "Marain.UserNotifications.Management.Host\Marain.UserNotifications.Management.Host.csproj", "{0177A15F-8354-421D-AB5E-435115865630}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.UserNotifications.ApiDeliveryChannel.Host", "Marain.UserNotifications.ApiDeliveryChannel.Host\Marain.UserNotifications.ApiDeliveryChannel.Host.csproj", "{F105DB6A-EA75-44EC-8675-69201C981ED1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.ApiDeliveryChannel.Host", "Marain.UserNotifications.ApiDeliveryChannel.Host\Marain.UserNotifications.ApiDeliveryChannel.Host.csproj", "{F105DB6A-EA75-44EC-8675-69201C981ED1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.UserNotifications.Hosting.AspNetCore", "Marain.UserNotifications.Hosting.AspNetCore\Marain.UserNotifications.Hosting.AspNetCore.csproj", "{757E23A7-F479-4126-9967-D6FD112025DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Hosting.AspNetCore", "Marain.UserNotifications.Hosting.AspNetCore\Marain.UserNotifications.Hosting.AspNetCore.csproj", "{757E23A7-F479-4126-9967-D6FD112025DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.UserNotifications.Benchmarks", "Marain.UserNotifications.Benchmarks\Marain.UserNotifications.Benchmarks.csproj", "{66638B1A-B225-4EB3-811C-D41E72BEABA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,10 @@ Global
 		{757E23A7-F479-4126-9967-D6FD112025DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{757E23A7-F479-4126-9967-D6FD112025DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{757E23A7-F479-4126-9967-D6FD112025DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66638B1A-B225-4EB3-811C-D41E72BEABA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66638B1A-B225-4EB3-811C-D41E72BEABA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66638B1A-B225-4EB3-811C-D41E72BEABA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66638B1A-B225-4EB3-811C-D41E72BEABA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
