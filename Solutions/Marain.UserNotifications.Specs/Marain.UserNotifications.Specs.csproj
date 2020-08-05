@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Corvus.Testing.SpecFlow" Version="1.0.0" />
+    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.0.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

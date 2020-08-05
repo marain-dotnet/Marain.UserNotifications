@@ -15,15 +15,14 @@
 
   <ItemGroup>
     <None Remove="Marain\UserNotifications\OpenApi\ApiDeliveryChannelService.yaml" />
-    <None Remove="Marain\UserNotifications\OpenApi\ManagementService.yaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Marain\UserNotifications\OpenApi\ManagementService.yaml" />
     <EmbeddedResource Include="Marain\UserNotifications\OpenApi\ApiDeliveryChannelService.yaml" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Corvus.Json.Abstractions" Version="1.0.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

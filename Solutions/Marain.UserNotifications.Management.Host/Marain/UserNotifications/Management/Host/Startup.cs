@@ -6,7 +6,11 @@
 
 namespace Marain.UserNotifications.Management.Host
 {
+    using Marain.UserNotifications.Management.Host.Helpers;
+    using Marain.UserNotifications.Management.Host.OpenApi;
+    using Menes;
     using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+    using Microsoft.Azure.WebJobs.Extensions.DurableTask;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
@@ -24,7 +28,33 @@ namespace Marain.UserNotifications.Management.Host
 
             services.AddLogging();
 
-            services.AddTenantedUserNotificationsManagementApi();
+            services.AddSingleton<IMessageSerializerSettingsFactory, SerializationSettingsFactoryAdapter>();
+
+            services.AddCommonUserNotificationsApiServices();
+
+            AddTenantedUserNotificationsManagementApi(services);
+        }
+
+        /// <summary>
+        /// Configures services neededed to provide the user notifications management API.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        private static void AddTenantedUserNotificationsManagementApi(IServiceCollection services)
+        {
+            services.AddSingleton<IOpenApiService, CreateNotificationsService>();
+            services.AddSingleton<IOpenApiService, GetNotificationsService>();
+            services.AddSingleton<IOpenApiService, GetNotificationStatusService>();
+
+            services.AddOpenApiHttpRequestHosting<DurableFunctionsOpenApiContext>(
+                hostConfig =>
+                {
+                    System.Type serviceType = typeof(CreateNotificationsService);
+                    hostConfig.Documents.RegisterOpenApiServiceWithEmbeddedDefinition(
+                        serviceType.Assembly,
+                        $"{serviceType.Namespace}.ManagementService.yaml");
+
+                    hostConfig.Documents.AddSwaggerEndpoint();
+                });
         }
     }
 }
