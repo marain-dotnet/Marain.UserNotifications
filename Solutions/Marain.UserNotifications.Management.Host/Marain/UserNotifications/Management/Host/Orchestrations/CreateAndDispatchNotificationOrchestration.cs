@@ -7,6 +7,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
 {
     using System.Threading.Tasks;
     using Marain.UserNotifications.Management.Host.Activities;
+    using Marain.UserNotifications.Management.Host.Helpers;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
     using Microsoft.Extensions.Logging;
@@ -35,9 +36,9 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
                 orchestrationContext.InstanceId,
                 orchestrationContext.ParentInstanceId);
 
-            Notification request = orchestrationContext.GetInput<Notification>();
+            TenantedFunctionData<Notification> request = orchestrationContext.GetInput<TenantedFunctionData<Notification>>();
 
-            replaySafeLogger.LogDebug("Deserialized CreateNotificationsRequest for user Id '{userId}'", request.UserId);
+            replaySafeLogger.LogDebug("Deserialized CreateNotificationsRequest for user Id '{userId}'", request.Payload.UserId);
 
             await orchestrationContext.CallActivityAsync(nameof(CreateNotificationActivity), request);
         }

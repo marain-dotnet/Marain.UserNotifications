@@ -8,6 +8,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -31,23 +32,23 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
         {
             ILogger replaySafeLogger = orchestrationContext.CreateReplaySafeLogger(log);
 
-            CreateNotificationsRequest request = orchestrationContext.GetInput<CreateNotificationsRequest>();
+            TenantedFunctionData<CreateNotificationsRequest> request = orchestrationContext.GetInput<TenantedFunctionData<CreateNotificationsRequest>>();
 
             // Fan out to create each notification
-            string[] correlationIds = new string[request.CorrelationIds.Length + 1];
-            request.CorrelationIds.CopyTo(correlationIds, 0);
+            string[] correlationIds = new string[request.Payload.CorrelationIds.Length + 1];
+            request.Payload.CorrelationIds.CopyTo(correlationIds, 0);
             correlationIds[^1] = orchestrationContext.InstanceId;
 
-            IEnumerable<Task> createNotificationTasks = request.UserIds
+            IEnumerable<Task> createNotificationTasks = request.Payload.UserIds
                 .Select(userId => new Notification(
-                    request.NotificationType,
+                    request.Payload.NotificationType,
                     userId,
-                    request.Timestamp,
-                    request.Properties,
+                    request.Payload.Timestamp,
+                    request.Payload.Properties,
                     correlationIds))
                 .Select(notification => orchestrationContext.CallSubOrchestratorAsync(
                     nameof(CreateAndDispatchNotificationOrchestration),
-                    notification));
+                    new TenantedFunctionData<Notification>(request.TenantId, notification)));
 
             await Task.WhenAll(createNotificationTasks);
         }

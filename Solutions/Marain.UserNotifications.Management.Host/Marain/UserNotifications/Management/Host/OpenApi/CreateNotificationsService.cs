@@ -6,6 +6,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 {
     using System.Threading.Tasks;
     using Dynamitey.DynamicObjects;
+    using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.Management.Host.Orchestrations;
     using Menes;
     using Menes.Exceptions;
@@ -41,7 +42,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
             await orchestrationClient.StartNewAsync(
                 nameof(CreateAndDispatchNotificationsOrchestration),
-                body).ConfigureAwait(false);
+                new TenantedFunctionData<CreateNotificationsRequest>(context.CurrentTenantId!, body)).ConfigureAwait(false);
 
             // TODO: Return long running op Id.
             return this.AcceptedResult("http://mylocation.com/myoperationid");

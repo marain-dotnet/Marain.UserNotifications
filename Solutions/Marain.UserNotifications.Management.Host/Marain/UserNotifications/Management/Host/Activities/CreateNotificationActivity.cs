@@ -5,6 +5,7 @@
 namespace Marain.UserNotifications.Management.Host.Activities
 {
     using System.Threading.Tasks;
+    using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -26,12 +27,12 @@ namespace Marain.UserNotifications.Management.Host.Activities
             [ActivityTrigger] IDurableActivityContext context,
             ILogger logger)
         {
-            Notification request = context.GetInput<Notification>();
+            TenantedFunctionData<Notification> request = context.GetInput<TenantedFunctionData<Notification>>();
 
             logger.LogInformation(
                 "Executing CreateNotificationActivity for notification of type {notificationType} for user {userId}",
-                request.NotificationType,
-                request.UserId);
+                request.Payload.NotificationType,
+                request.Payload.UserId);
 
             return Task.CompletedTask;
         }
