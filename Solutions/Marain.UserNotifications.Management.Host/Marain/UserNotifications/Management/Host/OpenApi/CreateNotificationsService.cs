@@ -5,7 +5,8 @@
 namespace Marain.UserNotifications.Management.Host.OpenApi
 {
     using System.Threading.Tasks;
-    using Dynamitey.DynamicObjects;
+    using Corvus.Tenancy;
+    using Marain.Services.Tenancy;
     using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.Management.Host.Orchestrations;
     using Menes;
@@ -22,6 +23,18 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// </summary>
         public const string CreateNotificationsOperationId = "createNotifications";
 
+        private readonly IMarainServicesTenancy marainServicesTenancy;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateNotificationsService"/> class.
+        /// </summary>
+        /// <param name="marainServicesTenancy">Marain tenancy services.</param>
+        public CreateNotificationsService(
+            IMarainServicesTenancy marainServicesTenancy)
+        {
+            this.marainServicesTenancy = marainServicesTenancy;
+        }
+
         /// <summary>
         /// Creates new notification(s) for one or more users.
         /// </summary>
@@ -33,8 +46,12 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             IOpenApiContext context,
             CreateNotificationsRequest body)
         {
-            // TODO: validate tenant Id
+            // We can guarantee tenant Id is available because it's part of the Uri.
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId!).ConfigureAwait(false);
+
             // TODO: Start long running operation
+            string delegatedTenantId = await this.marainServicesTenancy.GetDelegatedTenantIdForRequestingTenantAsync(tenant.Id).ConfigureAwait(false);
+
             // TODO: Add the operation Id to the correlation Ids
             // TODO: Start new orchestration
             IDurableOrchestrationClient orchestrationClient = context.AsDurableFunctionsOpenApiContext().OrchestrationClient

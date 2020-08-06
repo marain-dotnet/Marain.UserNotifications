@@ -4,6 +4,7 @@
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    using Corvus.Azure.Storage.Tenancy;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.Tenancy.Client;
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel;
@@ -46,6 +47,13 @@ namespace Microsoft.Extensions.DependencyInjection
             // Token source, to provide authentication when accessing external services.
             services.AddAzureManagedIdentityBasedTokenSource(
                 sp => new AzureManagedIdentityTokenSourceOptions
+                {
+                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
+                });
+
+            // Notification storage
+            services.AddTenantedAzureTableUserNotificationStore(
+                sp => new TenantCloudTableFactoryOptions
                 {
                     AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
                 });

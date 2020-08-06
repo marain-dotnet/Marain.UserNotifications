@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Marain.UserNotifications.OpenApi\Marain.UserNotifications.OpenApi.csproj" />
+    <ProjectReference Include="..\Marain.UserNotifications.Storage.AzureTable\Marain.UserNotifications.Storage.AzureTable.csproj" />
   </ItemGroup>
 
 </Project>

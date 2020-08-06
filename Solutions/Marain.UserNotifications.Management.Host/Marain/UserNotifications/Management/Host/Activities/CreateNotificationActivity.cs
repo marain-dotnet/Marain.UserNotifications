@@ -4,9 +4,10 @@
 
 namespace Marain.UserNotifications.Management.Host.Activities
 {
+    using System;
     using System.Threading.Tasks;
+    using Corvus.Tenancy;
     using Marain.UserNotifications.Management.Host.Helpers;
-    using Marain.UserNotifications.Management.Host.OpenApi;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
     using Microsoft.Extensions.Logging;
@@ -16,6 +17,24 @@ namespace Marain.UserNotifications.Management.Host.Activities
     /// </summary>
     public class CreateNotificationActivity
     {
+        private readonly ITenantProvider tenantProvider;
+        private readonly ITenantedNotificationStoreFactory notificationStoreFactory;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateNotificationActivity"/> class.
+        /// </summary>
+        /// <param name="tenantProvider">The tenant provider.</param>
+        /// <param name="notificationStoreFactory">The factory for the notification store.</param>
+        public CreateNotificationActivity(
+            ITenantProvider tenantProvider,
+            ITenantedNotificationStoreFactory notificationStoreFactory)
+        {
+            this.tenantProvider = tenantProvider
+                ?? throw new ArgumentNullException(nameof(tenantProvider));
+            this.notificationStoreFactory = notificationStoreFactory
+                ?? throw new ArgumentNullException(nameof(notificationStoreFactory));
+        }
+
         /// <summary>
         /// Executes the activity.
         /// </summary>
@@ -23,18 +42,22 @@ namespace Marain.UserNotifications.Management.Host.Activities
         /// <param name="logger">The logger.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [FunctionName(nameof(CreateNotificationActivity))]
-        public Task ExecuteAsync(
+        public async Task ExecuteAsync(
             [ActivityTrigger] IDurableActivityContext context,
             ILogger logger)
         {
             TenantedFunctionData<Notification> request = context.GetInput<TenantedFunctionData<Notification>>();
+
+            ITenant tenant = await this.tenantProvider.GetTenantAsync(request.TenantId).ConfigureAwait(false);
 
             logger.LogInformation(
                 "Executing CreateNotificationActivity for notification of type {notificationType} for user {userId}",
                 request.Payload.NotificationType,
                 request.Payload.UserId);
 
-            return Task.CompletedTask;
+            INotificationStore store = await this.notificationStoreFactory.GetNotificationStoreForTenantAsync(tenant).ConfigureAwait(false);
+
+            await store.StoreAsync(request.Payload).ConfigureAwait(false);
         }
     }
 }

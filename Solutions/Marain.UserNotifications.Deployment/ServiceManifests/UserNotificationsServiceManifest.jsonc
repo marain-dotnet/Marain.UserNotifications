@@ -1,0 +1,13 @@
+{
+  "contentType": "application/vnd.marain.tenancy.servicemanifests.servicemanifest",
+  "wellKnownTenantGuid": "892ffa7f-117c-4569-8ecb-7240edb9f0c3", // This will encode to 3633754ac4c9be44b55bfe791b1780f17ffa2f897c1169458ecb7240edb9f0c3
+  "serviceName": "User Notifications v1",
+  "dependsOnServiceTenants": [
+    {
+      "id": "3633754ac4c9be44b55bfe791b1780f12429524fe7b6cc48a265a307407ec858",
+      "expectedName": "Operations v1"
+    }
+  ],
+  "requiredConfigurationEntries": [
+  ]
+}

@@ -1,0 +1,11 @@
+[
+  {
+    "key": "operationsStore",
+    "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azureblobstorage",
+    "configuration": {
+      "accountName": null,
+      "container": "operations",
+      "disableTenantIdPrefix": false
+    }
+  }
+]
