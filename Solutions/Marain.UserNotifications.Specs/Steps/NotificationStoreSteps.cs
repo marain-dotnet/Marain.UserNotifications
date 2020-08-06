@@ -27,9 +27,25 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             INotificationStore store = this.serviceProvider.GetRequiredService<INotificationStore>();
             Notification notification = this.scenarioContext.Get<Notification>(notificationName);
-            Notification result = await store.StoreAsync(notification).ConfigureAwait(false);
 
-            this.scenarioContext.Set(result, resultName);
+            try
+            {
+                Notification result = await store.StoreAsync(notification).ConfigureAwait(false);
+
+                this.scenarioContext.Set(result, resultName);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [Given("I have told the notification store to store the notification called '(.*)'")]
+        public Task WhenITellTheNotificationStoreToStoreTheNotificationCalled(string notificationName)
+        {
+            INotificationStore store = this.serviceProvider.GetRequiredService<INotificationStore>();
+            Notification notification = this.scenarioContext.Get<Notification>(notificationName);
+            return store.StoreAsync(notification);
         }
     }
 }

@@ -9,7 +9,6 @@ namespace Marain.UserNotifications.Storage.AzureTable
     using Corvus.Extensions.Json;
     using Marain.UserNotifications.Storage.AzureTable.Internal;
     using Microsoft.Azure.Cosmos.Table;
-    using Microsoft.Azure.Storage.Shared.Protocol;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -53,12 +52,18 @@ namespace Marain.UserNotifications.Storage.AzureTable
 
             var createOperation = TableOperation.Insert(notificationEntity);
 
-            TableResult result = await this.table.ExecuteAsync(createOperation).ConfigureAwait(false);
+            try
+            {
+                TableResult result = await this.table.ExecuteAsync(createOperation).ConfigureAwait(false);
 
-            // TODO: Check result status code
-            var response = (NotificationTableEntity)result.Result;
-
-            return response.ToNotification(this.serializerSettingsProvider.Instance);
+                // TODO: Check result status code
+                var response = (NotificationTableEntity)result.Result;
+                return response.ToNotification(this.serializerSettingsProvider.Instance);
+            }
+            catch (StorageException ex) when (ex.Message == "Conflict")
+            {
+                throw new UserNotificationStoreConcurrencyException("Could not create the notification because a notification with the same identity hash already exists in the store.", ex);
+            }
         }
     }
 }

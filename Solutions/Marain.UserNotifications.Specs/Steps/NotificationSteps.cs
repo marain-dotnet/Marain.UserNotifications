@@ -32,7 +32,7 @@ namespace Marain.UserNotifications.Specs.Steps
             Notification actual = this.scenarioContext.Get<Notification>(actualNotificationName);
             Notification expected = this.scenarioContext.Get<Notification>(expectedNotificationName);
 
-            Assert.AreEqual(expected.CorrelationIds, actual.CorrelationIds);
+            Assert.AreEqual(expected.Metadata.CorrelationIds, actual.Metadata.CorrelationIds);
             Assert.AreEqual(expected.NotificationType, actual.NotificationType);
             Assert.AreEqual(expected.Timestamp, actual.Timestamp);
             Assert.AreEqual(expected.UserId, actual.UserId);
@@ -49,6 +49,13 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             Notification actual = this.scenarioContext.Get<Notification>(notificationName);
             Assert.IsNotNull(actual.Id);
+        }
+
+        [Then("the ETag of the notification called '(.*)' should be set")]
+        public void ThenETagOfTheNotificationCalledShouldBeSet(string notificationName)
+        {
+            Notification actual = this.scenarioContext.Get<Notification>(notificationName);
+            Assert.IsNotNull(actual.Metadata.ETag);
         }
     }
 }

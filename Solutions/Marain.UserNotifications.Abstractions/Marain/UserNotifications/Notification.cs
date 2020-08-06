@@ -5,7 +5,9 @@
 namespace Marain.UserNotifications
 {
     using System;
+    using System.Text;
     using Corvus.Json;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// A single notification targetted at a specific user.
@@ -20,21 +22,25 @@ namespace Marain.UserNotifications
         /// <param name="userId">The <see cref="UserId" />.</param>
         /// <param name="timestamp">The <see cref="Timestamp" />.</param>
         /// <param name="properties">The <see cref="Properties" />.</param>
-        /// <param name="correlationIds">The <see cref="CorrelationIds" />.</param>
+        /// <param name="correlationIds">The <see cref="NotificationMetadata.CorrelationIds" />.</param>
+        /// <param name="eTag">The <see cref="NotificationMetadata.ETag" />.</param>
         public Notification(
             string? id,
             string notificationType,
             string userId,
             DateTimeOffset timestamp,
             IPropertyBag properties,
-            string[] correlationIds)
+            string[] correlationIds,
+            string? eTag)
         {
             this.Id = id;
-            this.NotificationType = notificationType;
-            this.UserId = userId;
-            this.Timestamp = timestamp;
-            this.Properties = properties;
-            this.CorrelationIds = correlationIds;
+            this.NotificationType = notificationType ?? throw new ArgumentNullException(nameof(notificationType));
+            this.UserId = userId ?? throw new ArgumentNullException(nameof(userId));
+            this.Timestamp = timestamp != default ? timestamp : throw new ArgumentException(nameof(timestamp));
+            this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
+            this.Metadata = new NotificationMetadata(
+                correlationIds ?? throw new ArgumentNullException(nameof(correlationIds)),
+                eTag);
         }
 
         /// <summary>
@@ -60,11 +66,6 @@ namespace Marain.UserNotifications
         public string UserId { get; }
 
         /// <summary>
-        /// Gets a list of correlation Ids associated with the notification.
-        /// </summary>
-        public string[] CorrelationIds { get; }
-
-        /// <summary>
         /// Gets the date and time at which the event being notified took place.
         /// </summary>
         public DateTimeOffset Timestamp { get; }
@@ -74,5 +75,26 @@ namespace Marain.UserNotifications
         /// to construct a human readable message for the notification.
         /// </summary>
         public IPropertyBag Properties { get; }
+
+        /// <summary>
+        /// Gets metadata for the notification.
+        /// </summary>
+        public NotificationMetadata Metadata { get; }
+
+        /// <summary>
+        /// Constructs a hash for the notification that can be used to determine whether two notifications are
+        /// equivalent. This takes into account the notification's <see cref="NotificationType"/>, <see cref="UserId"/>,
+        /// <see cref="Timestamp"/> and <see cref="Properties"/>, but does not include <see cref="Id"/> or
+        /// <see cref="Metadata"/>. It is normally used to determine whether a notification already exists in storage
+        /// if the service receives the same request to create a notification multiple times.
+        /// </summary>
+        /// <param name="serializerSettings">The JsonSerializerSettings that will be used.</param>
+        /// <returns>A hash for the notification.</returns>
+        public string GetIdentityHash(JsonSerializerSettings serializerSettings)
+        {
+            string propertiesJson = JsonConvert.SerializeObject(this.Properties, serializerSettings);
+            string fingerprint = $"{this.UserId}{this.Timestamp.ToUnixTimeMilliseconds()}{this.NotificationType}{propertiesJson}";
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(fingerprint));
+        }
     }
 }

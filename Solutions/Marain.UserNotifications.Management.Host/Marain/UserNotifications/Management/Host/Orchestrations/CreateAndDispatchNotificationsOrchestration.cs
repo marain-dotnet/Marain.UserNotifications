@@ -46,7 +46,8 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
                     userId,
                     request.Payload.Timestamp,
                     request.Payload.Properties,
-                    correlationIds))
+                    correlationIds,
+                    null))
                 .Select(notification => orchestrationContext.CallSubOrchestratorAsync(
                     nameof(CreateAndDispatchNotificationOrchestration),
                     new TenantedFunctionData<Notification>(request.TenantId, notification)));

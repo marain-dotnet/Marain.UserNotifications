@@ -28,7 +28,26 @@ namespace Marain.UserNotifications.Specs.Steps
         [Then("no exception should be thrown")]
         public void ThenTheNoExceptionShouldBeThrown()
         {
-            Assert.IsFalse(this.scenarioContext.ContainsKey(LastExceptionContextKey));
+            if (this.scenarioContext.TryGetValue(LastExceptionContextKey, out Exception val))
+            {
+                Assert.Fail($"Expected no exception, but the following exception was thrown:\n{val}");
+            }
+        }
+
+        [Then("a '(.*)' should be thrown")]
+        public void ThenAShouldBeThrown(string expectedExceptionTypeName)
+        {
+            if (!this.scenarioContext.TryGetValue(LastExceptionContextKey, out Exception val))
+            {
+                Assert.Fail($"Expected an exception of type '{expectedExceptionTypeName}', but no exception was thrown.");
+            }
+
+            string actualExceptionTypeName = val.GetType().Name;
+
+            if (actualExceptionTypeName != expectedExceptionTypeName)
+            {
+                Assert.Fail($"Expected an exception of type '{expectedExceptionTypeName}', but the thrown exception was of type '{actualExceptionTypeName}'.");
+            }
         }
     }
 }

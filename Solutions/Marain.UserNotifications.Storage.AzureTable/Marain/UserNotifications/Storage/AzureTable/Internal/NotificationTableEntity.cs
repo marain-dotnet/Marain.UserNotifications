@@ -5,12 +5,10 @@
 namespace Marain.UserNotifications.Storage.AzureTable.Internal
 {
     using System;
-    using System.Security.Cryptography;
     using System.Text;
     using Corvus.Json;
     using Microsoft.Azure.Cosmos.Table;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Table storage specific version of a <see cref="Notification"/>.
@@ -45,11 +43,11 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
         /// <returns>A new <see cref="NotificationTableEntity"/>.</returns>
         public static NotificationTableEntity FromNotification(Notification source, JsonSerializerSettings serializerSettings)
         {
-            long timestamp = source.Timestamp.ToUnixTimeMilliseconds();
-            string correlationIdsJson = JsonConvert.SerializeObject(source.CorrelationIds, serializerSettings);
+            long reversedTimestamp = long.MaxValue - source.Timestamp.ToUnixTimeMilliseconds();
+            string correlationIdsJson = JsonConvert.SerializeObject(source.Metadata.CorrelationIds, serializerSettings);
             string propertiesJson = JsonConvert.SerializeObject(source.Properties, serializerSettings);
-            string hash = GetNotificationHash(timestamp, source.NotificationType, correlationIdsJson, propertiesJson);
-            string rowKey = $"{timestamp:D20}-{hash}";
+            string hash = source.GetIdentityHash(serializerSettings);
+            string rowKey = $"{reversedTimestamp}-{hash}";
 
             return new NotificationTableEntity
             {
@@ -59,6 +57,7 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
                 NotificationTimestamp = source.Timestamp,
                 CorrelationIdsJson = correlationIdsJson,
                 PropertiesJson = propertiesJson,
+                ETag = source.Metadata.ETag,
             };
         }
 
@@ -79,25 +78,14 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
                 this.PartitionKey,
                 this.NotificationTimestamp,
                 properties,
-                correlationIds);
+                correlationIds,
+                this.ETag);
         }
 
         private static string GetIdFromPartitionKeyAndRowKey(string partitionKey, string rowKey, JsonSerializerSettings serializerSettings)
         {
             string serializedValues = JsonConvert.SerializeObject(new NotificationId { PartitionKey = partitionKey, RowKey = rowKey }, serializerSettings);
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedValues));
-        }
-
-        private static NotificationId GetPartitionKeyAndRowKeyFromId(string id, JsonSerializerSettings serializerSettings)
-        {
-            string serializedValues = Encoding.UTF8.GetString(Convert.FromBase64String(id));
-            return JsonConvert.DeserializeObject<NotificationId>(serializedValues, serializerSettings);
-        }
-
-        private static string GetNotificationHash(long timestamp, string notificationType, string correlationIdsJson, string propertiesJson)
-        {
-            string fingerprint = $"{timestamp}{notificationType}{correlationIdsJson}{propertiesJson}";
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(fingerprint));
         }
 
         private class NotificationId

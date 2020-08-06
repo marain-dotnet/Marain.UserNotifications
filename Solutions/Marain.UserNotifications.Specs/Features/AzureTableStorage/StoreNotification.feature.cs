@@ -138,6 +138,62 @@ this.ScenarioInitialize(scenarioInfo);
             }
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Attempting to store the same notification twice throws a concurrency exception")]
+        public virtual void AttemptingToStoreTheSameNotificationTwiceThrowsAConcurrencyException()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Attempting to store the same notification twice throws a concurrency exception", null, tagsOfScenario, argumentsOfScenario);
+#line 16
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                            "NotificationType",
+                            "UserId",
+                            "Timestamp",
+                            "PropertiesJson",
+                            "CorrelationIds"});
+                table2.AddRow(new string[] {
+                            "marain.test.notification.v1",
+                            "93B6A389-A40F-4807-B6EE-AC41F44A3CCD",
+                            "2012-03-19T07:22Z",
+                            "{ \"prop1\": \"val1\" }",
+                            "[\"id1\", \"id2\"]"});
+#line 17
+ testRunner.Given("I have a notification called \'input\'", ((string)(null)), table2, "Given ");
+#line hidden
+#line 20
+ testRunner.And("I have told the notification store to store the notification called \'input\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 21
+ testRunner.When("I tell the notification store to store the notification called \'input\' and call t" +
+                        "he result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 22
+ testRunner.Then("a \'UserNotificationStoreConcurrencyException\' should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

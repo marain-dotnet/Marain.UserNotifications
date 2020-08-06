@@ -8,7 +8,6 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Configuration;
     using Corvus.Extensions.Json;
     using Corvus.Testing.SpecFlow;
-    using Dynamitey;
     using Marain.UserNotifications.Storage.AzureTable;
     using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
