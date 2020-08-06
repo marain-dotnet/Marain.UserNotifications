@@ -6,6 +6,10 @@ namespace Marain.UserNotifications.Storage.AzureTable
 {
     using System;
     using System.Threading.Tasks;
+    using Corvus.Extensions.Json;
+    using Marain.UserNotifications.Storage.AzureTable.Internal;
+    using Microsoft.Azure.Cosmos.Table;
+    using Microsoft.Azure.Storage.Shared.Protocol;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -14,26 +18,47 @@ namespace Marain.UserNotifications.Storage.AzureTable
     public class AzureTableNotificationStore : INotificationStore
     {
         private readonly ILogger logger;
+        private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
+        private readonly CloudTable table;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureTableNotificationStore"/> class.
         /// </summary>
+        /// <param name="table">The underlying cloud table.</param>
+        /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
         /// <param name="logger">The logger.</param>
         public AzureTableNotificationStore(
+            CloudTable table,
+            IJsonSerializerSettingsProvider serializerSettingsProvider,
             ILogger logger)
         {
             this.logger = logger
                 ?? throw new ArgumentNullException(nameof(logger));
+            this.serializerSettingsProvider = serializerSettingsProvider
+                ?? throw new ArgumentNullException(nameof(serializerSettingsProvider));
+            this.table = table
+                ?? throw new ArgumentNullException(nameof(table));
         }
 
         /// <inheritdoc/>
-        public Task<Notification> StoreAsync(Notification notification)
+        public async Task<Notification> StoreAsync(Notification notification)
         {
             this.logger.LogDebug(
                 "Storing notification for user ",
                 notification.UserId);
 
-            return Task.FromResult(notification);
+            await this.table.CreateIfNotExistsAsync().ConfigureAwait(false);
+
+            var notificationEntity = NotificationTableEntity.FromNotification(notification, this.serializerSettingsProvider.Instance);
+
+            var createOperation = TableOperation.Insert(notificationEntity);
+
+            TableResult result = await this.table.ExecuteAsync(createOperation).ConfigureAwait(false);
+
+            // TODO: Check result status code
+            var response = (NotificationTableEntity)result.Result;
+
+            return response.ToNotification(this.serializerSettingsProvider.Instance);
         }
     }
 }

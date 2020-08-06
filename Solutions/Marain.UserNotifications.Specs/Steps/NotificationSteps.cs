@@ -48,7 +48,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public void ThenIdOfTheNotificationCalledShouldBeSet(string notificationName)
         {
             Notification actual = this.scenarioContext.Get<Notification>(notificationName);
-            Assert.IsNotNull(actual.NotificationId);
+            Assert.IsNotNull(actual.Id);
         }
     }
 }

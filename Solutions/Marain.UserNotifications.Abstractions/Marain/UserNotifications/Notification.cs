@@ -15,21 +15,21 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Initializes a new instance of the <see cref="Notification"/> class.
         /// </summary>
-        /// <param name="notificationId">The <see cref="NotificationId"/>.</param>
+        /// <param name="id">The <see cref="Id"/>.</param>
         /// <param name="notificationType">The <see cref="NotificationType" />.</param>
         /// <param name="userId">The <see cref="UserId" />.</param>
         /// <param name="timestamp">The <see cref="Timestamp" />.</param>
         /// <param name="properties">The <see cref="Properties" />.</param>
         /// <param name="correlationIds">The <see cref="CorrelationIds" />.</param>
         public Notification(
-            string? notificationId,
+            string? id,
             string notificationType,
             string userId,
-            DateTime timestamp,
+            DateTimeOffset timestamp,
             IPropertyBag properties,
             string[] correlationIds)
         {
-            this.NotificationId = notificationId;
+            this.Id = id;
             this.NotificationType = notificationType;
             this.UserId = userId;
             this.Timestamp = timestamp;
@@ -44,7 +44,7 @@ namespace Marain.UserNotifications
         /// The Id will be specific to the underlying storage mechanism being used and should never be set or modified
         /// externally.
         /// </remarks>
-        public string? NotificationId { get; }
+        public string? Id { get; }
 
         /// <summary>
         /// Gets the type of the notification. These types are defined by the consuming application, so can be
@@ -67,7 +67,7 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Gets the date and time at which the event being notified took place.
         /// </summary>
-        public DateTime Timestamp { get; }
+        public DateTimeOffset Timestamp { get; }
 
         /// <summary>
         /// Gets additional data associated with the notification. This is generally used by a delivery channel
