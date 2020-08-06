@@ -30,21 +30,31 @@ namespace Marain.UserNotifications.Specs.Steps
             this.serializationSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
         }
 
-        [Given("I have a notification called '(.*)'")]
-        public void GivenIHaveANotificationCalled(string notificationName, Table table)
+        [Given("I have a user notification called '(.*)'")]
+        public void GivenIHaveAUserNotificationCalled(string notificationName, Table table)
         {
-            Notification notification = this.BuildNotificationFrom(table.Rows[0]);
+            UserNotification notification = this.BuildNotificationFrom(table.Rows[0]);
             this.scenarioContext.Set(notification, notificationName);
         }
 
-        private Notification BuildNotificationFrom(TableRow tableRow)
+        [Given("I have user notifications")]
+        public void GivenIHaveUserNotifications(Table table)
+        {
+            foreach (TableRow row in table.Rows)
+            {
+                UserNotification notification = this.BuildNotificationFrom(row);
+                this.scenarioContext.Set(notification, row["Name"]);
+            }
+        }
+
+        private UserNotification BuildNotificationFrom(TableRow tableRow)
         {
             string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();
             IPropertyBag properties = JsonConvert.DeserializeObject<IPropertyBag>(tableRow["PropertiesJson"], this.serializationSettingsProvider.Instance);
 
             string? notificationId = tableRow.ContainsKey("Id") ? tableRow["Id"] : null;
 
-            return new Notification(
+            return new UserNotification(
                 notificationId,
                 tableRow["NotificationType"],
                 tableRow["UserId"],

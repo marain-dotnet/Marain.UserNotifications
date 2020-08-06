@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds Azure table-based implementation of <see cref="ITenantedNotificationStoreFactory"/> to the service container.
+        /// Adds Azure table-based implementation of <see cref="ITenantedUserNotificationStoreFactory"/> to the service container.
         /// </summary>
         /// <param name="services">The collection.</param>
         /// <param name="getCloudTableFactoryOptions">A callback function that returns the <see cref="TenantCloudTableFactoryOptions"/>.</param>
@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             Func<IServiceProvider, TenantCloudTableFactoryOptions> getCloudTableFactoryOptions)
         {
-            if (services.Any(s => s.ServiceType is ITenantedNotificationStoreFactory))
+            if (services.Any(s => s.ServiceType is ITenantedUserNotificationStoreFactory))
             {
                 return services;
             }
@@ -33,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTenantCloudTableFactory(getCloudTableFactoryOptions);
 
             // TODO: Wire this up properly.
-            services.AddSingleton<ITenantedNotificationStoreFactory, TenantedAzureTableNotificationStoreFactory>();
+            services.AddSingleton<ITenantedUserNotificationStoreFactory, TenantedAzureTableUserNotificationStoreFactory>();
 
             return services;
         }

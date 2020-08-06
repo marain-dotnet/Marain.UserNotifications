@@ -36,7 +36,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
                 orchestrationContext.InstanceId,
                 orchestrationContext.ParentInstanceId);
 
-            TenantedFunctionData<Notification> request = orchestrationContext.GetInput<TenantedFunctionData<Notification>>();
+            TenantedFunctionData<UserNotification> request = orchestrationContext.GetInput<TenantedFunctionData<UserNotification>>();
 
             replaySafeLogger.LogDebug("Deserialized CreateNotificationsRequest for user Id '{userId}'", request.Payload.UserId);
 

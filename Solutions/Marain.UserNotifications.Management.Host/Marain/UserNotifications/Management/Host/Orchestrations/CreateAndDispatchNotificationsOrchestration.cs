@@ -40,7 +40,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
             correlationIds[^1] = orchestrationContext.InstanceId;
 
             IEnumerable<Task> createNotificationTasks = request.Payload.UserIds
-                .Select(userId => new Notification(
+                .Select(userId => new UserNotification(
                     null,
                     request.Payload.NotificationType,
                     userId,
@@ -50,7 +50,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
                     null))
                 .Select(notification => orchestrationContext.CallSubOrchestratorAsync(
                     nameof(CreateAndDispatchNotificationOrchestration),
-                    new TenantedFunctionData<Notification>(request.TenantId, notification)));
+                    new TenantedFunctionData<UserNotification>(request.TenantId, notification)));
 
             await Task.WhenAll(createNotificationTasks);
         }

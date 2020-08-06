@@ -42,7 +42,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                 scenarioContext,
                 services =>
                 {
-                    services.AddSingleton<INotificationStore>(
+                    services.AddSingleton<IUserNotificationStore>(
                         sp =>
                         {
                             IConfiguration config = sp.GetRequiredService<IConfiguration>();
@@ -58,10 +58,10 @@ namespace Marain.UserNotifications.Specs.Bindings
                             // Add the table to the scenario context so it can be deleted later.
                             scenarioContext.Set(table);
 
-                            return new AzureTableNotificationStore(
+                            return new AzureTableUserNotificationStore(
                                 table,
                                 sp.GetRequiredService<IJsonSerializerSettingsProvider>(),
-                                sp.GetRequiredService<ILogger<AzureTableNotificationStore>>());
+                                sp.GetRequiredService<ILogger<AzureTableUserNotificationStore>>());
                         });
                 });
         }

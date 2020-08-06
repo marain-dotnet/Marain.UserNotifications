@@ -26,11 +26,11 @@ namespace Marain.UserNotifications.Specs.Steps
             this.serializationSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
         }
 
-        [Then("the properties of the notification called '(.*)' should match the notification called '(.*)'")]
-        public void ThenThePropertiesOfTheNotificationCalledShouldMatchTheNotificationCalled(string actualNotificationName, string expectedNotificationName)
+        [Then("the properties of the user notification called '(.*)' should match the user notification called '(.*)'")]
+        public void ThenThePropertiesOfTheUserNotificationCalledShouldMatchTheUserNotificationCalled(string actualNotificationName, string expectedNotificationName)
         {
-            Notification actual = this.scenarioContext.Get<Notification>(actualNotificationName);
-            Notification expected = this.scenarioContext.Get<Notification>(expectedNotificationName);
+            UserNotification actual = this.scenarioContext.Get<UserNotification>(actualNotificationName);
+            UserNotification expected = this.scenarioContext.Get<UserNotification>(expectedNotificationName);
 
             Assert.AreEqual(expected.Metadata.CorrelationIds, actual.Metadata.CorrelationIds);
             Assert.AreEqual(expected.NotificationType, actual.NotificationType);
@@ -44,17 +44,17 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.AreEqual(serializedExpectedProperties, serializedActualProperties);
         }
 
-        [Then("the Id of the notification called '(.*)' should be set")]
-        public void ThenIdOfTheNotificationCalledShouldBeSet(string notificationName)
+        [Then("the Id of the user notification called '(.*)' should be set")]
+        public void ThenIdOfTheUserNotificationCalledShouldBeSet(string notificationName)
         {
-            Notification actual = this.scenarioContext.Get<Notification>(notificationName);
+            UserNotification actual = this.scenarioContext.Get<UserNotification>(notificationName);
             Assert.IsNotNull(actual.Id);
         }
 
-        [Then("the ETag of the notification called '(.*)' should be set")]
-        public void ThenETagOfTheNotificationCalledShouldBeSet(string notificationName)
+        [Then("the ETag of the user notification called '(.*)' should be set")]
+        public void ThenETagOfTheUserNotificationCalledShouldBeSet(string notificationName)
         {
-            Notification actual = this.scenarioContext.Get<Notification>(notificationName);
+            UserNotification actual = this.scenarioContext.Get<UserNotification>(notificationName);
             Assert.IsNotNull(actual.Metadata.ETag);
         }
     }

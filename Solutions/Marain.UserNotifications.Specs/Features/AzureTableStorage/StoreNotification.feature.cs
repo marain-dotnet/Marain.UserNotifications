@@ -80,12 +80,12 @@ namespace Marain.UserNotifications.Specs.Features.AzureTableStorage
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Store a new notification")]
-        public virtual void StoreANewNotification()
+        [NUnit.Framework.DescriptionAttribute("Store a new user notification")]
+        public virtual void StoreANewUserNotification()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Store a new notification", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Store a new user notification", null, tagsOfScenario, argumentsOfScenario);
 #line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -119,21 +119,21 @@ this.ScenarioInitialize(scenarioInfo);
                             "{ \"prop1\": \"val1\" }",
                             "[\"id1\", \"id2\"]"});
 #line 7
- testRunner.Given("I have a notification called \'input\'", ((string)(null)), table1, "Given ");
+ testRunner.Given("I have a user notification called \'input\'", ((string)(null)), table1, "Given ");
 #line hidden
 #line 10
- testRunner.When("I tell the notification store to store the notification called \'input\' and call t" +
-                        "he result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I tell the user notification store to store the user notification called \'input\' " +
+                        "and call the result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
  testRunner.Then("no exception should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 12
- testRunner.And("the properties of the notification called \'result\' should match the notification " +
-                        "called \'input\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the properties of the user notification called \'result\' should match the user not" +
+                        "ification called \'input\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
- testRunner.And("the Id of the notification called \'result\' should be set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the Id of the user notification called \'result\' should be set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -179,16 +179,83 @@ this.ScenarioInitialize(scenarioInfo);
                             "{ \"prop1\": \"val1\" }",
                             "[\"id1\", \"id2\"]"});
 #line 17
- testRunner.Given("I have a notification called \'input\'", ((string)(null)), table2, "Given ");
+ testRunner.Given("I have a user notification called \'input\'", ((string)(null)), table2, "Given ");
 #line hidden
 #line 20
- testRunner.And("I have told the notification store to store the notification called \'input\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I have told the user notification store to store the user notification called \'in" +
+                        "put\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 21
- testRunner.When("I tell the notification store to store the notification called \'input\' and call t" +
-                        "he result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I tell the user notification store to store the user notification called \'input\' " +
+                        "and call the result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 22
+ testRunner.Then("a \'UserNotificationStoreConcurrencyException\' should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Attempting to store equivalent notifications throws a concurrency exception")]
+        public virtual void AttemptingToStoreEquivalentNotificationsThrowsAConcurrencyException()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Attempting to store equivalent notifications throws a concurrency exception", null, tagsOfScenario, argumentsOfScenario);
+#line 24
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Name",
+                            "NotificationType",
+                            "UserId",
+                            "Timestamp",
+                            "PropertiesJson",
+                            "CorrelationIds"});
+                table3.AddRow(new string[] {
+                            "input1",
+                            "marain.test.notification.v1",
+                            "F88677CE-8A9B-41FC-9E75-A8F71C9470C8",
+                            "2012-03-19T07:22Z",
+                            "{ \"prop1\": \"val1\" }",
+                            "[\"id1\", \"id2\"]"});
+                table3.AddRow(new string[] {
+                            "input2",
+                            "marain.test.notification.v1",
+                            "F88677CE-8A9B-41FC-9E75-A8F71C9470C8",
+                            "2012-03-19T07:22Z",
+                            "{ \"prop1\": \"val1\" }",
+                            "[\"id3\", \"id4\"]"});
+#line 25
+ testRunner.Given("I have user notifications", ((string)(null)), table3, "Given ");
+#line hidden
+#line 29
+ testRunner.And("I have told the user notification store to store the user notification called \'in" +
+                        "put1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 30
+ testRunner.When("I tell the user notification store to store the user notification called \'input2\'" +
+                        " and call the result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 31
  testRunner.Then("a \'UserNotificationStoreConcurrencyException\' should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

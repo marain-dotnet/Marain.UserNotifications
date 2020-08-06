@@ -1,4 +1,4 @@
-﻿// <copyright file="Notification.cs" company="Endjin Limited">
+﻿// <copyright file="UserNotification.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -12,19 +12,19 @@ namespace Marain.UserNotifications
     /// <summary>
     /// A single notification targetted at a specific user.
     /// </summary>
-    public class Notification
+    public class UserNotification
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Notification"/> class.
+        /// Initializes a new instance of the <see cref="UserNotification"/> class.
         /// </summary>
         /// <param name="id">The <see cref="Id"/>.</param>
         /// <param name="notificationType">The <see cref="NotificationType" />.</param>
         /// <param name="userId">The <see cref="UserId" />.</param>
         /// <param name="timestamp">The <see cref="Timestamp" />.</param>
         /// <param name="properties">The <see cref="Properties" />.</param>
-        /// <param name="correlationIds">The <see cref="NotificationMetadata.CorrelationIds" />.</param>
-        /// <param name="eTag">The <see cref="NotificationMetadata.ETag" />.</param>
-        public Notification(
+        /// <param name="correlationIds">The <see cref="UserNotificationMetadata.CorrelationIds" />.</param>
+        /// <param name="eTag">The <see cref="UserNotificationMetadata.ETag" />.</param>
+        public UserNotification(
             string? id,
             string notificationType,
             string userId,
@@ -38,7 +38,7 @@ namespace Marain.UserNotifications
             this.UserId = userId ?? throw new ArgumentNullException(nameof(userId));
             this.Timestamp = timestamp != default ? timestamp : throw new ArgumentException(nameof(timestamp));
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
-            this.Metadata = new NotificationMetadata(
+            this.Metadata = new UserNotificationMetadata(
                 correlationIds ?? throw new ArgumentNullException(nameof(correlationIds)),
                 eTag);
         }
@@ -79,7 +79,7 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Gets metadata for the notification.
         /// </summary>
-        public NotificationMetadata Metadata { get; }
+        public UserNotificationMetadata Metadata { get; }
 
         /// <summary>
         /// Constructs a hash for the notification that can be used to determine whether two notifications are

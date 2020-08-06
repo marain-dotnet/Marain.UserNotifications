@@ -1,20 +1,20 @@
-﻿// <copyright file="NotificationMetadata.cs" company="Endjin Limited">
+﻿// <copyright file="UserNotificationMetadata.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Marain.UserNotifications
 {
     /// <summary>
-    /// Class representing metadata for a <see cref="Notification"/>.
+    /// Class representing metadata for a <see cref="UserNotification"/>.
     /// </summary>
-    public class NotificationMetadata
+    public class UserNotificationMetadata
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotificationMetadata"/> class.
+        /// Initializes a new instance of the <see cref="UserNotificationMetadata"/> class.
         /// </summary>
         /// <param name="correlationIds">The <see cref="CorrelationIds"/>.</param>
         /// <param name="etag">The <see cref="ETag"/>.</param>
-        public NotificationMetadata(string[] correlationIds, string? etag)
+        public UserNotificationMetadata(string[] correlationIds, string? etag)
         {
             this.CorrelationIds = correlationIds;
             this.ETag = etag;

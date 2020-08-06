@@ -22,15 +22,15 @@ namespace Marain.UserNotifications.Specs.Steps
             this.scenarioContext = scenarioContext;
         }
 
-        [When("I tell the notification store to store the notification called '(.*)' and call the result '(.*)'")]
-        public async Task WhenITellTheNotificationStoreToStoreTheNotificationCalledAndCallTheResult(string notificationName, string resultName)
+        [When("I tell the user notification store to store the user notification called '(.*)' and call the result '(.*)'")]
+        public async Task WhenITellTheUserNotificationStoreToStoreTheUserNotificationCalledAndCallTheResult(string notificationName, string resultName)
         {
-            INotificationStore store = this.serviceProvider.GetRequiredService<INotificationStore>();
-            Notification notification = this.scenarioContext.Get<Notification>(notificationName);
+            IUserNotificationStore store = this.serviceProvider.GetRequiredService<IUserNotificationStore>();
+            UserNotification notification = this.scenarioContext.Get<UserNotification>(notificationName);
 
             try
             {
-                Notification result = await store.StoreAsync(notification).ConfigureAwait(false);
+                UserNotification result = await store.StoreAsync(notification).ConfigureAwait(false);
 
                 this.scenarioContext.Set(result, resultName);
             }
@@ -40,11 +40,11 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [Given("I have told the notification store to store the notification called '(.*)'")]
-        public Task WhenITellTheNotificationStoreToStoreTheNotificationCalled(string notificationName)
+        [Given("I have told the user notification store to store the user notification called '(.*)'")]
+        public Task WhenITellTheUserNotificationStoreToStoreTheUserNotificationCalled(string notificationName)
         {
-            INotificationStore store = this.serviceProvider.GetRequiredService<INotificationStore>();
-            Notification notification = this.scenarioContext.Get<Notification>(notificationName);
+            IUserNotificationStore store = this.serviceProvider.GetRequiredService<IUserNotificationStore>();
+            UserNotification notification = this.scenarioContext.Get<UserNotification>(notificationName);
             return store.StoreAsync(notification);
         }
     }

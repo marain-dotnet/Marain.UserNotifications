@@ -18,7 +18,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
     public class CreateNotificationActivity
     {
         private readonly ITenantProvider tenantProvider;
-        private readonly ITenantedNotificationStoreFactory notificationStoreFactory;
+        private readonly ITenantedUserNotificationStoreFactory notificationStoreFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateNotificationActivity"/> class.
@@ -27,7 +27,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
         /// <param name="notificationStoreFactory">The factory for the notification store.</param>
         public CreateNotificationActivity(
             ITenantProvider tenantProvider,
-            ITenantedNotificationStoreFactory notificationStoreFactory)
+            ITenantedUserNotificationStoreFactory notificationStoreFactory)
         {
             this.tenantProvider = tenantProvider
                 ?? throw new ArgumentNullException(nameof(tenantProvider));
@@ -46,7 +46,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
             [ActivityTrigger] IDurableActivityContext context,
             ILogger logger)
         {
-            TenantedFunctionData<Notification> request = context.GetInput<TenantedFunctionData<Notification>>();
+            TenantedFunctionData<UserNotification> request = context.GetInput<TenantedFunctionData<UserNotification>>();
 
             ITenant tenant = await this.tenantProvider.GetTenantAsync(request.TenantId).ConfigureAwait(false);
 
@@ -55,7 +55,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 request.Payload.NotificationType,
                 request.Payload.UserId);
 
-            INotificationStore store = await this.notificationStoreFactory.GetNotificationStoreForTenantAsync(tenant).ConfigureAwait(false);
+            IUserNotificationStore store = await this.notificationStoreFactory.GetNotificationStoreForTenantAsync(tenant).ConfigureAwait(false);
 
             await store.StoreAsync(request.Payload).ConfigureAwait(false);
         }

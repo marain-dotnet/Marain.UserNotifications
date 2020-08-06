@@ -1,4 +1,4 @@
-﻿// <copyright file="NotificationTableEntity.cs" company="Endjin Limited">
+﻿// <copyright file="UserNotificationTableEntity.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -11,9 +11,9 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Table storage specific version of a <see cref="Notification"/>.
+    /// Table storage specific version of a <see cref="UserNotification"/>.
     /// </summary>
-    public class NotificationTableEntity : TableEntity
+    public class UserNotificationTableEntity : TableEntity
     {
         /// <summary>
         /// Gets or sets the type of the notification.
@@ -36,12 +36,12 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
         public string PropertiesJson { get; set; }
 
         /// <summary>
-        /// Creates a new <see cref="NotificationTableEntity"/> from a <see cref="Notification"/>.
+        /// Creates a new <see cref="UserNotificationTableEntity"/> from a <see cref="UserNotification"/>.
         /// </summary>
         /// <param name="source">The source notification.</param>
         /// <param name="serializerSettings">The serialization settings.</param>
-        /// <returns>A new <see cref="NotificationTableEntity"/>.</returns>
-        public static NotificationTableEntity FromNotification(Notification source, JsonSerializerSettings serializerSettings)
+        /// <returns>A new <see cref="UserNotificationTableEntity"/>.</returns>
+        public static UserNotificationTableEntity FromNotification(UserNotification source, JsonSerializerSettings serializerSettings)
         {
             long reversedTimestamp = long.MaxValue - source.Timestamp.ToUnixTimeMilliseconds();
             string correlationIdsJson = JsonConvert.SerializeObject(source.Metadata.CorrelationIds, serializerSettings);
@@ -49,7 +49,7 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
             string hash = source.GetIdentityHash(serializerSettings);
             string rowKey = $"{reversedTimestamp}-{hash}";
 
-            return new NotificationTableEntity
+            return new UserNotificationTableEntity
             {
                 PartitionKey = source.UserId,
                 RowKey = rowKey,
@@ -62,17 +62,17 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
         }
 
         /// <summary>
-        /// Returns the entity as a <see cref="Notification"/>.
+        /// Returns the entity as a <see cref="UserNotification"/>.
         /// </summary>
         /// <param name="serializerSettings">The serialization settings.</param>
-        /// <returns>The converted <see cref="Notification"/>.</returns>
-        public Notification ToNotification(JsonSerializerSettings serializerSettings)
+        /// <returns>The converted <see cref="UserNotification"/>.</returns>
+        public UserNotification ToNotification(JsonSerializerSettings serializerSettings)
         {
             string[] correlationIds = JsonConvert.DeserializeObject<string[]>(this.CorrelationIdsJson, serializerSettings);
             IPropertyBag properties = JsonConvert.DeserializeObject<IPropertyBag>(this.PropertiesJson, serializerSettings);
             string id = GetIdFromPartitionKeyAndRowKey(this.PartitionKey, this.RowKey, serializerSettings);
 
-            return new Notification(
+            return new UserNotification(
                 id,
                 this.NotificationType,
                 this.PartitionKey,

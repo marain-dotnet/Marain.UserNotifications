@@ -1,4 +1,4 @@
-﻿// <copyright file="AzureTableNotificationStore.cs" company="Endjin Limited">
+﻿// <copyright file="AzureTableUserNotificationStore.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -12,21 +12,21 @@ namespace Marain.UserNotifications.Storage.AzureTable
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// An implementation of <see cref="INotificationStore"/> over Azure Table storage.
+    /// An implementation of <see cref="IUserNotificationStore"/> over Azure Table storage.
     /// </summary>
-    public class AzureTableNotificationStore : INotificationStore
+    public class AzureTableUserNotificationStore : IUserNotificationStore
     {
         private readonly ILogger logger;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
         private readonly CloudTable table;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AzureTableNotificationStore"/> class.
+        /// Initializes a new instance of the <see cref="AzureTableUserNotificationStore"/> class.
         /// </summary>
         /// <param name="table">The underlying cloud table.</param>
         /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
         /// <param name="logger">The logger.</param>
-        public AzureTableNotificationStore(
+        public AzureTableUserNotificationStore(
             CloudTable table,
             IJsonSerializerSettingsProvider serializerSettingsProvider,
             ILogger logger)
@@ -40,7 +40,7 @@ namespace Marain.UserNotifications.Storage.AzureTable
         }
 
         /// <inheritdoc/>
-        public async Task<Notification> StoreAsync(Notification notification)
+        public async Task<UserNotification> StoreAsync(UserNotification notification)
         {
             this.logger.LogDebug(
                 "Storing notification for user ",
@@ -48,7 +48,7 @@ namespace Marain.UserNotifications.Storage.AzureTable
 
             await this.table.CreateIfNotExistsAsync().ConfigureAwait(false);
 
-            var notificationEntity = NotificationTableEntity.FromNotification(notification, this.serializerSettingsProvider.Instance);
+            var notificationEntity = UserNotificationTableEntity.FromNotification(notification, this.serializerSettingsProvider.Instance);
 
             var createOperation = TableOperation.Insert(notificationEntity);
 
@@ -57,7 +57,7 @@ namespace Marain.UserNotifications.Storage.AzureTable
                 TableResult result = await this.table.ExecuteAsync(createOperation).ConfigureAwait(false);
 
                 // TODO: Check result status code
-                var response = (NotificationTableEntity)result.Result;
+                var response = (UserNotificationTableEntity)result.Result;
                 return response.ToNotification(this.serializerSettingsProvider.Instance);
             }
             catch (StorageException ex) when (ex.Message == "Conflict")
