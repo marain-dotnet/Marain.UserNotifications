@@ -38,15 +38,16 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
             request.CorrelationIds.CopyTo(correlationIds, 0);
             correlationIds[^1] = orchestrationContext.InstanceId;
 
-            IEnumerable<Task> createNotificationTasks = request.UserIds.Select(
-                userId => orchestrationContext.CallSubOrchestratorAsync(
+            IEnumerable<Task> createNotificationTasks = request.UserIds
+                .Select(userId => new Notification(
+                    request.NotificationType,
+                    userId,
+                    request.Timestamp,
+                    request.Properties,
+                    correlationIds))
+                .Select(notification => orchestrationContext.CallSubOrchestratorAsync(
                     nameof(CreateAndDispatchNotificationOrchestration),
-                    new CreateNotificationsRequest(
-                        request.NotificationType,
-                        new[] { userId },
-                        request.Timestamp,
-                        request.Properties,
-                        correlationIds)));
+                    notification));
 
             await Task.WhenAll(createNotificationTasks);
         }

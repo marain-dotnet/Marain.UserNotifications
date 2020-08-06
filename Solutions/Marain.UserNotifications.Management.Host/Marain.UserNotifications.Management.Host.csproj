@@ -25,6 +25,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Marain.UserNotifications.Abstractions\Marain.UserNotifications.Abstractions.csproj" />
     <ProjectReference Include="..\Marain.UserNotifications.Hosting.AspNetCore\Marain.UserNotifications.Hosting.AspNetCore.csproj" />
   </ItemGroup>
   <ItemGroup>

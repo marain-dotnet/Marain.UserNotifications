@@ -6,6 +6,7 @@
 namespace Marain.UserNotifications.Management.Host.Orchestrations
 {
     using System.Threading.Tasks;
+    using Marain.UserNotifications.Management.Host.Activities;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
     using Microsoft.Extensions.Logging;
@@ -22,7 +23,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
         /// <param name="log">The current logger.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [FunctionName(nameof(CreateAndDispatchNotificationOrchestration))]
-        public Task RunAsync(
+        public async Task RunAsync(
             [OrchestrationTrigger] IDurableOrchestrationContext orchestrationContext,
             ILogger log)
         {
@@ -34,7 +35,11 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
                 orchestrationContext.InstanceId,
                 orchestrationContext.ParentInstanceId);
 
-            return Task.CompletedTask;
+            Notification request = orchestrationContext.GetInput<Notification>();
+
+            replaySafeLogger.LogDebug("Deserialized CreateNotificationsRequest for user Id '{userId}'", request.UserId);
+
+            await orchestrationContext.CallActivityAsync(nameof(CreateNotificationActivity), request);
         }
     }
 }
