@@ -22,25 +22,21 @@ namespace Marain.UserNotifications
         /// <param name="userId">The <see cref="UserId" />.</param>
         /// <param name="timestamp">The <see cref="Timestamp" />.</param>
         /// <param name="properties">The <see cref="Properties" />.</param>
-        /// <param name="correlationIds">The <see cref="UserNotificationMetadata.CorrelationIds" />.</param>
-        /// <param name="eTag">The <see cref="UserNotificationMetadata.ETag" />.</param>
+        /// <param name="metadata">The <see cref="Metadata"/>.</param>
         public UserNotification(
             string? id,
             string notificationType,
             string userId,
             DateTimeOffset timestamp,
             IPropertyBag properties,
-            string[] correlationIds,
-            string? eTag)
+            UserNotificationMetadata metadata)
         {
             this.Id = id;
             this.NotificationType = notificationType ?? throw new ArgumentNullException(nameof(notificationType));
             this.UserId = userId ?? throw new ArgumentNullException(nameof(userId));
             this.Timestamp = timestamp != default ? timestamp : throw new ArgumentException(nameof(timestamp));
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
-            this.Metadata = new UserNotificationMetadata(
-                correlationIds ?? throw new ArgumentNullException(nameof(correlationIds)),
-                eTag);
+            this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
         }
 
         /// <summary>

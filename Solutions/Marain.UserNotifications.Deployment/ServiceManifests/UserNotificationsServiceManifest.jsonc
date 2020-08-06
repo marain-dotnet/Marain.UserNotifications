@@ -9,5 +9,13 @@
     }
   ],
   "requiredConfigurationEntries": [
+    {
+      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azuretablestorage",
+      "key": "userNotificationStore",
+      "containerDefinition": {
+        "tableName": "usernotifications"
+      },
+      "description": "User notifications store."
+    }
   ]
 }

@@ -29,7 +29,6 @@
     <None Include="packages.config" />
     <Content Include="ServiceManifests\Configuration\UserNotificationsConfigForStorageEmulator.json" />
     <Content Include="ServiceManifests\UserNotificationsServiceManifest.jsonc" />
-    <Content Include="ServiceManifests\Configuration\UserNotificationsConfigForMarainDev.json" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
 </Project>

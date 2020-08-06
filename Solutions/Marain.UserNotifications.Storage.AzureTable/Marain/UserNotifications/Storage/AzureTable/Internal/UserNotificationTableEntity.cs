@@ -78,8 +78,7 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
                 this.PartitionKey,
                 this.NotificationTimestamp,
                 properties,
-                correlationIds,
-                this.ETag);
+                new UserNotificationMetadata(correlationIds, this.ETag));
         }
 
         private static string GetIdFromPartitionKeyAndRowKey(string partitionKey, string rowKey, JsonSerializerSettings serializerSettings)

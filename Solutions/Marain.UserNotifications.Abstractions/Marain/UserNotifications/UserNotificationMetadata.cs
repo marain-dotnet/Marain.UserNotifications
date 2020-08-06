@@ -4,6 +4,8 @@
 
 namespace Marain.UserNotifications
 {
+    using System;
+
     /// <summary>
     /// Class representing metadata for a <see cref="UserNotification"/>.
     /// </summary>
@@ -16,7 +18,10 @@ namespace Marain.UserNotifications
         /// <param name="etag">The <see cref="ETag"/>.</param>
         public UserNotificationMetadata(string[] correlationIds, string? etag)
         {
-            this.CorrelationIds = correlationIds;
+            // Note: although correlation Ids should not be null, some combinations of serializer settings can result
+            // in an empty array not being serialized, meaning that when this constructor is called during
+            // deserialization we will get a null value. As such, we'll just treat null the same as an empty array.
+            this.CorrelationIds = correlationIds ?? Array.Empty<string>();
             this.ETag = etag;
         }
 

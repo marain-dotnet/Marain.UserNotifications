@@ -57,7 +57,19 @@ namespace Marain.UserNotifications.Management.Host.Activities
 
             IUserNotificationStore store = await this.notificationStoreFactory.GetNotificationStoreForTenantAsync(tenant).ConfigureAwait(false);
 
-            await store.StoreAsync(request.Payload).ConfigureAwait(false);
+            try
+            {
+                await store.StoreAsync(request.Payload).ConfigureAwait(false);
+            }
+            catch (UserNotificationStoreConcurrencyException)
+            {
+                // We will ignore concurrency exceptions; these suggest that the notification has already been created,
+                // which normally means that we've received the request to create it twice for reasons outside our
+                // control.
+                logger.LogInformation(
+                    "Received a concurrency exception when attempting to store notification for user '{userId}'.",
+                    request.Payload.UserId);
+            }
         }
     }
 }

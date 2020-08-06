@@ -1,5 +1,13 @@
 [
   {
+    "key": "userNotificationStore",
+    "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azuretablestorage",
+    "configuration": {
+      "accountName": null,
+      "disableTenantIdPrefix": false
+    }
+  },
+  {
     "key": "operationsStore",
     "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azureblobstorage",
     "configuration": {

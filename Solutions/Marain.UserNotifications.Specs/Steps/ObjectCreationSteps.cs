@@ -60,8 +60,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 tableRow["UserId"],
                 DateTime.Parse(tableRow["Timestamp"]),
                 properties,
-                correlationIds,
-                null);
+                new UserNotificationMetadata(correlationIds, null));
         }
     }
 }
