@@ -15,7 +15,7 @@ namespace Marain.UserNotifications
         /// Stores the given notification.
         /// </summary>
         /// <param name="notification">The notification to store.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        Task StoreAsync(Notification notification);
+        /// <returns>The stored notification.</returns>
+        Task<Notification> StoreAsync(Notification notification);
     }
 }

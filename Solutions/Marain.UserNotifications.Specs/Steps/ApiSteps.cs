@@ -8,7 +8,6 @@ namespace Marain.UserNotifications.Specs.Steps
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Newtonsoft.Json.Linq;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
 

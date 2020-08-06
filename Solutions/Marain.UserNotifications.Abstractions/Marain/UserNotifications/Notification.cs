@@ -15,24 +15,36 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Initializes a new instance of the <see cref="Notification"/> class.
         /// </summary>
+        /// <param name="notificationId">The <see cref="NotificationId"/>.</param>
         /// <param name="notificationType">The <see cref="NotificationType" />.</param>
         /// <param name="userId">The <see cref="UserId" />.</param>
         /// <param name="timestamp">The <see cref="Timestamp" />.</param>
         /// <param name="properties">The <see cref="Properties" />.</param>
         /// <param name="correlationIds">The <see cref="CorrelationIds" />.</param>
         public Notification(
+            string? notificationId,
             string notificationType,
             string userId,
             DateTime timestamp,
             IPropertyBag properties,
             string[] correlationIds)
         {
+            this.NotificationId = notificationId;
             this.NotificationType = notificationType;
             this.UserId = userId;
             this.Timestamp = timestamp;
             this.Properties = properties;
             this.CorrelationIds = correlationIds;
         }
+
+        /// <summary>
+        /// Gets the Id of the notification. If not set, this is a new notification that has not yet been stored.
+        /// </summary>
+        /// <remarks>
+        /// The Id will be specific to the underlying storage mechanism being used and should never be set or modified
+        /// externally.
+        /// </remarks>
+        public string? NotificationId { get; }
 
         /// <summary>
         /// Gets the type of the notification. These types are defined by the consuming application, so can be

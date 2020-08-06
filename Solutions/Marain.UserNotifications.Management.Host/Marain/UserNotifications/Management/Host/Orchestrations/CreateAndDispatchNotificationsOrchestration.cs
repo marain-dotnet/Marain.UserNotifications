@@ -41,6 +41,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
 
             IEnumerable<Task> createNotificationTasks = request.Payload.UserIds
                 .Select(userId => new Notification(
+                    null,
                     request.Payload.NotificationType,
                     userId,
                     request.Payload.Timestamp,

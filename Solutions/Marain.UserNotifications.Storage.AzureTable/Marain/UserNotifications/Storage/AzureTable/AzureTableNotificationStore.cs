@@ -27,13 +27,13 @@ namespace Marain.UserNotifications.Storage.AzureTable
         }
 
         /// <inheritdoc/>
-        public Task StoreAsync(Notification notification)
+        public Task<Notification> StoreAsync(Notification notification)
         {
             this.logger.LogDebug(
                 "Storing notification for user ",
                 notification.UserId);
 
-            return Task.CompletedTask;
+            return Task.FromResult(notification);
         }
     }
 }
