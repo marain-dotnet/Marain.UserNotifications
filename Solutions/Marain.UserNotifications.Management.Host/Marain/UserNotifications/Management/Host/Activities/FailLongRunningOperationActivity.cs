@@ -47,7 +47,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
         public async Task RunAction(
             [ActivityTrigger] IDurableActivityContext context)
         {
-            (Guid operationId, string tenantId) = context.GetInput<Tuple<Guid, string>>();
+            (Guid operationId, string tenantId) = context.GetInput<(Guid, string)>();
             string delegatedTenantId =
                 await this.marainServicesTenancy.GetDelegatedTenantIdForRequestingTenantAsync(tenantId);
 
