@@ -129,6 +129,10 @@ this.ScenarioInitialize(scenarioInfo);
 #line 24
     testRunner.And("the response should contain a \'Location\' header", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
+#line 25
+    testRunner.And("the long running operation whose Url is in the response Location header should ha" +
+                        "ve a \'status\' of \'Succeeded\' within 15 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
             }
             this.ScenarioCleanup();
         }

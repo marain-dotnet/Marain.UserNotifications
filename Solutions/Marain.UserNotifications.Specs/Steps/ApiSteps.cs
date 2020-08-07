@@ -8,8 +8,13 @@ namespace Marain.UserNotifications.Specs.Steps
     using System.Net;
     using System.Net.Http;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
+    using Corvus.Retry;
+    using Corvus.Retry.Policies;
+    using Corvus.Retry.Strategies;
     using Marain.UserNotifications.Specs.Bindings;
+    using Newtonsoft.Json.Linq;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
 
@@ -68,6 +73,35 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
             Assert.IsTrue(response.Headers.Contains(headerName));
+        }
+
+        [Then("the long running operation whose Url is in the response Location header should have a '(.*)' of '(.*)' within (.*) seconds")]
+        public Task ThenTheLongRunningOperationWhoseUrlIsInTheResponseLocationHeaderShouldHaveAOfWithinSeconds(string operationPropertyPath, string expectedOperationPropertyValue, int timeout)
+        {
+            HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
+            Uri operationLocation = response.Headers.Location;
+
+            var tokenSource = new CancellationTokenSource();
+            tokenSource.CancelAfter(TimeSpan.FromSeconds(timeout));
+
+            return Retriable.RetryAsync(
+                async () =>
+                {
+                    HttpResponseMessage response = await HttpClient.GetAsync(operationLocation).ConfigureAwait(false);
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var operation = JObject.Parse(responseBody);
+                    JToken targetToken = operation.SelectToken(operationPropertyPath);
+                    string currentValue = targetToken.Value<string>();
+
+                    if (currentValue != expectedOperationPropertyValue)
+                    {
+                        throw new Exception($"Property '{operationPropertyPath}' has the value '{currentValue}', not the required value '{expectedOperationPropertyValue}'");
+                    }
+                },
+                tokenSource.Token,
+                new Linear(TimeSpan.FromSeconds(3), int.MaxValue),
+                new AnyExceptionPolicy(),
+                false);
         }
 
         private async Task SendGetRequest(string path)

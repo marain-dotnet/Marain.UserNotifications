@@ -8,6 +8,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Marain.UserNotifications.Management.Host.Activities;
     using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Microsoft.Azure.WebJobs;
@@ -34,24 +35,37 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
 
             TenantedFunctionData<CreateNotificationsRequest> request = orchestrationContext.GetInput<TenantedFunctionData<CreateNotificationsRequest>>();
 
-            // Fan out to create each notification
-            string[] correlationIds = new string[request.Payload.CorrelationIds.Length + 1];
-            request.Payload.CorrelationIds.CopyTo(correlationIds, 0);
-            correlationIds[^1] = orchestrationContext.InstanceId;
+            try
+            {
+                // Fan out to create each notification
+                string[] correlationIds = new string[request.Payload.CorrelationIds.Length + 1];
+                request.Payload.CorrelationIds.CopyTo(correlationIds, 0);
+                correlationIds[^1] = orchestrationContext.InstanceId;
 
-            IEnumerable<Task> createNotificationTasks = request.Payload.UserIds
-                .Select(userId => new UserNotification(
-                    null,
-                    request.Payload.NotificationType,
-                    userId,
-                    request.Payload.Timestamp,
-                    request.Payload.Properties,
-                    new UserNotificationMetadata(correlationIds, null)))
-                .Select(notification => orchestrationContext.CallSubOrchestratorAsync(
-                    nameof(CreateAndDispatchNotificationOrchestration),
-                    new TenantedFunctionData<UserNotification>(request.TenantId, notification)));
+                IEnumerable<Task> createNotificationTasks = request.Payload.UserIds
+                    .Select(userId => new UserNotification(
+                        null,
+                        request.Payload.NotificationType,
+                        userId,
+                        request.Payload.Timestamp,
+                        request.Payload.Properties,
+                        new UserNotificationMetadata(correlationIds, null)))
+                    .Select(notification => orchestrationContext.CallSubOrchestratorAsync(
+                        nameof(CreateAndDispatchNotificationOrchestration),
+                        new TenantedFunctionData<UserNotification>(request.TenantId, notification)));
 
-            await Task.WhenAll(createNotificationTasks);
+                await Task.WhenAll(createNotificationTasks);
+
+                await orchestrationContext.CallActivityAsync(
+                    nameof(CompleteLongRunningOperationActivity),
+                    (request.LongRunningOperationId.Value, request.TenantId));
+            }
+            catch (FunctionFailedException)
+            {
+                await orchestrationContext.CallActivityAsync(
+                    nameof(FailLongRunningOperationActivity),
+                    (request.LongRunningOperationId.Value, request.TenantId));
+            }
         }
     }
 }

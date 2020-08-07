@@ -4,8 +4,11 @@
 
 namespace Marain.UserNotifications.Management.Host.OpenApi
 {
+    using System;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
+    using Marain.Operations.Client.OperationsControl;
+    using Marain.Operations.Client.OperationsControl.Models;
     using Marain.Services.Tenancy;
     using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.Management.Host.Orchestrations;
@@ -24,15 +27,19 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         public const string CreateNotificationsOperationId = "createNotifications";
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
+        private readonly IMarainOperationsControl operationsControlClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateNotificationsService"/> class.
         /// </summary>
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
+        /// <param name="operationsControlClient">The operations control client.</param>
         public CreateNotificationsService(
-            IMarainServicesTenancy marainServicesTenancy)
+            IMarainServicesTenancy marainServicesTenancy,
+            IMarainOperationsControl operationsControlClient)
         {
             this.marainServicesTenancy = marainServicesTenancy;
+            this.operationsControlClient = operationsControlClient;
         }
 
         /// <summary>
@@ -51,6 +58,10 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
             // TODO: Start long running operation
             string delegatedTenantId = await this.marainServicesTenancy.GetDelegatedTenantIdForRequestingTenantAsync(tenant.Id).ConfigureAwait(false);
+            var operationId = Guid.NewGuid();
+            CreateOperationHeaders response = await this.operationsControlClient.CreateOperationAsync(
+                delegatedTenantId,
+                operationId);
 
             // TODO: Add the operation Id to the correlation Ids
             // TODO: Start new orchestration
@@ -59,10 +70,10 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
             await orchestrationClient.StartNewAsync(
                 nameof(CreateAndDispatchNotificationsOrchestration),
-                new TenantedFunctionData<CreateNotificationsRequest>(context.CurrentTenantId!, body)).ConfigureAwait(false);
+                new TenantedFunctionData<CreateNotificationsRequest>(context.CurrentTenantId!, body, operationId)).ConfigureAwait(false);
 
             // TODO: Return long running op Id.
-            return this.AcceptedResult("http://mylocation.com/myoperationid");
+            return this.AcceptedResult(response.Location);
         }
     }
 }

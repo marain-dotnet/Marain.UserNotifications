@@ -4,6 +4,8 @@
 
 namespace Marain.UserNotifications.Management.Host.Helpers
 {
+    using System;
+
     /// <summary>
     /// Provides a wrapper class for passing data between functions where it is also necessary to know the requesting
     /// tenant Id.
@@ -16,10 +18,12 @@ namespace Marain.UserNotifications.Management.Host.Helpers
         /// </summary>
         /// <param name="tenantId">The <see cref="TenantId"/>.</param>
         /// <param name="payload">The <see cref="Payload"/>.</param>
-        public TenantedFunctionData(string tenantId, T payload)
+        /// <param name="longRunningOperationId">The <see cref="LongRunningOperationId"/>.</param>
+        public TenantedFunctionData(string tenantId, T payload, Guid? longRunningOperationId = null)
         {
             this.TenantId = tenantId;
             this.Payload = payload;
+            this.LongRunningOperationId = longRunningOperationId;
         }
 
         /// <summary>
@@ -31,5 +35,10 @@ namespace Marain.UserNotifications.Management.Host.Helpers
         /// Gets the payload data.
         /// </summary>
         public T Payload { get; }
+
+        /// <summary>
+        /// Gets the Id of the long running operation associated with this data item.
+        /// </summary>
+        public Guid? LongRunningOperationId { get; }
     }
 }

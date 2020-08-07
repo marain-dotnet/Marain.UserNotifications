@@ -5,7 +5,6 @@
 namespace Marain.UserNotifications.Specs.Bindings
 {
     using System.Threading.Tasks;
-    using Corvus.Testing.SpecFlow;
     using Menes.Testing.AspNetCoreSelfHosting;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;

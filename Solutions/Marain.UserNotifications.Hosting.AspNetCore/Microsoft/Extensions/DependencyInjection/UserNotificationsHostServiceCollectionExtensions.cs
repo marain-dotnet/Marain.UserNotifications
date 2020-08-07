@@ -6,6 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     using Corvus.Azure.Storage.Tenancy;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
+    using Marain.Operations.Client.OperationsControl;
     using Marain.Tenancy.Client;
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel;
     using Menes;
@@ -43,6 +44,21 @@ namespace Microsoft.Extensions.DependencyInjection
             });
 
             services.AddTenantProviderServiceClient();
+
+            // Operations control client
+            services.AddOperationsControlClient(
+                sp =>
+                {
+                    MarainOperationsControlClientOptions operationsConfiguration =
+                        sp.GetRequiredService<IConfiguration>().GetSection("Operations").Get<MarainOperationsControlClientOptions>();
+
+                    if (operationsConfiguration?.OperationsControlServiceBaseUri == default)
+                    {
+                        throw new OpenApiServiceMismatchException("Could not find a configuration value for Operations:OperationsControlServiceBaseUri");
+                    }
+
+                    return operationsConfiguration;
+                });
 
             // Token source, to provide authentication when accessing external services.
             services.AddAzureManagedIdentityBasedTokenSource(

@@ -22,3 +22,4 @@ Scenario: Create a single notification
         """
 	Then the response status code should be 'Accepted'
     And the response should contain a 'Location' header
+    And the long running operation whose Url is in the response Location header should have a 'status' of 'Succeeded' within 15 seconds
