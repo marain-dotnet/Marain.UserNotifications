@@ -22,8 +22,8 @@ Scenario: Create a notification for a single user
         """
 	Then the response status code should be 'Accepted'
     And the response should contain a 'Location' header
-    And the long running operation whose Url is in the response Location header should not have a 'status' of 'NotStarted' within 5 seconds
-    And the long running operation whose Url is in the response Location header should have a 'status' of 'Succeeded' within 15 seconds
+    And the long running operation whose Url is in the response Location header should not have a 'status' of 'NotStarted' within 10 seconds
+    And the long running operation whose Url is in the response Location header should have a 'status' of 'Succeeded' within 30 seconds
 
 Scenario: Create notifications for multiple users
 	When I send a request to create a new notification:
@@ -48,5 +48,5 @@ Scenario: Create notifications for multiple users
         """
 	Then the response status code should be 'Accepted'
     And the response should contain a 'Location' header
-    And the long running operation whose Url is in the response Location header should not have a 'status' of 'NotStarted' within 5 seconds
-    And the long running operation whose Url is in the response Location header should have a 'status' of 'Succeeded' within 15 seconds
+    And the long running operation whose Url is in the response Location header should not have a 'status' of 'NotStarted' within 10 seconds
+    And the long running operation whose Url is in the response Location header should have a 'status' of 'Succeeded' within 30 seconds

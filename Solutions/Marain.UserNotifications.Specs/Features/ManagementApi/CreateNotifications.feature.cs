@@ -131,11 +131,11 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 25
     testRunner.And("the long running operation whose Url is in the response Location header should no" +
-                        "t have a \'status\' of \'NotStarted\' within 5 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        "t have a \'status\' of \'NotStarted\' within 10 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 26
     testRunner.And("the long running operation whose Url is in the response Location header should ha" +
-                        "ve a \'status\' of \'Succeeded\' within 15 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        "ve a \'status\' of \'Succeeded\' within 30 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -195,11 +195,11 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 51
     testRunner.And("the long running operation whose Url is in the response Location header should no" +
-                        "t have a \'status\' of \'NotStarted\' within 5 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        "t have a \'status\' of \'NotStarted\' within 10 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 52
     testRunner.And("the long running operation whose Url is in the response Location header should ha" +
-                        "ve a \'status\' of \'Succeeded\' within 15 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        "ve a \'status\' of \'Succeeded\' within 30 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
