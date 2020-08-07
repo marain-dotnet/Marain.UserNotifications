@@ -14,7 +14,7 @@ namespace Marain.UserNotifications.Specs.Bindings
     [Binding]
     public static class SelfHostedApiBindings
     {
-        [BeforeScenario("useApiDeliveryChannelApi", Order = ContainerBeforeScenarioOrder.ServiceProviderAvailable)]
+        [BeforeScenario("useApiDeliveryChannelApi", Order = BindingSequence.FunctionStartup)]
         public static Task StartSelfHostedApiDeliveryChannelApi(ScenarioContext scenarioContext)
         {
             var hostManager = new OpenApiWebHostManager();

@@ -21,12 +21,18 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Create Notifications")]
+    [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
+    [NUnit.Framework.CategoryAttribute("useManagementApi")]
+    [NUnit.Framework.CategoryAttribute("useTransientTenant")]
     public partial class CreateNotificationsFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-        private string[] _featureTags = ((string[])(null));
+        private string[] _featureTags = new string[] {
+                "perFeatureContainer",
+                "useManagementApi",
+                "useTransientTenant"};
         
 #line 1 "CreateNotifications.feature"
 #line hidden
@@ -35,7 +41,10 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Create Notifications", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Create Notifications", null, ProgrammingLanguage.CSharp, new string[] {
+                        "perFeatureContainer",
+                        "useManagementApi",
+                        "useTransientTenant"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -80,7 +89,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a single notification", null, tagsOfScenario, argumentsOfScenario);
-#line 3
+#line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -100,17 +109,22 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 4
- testRunner.Given("the first number is 50", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 8
+ testRunner.When("I send a request to create a new notification:", @"      {
+          ""notificationType"": ""marain.notifications.test.v1"",
+          ""timestamp"": ""2020-07-21T17:32:28Z"",
+          ""userIds"": [
+              ""user1""
+          ],
+          ""correlationIds"": [""cid1"", ""cid2""],
+          ""properties"": {
+              ""thing1"": ""value1"",
+              ""thing2"": ""value2""
+          }
+      }", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 5
- testRunner.And("the second number is 70", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 6
- testRunner.When("the two numbers are added", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 7
- testRunner.Then("the result should be 120", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 23
+ testRunner.Then("the response status code should be \'Accepted\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

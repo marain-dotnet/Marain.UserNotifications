@@ -43,6 +43,12 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
         /// <returns>A new <see cref="UserNotificationTableEntity"/>.</returns>
         public static UserNotificationTableEntity FromNotification(UserNotification source, JsonSerializerSettings serializerSettings)
         {
+            // We're going to use a "reversed" timestamp in the row key. Our standard query will be to get recent
+            // notifications for a user in descending order of timestamp, potentially since the previous set of
+            // notifications was retrieved. Using the reversed timestamp for the row key means that this will be the
+            // default sort order. This means that when we look for new notifications since a specified time, the
+            // resulting partition scan will be able to complete as soon as it encounters a record with an earlier
+            // timestamp, or when it hits the maximum requested items.
             long reversedTimestamp = long.MaxValue - source.Timestamp.ToUnixTimeMilliseconds();
             string correlationIdsJson = JsonConvert.SerializeObject(source.Metadata.CorrelationIds, serializerSettings);
             string propertiesJson = JsonConvert.SerializeObject(source.Properties, serializerSettings);

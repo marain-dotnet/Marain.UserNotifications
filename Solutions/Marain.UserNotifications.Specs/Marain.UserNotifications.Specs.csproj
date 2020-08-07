@@ -25,6 +25,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="1.1.0-preview.1" />
     <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="1.1.0-preview.4" />
     <PackageReference Include="SpecFlow.NUnit" Version="3.3.30" />
     <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.3.30" />
@@ -53,8 +54,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="specflow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ServiceManifests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\Marain.UserNotifications.Deployment\ServiceManifests\UserNotificationsServiceManifest.jsonc" Link="ServiceManifests\UserNotificationsServiceManifest.jsonc" />
   </ItemGroup>
 </Project>

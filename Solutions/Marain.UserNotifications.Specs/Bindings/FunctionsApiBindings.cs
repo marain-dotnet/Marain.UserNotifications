@@ -13,7 +13,7 @@ namespace Marain.UserNotifications.Specs.Bindings
     [Binding]
     public static class FunctionsApiBindings
     {
-        [BeforeFeature("useManagementApi", Order = ContainerBeforeScenarioOrder.ServiceProviderAvailable)]
+        [BeforeFeature("useManagementApi", Order = BindingSequence.FunctionStartup)]
         public static Task StartManagementApi(FeatureContext featureContext)
         {
             FunctionsController functionsController = FunctionsBindings.GetFunctionsController(featureContext);

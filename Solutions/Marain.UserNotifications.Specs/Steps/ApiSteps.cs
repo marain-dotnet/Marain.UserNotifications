@@ -7,7 +7,9 @@ namespace Marain.UserNotifications.Specs.Steps
     using System;
     using System.Net;
     using System.Net.Http;
+    using System.Text;
     using System.Threading.Tasks;
+    using Marain.UserNotifications.Specs.Bindings;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
 
@@ -19,11 +21,12 @@ namespace Marain.UserNotifications.Specs.Steps
         private static readonly HttpClient HttpClient = HttpClientFactory.Create();
 
         private static readonly Uri BaseUri = new Uri("http://localhost:7080");
-
+        private readonly FeatureContext featureContext;
         private readonly ScenarioContext scenarioContext;
 
-        public ApiSteps(ScenarioContext scenarioContext)
+        public ApiSteps(FeatureContext featureContext, ScenarioContext scenarioContext)
         {
+            this.featureContext = featureContext;
             this.scenarioContext = scenarioContext;
         }
 
@@ -38,6 +41,26 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
             Assert.AreEqual(expectedStatusCode, response.StatusCode);
+        }
+
+        [When("I send a request to create a new notification:")]
+        public async Task WhenISendARequestToCreateANewNotification(string requestJson)
+        {
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            HttpResponseMessage response = await HttpClient.PutAsync(
+                new Uri(BaseUri, $"/{transientTenantId}/marain/usernotifications"),
+                requestContent).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
+            }
         }
 
         private async Task SendGetRequest(string path)
