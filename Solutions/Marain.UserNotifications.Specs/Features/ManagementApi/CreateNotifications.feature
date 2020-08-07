@@ -21,3 +21,4 @@ Scenario: Create a single notification
         }
         """
 	Then the response status code should be 'Accepted'
+    And the response should contain a 'Location' header

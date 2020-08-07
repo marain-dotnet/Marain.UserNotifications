@@ -126,6 +126,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 23
  testRunner.Then("the response status code should be \'Accepted\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+#line 24
+    testRunner.And("the response should contain a \'Location\' header", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
             }
             this.ScenarioCleanup();
         }

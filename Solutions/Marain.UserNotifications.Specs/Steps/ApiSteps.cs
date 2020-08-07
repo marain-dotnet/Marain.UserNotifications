@@ -63,6 +63,13 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [Then("the response should contain a '(.*)' header")]
+        public void ThenTheResponseShouldContainAHeader(string headerName)
+        {
+            HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
+            Assert.IsTrue(response.Headers.Contains(headerName));
+        }
+
         private async Task SendGetRequest(string path)
         {
             HttpResponseMessage response = await HttpClient.GetAsync(new Uri(BaseUri, path)).ConfigureAwait(false);
