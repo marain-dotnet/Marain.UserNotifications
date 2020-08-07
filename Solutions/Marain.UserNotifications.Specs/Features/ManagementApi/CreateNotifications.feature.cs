@@ -83,12 +83,12 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Create a single notification")]
-        public virtual void CreateASingleNotification()
+        [NUnit.Framework.DescriptionAttribute("Create a notification for a single user")]
+        public virtual void CreateANotificationForASingleUser()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a single notification", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a notification for a single user", null, tagsOfScenario, argumentsOfScenario);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -130,6 +130,74 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.And("the response should contain a \'Location\' header", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 25
+    testRunner.And("the long running operation whose Url is in the response Location header should no" +
+                        "t have a \'status\' of \'NotStarted\' within 5 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 26
+    testRunner.And("the long running operation whose Url is in the response Location header should ha" +
+                        "ve a \'status\' of \'Succeeded\' within 15 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Create notifications for multiple users")]
+        public virtual void CreateNotificationsForMultipleUsers()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create notifications for multiple users", null, tagsOfScenario, argumentsOfScenario);
+#line 28
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 29
+ testRunner.When("I send a request to create a new notification:", @"      {
+          ""notificationType"": ""marain.notifications.test.v1"",
+          ""timestamp"": ""2020-07-21T17:32:28Z"",
+          ""userIds"": [
+              ""user2"",
+              ""user3"",
+              ""user4"",
+              ""user5"",
+              ""user6"",
+              ""user7""
+          ],
+          ""correlationIds"": [""cid1"", ""cid2""],
+          ""properties"": {
+              ""thing1"": ""value1"",
+              ""thing2"": ""value2""
+          }
+      }", ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 49
+ testRunner.Then("the response status code should be \'Accepted\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 50
+    testRunner.And("the response should contain a \'Location\' header", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 51
+    testRunner.And("the long running operation whose Url is in the response Location header should no" +
+                        "t have a \'status\' of \'NotStarted\' within 5 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 52
     testRunner.And("the long running operation whose Url is in the response Location header should ha" +
                         "ve a \'status\' of \'Succeeded\' within 15 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden

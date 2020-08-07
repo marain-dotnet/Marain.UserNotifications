@@ -53,7 +53,7 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
             string correlationIdsJson = JsonConvert.SerializeObject(source.Metadata.CorrelationIds, serializerSettings);
             string propertiesJson = JsonConvert.SerializeObject(source.Properties, serializerSettings);
             string hash = source.GetIdentityHash(serializerSettings);
-            string rowKey = $"{reversedTimestamp}-{hash}";
+            string rowKey = $"{reversedTimestamp:D21}-{hash}";
 
             return new UserNotificationTableEntity
             {

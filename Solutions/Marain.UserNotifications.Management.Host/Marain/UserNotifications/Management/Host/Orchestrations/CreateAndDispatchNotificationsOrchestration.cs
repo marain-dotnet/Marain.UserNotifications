@@ -37,6 +37,10 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
 
             try
             {
+                await orchestrationContext.CallActivityAsync(
+                    nameof(StartLongRunningOperationActivity),
+                    (request.LongRunningOperationId.Value, request.TenantId));
+
                 // Fan out to create each notification
                 string[] correlationIds = new string[request.Payload.CorrelationIds.Length + 1];
                 request.Payload.CorrelationIds.CopyTo(correlationIds, 0);

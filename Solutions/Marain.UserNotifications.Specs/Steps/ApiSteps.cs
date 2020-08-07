@@ -81,22 +81,52 @@ namespace Marain.UserNotifications.Specs.Steps
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
             Uri operationLocation = response.Headers.Location;
 
+            return this.LongRunningOperationPropertyCheck(
+                operationLocation,
+                operationPropertyPath,
+                timeout,
+                val =>
+                {
+                    if (val != expectedOperationPropertyValue)
+                    {
+                        throw new Exception($"Property '{operationPropertyPath}' has the value '{val}', not the required value '{expectedOperationPropertyValue}'");
+                    }
+                });
+        }
+
+        [Then("the long running operation whose Url is in the response Location header should not have a '(.*)' of '(.*)' within (.*) seconds")]
+        public Task ThenTheLongRunningOperationWhoseUrlIsInTheResponseLocationHeaderShouldNotHaveAOfWithinSeconds(string operationPropertyPath, string expectedOperationPropertyValue, int timeout)
+        {
+            HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
+            Uri operationLocation = response.Headers.Location;
+
+            return this.LongRunningOperationPropertyCheck(
+                operationLocation,
+                operationPropertyPath,
+                timeout,
+                val =>
+                {
+                    if (val == expectedOperationPropertyValue)
+                    {
+                        throw new Exception($"Property '{operationPropertyPath}' still has the value '{val}'.");
+                    }
+                });
+        }
+
+        private Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)
+        {
             var tokenSource = new CancellationTokenSource();
-            tokenSource.CancelAfter(TimeSpan.FromSeconds(timeout));
+            tokenSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
 
             return Retriable.RetryAsync(
                 async () =>
                 {
-                    HttpResponseMessage response = await HttpClient.GetAsync(operationLocation).ConfigureAwait(false);
+                    HttpResponseMessage response = await HttpClient.GetAsync(location).ConfigureAwait(false);
                     string responseBody = await response.Content.ReadAsStringAsync();
                     var operation = JObject.Parse(responseBody);
                     JToken targetToken = operation.SelectToken(operationPropertyPath);
                     string currentValue = targetToken.Value<string>();
-
-                    if (currentValue != expectedOperationPropertyValue)
-                    {
-                        throw new Exception($"Property '{operationPropertyPath}' has the value '{currentValue}', not the required value '{expectedOperationPropertyValue}'");
-                    }
+                    testValue(currentValue);
                 },
                 tokenSource.Token,
                 new Linear(TimeSpan.FromSeconds(3), int.MaxValue),
