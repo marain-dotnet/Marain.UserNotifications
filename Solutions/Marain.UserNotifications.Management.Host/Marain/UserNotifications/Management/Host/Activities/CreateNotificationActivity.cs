@@ -55,7 +55,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 request.Payload.NotificationType,
                 request.Payload.UserId);
 
-            IUserNotificationStore store = await this.notificationStoreFactory.GetNotificationStoreForTenantAsync(tenant).ConfigureAwait(false);
+            IUserNotificationStore store = await this.notificationStoreFactory.GetUserNotificationStoreForTenantAsync(tenant).ConfigureAwait(false);
 
             try
             {

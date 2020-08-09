@@ -17,6 +17,6 @@ namespace Marain.UserNotifications
         /// </summary>
         /// <param name="tenant">The tenant to retrieve the store for.</param>
         /// <returns>The notification store for the tenant.</returns>
-        Task<IUserNotificationStore> GetNotificationStoreForTenantAsync(ITenant tenant);
+        Task<IUserNotificationStore> GetUserNotificationStoreForTenantAsync(ITenant tenant);
     }
 }

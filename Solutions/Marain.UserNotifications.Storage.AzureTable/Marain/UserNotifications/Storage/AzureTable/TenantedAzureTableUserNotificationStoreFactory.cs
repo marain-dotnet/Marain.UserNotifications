@@ -47,7 +47,7 @@ namespace Marain.UserNotifications.Storage.AzureTable
         }
 
         /// <inheritdoc/>#
-        public async Task<IUserNotificationStore> GetNotificationStoreForTenantAsync(ITenant tenant)
+        public async Task<IUserNotificationStore> GetUserNotificationStoreForTenantAsync(ITenant tenant)
         {
             CloudTable table =
                 await this.tableFactory.GetTableForTenantAsync(tenant, TableDefinition).ConfigureAwait(false);
