@@ -99,7 +99,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                         sp =>
                         {
                             IConfiguration config = sp.GetRequiredService<IConfiguration>();
-                            string connectionString = config["TestStorage:ConnectionString"];
+                            string connectionString = config["TestTableStorageConfiguration:AccountName"];
 
                             CloudStorageAccount storageAccount = string.IsNullOrEmpty(connectionString)
                                 ? CloudStorageAccount.DevelopmentStorageAccount
