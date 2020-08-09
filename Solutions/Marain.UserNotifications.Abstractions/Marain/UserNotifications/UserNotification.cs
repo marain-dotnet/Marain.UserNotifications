@@ -43,8 +43,7 @@ namespace Marain.UserNotifications
         /// Gets the Id of the notification. If not set, this is a new notification that has not yet been stored.
         /// </summary>
         /// <remarks>
-        /// The Id will be specific to the underlying storage mechanism being used and should never be set or modified
-        /// externally.
+        /// The Id will be specific to the underlying storage mechanism being used and should not be set externally.
         /// </remarks>
         public string? Id { get; }
 
@@ -67,8 +66,8 @@ namespace Marain.UserNotifications
         public DateTimeOffset Timestamp { get; }
 
         /// <summary>
-        /// Gets additional data associated with the notification. This is generally used by a delivery channel
-        /// to construct a human readable message for the notification.
+        /// Gets additional data associated with the notification. This is generally when dispatching to a delivery
+        /// channel to construct a channel-specific human readable message for the notification.
         /// </summary>
         public IPropertyBag Properties { get; }
 
