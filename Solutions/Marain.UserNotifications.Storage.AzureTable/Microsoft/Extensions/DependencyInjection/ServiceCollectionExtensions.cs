@@ -31,8 +31,6 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services.AddTenantCloudTableFactory(getCloudTableFactoryOptions);
-
-            // TODO: Wire this up properly.
             services.AddSingleton<ITenantedUserNotificationStoreFactory, TenantedAzureTableUserNotificationStoreFactory>();
 
             return services;
