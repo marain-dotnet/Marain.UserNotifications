@@ -1,6 +1,5 @@
 {
   "stepAssemblies": [
-    { "assembly": "Corvus.Testing.SpecFlow" },
-    { "assembly": "Marain.Services.Tenancy.Testing" }
+    { "assembly": "Corvus.Testing.SpecFlow" }
   ]
 }

@@ -65,6 +65,13 @@ namespace Marain.UserNotifications.Specs.Bindings
             transientTenantManager.PrimaryTransientClient = await tenantProvider.GetTenantAsync(transientClientTenant.Id).ConfigureAwait(false);
         }
 
+        [AfterFeature("useTransientTenant")]
+        public static Task TearDownTenants(FeatureContext featureContext)
+        {
+            var tenantManager = TransientTenantManager.GetInstance(featureContext);
+            return tenantManager.CleanupAsync();
+        }
+
         /// <summary>
         /// Retrieves the transient tenant created for the current feature from the supplied <see cref="FeatureContext"/>,
         /// or null if there is none.
