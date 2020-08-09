@@ -5,6 +5,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <PackageDescription></PackageDescription>
+    <PackageTags></PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Corvus.Azure.Storage.Tenancy" Version="1.0.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.0.0">
