@@ -58,12 +58,14 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             }
 
 #pragma warning disable CS8614 // Nullability of reference types in type of parameter doesn't match implicitly implemented member.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member.
             set
             {
                 this.additionalProperties = value as DurableFunctionsOpenApiContextAdditionalProperties
                     ?? throw new ArgumentException("AdditionalContext can only be set to a non-null value of type 'DurableFunctionsOpenApiContextAdditionalProperties'");
             }
 #pragma warning restore CS8614 // Nullability of reference types in type of parameter doesn't match implicitly implemented member.
+#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member.
         }
     }
 }

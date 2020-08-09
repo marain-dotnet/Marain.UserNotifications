@@ -39,7 +39,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
             {
                 await orchestrationContext.CallActivityAsync(
                     nameof(StartLongRunningOperationActivity),
-                    (request.LongRunningOperationId.Value, request.TenantId));
+                    (request.LongRunningOperationId!.Value, request.TenantId));
 
                 // Fan out to create each notification
                 string[] correlationIds = new string[request.Payload.CorrelationIds.Length + 1];
@@ -62,13 +62,13 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
 
                 await orchestrationContext.CallActivityAsync(
                     nameof(CompleteLongRunningOperationActivity),
-                    (request.LongRunningOperationId.Value, request.TenantId));
+                    (request.LongRunningOperationId!.Value, request.TenantId));
             }
             catch (FunctionFailedException)
             {
                 await orchestrationContext.CallActivityAsync(
                     nameof(FailLongRunningOperationActivity),
-                    (request.LongRunningOperationId.Value, request.TenantId));
+                    (request.LongRunningOperationId!.Value, request.TenantId));
             }
         }
     }
