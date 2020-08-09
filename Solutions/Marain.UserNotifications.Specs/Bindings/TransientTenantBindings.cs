@@ -12,10 +12,12 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Testing.AzureFunctions;
     using Corvus.Testing.AzureFunctions.SpecFlow;
     using Corvus.Testing.SpecFlow;
+    using Dynamitey;
     using Marain.TenantManagement.EnrollmentConfiguration;
     using Marain.TenantManagement.Testing;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using TechTalk.SpecFlow;
 
     /// <summary>
@@ -107,14 +109,30 @@ namespace Marain.UserNotifications.Specs.Bindings
                 .GetServiceProvider(featureContext)
                 .GetRequiredService<IConfiguration>();
 
+            // Can't create a logger using the generic type of this class because it's static, so we'll do it using
+            // the feature context instead.
+            ILogger<FeatureContext> logger = ContainerBindings
+                .GetServiceProvider(featureContext)
+                .GetRequiredService<ILogger<FeatureContext>>();
+
             // Load the config items we need:
             TableStorageConfiguration tableStorageConfiguration =
                 configuration.GetSection("TestTableStorageConfiguration").Get<TableStorageConfiguration>()
                 ?? new TableStorageConfiguration();
 
+            if (string.IsNullOrEmpty(tableStorageConfiguration.AccountName))
+            {
+                logger.LogDebug("No configuration value 'TestTableStorageConfiguration:AccountName' provided; using local storage emulator.");
+            }
+
             BlobStorageConfiguration blobStorageConfiguration =
                 configuration.GetSection("TestBlobStorageConfiguration").Get<BlobStorageConfiguration>()
                 ?? new BlobStorageConfiguration();
+
+            if (string.IsNullOrEmpty(tableStorageConfiguration.AccountName))
+            {
+                logger.LogDebug("No configuration value 'TestBlobStorageConfiguration:AccountName' provided; using local storage emulator.");
+            }
 
             return new EnrollmentConfigurationItem[]
             {
