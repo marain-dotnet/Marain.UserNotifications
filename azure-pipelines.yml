@@ -26,7 +26,7 @@ jobs:
           Write-Host "##vso[task.setvariable variable=AzureWebJobsStorage]$Env:ENDJIN_AZURESTORAGECONNECTIONSTRING"
           Write-Host "##vso[task.setvariable variable=TenancyClient__TenancyServiceBaseUri]$Env:ENDJIN_MARAINTENANCYBASEURL"
           Write-Host "##vso[task.setvariable variable=TenancyClient__ResourceIdForMsiAuthentication]$Env:ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION"
-          Write-Host "##vso[task.setvariable variable=Operations__ControlServiceBaseUrl]$Env:ENDJIN_MARAINOPERATIONSCONTROLBASEURL"
+          Write-Host "##vso[task.setvariable variable=Operations__OperationsControlServiceBaseUri]$Env:ENDJIN_MARAINOPERATIONSCONTROLBASEURL"
           Write-Host "##vso[task.setvariable variable=Operations__ResourceIdForMsiAuthentication]$Env:ENDJIN_MARAINOPERATIONSCONTROLRESOURCEID"
           Write-Host "##vso[task.setvariable variable=TestTableStorageConfiguration__AccountName]$Env:ENDJIN_AZURESTORAGECONNECTIONSTRING"
           Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__AccountName]$Env:ENDJIN_AZURESTORAGECONNECTIONSTRING"
