@@ -20,3 +20,57 @@ jobs:
     service_connection_nuget_org: $(Endjin_Service_Connection_NuGet_Org)
     service_connection_github: $(Endjin_Service_Connection_GitHub)
     solution_to_build: $(Endjin_Solution_To_Build)
+    postCustomEnvironmentVariables:
+      - powershell: |
+          Write-Host "##vso[task.setvariable variable=AzureServicesAuthConnectionString]$Env:ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING"
+          Write-Host "##vso[task.setvariable variable=AzureWebJobsStorage]$Env:ENDJIN_AZURESTORAGECONNECTIONSTRING"
+          Write-Host "##vso[task.setvariable variable=TenancyClient__TenancyServiceBaseUri]$Env:ENDJIN_MARAINTENANCYBASEURL"
+          Write-Host "##vso[task.setvariable variable=TenancyClient__ResourceIdForMsiAuthentication]$Env:ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION"
+          Write-Host "##vso[task.setvariable variable=Operations__OperationsControlServiceBaseUri]$Env:ENDJIN_MARAINOPERATIONSCONTROLBASEURL"
+          Write-Host "##vso[task.setvariable variable=Operations__ResourceIdForMsiAuthentication]$Env:ENDJIN_MARAINOPERATIONSCONTROLRESOURCEID"
+          Write-Host "##vso[task.setvariable variable=TestTableStorageConfiguration__AccountName]$Env:ENDJIN_AZURESTORAGECONNECTIONSTRING"
+          Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__AccountName]$Env:ENDJIN_AZURESTORAGECONNECTIONSTRING"
+          Write-Host "##vso[task.setvariable variable=MarainServiceConfiguration:ServiceDisplayName]$Env:ENDJIN_MARAINUSERNOTIFICATIONSSERVICEDISPLAYNAME"
+          Write-Host "##vso[task.setvariable variable=MarainServiceConfiguration:ServiceTenantId]$Env:ENDJIN_MARAINUSERNOTIFICATIONSSERVICETENANTID"
+        displayName: 'Set Custom Environment Variables'
+        env:
+          ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING: $(Endjin_AzureServicesAuthConnectionString)
+          ENDJIN_AZURESTORAGECONNECTIONSTRING: $(Endjin_AzureStorageConnectionString)
+          ENDJIN_MARAINTENANCYBASEURL: $(Endjin_MarainTenancyBaseUrl)
+          ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION: $(Endjin_MarainTenancyResourceIdForMsiAuthentication)
+          ENDJIN_MARAINOPERATIONSCONTROLBASEURL: $(Endjin_MarainOperationsControlBaseUrl)
+          ENDJIN_MARAINOPERATIONSCONTROLRESOURCEID: $(Endjin_MarainOperationsControlResourceIdForMsiAuthentication)
+          ENDJIN_MARAINUSERNOTIFICATIONSSERVICEDISPLAYNAME: $(Endjin_MarainUserNotificationsServiceDisplayName)
+          ENDJIN_MARAINUSERNOTIFICATIONSSERVICETENANTID: $(Endjin_MarainUserNotificationsServiceTenantId)
+      - task: Npm@1
+        displayName: 'Install Latest Azure Functions V3 Runtime'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'install -g azure-functions-core-tools@3 --unsafe-perm true'
+
+    postSpecs:
+      - task: ArchiveFiles@2
+        displayName: 'Archive Management Function App'
+        inputs:
+          rootFolderOrFile: 'Solutions/Marain.UserNotifications.Management.Host/bin/Release/netcoreapp3.1/'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.UserNotifications.Management.Host.zip'
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: 'Archive API Delivery Channel Function App'
+        inputs:
+          rootFolderOrFile: 'Solutions/Marain.UserNotifications.ApiDeliveryChannel.Host/bin/Release/netcoreapp3.1/'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.UserNotifications.ApiDeliveryChannel.Host.zip'
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: 'Archive Deployment Artifacts'
+        inputs:
+          rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/Marain.UserNotifications.Deployment'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.UserNotifications.Deployment.zip'
+          replaceExistingArchive: true

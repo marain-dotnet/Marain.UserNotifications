@@ -4,7 +4,6 @@
 
 namespace Marain.UserNotifications.Benchmarks
 {
-    using System;
     using System.IO;
     using BenchmarkDotNet.Configs;
     using BenchmarkDotNet.Jobs;

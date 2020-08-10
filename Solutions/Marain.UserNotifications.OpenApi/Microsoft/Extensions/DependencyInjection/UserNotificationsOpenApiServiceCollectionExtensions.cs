@@ -5,7 +5,6 @@
 namespace Microsoft.Extensions.DependencyInjection
 {
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel;
-    using Marain.UserNotifications.OpenApi.Management;
     using Menes;
 
     /// <summary>
@@ -13,21 +12,6 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class UserNotificationsOpenApiServiceCollectionExtensions
     {
-        /// <summary>
-        /// Adds the OpenApiServices for the management API.
-        /// </summary>
-        /// <param name="services">The service collection.</param>
-        /// <returns>The service collection, to enable chaining.</returns>
-        public static IServiceCollection AddManagementOpenApiServices(
-            this IServiceCollection services)
-        {
-            services.AddSingleton<IOpenApiService, CreateNotificationsService>();
-            services.AddSingleton<IOpenApiService, GetNotificationsService>();
-            services.AddSingleton<IOpenApiService, GetNotificationStatusService>();
-
-            return services;
-        }
-
         /// <summary>
         /// Adds the OpenApiServices for the API delivery channel.
         /// </summary>

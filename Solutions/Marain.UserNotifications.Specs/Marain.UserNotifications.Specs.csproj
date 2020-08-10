@@ -17,17 +17,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.0.0" />
+    <PackageReference Include="Corvus.Extensions.Newtonsoft.Json" Version="1.0.0" />
     <PackageReference Include="Corvus.Testing.SpecFlow" Version="1.0.0" />
+    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.0.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="1.1.0" />
     <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="1.1.0-preview.4" />
-    <PackageReference Include="SpecFlow.NUnit" Version="3.3.30" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.3.30" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.3.74" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.3.74" />
     <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -50,8 +54,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
     <None Update="specflow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ServiceManifests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\Marain.UserNotifications.Deployment\ServiceManifests\UserNotificationsServiceManifest.jsonc" Link="ServiceManifests\UserNotificationsServiceManifest.jsonc" />
   </ItemGroup>
 </Project>
