@@ -5,6 +5,7 @@
 namespace Marain.UserNotifications
 {
     using System;
+    using System.Diagnostics;
     using System.Text;
     using Corvus.Json;
     using Newtonsoft.Json;
@@ -12,6 +13,7 @@ namespace Marain.UserNotifications
     /// <summary>
     /// A single notification targetted at a specific user.
     /// </summary>
+    [DebuggerDisplay("'{NotificationType}' for user '{UserId}' with timestamp '{Timestamp}'")]
     public class UserNotification
     {
         /// <summary>

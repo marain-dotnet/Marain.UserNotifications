@@ -5,10 +5,8 @@
 namespace Marain.UserNotifications.Management.Host.OpenApi
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
-    using Dynamitey.DynamicObjects;
     using Marain.Operations.Client.OperationsControl;
     using Marain.Operations.Client.OperationsControl.Models;
     using Marain.Services.Tenancy;

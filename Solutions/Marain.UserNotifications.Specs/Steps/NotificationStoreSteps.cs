@@ -5,9 +5,16 @@
 namespace Marain.UserNotifications.Specs.Steps
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
+    using Corvus.Extensions;
+    using Corvus.Extensions.Json;
+    using Corvus.Json;
     using Corvus.Testing.SpecFlow;
     using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json;
+    using NUnit.Framework;
     using TechTalk.SpecFlow;
 
     [Binding]
@@ -40,12 +47,162 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [Given("I have told the user notification store to store the user notification called '(.*)'")]
-        public Task WhenITellTheUserNotificationStoreToStoreTheUserNotificationCalled(string notificationName)
+        [Given("I have created and stored a notification for the user with Id '(.*)'")]
+        public Task GivenIHaveCreatedAndStoredANotificationForTheUserWithId(string userId)
+        {
+            return this.GivenIHaveCreatedAndStoredNotificationsWithTimestampsAtSecondIntervalsForTheUserWithId(1, 0, userId);
+        }
+
+        [Given("I have created and stored (.*) notifications with timestamps at (.*) second intervals for the user with Id '(.*)'")]
+        public Task GivenIHaveCreatedAndStoredNotificationsWithTimestampsAtSecondIntervalsForTheUserWithId(int notificationCount, int interval, string userId)
+        {
+            IUserNotificationStore store = this.serviceProvider.GetRequiredService<IUserNotificationStore>();
+            IPropertyBagFactory propertyBagFactory = this.serviceProvider.GetRequiredService<IPropertyBagFactory>();
+
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
+            var offset = TimeSpan.FromSeconds(interval);
+
+            var tasks = new List<Task>();
+            var propertiesDictionary = new Dictionary<string, object>
+            {
+                { "prop1", "val1" },
+                { "prop2", 2 },
+                { "prop3", DateTime.Now },
+            };
+
+            IPropertyBag properties = propertyBagFactory.Create(propertiesDictionary);
+
+            for (int i = 0; i < notificationCount; i++)
+            {
+                string[] correlationIds = Enumerable.Range(0, 3).Select(_ => Guid.NewGuid().ToString()).ToArray();
+                var metadata = new UserNotificationMetadata(correlationIds, null);
+                tasks.Add(store.StoreAsync(new UserNotification(null, "marain.usernotifications.test", userId, timestamp, properties, metadata)));
+                timestamp -= offset;
+            }
+
+            return Task.WhenAll(tasks);
+        }
+
+        [Given("I have told the user notification store to store the user notification called '(.*)' and call the result '(.*)'")]
+        public async Task WhenITellTheUserNotificationStoreToStoreTheUserNotificationCalled(string notificationName, string resultName)
         {
             IUserNotificationStore store = this.serviceProvider.GetRequiredService<IUserNotificationStore>();
             UserNotification notification = this.scenarioContext.Get<UserNotification>(notificationName);
-            return store.StoreAsync(notification);
+            UserNotification result = await store.StoreAsync(notification).ConfigureAwait(false);
+            this.scenarioContext.Set(result, resultName);
+        }
+
+        [When("I ask the user notification store for the user notification with the same Id as the user notification called '(.*)' and call it '(.*)'")]
+        public async Task WhenIAskTheUserNotificationStoreForTheUserNotificationWithTheSameIdAsTheUserNotificationCalledAndCallIt(string notificationName, string resultName)
+        {
+            IUserNotificationStore store = this.serviceProvider.GetRequiredService<IUserNotificationStore>();
+            UserNotification notification = this.scenarioContext.Get<UserNotification>(notificationName);
+            UserNotification result = await store.GetByIdAsync(notification.Id!).ConfigureAwait(false);
+            this.scenarioContext.Set(result, resultName);
+        }
+
+        [Given("I have asked the user notification store for (.*) notifications for the user with Id '(.*)' and called the result '(.*)'")]
+        [When("I ask the user notification store for (.*) notifications for the user with Id '(.*)' and call the result '(.*)'")]
+        public async Task WhenIAskTheUserNotificationStoreForNotificationsForTheUserWithId(int itemCount, string userId, string resultName)
+        {
+            IUserNotificationStore store = this.serviceProvider.GetRequiredService<IUserNotificationStore>();
+            GetNotificationsResult result = await store.GetAsync(userId, null, itemCount).ConfigureAwait(false);
+            this.scenarioContext.Set(result, resultName);
+        }
+
+        [When("I ask the user notification store for (.*) notifications since the first notification in the results called '(.*)' for the user with Id '(.*)' and call the result '(.*)'")]
+        public async Task WhenIAskTheUserNotificationStoreForNotificationsSinceTheFirstNotificationInTheResultsCalledForTheUserWithIdAndCallTheResult(int itemCount, string previousResultName, string userId, string newResultName)
+        {
+            IUserNotificationStore store = this.serviceProvider.GetRequiredService<IUserNotificationStore>();
+            GetNotificationsResult previousResult = this.scenarioContext.Get<GetNotificationsResult>(previousResultName);
+            GetNotificationsResult result = await store.GetAsync(userId, previousResult.Results[0].Id, itemCount).ConfigureAwait(false);
+            this.scenarioContext.Set(result, newResultName);
+        }
+
+        [Given("I have asked the user notification store for notifications using the continuation token from the result called '(.*)' and call the result '(.*)'")]
+        [When("I ask the user notification store for notifications using the continuation token from the result called '(.*)' and call the result '(.*)'")]
+        public async Task WhenIAskTheUserNotificationStoreForNotificationsUsingTheContinuationTokenFromTheResultCalledAndCallTheResult(string previousResultName, string newResultName)
+        {
+            IUserNotificationStore store = this.serviceProvider.GetRequiredService<IUserNotificationStore>();
+            GetNotificationsResult previousResult = this.scenarioContext.Get<GetNotificationsResult>(previousResultName);
+            GetNotificationsResult result = await store.GetAsync(previousResult.ContinuationToken!).ConfigureAwait(false);
+            this.scenarioContext.Set(result, newResultName);
+        }
+
+        [Then("the get notifications result called '(.*)' should contain (.*) notifications")]
+        public void ThenTheGetNotificationsResultShouldContainNotifications(string resultName, int expectedNotificationCount)
+        {
+            GetNotificationsResult result = this.scenarioContext.Get<GetNotificationsResult>(resultName);
+            Assert.AreEqual(expectedNotificationCount, result.Results.Length);
+        }
+
+        [Then("the get notifications results called '(.*)' and '(.*)' should not contain any of the same notifications")]
+        public void ThenTheGetNotificationsResultsCalledAndShouldNotContainAnyOfTheSameNotifications(string resultsName1, string resultsName2)
+        {
+            GetNotificationsResult results1 = this.scenarioContext.Get<GetNotificationsResult>(resultsName1);
+            GetNotificationsResult results2 = this.scenarioContext.Get<GetNotificationsResult>(resultsName2);
+
+            int overlapCount = results1.Results.Count(r1 => results2.Results.Any(r2 => r2.Id == r1.Id));
+            Assert.AreEqual(0, overlapCount);
+        }
+
+        [Then("the get notifications result called '(.*)' should only contain notifications with an earlier timestamp than those in the get notifications result '(.*)'")]
+        public void ThenTheGetNotificationsResultCalledShouldOnlyContainNotificationsWithAnEarlierTimestampThanThoseInTheGetNotificationsResult(string earlierResultsName, string laterResultsName)
+        {
+            GetNotificationsResult earlierResults = this.scenarioContext.Get<GetNotificationsResult>(earlierResultsName);
+            GetNotificationsResult laterResults = this.scenarioContext.Get<GetNotificationsResult>(laterResultsName);
+
+            int overlapCount = earlierResults.Results.Count(e => laterResults.Results.Any(l => l.Timestamp < e.Timestamp));
+            Assert.AreEqual(0, overlapCount);
+        }
+
+        [Then("the get notifications result called '(.*)' should contain notifications in descending order of timestamp")]
+        public void ThenTheGetNotificationsResultCalledShouldContainNotificationsInDescendingOrderOfTimestamp(string resultName)
+        {
+            GetNotificationsResult result = this.scenarioContext.Get<GetNotificationsResult>(resultName);
+            result.Results.ForEachAtIndex((n, i) =>
+            {
+                if (i != 0)
+                {
+                    Assert.GreaterOrEqual(result.Results[i - 1].Timestamp, n.Timestamp);
+                }
+            });
+        }
+
+        [Then("the get notifications result called '(.*)' should contain a continuation token")]
+        public void ThenTheGetNotificationsResultShouldContainAContinuationToken(string resultName)
+        {
+            GetNotificationsResult result = this.scenarioContext.Get<GetNotificationsResult>(resultName);
+            Assert.IsNotNull(result.ContinuationToken);
+            Assert.IsNotEmpty(result.ContinuationToken);
+        }
+
+        [Then("the get notifications result called '(.*)' should not contain a continuation token")]
+        public void ThenTheGetNotificationsResultCalledShouldNotContainAContinuationToken(string resultName)
+        {
+            GetNotificationsResult result = this.scenarioContext.Get<GetNotificationsResult>(resultName);
+            Assert.IsNull(result.ContinuationToken);
+        }
+
+        [Then("the notification called '(.*)' should be the same as the notification called '(.*)'")]
+        public void ThenTheNotificationCalledShouldBeTheSameAsTheNotificationCalled(string expectedName, string actualName)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            UserNotification expected = this.scenarioContext.Get<UserNotification>(expectedName);
+            UserNotification actual = this.scenarioContext.Get<UserNotification>(actualName);
+
+            // TODO: Verify that properties are returned correctly.
+            Assert.AreEqual(expected.UserId, actual.UserId);
+            Assert.AreEqual(expected.NotificationType, actual.NotificationType);
+            Assert.AreEqual(expected.Timestamp, actual.Timestamp);
+
+            Assert.AreEqual(expected.Metadata.CorrelationIds, actual.Metadata.CorrelationIds);
+
+            // As always, the easiest way to verify two property bags match is to serialize them.
+            string serializedActualProperties = JsonConvert.SerializeObject(actual.Properties, serializerSettingsProvider.Instance);
+            string serializedExpectedProperties = JsonConvert.SerializeObject(expected.Properties, serializerSettingsProvider.Instance);
+
+            Assert.AreEqual(serializedExpectedProperties, serializedActualProperties);
         }
     }
 }
