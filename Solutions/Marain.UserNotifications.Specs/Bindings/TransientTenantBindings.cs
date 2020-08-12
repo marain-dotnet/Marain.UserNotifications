@@ -15,6 +15,8 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Dynamitey;
     using Marain.TenantManagement.EnrollmentConfiguration;
     using Marain.TenantManagement.Testing;
+    using Marain.UserNotifications.Storage.AzureTable;
+    using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -66,10 +68,21 @@ namespace Marain.UserNotifications.Specs.Bindings
         }
 
         [AfterFeature("useTransientTenant")]
-        public static Task TearDownTenants(FeatureContext featureContext)
+        public static async Task TearDownTenants(FeatureContext featureContext)
         {
             var tenantManager = TransientTenantManager.GetInstance(featureContext);
-            return tenantManager.CleanupAsync();
+
+            await featureContext.RunAndStoreExceptionsAsync(async () =>
+            {
+                ITenantCloudTableFactory cloudTableFactory = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<ITenantCloudTableFactory>();
+                CloudTable testTable = await cloudTableFactory.GetTableForTenantAsync(tenantManager.PrimaryTransientClient, TenantedAzureTableUserNotificationStoreFactory.TableDefinition).ConfigureAwait(false);
+                await testTable.DeleteIfExistsAsync().ConfigureAwait(false);
+            }).ConfigureAwait(false);
+
+            await featureContext.RunAndStoreExceptionsAsync(() =>
+            {
+                return tenantManager.CleanupAsync();
+            }).ConfigureAwait(false);
         }
 
         /// <summary>

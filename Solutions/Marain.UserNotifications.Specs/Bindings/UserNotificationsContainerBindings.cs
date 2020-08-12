@@ -5,6 +5,7 @@
 namespace Marain.UserNotifications.Specs.Bindings
 {
     using System;
+    using Corvus.Azure.Storage.Tenancy;
     using Corvus.Configuration;
     using Corvus.Extensions.Json;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
@@ -64,6 +65,13 @@ namespace Marain.UserNotifications.Specs.Bindings
 
                     // Marain tenancy management, required to create transient client/service tenants.
                     services.AddMarainTenantManagement();
+
+                    // Add the tenanted table factory so we can clear up our own mess after the test.
+                    services.AddTenantCloudTableFactory(
+                        sp => new TenantCloudTableFactoryOptions
+                        {
+                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
+                        });
                 });
         }
 
