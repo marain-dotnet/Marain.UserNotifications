@@ -1,4 +1,4 @@
-﻿@useManagementApi
+﻿@useApis
 
 Feature: Get swagger
 	In order to understand the management API
@@ -6,5 +6,5 @@ Feature: Get swagger
 	I want to retrieve the Swagger definition of the API
 
 Scenario: Get swagger
-	When I request the Swagger definition for the API
+	When I request the Swagger definition for the management API
 	Then the response status code should be 'OK'

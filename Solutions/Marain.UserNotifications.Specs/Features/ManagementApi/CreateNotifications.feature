@@ -1,11 +1,11 @@
 ﻿@perFeatureContainer
-@useManagementApi
+@useApis
 @useTransientTenant
 
 Feature: Create Notifications
 
 Scenario: Create a notification for a single user
-	When I send a request to create a new notification:
+	When I send a management API request to create a new notification:
 		"""
         {
             "notificationType": "marain.notifications.test.v1",
@@ -26,7 +26,7 @@ Scenario: Create a notification for a single user
     And the long running operation whose Url is in the response Location header should have a 'status' of 'Succeeded' within 30 seconds
 
 Scenario: Create notifications for multiple users
-	When I send a request to create a new notification:
+	When I send a management API request to create a new notification:
 		"""
         {
             "notificationType": "marain.notifications.test.v1",

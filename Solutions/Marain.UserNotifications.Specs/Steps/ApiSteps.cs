@@ -25,7 +25,6 @@ namespace Marain.UserNotifications.Specs.Steps
 
         private static readonly HttpClient HttpClient = HttpClientFactory.Create();
 
-        private static readonly Uri BaseUri = new Uri("http://localhost:7080");
         private readonly FeatureContext featureContext;
         private readonly ScenarioContext scenarioContext;
 
@@ -35,10 +34,16 @@ namespace Marain.UserNotifications.Specs.Steps
             this.scenarioContext = scenarioContext;
         }
 
-        [When("I request the Swagger definition for the API")]
-        public Task WhenIRequestTheSwaggerDefinitionForTheAPI()
+        [When("I request the Swagger definition for the management API")]
+        public Task WhenIRequestTheSwaggerDefinitionForTheManagementAPI()
         {
-            return this.SendGetRequest("/swagger");
+            return this.SendGetRequest(FunctionsApiBindings.ManagementApiBaseUri, "/swagger");
+        }
+
+        [When("I request the Swagger definition for the API delivery channel")]
+        public Task WhenIRequestTheSwaggerDefinitionForTheAPIDeliveryChannel()
+        {
+            return this.SendGetRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, "/swagger");
         }
 
         [Then("the response status code should be '(.*)'")]
@@ -48,14 +53,14 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.AreEqual(expectedStatusCode, response.StatusCode);
         }
 
-        [When("I send a request to create a new notification:")]
-        public async Task WhenISendARequestToCreateANewNotification(string requestJson)
+        [When("I send a management API request to create a new notification:")]
+        public async Task WhenISendAManagementApiRequestToCreateANewNotification(string requestJson)
         {
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             string transientTenantId = this.featureContext.GetTransientTenantId();
 
             HttpResponseMessage response = await HttpClient.PutAsync(
-                new Uri(BaseUri, $"/{transientTenantId}/marain/usernotifications"),
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications"),
                 requestContent).ConfigureAwait(false);
 
             this.scenarioContext.Set(response);
@@ -134,9 +139,9 @@ namespace Marain.UserNotifications.Specs.Steps
                 false);
         }
 
-        private async Task SendGetRequest(string path)
+        private async Task SendGetRequest(Uri baseUri, string path)
         {
-            HttpResponseMessage response = await HttpClient.GetAsync(new Uri(BaseUri, path)).ConfigureAwait(false);
+            HttpResponseMessage response = await HttpClient.GetAsync(new Uri(baseUri, path)).ConfigureAwait(false);
 
             this.scenarioContext.Set(response);
 
