@@ -26,6 +26,12 @@ namespace Marain.UserNotifications.Specs.Steps
             this.serviceProvider = ContainerBindings.GetServiceProvider(featureContext);
         }
 
+        [Given("I have created and stored a notification in the current transient tenant for the user with Id '(.*)'")]
+        public Task GivenIHaveCreatedAndStoredANotificationInTheCurrentTransientTenantForTheUserWithId(string userId)
+        {
+            return this.GivenIHaveCreatedAndStoredNotificationsInTheCurrentTransientTenantWithTimestampsAtSecondIntervalsForTheUserWithId(1, 0, userId);
+        }
+
         [Given("I have created and stored (.*) notifications in the current transient tenant with timestamps at (.*) second intervals for the user with Id '(.*)'")]
         public async Task GivenIHaveCreatedAndStoredNotificationsInTheCurrentTransientTenantWithTimestampsAtSecondIntervalsForTheUserWithId(int notificationCount, int interval, string userId)
         {
@@ -33,8 +39,8 @@ namespace Marain.UserNotifications.Specs.Steps
             IUserNotificationStore store = await storeFactory.GetUserNotificationStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
             IPropertyBagFactory propertyBagFactory = this.serviceProvider.GetRequiredService<IPropertyBagFactory>();
 
-            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
             var offset = TimeSpan.FromSeconds(interval);
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow - offset;
 
             var tasks = new List<Task>();
             var propertiesDictionary = new Dictionary<string, object>

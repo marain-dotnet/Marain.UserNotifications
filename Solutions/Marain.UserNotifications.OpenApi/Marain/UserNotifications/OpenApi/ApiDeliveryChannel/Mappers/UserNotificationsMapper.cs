@@ -105,6 +105,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
                     resource,
                     "newer",
                     ("tenantId", context.OpenApiContext.CurrentTenantId),
+                    ("userId", context.UserId),
                     ("sinceNotificationId", resource.Results[0].Id),
                     ("maxItems", context.MaxItems));
             }

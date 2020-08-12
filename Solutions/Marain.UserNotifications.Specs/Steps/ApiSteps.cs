@@ -207,11 +207,27 @@ namespace Marain.UserNotifications.Specs.Steps
                 });
         }
 
+        [Given("I have sent an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         [When("I send an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         public Task WhenISendAnAPIDeliveryRequestForNotificationsForTheUserWithId(int count, string userId)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
             return this.SendGetRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, $"/{transientTenantId}/marain/users/{userId}/notifications?maxItems={count}");
+        }
+
+        [When("I send an API delivery request for notifications for the user with Id '(.*)'")]
+        public Task WhenISendAnAPIDeliveryRequestForNotificationsForTheUserWithId(string userId)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            return this.SendGetRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, $"/{transientTenantId}/marain/users/{userId}/notifications");
+        }
+
+        [Given("I have sent an API delivery request using the path called '(.*)'")]
+        [When("I send an API delivery request using the path called '(.*)'")]
+        public Task WhenISendAnAPIDeliveryRequestUsingThePathCalled(string pathName)
+        {
+            string path = this.scenarioContext.Get<string>(pathName);
+            return this.SendGetRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, path);
         }
 
         private Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)

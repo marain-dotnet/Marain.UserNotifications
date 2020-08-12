@@ -50,7 +50,7 @@ namespace Marain.UserNotifications.Specs
             Assert.AreEqual(expectedEntryCount, tokenArray.Length, $"Expected array '{propertyPath}' to contain {expectedEntryCount} elements but found {tokenArray.Length}.");
         }
 
-        [Given("I have stored the value of the response content property called '(.*)' as '(.*)'")]
+        [Given("I have stored the value of the response object property called '(.*)' as '(.*)'")]
         public void GivenIHaveStoredTheValueOfTheResponseObjectPropertyCalledAs(string propertyPath, string storeAsName)
         {
             JToken token = this.GetRequiredTokenFromResponseObject(propertyPath);
