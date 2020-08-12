@@ -15,11 +15,13 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
         /// Initializes a new instance of the <see cref="UserNotificationsMappingContext"/> class.
         /// </summary>
         /// <param name="openApiContext">The <see cref="OpenApiContext"/>.</param>
+        /// <param name="userId">The <see cref="UserId"/>.</param>
         /// <param name="sinceNotificationId">The <see cref="SinceNotificationId"/>.</param>
         /// <param name="maxItems">The <see cref="MaxItems"/>.</param>
         /// <param name="continuationToken">The <see cref="ContinuationToken"/>.</param>
         public UserNotificationsMappingContext(
             IOpenApiContext openApiContext,
+            string userId,
             string? sinceNotificationId,
             int maxItems,
             string? continuationToken)
@@ -28,6 +30,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
             this.SinceNotificationId = sinceNotificationId;
             this.MaxItems = maxItems;
             this.ContinuationToken = continuationToken;
+            this.UserId = userId;
         }
 
         /// <summary>
@@ -49,5 +52,10 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
         /// Gets the requested continuation token, returned from a previous request.
         /// </summary>
         public string? ContinuationToken { get; }
+
+        /// <summary>
+        /// Gets the Id of the user we are retrieving notifications for.
+        /// </summary>
+        public string UserId { get; }
     }
 }

@@ -119,13 +119,13 @@ namespace Marain.UserNotifications.Specs.Steps
             this.scenarioContext.Set(result, newResultName);
         }
 
-        [Given("I have asked the user notification store for notifications using the continuation token from the result called '(.*)' and call the result '(.*)'")]
-        [When("I ask the user notification store for notifications using the continuation token from the result called '(.*)' and call the result '(.*)'")]
-        public async Task WhenIAskTheUserNotificationStoreForNotificationsUsingTheContinuationTokenFromTheResultCalledAndCallTheResult(string previousResultName, string newResultName)
+        [Given("I have asked the user notification store for notifications for the user with Id '(.*)' using the continuation token from the result called '(.*)' and call the result '(.*)'")]
+        [When("I ask the user notification store for notifications for the user with Id '(.*)' using the continuation token from the result called '(.*)' and call the result '(.*)'")]
+        public async Task WhenIAskTheUserNotificationStoreForNotificationsUsingTheContinuationTokenFromTheResultCalledAndCallTheResult(string userId, string previousResultName, string newResultName)
         {
             IUserNotificationStore store = this.serviceProvider.GetRequiredService<IUserNotificationStore>();
             GetNotificationsResult previousResult = this.scenarioContext.Get<GetNotificationsResult>(previousResultName);
-            GetNotificationsResult result = await store.GetAsync(previousResult.ContinuationToken!).ConfigureAwait(false);
+            GetNotificationsResult result = await store.GetAsync(userId, previousResult.ContinuationToken!).ConfigureAwait(false);
             this.scenarioContext.Set(result, newResultName);
         }
 

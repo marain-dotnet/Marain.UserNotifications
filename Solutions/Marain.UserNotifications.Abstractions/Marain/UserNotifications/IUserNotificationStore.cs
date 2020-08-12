@@ -31,9 +31,10 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Retrieves notifications for the specified user.
         /// </summary>
+        /// <param name="userId">The Id of the user making the request.</param>
         /// <param name="continuationToken">A continuation token from a previous call to <see cref="GetAsync(string, string?, int)"/>.</param>
         /// <returns>The user notifications.</returns>
-        Task<GetNotificationsResult> GetAsync(string continuationToken);
+        Task<GetNotificationsResult> GetAsync(string userId, string continuationToken);
 
         /// <summary>
         /// Retrieves the user notification with the given Id.

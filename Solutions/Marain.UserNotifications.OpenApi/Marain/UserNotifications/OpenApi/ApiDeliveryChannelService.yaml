@@ -12,9 +12,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/tenantId'
         - $ref: '#/components/parameters/userId'
-        - $ref: '#/components/parameters/sinceSequenceId'
-        - $ref: '#/components/parameters/continuationToken'
+        - $ref: '#/components/parameters/sinceNotificationId'
         - $ref: '#/components/parameters/maxItems'
+        - $ref: '#/components/parameters/continuationToken'
       responses:
         '200':
           description: Successful operation
@@ -22,6 +22,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PagedNotificationsListResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /{tenantId}/marain/notifications/{notificationId}:
+    get:
+      summary: Gets a single notification
+      operationId: getNotification
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+        - $ref: '#/components/parameters/notificationId'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
         '400':
           description: Bad request
         '404':
@@ -66,7 +93,7 @@ components:
   schemas:
     Notification:
       description: A single notification for a specific user.
-      allOf:
+      anyOf:
       - $ref: '#/components/schemas/Resource'
       - type: object
         properties:
@@ -76,23 +103,12 @@ components:
             nullable: false
           properties:
             $ref: '#/components/schemas/PropertyBag'
-          sequenceId:
-            type: integer
-            format: int64
           userId:
             type: string
           timestamp:
             type: string
             format: date-time
             description: The date and time at which the event being notified took place.
-          delivered:
-            description: A boolean indicating whether or not the notification has been delivered via at least one channel.
-            type: boolean
-          read:
-            description: A boolean indicating whether or not the notification has been read/acknowledged via at least one channel.
-            type: boolean
-          correlationIds:
-            $ref: '#/components/schemas/CorrelationIds'
           _links:
             type: object
             properties:
@@ -103,7 +119,7 @@ components:
 
     PagedNotificationsListResponse:
       description: A paged list of notifications
-      allOf:
+      anyOf:
       - $ref: '#/components/schemas/PagedListResource'
       - type: object
         properties:
@@ -220,7 +236,7 @@ components:
 
     PagedListResource:
       description: A resource representation of a paged list
-      allOf:
+      anyOf:
         - $ref: '#/components/schemas/Resource'
         - type: object
           required:
@@ -293,19 +309,19 @@ components:
       required: true
       schema:
         type: string
-    sinceSequenceId:
-      name: sinceSequenceId
+    sinceNotificationId:
+      name: sinceNotificationId
       in: query
       x-ms-parameter-location: method
       description: When retrieving notifications, all returned notifications should have a greater sequence number than the supplied value
       required: false
       schema:
-        type: integer
+        type: string
     continuationToken:
       name: continuationToken
       in: query
       x-ms-parameter-location: method
-      description: A continuation token for an operation where more data is available
+      description: A continuation token for an operation where more data is available. If continuation token is specified, other query parameters are ignored.
       required: false
       schema:
         type: string

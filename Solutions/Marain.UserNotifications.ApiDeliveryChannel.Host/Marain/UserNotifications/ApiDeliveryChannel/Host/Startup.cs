@@ -24,6 +24,8 @@ namespace Marain.UserNotifications.ApiDeliveryChannel.Host
 
             services.AddLogging();
 
+            services.AddCommonUserNotificationsApiServices();
+
             services.AddTenantedUserNotificationsApiDeliveryChannel();
         }
     }

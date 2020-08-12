@@ -51,6 +51,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
         {
             HalDocument response = this.halDocumentFactory.CreateHalDocumentFrom(new
             {
+                resource.UserId,
                 resource.NotificationType,
                 resource.Properties,
                 resource.Timestamp,
@@ -60,14 +61,14 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
                 this.openApiWebLinkResolver,
                 resource,
                 "self",
-                ("tenantId", context.CurrentPrincipal),
+                ("tenantId", context.CurrentTenantId),
                 ("notificationId", resource.Id));
 
             response.ResolveAndAddByOwnerAndRelationType(
                 this.openApiWebLinkResolver,
                 resource,
                 "mark-read",
-                ("tenantId", context.CurrentPrincipal),
+                ("tenantId", context.CurrentTenantId),
                 ("notificationId", resource.Id));
 
             return new ValueTask<HalDocument>(response);

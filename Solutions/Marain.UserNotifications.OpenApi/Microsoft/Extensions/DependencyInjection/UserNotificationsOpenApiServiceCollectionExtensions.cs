@@ -4,7 +4,9 @@
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    using Marain.UserNotifications;
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel;
+    using Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers;
     using Menes;
 
     /// <summary>
@@ -20,6 +22,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddApiDeliveryChannelOpenApiServices(
             this IServiceCollection services)
         {
+            services.AddHalDocumentMapper<GetNotificationsResult, UserNotificationsMappingContext, UserNotificationsMapper>();
+            services.AddHalDocumentMapper<UserNotification, IOpenApiContext, UserNotificationMapper>();
+
+            services.AddSingleton<IOpenApiService, GetNotificationService>();
             services.AddSingleton<IOpenApiService, GetNotificationsForUserService>();
             services.AddSingleton<IOpenApiService, UpdateUserNotificationReadStatusService>();
 

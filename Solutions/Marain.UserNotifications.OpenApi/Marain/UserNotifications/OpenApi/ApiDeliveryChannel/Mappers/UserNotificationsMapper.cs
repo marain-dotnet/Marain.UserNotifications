@@ -52,6 +52,10 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
             links.MapByContentTypeAndRelationTypeAndOperationId<GetNotificationsResult>(
                 "next",
                 GetNotificationsForUserService.GetNotificationsForUserOperationId);
+
+            links.MapByContentTypeAndRelationTypeAndOperationId<GetNotificationsResult>(
+                "newer",
+                GetNotificationsForUserService.GetNotificationsForUserOperationId);
         }
 
         /// <inheritdoc/>
@@ -75,8 +79,35 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
                 resource,
                 "self",
                 ("tenantId", context.OpenApiContext.CurrentTenantId),
+                ("userId", context.UserId),
                 ("sinceNotificationId", context.SinceNotificationId),
-                ("maxItems", context.MaxItems));
+                ("maxItems", context.MaxItems),
+                ("continuationToken", context.ContinuationToken));
+
+            if (!string.IsNullOrEmpty(resource.ContinuationToken))
+            {
+                response.ResolveAndAddByOwnerAndRelationType(
+                this.openApiWebLinkResolver,
+                resource,
+                "self",
+                ("tenantId", context.OpenApiContext.CurrentTenantId),
+                ("userId", context.UserId),
+                ("continuationToken", resource.ContinuationToken));
+            }
+
+            // If there are any results, we can also return a "newer" link, which can be used to request notifications
+            // newer than those in this result set. If there aren't any, the user can just make the same request again
+            // to get any newly created notifications.
+            if (resource.Results.Length > 0)
+            {
+                response.ResolveAndAddByOwnerAndRelationType(
+                    this.openApiWebLinkResolver,
+                    resource,
+                    "newer",
+                    ("tenantId", context.OpenApiContext.CurrentTenantId),
+                    ("sinceNotificationId", resource.Results[0].Id),
+                    ("maxItems", context.MaxItems));
+            }
 
             return response;
         }

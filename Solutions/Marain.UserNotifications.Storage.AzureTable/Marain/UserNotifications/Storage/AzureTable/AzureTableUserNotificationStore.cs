@@ -58,10 +58,15 @@ namespace Marain.UserNotifications.Storage.AzureTable
         }
 
         /// <inheritdoc/>
-        public Task<GetNotificationsResult> GetAsync(string continuationToken)
+        public Task<GetNotificationsResult> GetAsync(string userId, string continuationToken)
         {
             var requestContinuationToken =
                 ContinuationToken.FromString(continuationToken, this.serializerSettingsProvider.Instance);
+
+            if (userId != requestContinuationToken.UserId)
+            {
+                throw new ArgumentException("The supplied continuation token was not generated for user '{userId}'");
+            }
 
             return this.GetInternalAsync(
                 requestContinuationToken.UserId,

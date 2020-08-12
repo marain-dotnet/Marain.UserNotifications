@@ -15,7 +15,7 @@ Scenario: Retrieve notifications for a user
 
 Scenario: Retrieve notifications for a user using a continuation token
 	Given I have asked the user notification store for 20 notifications for the user with Id 'user1' and called the result 'result1'
-	When I ask the user notification store for notifications using the continuation token from the result called 'result1' and call the result 'result2'
+	When I ask the user notification store for notifications for the user with Id 'user1' using the continuation token from the result called 'result1' and call the result 'result2'
 	Then the get notifications result called 'result2' should contain 20 notifications
 	And the get notifications result called 'result2' should contain notifications in descending order of timestamp
 	And the get notifications result called 'result2' should contain a continuation token
@@ -24,8 +24,8 @@ Scenario: Retrieve notifications for a user using a continuation token
 
 Scenario: Retrieve final page of notifications for a user using continuation tokens
 	Given I have asked the user notification store for 20 notifications for the user with Id 'user1' and called the result 'result1'
-	And I have asked the user notification store for notifications using the continuation token from the result called 'result1' and call the result 'result2'
-	When I ask the user notification store for notifications using the continuation token from the result called 'result2' and call the result 'result3'
+	And I have asked the user notification store for notifications for the user with Id 'user1' using the continuation token from the result called 'result1' and call the result 'result2'
+	When I ask the user notification store for notifications for the user with Id 'user1' using the continuation token from the result called 'result2' and call the result 'result3'
 	Then the get notifications result called 'result3' should contain 10 notifications
 	And the get notifications result called 'result3' should contain notifications in descending order of timestamp
 	And the get notifications result called 'result3' should not contain a continuation token

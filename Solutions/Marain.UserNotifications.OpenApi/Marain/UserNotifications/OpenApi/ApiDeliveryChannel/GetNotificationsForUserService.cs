@@ -10,6 +10,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
     using Marain.Services.Tenancy;
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers;
     using Menes;
+    using Menes.Exceptions;
     using Menes.Hal;
 
     /// <summary>
@@ -54,6 +55,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
         /// <param name="maxItems">The maximum number of items to return.</param>
         /// <param name="continuationToken">A continuation token returned from a previous request.</param>
         /// <returns>The notifications, as an OpenApiResult.</returns>
+        [OperationId(GetNotificationsForUserOperationId)]
         public async Task<OpenApiResult> GetNotificationsForUserAsync(
             IOpenApiContext context,
             string userId,
@@ -69,12 +71,24 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
 
             maxItems ??= 50;
 
-            GetNotificationsResult results =
-                await userNotificationStore.GetAsync(userId, sinceNotificationId, maxItems.Value).ConfigureAwait(false);
+            GetNotificationsResult results;
+
+            try
+            {
+                results = string.IsNullOrEmpty(continuationToken)
+                                    ? await userNotificationStore.GetAsync(userId, sinceNotificationId, maxItems.Value).ConfigureAwait(false)
+                                    : await userNotificationStore.GetAsync(userId, continuationToken).ConfigureAwait(false);
+            }
+            catch (ArgumentException) when (!string.IsNullOrEmpty(continuationToken))
+            {
+                // The most likely reason for this is that the user Id in the continuation token doesn't match that in
+                // the path - which makes this a bad request.
+                throw new OpenApiBadRequestException();
+            }
 
             HalDocument result = await this.userNotificationsMapper.MapAsync(
                 results,
-                new UserNotificationsMappingContext(context, sinceNotificationId, maxItems.Value, continuationToken)).ConfigureAwait(false);
+                new UserNotificationsMappingContext(context, userId, sinceNotificationId, maxItems.Value, continuationToken)).ConfigureAwait(false);
 
             return this.OkResult(result);
         }

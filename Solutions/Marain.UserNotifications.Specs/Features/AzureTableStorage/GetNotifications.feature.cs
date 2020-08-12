@@ -177,8 +177,9 @@ this.FeatureBackground();
                         "d \'user1\' and called the result \'result1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 18
- testRunner.When("I ask the user notification store for notifications using the continuation token " +
-                        "from the result called \'result1\' and call the result \'result2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I ask the user notification store for notifications for the user with Id \'user1\' " +
+                        "using the continuation token from the result called \'result1\' and call the resul" +
+                        "t \'result2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 19
  testRunner.Then("the get notifications result called \'result2\' should contain 20 notifications", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -238,12 +239,14 @@ this.FeatureBackground();
                         "d \'user1\' and called the result \'result1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 27
- testRunner.And("I have asked the user notification store for notifications using the continuation" +
-                        " token from the result called \'result1\' and call the result \'result2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I have asked the user notification store for notifications for the user with Id \'" +
+                        "user1\' using the continuation token from the result called \'result1\' and call th" +
+                        "e result \'result2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 28
- testRunner.When("I ask the user notification store for notifications using the continuation token " +
-                        "from the result called \'result2\' and call the result \'result3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I ask the user notification store for notifications for the user with Id \'user1\' " +
+                        "using the continuation token from the result called \'result2\' and call the resul" +
+                        "t \'result3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 29
  testRunner.Then("the get notifications result called \'result3\' should contain 10 notifications", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

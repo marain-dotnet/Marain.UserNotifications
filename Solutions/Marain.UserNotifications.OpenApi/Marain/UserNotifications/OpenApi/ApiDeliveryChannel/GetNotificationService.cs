@@ -51,6 +51,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
         /// <param name="context">The current OpenApi context.</param>
         /// <param name="notificationId">The Id of the notification to retrieve.</param>
         /// <returns>The notifications, as an OpenApiResult.</returns>
+        [OperationId(GetNotificationOperationId)]
         public async Task<OpenApiResult> GetNotificationAsync(
             IOpenApiContext context,
             string notificationId)
