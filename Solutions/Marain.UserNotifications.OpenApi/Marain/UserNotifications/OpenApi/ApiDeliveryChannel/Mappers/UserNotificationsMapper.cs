@@ -87,12 +87,12 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
             if (!string.IsNullOrEmpty(resource.ContinuationToken))
             {
                 response.ResolveAndAddByOwnerAndRelationType(
-                this.openApiWebLinkResolver,
-                resource,
-                "self",
-                ("tenantId", context.OpenApiContext.CurrentTenantId),
-                ("userId", context.UserId),
-                ("continuationToken", resource.ContinuationToken));
+                    this.openApiWebLinkResolver,
+                    resource,
+                    "next",
+                    ("tenantId", context.OpenApiContext.CurrentTenantId),
+                    ("userId", context.UserId),
+                    ("continuationToken", resource.ContinuationToken));
             }
 
             // If there are any results, we can also return a "newer" link, which can be used to request notifications

@@ -160,12 +160,12 @@ namespace Marain.UserNotifications.Storage.AzureTable
 
             // If we've managed to read up to the max items, then there might be more - build a continuation token
             // to return.
-            ContinuationToken? responseContinuationToken = results.Count == maxItems
+            ContinuationToken? responseContinuationToken = results.Count >= maxItems
                 ? new ContinuationToken(userId, maxItems, results[^1].RowKey, afterRowKey)
                 : null;
 
             return new GetNotificationsResult(
-                results.Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToArray(),
+                results.Take(maxItems).Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToArray(),
                 responseContinuationToken?.AsString(this.serializerSettingsProvider.Instance));
         }
     }
