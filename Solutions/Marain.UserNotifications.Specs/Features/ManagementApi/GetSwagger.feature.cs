@@ -21,6 +21,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Get swagger")]
+    [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
     [NUnit.Framework.CategoryAttribute("useApis")]
     public partial class GetSwaggerFeature
     {
@@ -28,6 +29,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = new string[] {
+                "perFeatureContainer",
                 "useApis"};
         
 #line 1 "GetSwagger.feature"
@@ -39,6 +41,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Get swagger", "\tIn order to understand the management API\r\n\tAs a developer\r\n\tI want to retrieve " +
                     "the Swagger definition of the API", ProgrammingLanguage.CSharp, new string[] {
+                        "perFeatureContainer",
                         "useApis"});
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -84,7 +87,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get swagger", null, tagsOfScenario, argumentsOfScenario);
-#line 8
+#line 9
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -104,10 +107,10 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 9
+#line 10
  testRunner.When("I request the Swagger definition for the management API", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 10
+#line 11
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

@@ -35,7 +35,7 @@ namespace Marain.UserNotifications.Specs.Steps
         [Given("I have a user notification called '(.*)'")]
         public void GivenIHaveAUserNotificationCalled(string notificationName, Table table)
         {
-            UserNotification notification = this.BuildNotificationFrom(table.Rows[0]);
+            UserNotification notification = DataSetupSteps.BuildNotificationFrom(table.Rows[0], this.serializationSettingsProvider.Instance);
             this.scenarioContext.Set(notification, notificationName);
         }
 
@@ -44,7 +44,7 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             foreach (TableRow row in table.Rows)
             {
-                UserNotification notification = this.BuildNotificationFrom(row);
+                UserNotification notification = DataSetupSteps.BuildNotificationFrom(row, this.serializationSettingsProvider.Instance);
                 this.scenarioContext.Set(notification, row["Name"]);
             }
         }
@@ -223,22 +223,6 @@ namespace Marain.UserNotifications.Specs.Steps
             string serializedExpectedProperties = JsonConvert.SerializeObject(expected.Properties, serializerSettingsProvider.Instance);
 
             Assert.AreEqual(serializedExpectedProperties, serializedActualProperties);
-        }
-
-        private UserNotification BuildNotificationFrom(TableRow tableRow)
-        {
-            string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();
-            IPropertyBag properties = JsonConvert.DeserializeObject<IPropertyBag>(tableRow["PropertiesJson"], this.serializationSettingsProvider.Instance);
-
-            string? notificationId = tableRow.ContainsKey("Id") ? tableRow["Id"] : null;
-
-            return new UserNotification(
-                notificationId,
-                tableRow["NotificationType"],
-                tableRow["UserId"],
-                DateTime.Parse(tableRow["Timestamp"]),
-                properties,
-                new UserNotificationMetadata(correlationIds, null));
         }
     }
 }

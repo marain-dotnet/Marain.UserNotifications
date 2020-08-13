@@ -5,25 +5,16 @@
 namespace Marain.UserNotifications.Specs.Steps
 {
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using Corvus.Extensions.Json;
-    using Corvus.Json;
     using Corvus.Retry;
     using Corvus.Retry.Policies;
     using Corvus.Retry.Strategies;
     using Corvus.Testing.SpecFlow;
-    using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications.Specs.Bindings;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
@@ -86,80 +77,12 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [Given("I have used the management API to create (.*) notifications with timestamps at (.*) second intervals for the user with Id '(.*)'")]
-        public async Task GivenIHaveUsedTheManagementAPIToCreateNotificationsWithTimestampsAtSecondIntervalsForTheUserWithId(int notificationCount, int interval, string userId)
+        [Given("I send an API delivery request for the user notification with the same Id as the user notification called '(.*)'")]
+        public Task GivenISendAnAPIDeliveryRequestForTheUserNotificationWithTheSameIdAsTheUserNotificationCalled(string notificationName)
         {
-            IPropertyBagFactory propertyBagFactory = this.serviceProvider.GetRequiredService<IPropertyBagFactory>();
-            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
-
-            var offset = TimeSpan.FromSeconds(interval);
-
-            var propertiesDictionary = new Dictionary<string, object>
-            {
-                { "prop1", "val1" },
-                { "prop2", 2 },
-                { "prop3", DateTime.Now },
-            };
-
-            var request = new CreateNotificationsRequest(
-                "marain.usernotifications.apitest",
-                new[] { userId },
-                DateTime.UtcNow,
-                propertyBagFactory.Create(propertiesDictionary),
-                new[] { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() });
-
-            var initialRequestTasks = new List<Task<HttpResponseMessage>>();
-
-            var timer = new Stopwatch();
-            timer.Start();
-
-            for (int i = 0; i < notificationCount; i++)
-            {
-                string requestJson = JsonConvert.SerializeObject(request, serializerSettingsProvider.Instance);
-                var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
-                string transientTenantId = this.featureContext.GetTransientTenantId();
-
-                initialRequestTasks.Add(HttpClient.PutAsync(
-                    new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications"),
-                    requestContent));
-
-                request = new CreateNotificationsRequest(
-                    request.NotificationType,
-                    request.UserIds,
-                    request.Timestamp - offset,
-                    request.Properties,
-                    request.CorrelationIds);
-            }
-
-            // Wait for the initial requests to complete
-            HttpResponseMessage[] responses = await Task.WhenAll(initialRequestTasks).ConfigureAwait(false);
-
-            timer.Stop();
-
-            Trace.TraceInformation($"Executed initial create requests in {timer.ElapsedMilliseconds}ms");
-
-            timer.Reset();
-            timer.Start();
-
-            // Now we need to wait for all of the operations to complete.
-            await Task.WhenAll(responses.Select(
-                r => this.LongRunningOperationPropertyCheck(
-                    r.Headers.Location,
-                    "status",
-                    120,
-                    val =>
-                    {
-                        if (val != "Succeeded")
-                        {
-                            throw new Exception("Long running operation has not completed successfully.");
-                        }
-
-                        Trace.TraceInformation("Long running operation completed successfully.");
-                    }))).ConfigureAwait(false);
-
-            timer.Stop();
-
-            Trace.TraceInformation($"Create requests completed in {timer.ElapsedMilliseconds}ms");
+            UserNotification notification = this.scenarioContext.Get<UserNotification>(notificationName);
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            return this.SendGetRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, $"/{transientTenantId}/marain/usernotifications/{WebUtility.UrlEncode(notification.Id)}");
         }
 
         [Then("the response should contain a '(.*)' header")]
@@ -230,6 +153,13 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.SendGetRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, path);
         }
 
+        [When("I send an API delivery request for the user notification with the Id '(.*)'")]
+        public Task WhenISendAnAPIDeliveryRequestForTheUserNotificationWithTheId(string notificationId)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            return this.SendGetRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, $"/{transientTenantId}/marain/usernotifications/{WebUtility.UrlEncode(notificationId)}");
+        }
+
         private Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)
         {
             var tokenSource = new CancellationTokenSource();
@@ -261,8 +191,11 @@ namespace Marain.UserNotifications.Specs.Steps
 
             this.scenarioContext.Set(content, ResponseContent);
 
-            var parsedResponse = JObject.Parse(content);
-            this.scenarioContext.Set(parsedResponse);
+            if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(content))
+            {
+                var parsedResponse = JObject.Parse(content);
+                this.scenarioContext.Set(parsedResponse);
+            }
         }
     }
 }

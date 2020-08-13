@@ -10,7 +10,9 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
     using Marain.Services.Tenancy;
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers;
     using Menes;
+    using Menes.Exceptions;
     using Menes.Hal;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Implements the user notifications retrieval endpoint for the API delivery channel.
@@ -62,8 +64,17 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
             IUserNotificationStore userNotificationStore =
                 await this.userNotificationStoreFactory.GetUserNotificationStoreForTenantAsync(tenant).ConfigureAwait(false);
 
-            UserNotification notifications =
-                await userNotificationStore.GetByIdAsync(notificationId).ConfigureAwait(false);
+            UserNotification notifications;
+
+            try
+            {
+                notifications = await userNotificationStore.GetByIdAsync(notificationId).ConfigureAwait(false);
+            }
+            catch (ArgumentException)
+            {
+                // This will happen if the supplied notification Id is invalid. Return a BadRequest response.
+                throw new OpenApiBadRequestException("The supplied notificationId is not valid");
+            }
 
             HalDocument response = await this.userNotificationMapper.MapAsync(notifications, context).ConfigureAwait(false);
 

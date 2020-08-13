@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace Marain.UserNotifications.Specs.Features.AzureTableStorage
+namespace Marain.UserNotifications.Specs.Features.ApiDeliveryChannel
 {
     using TechTalk.SpecFlow;
     using System;
@@ -20,28 +20,31 @@ namespace Marain.UserNotifications.Specs.Features.AzureTableStorage
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.3.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Store Notification")]
-    [NUnit.Framework.CategoryAttribute("perScenarioContainer")]
-    [NUnit.Framework.CategoryAttribute("withUserNotificationTableStorage")]
-    public partial class StoreNotificationFeature
+    [NUnit.Framework.DescriptionAttribute("Get Single Notification by ID")]
+    [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
+    [NUnit.Framework.CategoryAttribute("useApis")]
+    [NUnit.Framework.CategoryAttribute("useTransientTenant")]
+    public partial class GetSingleNotificationByIDFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = new string[] {
-                "perScenarioContainer",
-                "withUserNotificationTableStorage"};
+                "perFeatureContainer",
+                "useApis",
+                "useTransientTenant"};
         
-#line 1 "StoreNotification.feature"
+#line 1 "GetNotification.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Store Notification", null, ProgrammingLanguage.CSharp, new string[] {
-                        "perScenarioContainer",
-                        "withUserNotificationTableStorage"});
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Get Single Notification by ID", null, ProgrammingLanguage.CSharp, new string[] {
+                        "perFeatureContainer",
+                        "useApis",
+                        "useTransientTenant"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -80,13 +83,13 @@ namespace Marain.UserNotifications.Specs.Features.AzureTableStorage
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Store a new user notification")]
-        public virtual void StoreANewUserNotification()
+        [NUnit.Framework.DescriptionAttribute("Retrieve a notification by its Id")]
+        public virtual void RetrieveANotificationByItsId()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Store a new user notification", null, tagsOfScenario, argumentsOfScenario);
-#line 6
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieve a notification by its Id", null, tagsOfScenario, argumentsOfScenario);
+#line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -106,47 +109,60 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                             "NotificationType",
                             "UserId",
                             "Timestamp",
                             "PropertiesJson",
                             "CorrelationIds"});
-                table3.AddRow(new string[] {
+                table1.AddRow(new string[] {
                             "marain.test.notification.v1",
-                            "097C13C5-BF37-4C1F-9170-819BFC8733BC",
+                            "304ABC0E-08AF-4EF5-A9AC-281B67D633F4",
                             "2012-03-19T07:22Z",
                             "{ \"prop1\": \"val1\" }",
                             "[\"id1\", \"id2\"]"});
-#line 7
- testRunner.Given("I have a user notification called \'input\'", ((string)(null)), table3, "Given ");
-#line hidden
-#line 10
- testRunner.When("I tell the user notification store to store the user notification called \'input\' " +
-                        "and call the result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 8
+ testRunner.Given("I have created and stored a notification in the current transient tenant and call" +
+                        "ed the result \'output\'", ((string)(null)), table1, "Given ");
 #line hidden
 #line 11
- testRunner.Then("no exception should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("I send an API delivery request for the user notification with the same Id as the " +
+                        "user notification called \'output\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
- testRunner.And("the properties of the user notification called \'result\' should match the user not" +
-                        "ification called \'input\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 13
- testRunner.And("the Id of the user notification called \'result\' should be set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 14
+ testRunner.And("the response content should have a string property called \'userId\' with value \'30" +
+                        "4ABC0E-08AF-4EF5-A9AC-281B67D633F4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 15
+ testRunner.And("the response content should have a string property called \'notificationType\' with" +
+                        " value \'marain.test.notification.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 16
+ testRunner.And("the response content should have a long property called \'timestamp.unixTime\' with" +
+                        " value 1332141720000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 17
+ testRunner.And("the response content should have a string property called \'properties.prop1\' with" +
+                        " value \'val1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Attempting to store the same notification twice throws a concurrency exception")]
-        public virtual void AttemptingToStoreTheSameNotificationTwiceThrowsAConcurrencyException()
+        [NUnit.Framework.DescriptionAttribute("Request a notification that doesn\'t exist")]
+        public virtual void RequestANotificationThatDoesntExist()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Attempting to store the same notification twice throws a concurrency exception", null, tagsOfScenario, argumentsOfScenario);
-#line 16
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request a notification that doesn\'t exist", null, tagsOfScenario, argumentsOfScenario);
+#line 19
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -166,44 +182,24 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
-                            "NotificationType",
-                            "UserId",
-                            "Timestamp",
-                            "PropertiesJson",
-                            "CorrelationIds"});
-                table4.AddRow(new string[] {
-                            "marain.test.notification.v1",
-                            "93B6A389-A40F-4807-B6EE-AC41F44A3CCD",
-                            "2012-03-19T07:22Z",
-                            "{ \"prop1\": \"val1\" }",
-                            "[\"id1\", \"id2\"]"});
-#line 17
- testRunner.Given("I have a user notification called \'input\'", ((string)(null)), table4, "Given ");
-#line hidden
 #line 20
- testRunner.And("I have told the user notification store to store the user notification called \'in" +
-                        "put\' and call the result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When(@"I send an API delivery request for the user notification with the Id 'eyJwYXJ0aXRpb25LZXkiOiJ1c2VyMiIsInJvd0tleSI6IjAwOTIyMzM3MDQ0MTQ5MDU2NzgwNy1kWE5sY2pJeE5UazFNelkwTWpBNE1EQXdhbTl1TG5SbGMzUXlMakY3SW5Sb2FXNW5NU0k2SW5aaGJIVmxNU0lzSW5Sb2FXNW5NaUk2SW5aaGJIVmxNaUo5In0='", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 21
- testRunner.When("I tell the user notification store to store the user notification called \'input\' " +
-                        "and call the result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 22
- testRunner.Then("a \'UserNotificationStoreConcurrencyException\' should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code should be \'NotFound\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Attempting to store equivalent notifications throws a concurrency exception")]
-        public virtual void AttemptingToStoreEquivalentNotificationsThrowsAConcurrencyException()
+        [NUnit.Framework.DescriptionAttribute("Request a notification with an invalid ID")]
+        public virtual void RequestANotificationWithAnInvalidID()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Attempting to store equivalent notifications throws a concurrency exception", null, tagsOfScenario, argumentsOfScenario);
-#line 24
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request a notification with an invalid ID", null, tagsOfScenario, argumentsOfScenario);
+#line 23
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -223,40 +219,11 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Name",
-                            "NotificationType",
-                            "UserId",
-                            "Timestamp",
-                            "PropertiesJson",
-                            "CorrelationIds"});
-                table5.AddRow(new string[] {
-                            "input1",
-                            "marain.test.notification.v1",
-                            "F88677CE-8A9B-41FC-9E75-A8F71C9470C8",
-                            "2012-03-19T07:22Z",
-                            "{ \"prop1\": \"val1\" }",
-                            "[\"id1\", \"id2\"]"});
-                table5.AddRow(new string[] {
-                            "input2",
-                            "marain.test.notification.v1",
-                            "F88677CE-8A9B-41FC-9E75-A8F71C9470C8",
-                            "2012-03-19T07:22Z",
-                            "{ \"prop1\": \"val1\" }",
-                            "[\"id3\", \"id4\"]"});
+#line 24
+ testRunner.When("I send an API delivery request for the user notification with the Id \'BadId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
 #line 25
- testRunner.Given("I have user notifications", ((string)(null)), table5, "Given ");
-#line hidden
-#line 29
- testRunner.And("I have told the user notification store to store the user notification called \'in" +
-                        "put1\' and call the result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 30
- testRunner.When("I tell the user notification store to store the user notification called \'input2\'" +
-                        " and call the result \'result\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 31
- testRunner.Then("a \'UserNotificationStoreConcurrencyException\' should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code should be \'BadRequest\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

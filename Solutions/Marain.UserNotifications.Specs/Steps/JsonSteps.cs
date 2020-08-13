@@ -34,6 +34,15 @@ namespace Marain.UserNotifications.Specs
             Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was '{expectedValue}', but actual value was '{actualValue}'");
         }
 
+        [Then("the response content should have a long property called '(.*)' with value (.*)")]
+        public void ThenTheResponseObjectShouldHaveALongPropertyCalledWithValue(string propertyPath, long expectedValue)
+        {
+            JToken actualToken = this.GetRequiredTokenFromResponseObject(propertyPath);
+
+            long actualValue = actualToken.Value<long>();
+            Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was {expectedValue}, but actual value was {actualValue}");
+        }
+
         [Then("the response content should not have a property called '(.*)'")]
         public void ThenTheResponseObjectShouldNotHaveAPropertyCalled(string propertyPath)
         {

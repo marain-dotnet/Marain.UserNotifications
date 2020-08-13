@@ -1,4 +1,5 @@
-﻿@useApis
+﻿@perFeatureContainer
+@useApis
 
 Feature: Get swagger
 	In order to understand the management API

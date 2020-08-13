@@ -35,7 +35,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
 
-  /{tenantId}/marain/notifications/{notificationId}:
+  /{tenantId}/marain/usernotifications/{notificationId}:
     get:
       summary: Gets a single notification
       operationId: getNotification
@@ -62,7 +62,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
 
-  /{tenantId}/marain/notifications/{notificationId}/read:
+  /{tenantId}/marain/usernotifications/{notificationId}/read:
     post:
       summary: Mark the specified notification as read
       operationId: markNotificationRead

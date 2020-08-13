@@ -82,10 +82,18 @@ namespace Marain.UserNotifications.Storage.AzureTable
             var operation = TableOperation.Retrieve<UserNotificationTableEntity>(notificationId.PartitionKey, notificationId.RowKey);
             TableResult result = await this.table.ExecuteAsync(operation).ConfigureAwait(false);
 
-            // TODO: Check not found.
-            var notification = (UserNotificationTableEntity)result.Result;
+            switch (result.HttpStatusCode)
+            {
+                case 200:
+                    var notification = (UserNotificationTableEntity)result.Result;
+                    return notification.ToNotification(this.serializerSettingsProvider.Instance);
 
-            return notification.ToNotification(this.serializerSettingsProvider.Instance);
+                case 404:
+                    throw new UserNotificationNotFoundException(id);
+
+                default:
+                    throw new AzureTableUserNotificationStoreException($"Unexpected response code '{result.HttpStatusCode}' from table storage when attempting to retrieve the notification with Id '{id}'");
+            }
         }
 
         /// <inheritdoc/>

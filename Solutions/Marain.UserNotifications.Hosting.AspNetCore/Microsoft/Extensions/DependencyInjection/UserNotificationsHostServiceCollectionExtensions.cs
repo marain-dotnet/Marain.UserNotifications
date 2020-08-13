@@ -8,6 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.Operations.Client.OperationsControl;
     using Marain.Tenancy.Client;
+    using Marain.UserNotifications;
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel;
     using Menes;
     using Menes.Exceptions;
@@ -95,6 +96,8 @@ namespace Microsoft.Extensions.DependencyInjection
                         "Marain.UserNotifications.OpenApi.ApiDeliveryChannelService.yaml");
 
                     hostConfig.Documents.AddSwaggerEndpoint();
+
+                    hostConfig.Exceptions.Map<UserNotificationNotFoundException>(404);
                 });
 
             return services;
