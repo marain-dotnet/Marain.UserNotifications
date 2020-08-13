@@ -149,7 +149,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                 configuration.GetSection("TestBlobStorageConfiguration").Get<BlobStorageConfiguration>()
                 ?? new BlobStorageConfiguration();
 
-            if (string.IsNullOrEmpty(tableStorageConfiguration.AccountName))
+            if (string.IsNullOrEmpty(blobStorageConfiguration.AccountName))
             {
                 logger.LogDebug("No configuration value 'TestBlobStorageConfiguration:AccountName' provided; using local storage emulator.");
             }
