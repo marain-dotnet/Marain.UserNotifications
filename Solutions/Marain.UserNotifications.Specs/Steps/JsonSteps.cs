@@ -59,6 +59,17 @@ namespace Marain.UserNotifications.Specs
             Assert.AreEqual(expectedEntryCount, tokenArray.Length, $"Expected array '{propertyPath}' to contain {expectedEntryCount} elements but found {tokenArray.Length}.");
         }
 
+        [Then("each item in the response content array property called '(.*)' should have a property called '(.*)'")]
+        public void ThenEachItemInTheResponseContentArrayPropertyCalledShouldHaveAPropertyCalled(string arrayPropertyPath, string itemPropertyPath)
+        {
+            JToken actualToken = this.GetRequiredTokenFromResponseObject(arrayPropertyPath);
+
+            foreach (JToken current in actualToken.ToArray())
+            {
+                this.GetRequiredToken(current, itemPropertyPath);
+            }
+        }
+
         [Given("I have stored the value of the response object property called '(.*)' as '(.*)'")]
         public void GivenIHaveStoredTheValueOfTheResponseObjectPropertyCalledAs(string propertyPath, string storeAsName)
         {
@@ -70,8 +81,13 @@ namespace Marain.UserNotifications.Specs
         private JToken GetRequiredTokenFromResponseObject(string propertyPath)
         {
             JObject data = this.scenarioContext.Get<JObject>();
+            return this.GetRequiredToken(data, propertyPath);
+        }
+
+        private JToken GetRequiredToken(JToken data, string propertyPath)
+        {
             JToken token = data.SelectToken(propertyPath);
-            Assert.IsNotNull(token, $"Could not locate a property with path '{propertyPath}'");
+            Assert.IsNotNull(token, $"Could not locate a property with path '{propertyPath}' under the token with path '{data.Path}'");
             return token;
         }
     }

@@ -11,6 +11,12 @@ Scenario: Request notifications for a user
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 10 entries
 	And the response content should have an array property called '_embedded.items' containing 10 entries
+	And each item in the response content array property called '_embedded.items' should have a property called 'userId'
+	And each item in the response content array property called '_embedded.items' should have a property called 'notificationType'
+	And each item in the response content array property called '_embedded.items' should have a property called 'properties'
+	And each item in the response content array property called '_embedded.items' should have a property called 'timestamp'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.self'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.mark-read'
 	And the response content should have a property called '_links.self'
 	And the response content should have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
@@ -22,6 +28,12 @@ Scenario: Request notifications for a user without specifying the maximum number
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 50 entries
 	And the response content should have an array property called '_embedded.items' containing 50 entries
+	And each item in the response content array property called '_embedded.items' should have a property called 'userId'
+	And each item in the response content array property called '_embedded.items' should have a property called 'notificationType'
+	And each item in the response content array property called '_embedded.items' should have a property called 'properties'
+	And each item in the response content array property called '_embedded.items' should have a property called 'timestamp'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.self'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.mark-read'
 	And the response content should have a property called '_links.self'
 	And the response content should have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
@@ -33,6 +45,12 @@ Scenario: Request more notifications for a user than exist
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 25 entries
 	And the response content should have an array property called '_embedded.items' containing 25 entries
+	And each item in the response content array property called '_embedded.items' should have a property called 'userId'
+	And each item in the response content array property called '_embedded.items' should have a property called 'notificationType'
+	And each item in the response content array property called '_embedded.items' should have a property called 'properties'
+	And each item in the response content array property called '_embedded.items' should have a property called 'timestamp'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.self'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.mark-read'
 	And the response content should have a property called '_links.self'
 	And the response content should not have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
@@ -55,6 +73,12 @@ Scenario: Request notifications for a user using a continuation token from a pre
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 10 entries
 	And the response content should have an array property called '_embedded.items' containing 10 entries
+	And each item in the response content array property called '_embedded.items' should have a property called 'userId'
+	And each item in the response content array property called '_embedded.items' should have a property called 'notificationType'
+	And each item in the response content array property called '_embedded.items' should have a property called 'properties'
+	And each item in the response content array property called '_embedded.items' should have a property called 'timestamp'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.self'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.mark-read'
 	And the response content should have a property called '_links.self'
 	And the response content should have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
@@ -70,6 +94,12 @@ Scenario: Request the final page of notifications for a user using continuation 
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 5 entries
 	And the response content should have an array property called '_embedded.items' containing 5 entries
+	And each item in the response content array property called '_embedded.items' should have a property called 'userId'
+	And each item in the response content array property called '_embedded.items' should have a property called 'notificationType'
+	And each item in the response content array property called '_embedded.items' should have a property called 'properties'
+	And each item in the response content array property called '_embedded.items' should have a property called 'timestamp'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.self'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.mark-read'
 	And the response content should have a property called '_links.self'
 	And the response content should not have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
@@ -95,6 +125,12 @@ Scenario: Request notifications for a user since a previously retrieved notifica
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 3 entries
 	And the response content should have an array property called '_embedded.items' containing 3 entries
+	And each item in the response content array property called '_embedded.items' should have a property called 'userId'
+	And each item in the response content array property called '_embedded.items' should have a property called 'notificationType'
+	And each item in the response content array property called '_embedded.items' should have a property called 'properties'
+	And each item in the response content array property called '_embedded.items' should have a property called 'timestamp'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.self'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.mark-read'
 	And the response content should have a property called '_links.self'
 	And the response content should not have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
@@ -108,6 +144,12 @@ Scenario: Request notifications for a user since a previously retrieved notifica
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 10 entries
 	And the response content should have an array property called '_embedded.items' containing 10 entries
+	And each item in the response content array property called '_embedded.items' should have a property called 'userId'
+	And each item in the response content array property called '_embedded.items' should have a property called 'notificationType'
+	And each item in the response content array property called '_embedded.items' should have a property called 'properties'
+	And each item in the response content array property called '_embedded.items' should have a property called 'timestamp'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.self'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.mark-read'
 	And the response content should have a property called '_links.self'
 	And the response content should have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
@@ -123,6 +165,12 @@ Scenario: Request a second page of notifications for a user since a previously r
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 5 entries
 	And the response content should have an array property called '_embedded.items' containing 5 entries
+	And each item in the response content array property called '_embedded.items' should have a property called 'userId'
+	And each item in the response content array property called '_embedded.items' should have a property called 'notificationType'
+	And each item in the response content array property called '_embedded.items' should have a property called 'properties'
+	And each item in the response content array property called '_embedded.items' should have a property called 'timestamp'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.self'
+	And each item in the response content array property called '_embedded.items' should have a property called '_links.mark-read'
 	And the response content should have a property called '_links.self'
 	And the response content should not have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
