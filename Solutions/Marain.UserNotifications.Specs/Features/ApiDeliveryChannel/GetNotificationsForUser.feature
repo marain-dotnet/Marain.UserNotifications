@@ -4,6 +4,9 @@
 
 Feature: Get Notifications For User
 
+# IMPORTANT: Because all the setup/teardown is per feature, every spec in this feature that creates data for the scenario
+# should use a different user Id to avoid conflicts.
+
 Scenario: Request notifications for a user
 	Given I have created and stored 25 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user100'
 	And I have created and stored 5 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user101'
@@ -105,8 +108,8 @@ Scenario: Request the final page of notifications for a user using continuation 
 	And the response content should have a property called '_links.newer'
 
 Scenario: Request notifications for a user since a previously retrieved notification when there are no new notifications
-	Given I have created and stored 10 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user300'
-	And I have sent an API delivery request for 10 notifications for the user with Id 'user300'	
+	Given I have created and stored 10 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user350'
+	And I have sent an API delivery request for 10 notifications for the user with Id 'user350'	
 	And I have stored the value of the response object property called '_links.newer.href' as 'newerLink'
 	When I send an API delivery request using the path called 'newerLink'
 	Then the response status code should be 'OK'
@@ -117,10 +120,10 @@ Scenario: Request notifications for a user since a previously retrieved notifica
 	And the response content should not have a property called '_links.newer'
 
 Scenario: Request notifications for a user since a previously retrieved notification when there is a single page of new notifications
-	Given I have created and stored 10 notifications in the current transient tenant with timestamps at 300 second intervals for the user with Id 'user300'
-	And I have sent an API delivery request for 10 notifications for the user with Id 'user300'	
+	Given I have created and stored 10 notifications in the current transient tenant with timestamps at 300 second intervals for the user with Id 'user400'
+	And I have sent an API delivery request for 10 notifications for the user with Id 'user400'	
 	And I have stored the value of the response object property called '_links.newer.href' as 'newerLink'
-	And I have created and stored 3 notifications in the current transient tenant with timestamps at 1 second intervals for the user with Id 'user300'
+	And I have created and stored 3 notifications in the current transient tenant with timestamps at 1 second intervals for the user with Id 'user400'
 	When I send an API delivery request using the path called 'newerLink'
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 3 entries
@@ -136,10 +139,10 @@ Scenario: Request notifications for a user since a previously retrieved notifica
 	And the response content should have a property called '_links.newer'
 
 Scenario: Request notifications for a user since a previously retrieved notification when there are multiple pages of new notifications
-	Given I have created and stored 10 notifications in the current transient tenant with timestamps at 300 second intervals for the user with Id 'user300'
-	And I have sent an API delivery request for 10 notifications for the user with Id 'user300'	
+	Given I have created and stored 10 notifications in the current transient tenant with timestamps at 300 second intervals for the user with Id 'user450'
+	And I have sent an API delivery request for 10 notifications for the user with Id 'user450'	
 	And I have stored the value of the response object property called '_links.newer.href' as 'newerLink'
-	And I have created and stored 15 notifications in the current transient tenant with timestamps at 1 second intervals for the user with Id 'user300'
+	And I have created and stored 15 notifications in the current transient tenant with timestamps at 1 second intervals for the user with Id 'user450'
 	When I send an API delivery request using the path called 'newerLink'
 	Then the response status code should be 'OK'
 	And the response content should have an array property called '_links.items' containing 10 entries
@@ -155,10 +158,10 @@ Scenario: Request notifications for a user since a previously retrieved notifica
 	And the response content should have a property called '_links.newer'
 
 Scenario: Request a second page of notifications for a user since a previously retrieved notification
-	Given I have created and stored 10 notifications in the current transient tenant with timestamps at 300 second intervals for the user with Id 'user300'
-	And I have sent an API delivery request for 10 notifications for the user with Id 'user300'	
+	Given I have created and stored 10 notifications in the current transient tenant with timestamps at 300 second intervals for the user with Id 'user500'
+	And I have sent an API delivery request for 10 notifications for the user with Id 'user500'	
 	And I have stored the value of the response object property called '_links.newer.href' as 'newerLink'
-	And I have created and stored 15 notifications in the current transient tenant with timestamps at 1 second intervals for the user with Id 'user300'
+	And I have created and stored 15 notifications in the current transient tenant with timestamps at 1 second intervals for the user with Id 'user500'
 	And I have sent an API delivery request using the path called 'newerLink'
 	And I have stored the value of the response object property called '_links.next.href' as 'nextLink'
 	When I send an API delivery request using the path called 'nextLink'
