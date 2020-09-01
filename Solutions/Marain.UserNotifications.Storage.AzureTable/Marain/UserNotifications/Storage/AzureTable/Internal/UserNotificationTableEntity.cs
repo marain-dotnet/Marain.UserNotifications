@@ -2,10 +2,10 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
+#nullable disable
 namespace Marain.UserNotifications.Storage.AzureTable.Internal
 {
     using System;
-    using System.Text;
     using Corvus.Json;
     using Microsoft.Azure.Cosmos.Table;
     using Newtonsoft.Json;
@@ -76,7 +76,7 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
         {
             string[] correlationIds = JsonConvert.DeserializeObject<string[]>(this.CorrelationIdsJson, serializerSettings);
             IPropertyBag properties = JsonConvert.DeserializeObject<IPropertyBag>(this.PropertiesJson, serializerSettings);
-            string id = GetIdFromPartitionKeyAndRowKey(this.PartitionKey, this.RowKey, serializerSettings);
+            string id = new NotificationId(this.PartitionKey, this.RowKey).AsString(serializerSettings);
 
             return new UserNotification(
                 id,
@@ -85,19 +85,6 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
                 this.NotificationTimestamp,
                 properties,
                 new UserNotificationMetadata(correlationIds, this.ETag));
-        }
-
-        private static string GetIdFromPartitionKeyAndRowKey(string partitionKey, string rowKey, JsonSerializerSettings serializerSettings)
-        {
-            string serializedValues = JsonConvert.SerializeObject(new NotificationId { PartitionKey = partitionKey, RowKey = rowKey }, serializerSettings);
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedValues));
-        }
-
-        private class NotificationId
-        {
-            public string PartitionKey { get; set; }
-
-            public string RowKey { get; set; }
         }
     }
 }

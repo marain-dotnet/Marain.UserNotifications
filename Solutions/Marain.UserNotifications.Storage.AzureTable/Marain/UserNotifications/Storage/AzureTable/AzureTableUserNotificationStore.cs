@@ -5,8 +5,11 @@
 namespace Marain.UserNotifications.Storage.AzureTable
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Corvus.Extensions.Json;
+    using Marain.UserNotifications;
     using Marain.UserNotifications.Storage.AzureTable.Internal;
     using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Logging;
@@ -40,6 +43,60 @@ namespace Marain.UserNotifications.Storage.AzureTable
         }
 
         /// <inheritdoc/>
+        public Task<GetNotificationsResult> GetAsync(string userId, string? sinceUserNotificationId, int maxItems)
+        {
+            string? afterRowKey = null;
+
+            if (!string.IsNullOrEmpty(sinceUserNotificationId))
+            {
+                var decodedId = NotificationId.FromString(sinceUserNotificationId, this.serializerSettingsProvider.Instance);
+
+                afterRowKey = decodedId.RowKey;
+            }
+
+            return this.GetInternalAsync(userId, null, afterRowKey, maxItems);
+        }
+
+        /// <inheritdoc/>
+        public Task<GetNotificationsResult> GetAsync(string userId, string continuationToken)
+        {
+            var requestContinuationToken =
+                ContinuationToken.FromString(continuationToken, this.serializerSettingsProvider.Instance);
+
+            if (userId != requestContinuationToken.UserId)
+            {
+                throw new ArgumentException("The supplied continuation token was not generated for user '{userId}'");
+            }
+
+            return this.GetInternalAsync(
+                requestContinuationToken.UserId,
+                requestContinuationToken.BeforeRowKey,
+                requestContinuationToken.AfterRowKey,
+                requestContinuationToken.MaxItems);
+        }
+
+        /// <inheritdoc/>
+        public async Task<UserNotification> GetByIdAsync(string id)
+        {
+            var notificationId = NotificationId.FromString(id, this.serializerSettingsProvider.Instance);
+            var operation = TableOperation.Retrieve<UserNotificationTableEntity>(notificationId.PartitionKey, notificationId.RowKey);
+            TableResult result = await this.table.ExecuteAsync(operation).ConfigureAwait(false);
+
+            switch (result.HttpStatusCode)
+            {
+                case 200:
+                    var notification = (UserNotificationTableEntity)result.Result;
+                    return notification.ToNotification(this.serializerSettingsProvider.Instance);
+
+                case 404:
+                    throw new UserNotificationNotFoundException(id);
+
+                default:
+                    throw new AzureTableUserNotificationStoreException($"Unexpected response code '{result.HttpStatusCode}' from table storage when attempting to retrieve the notification with Id '{id}'");
+            }
+        }
+
+        /// <inheritdoc/>
         public async Task<UserNotification> StoreAsync(UserNotification notification)
         {
             this.logger.LogDebug(
@@ -64,6 +121,60 @@ namespace Marain.UserNotifications.Storage.AzureTable
             {
                 throw new UserNotificationStoreConcurrencyException("Could not create the notification because a notification with the same identity hash already exists in the store.", ex);
             }
+        }
+
+        private async Task<GetNotificationsResult> GetInternalAsync(
+            string userId,
+            string? beforeRowKey,
+            string? afterRowKey,
+            int maxItems)
+        {
+            string filter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, userId);
+
+            if (!string.IsNullOrEmpty(beforeRowKey))
+            {
+                filter = TableQuery.CombineFilters(
+                    filter,
+                    TableOperators.And,
+                    TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.GreaterThan, beforeRowKey));
+            }
+
+            if (!string.IsNullOrEmpty(afterRowKey))
+            {
+                filter = TableQuery.CombineFilters(
+                    filter,
+                    TableOperators.And,
+                    TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.LessThan, afterRowKey));
+            }
+
+            TableQuery<UserNotificationTableEntity> query = new TableQuery<UserNotificationTableEntity>()
+                .Where(filter)
+                .Take(maxItems);
+
+            TableContinuationToken? continuationToken = null;
+            var results = new List<UserNotificationTableEntity>(maxItems);
+
+            do
+            {
+                TableQuerySegment<UserNotificationTableEntity> result = await this.table.ExecuteQuerySegmentedAsync(
+                    query,
+                    continuationToken).ConfigureAwait(false);
+
+                continuationToken = result.ContinuationToken;
+
+                results.AddRange(result.Results);
+            }
+            while (results.Count < maxItems && !(continuationToken is null));
+
+            // If we've managed to read up to the max items, then there might be more - build a continuation token
+            // to return.
+            ContinuationToken? responseContinuationToken = results.Count >= maxItems
+                ? new ContinuationToken(userId, maxItems, results[^1].RowKey, afterRowKey)
+                : null;
+
+            return new GetNotificationsResult(
+                results.Take(maxItems).Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToArray(),
+                responseContinuationToken?.AsString(this.serializerSettingsProvider.Instance));
         }
     }
 }

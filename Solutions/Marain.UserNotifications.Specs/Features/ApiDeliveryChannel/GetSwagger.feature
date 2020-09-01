@@ -1,4 +1,5 @@
-﻿@useApiDeliveryChannelApi
+﻿@perFeatureContainer
+@useApis
 
 Feature: Get swagger
 	In order to understand the API delivery channel
@@ -6,5 +7,5 @@ Feature: Get swagger
 	I want to retrieve the Swagger definition of the API
 
 Scenario: Get swagger
-	When I request the Swagger definition for the API
+	When I request the Swagger definition for the API delivery channel
 	Then the response status code should be 'OK'

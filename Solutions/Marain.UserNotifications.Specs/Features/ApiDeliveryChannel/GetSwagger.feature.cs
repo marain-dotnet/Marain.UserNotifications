@@ -21,14 +21,16 @@ namespace Marain.UserNotifications.Specs.Features.ApiDeliveryChannel
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Get swagger")]
-    [NUnit.Framework.CategoryAttribute("useApiDeliveryChannelApi")]
+    [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
+    [NUnit.Framework.CategoryAttribute("useApis")]
     public partial class GetSwaggerFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = new string[] {
-                "useApiDeliveryChannelApi"};
+                "perFeatureContainer",
+                "useApis"};
         
 #line 1 "GetSwagger.feature"
 #line hidden
@@ -39,7 +41,8 @@ namespace Marain.UserNotifications.Specs.Features.ApiDeliveryChannel
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Get swagger", "\tIn order to understand the API delivery channel\r\n\tAs a developer\r\n\tI want to ret" +
                     "rieve the Swagger definition of the API", ProgrammingLanguage.CSharp, new string[] {
-                        "useApiDeliveryChannelApi"});
+                        "perFeatureContainer",
+                        "useApis"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -84,7 +87,7 @@ namespace Marain.UserNotifications.Specs.Features.ApiDeliveryChannel
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get swagger", null, tagsOfScenario, argumentsOfScenario);
-#line 8
+#line 9
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -104,10 +107,10 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 9
- testRunner.When("I request the Swagger definition for the API", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
 #line 10
+ testRunner.When("I request the Swagger definition for the API delivery channel", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 11
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

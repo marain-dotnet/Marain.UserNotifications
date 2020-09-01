@@ -23,6 +23,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
         /// <param name="context">The current OpenApi context.</param>
         /// <param name="notificationId">The Id of the notification to mark as read.</param>
         /// <returns>Confirmation that the update request has been accepted.</returns>
+        [OperationId(MarkNotificationReadOperationId)]
         public Task<OpenApiResult> MarkNotificationReadAsync(
             IOpenApiContext context,
             string notificationId)

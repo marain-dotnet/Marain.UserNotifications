@@ -22,7 +22,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Create Notifications")]
     [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
-    [NUnit.Framework.CategoryAttribute("useManagementApi")]
+    [NUnit.Framework.CategoryAttribute("useApis")]
     [NUnit.Framework.CategoryAttribute("useTransientTenant")]
     public partial class CreateNotificationsFeature
     {
@@ -31,7 +31,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
         
         private string[] _featureTags = new string[] {
                 "perFeatureContainer",
-                "useManagementApi",
+                "useApis",
                 "useTransientTenant"};
         
 #line 1 "CreateNotifications.feature"
@@ -43,7 +43,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Create Notifications", null, ProgrammingLanguage.CSharp, new string[] {
                         "perFeatureContainer",
-                        "useManagementApi",
+                        "useApis",
                         "useTransientTenant"});
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -110,7 +110,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 8
- testRunner.When("I send a request to create a new notification:", @"      {
+ testRunner.When("I send a management API request to create a new notification:", @"      {
           ""notificationType"": ""marain.notifications.test.v1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
           ""userIds"": [
@@ -169,7 +169,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 29
- testRunner.When("I send a request to create a new notification:", @"      {
+ testRunner.When("I send a management API request to create a new notification:", @"      {
           ""notificationType"": ""marain.notifications.test.v1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
           ""userIds"": [
