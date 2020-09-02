@@ -229,8 +229,6 @@ components:
             description: The date/time of the last update to the delivery status.
             type: string
             format: date-time
-          correlationIds:
-            $ref: '#/components/schemas/CorrelationIds'
           _links:
             type: object
             properties:

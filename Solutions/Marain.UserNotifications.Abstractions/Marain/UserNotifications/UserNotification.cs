@@ -5,7 +5,9 @@
 namespace Marain.UserNotifications
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Text;
     using Corvus.Json;
     using Newtonsoft.Json;
@@ -25,13 +27,17 @@ namespace Marain.UserNotifications
         /// <param name="timestamp">The <see cref="Timestamp" />.</param>
         /// <param name="properties">The <see cref="Properties" />.</param>
         /// <param name="metadata">The <see cref="Metadata"/>.</param>
+        /// <param name="channelDeliveryStatuses">The <see cref="ChannelDeliveryStatuses"/>.</param>
         public UserNotification(
             string? id,
             string notificationType,
             string userId,
             DateTimeOffset timestamp,
             IPropertyBag properties,
-            UserNotificationMetadata metadata)
+            UserNotificationMetadata metadata,
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
+            UserNotificationStatus[]? channelDeliveryStatuses = null)
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         {
             this.Id = id;
             this.NotificationType = notificationType ?? throw new ArgumentNullException(nameof(notificationType));
@@ -39,6 +45,10 @@ namespace Marain.UserNotifications
             this.Timestamp = timestamp != default ? timestamp : throw new ArgumentException(nameof(timestamp));
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
+            this.ChannelDeliveryStatuses = channelDeliveryStatuses?.ToList() ?? new List<UserNotificationStatus>
+            {
+                new UserNotificationStatus(UserNotificationStatus.ApiDeliveryChannelId),
+            };
         }
 
         /// <summary>
@@ -77,6 +87,11 @@ namespace Marain.UserNotifications
         /// Gets metadata for the notification.
         /// </summary>
         public UserNotificationMetadata Metadata { get; }
+
+        /// <summary>
+        /// Gets the notification statuses for each channel that the notification has been sent on.
+        /// </summary>
+        public List<UserNotificationStatus> ChannelDeliveryStatuses { get; }
 
         /// <summary>
         /// Constructs a hash for the notification that can be used to determine whether two notifications are
