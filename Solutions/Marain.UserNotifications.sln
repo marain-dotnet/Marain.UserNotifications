@@ -36,11 +36,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Ho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Benchmarks", "Marain.UserNotifications.Benchmarks\Marain.UserNotifications.Benchmarks.csproj", "{66638B1A-B225-4EB3-811C-D41E72BEABA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.UserNotifications.Abstractions", "Marain.UserNotifications.Abstractions\Marain.UserNotifications.Abstractions.csproj", "{83186152-DCB8-4AED-97DD-F1E73E8C8BDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Abstractions", "Marain.UserNotifications.Abstractions\Marain.UserNotifications.Abstractions.csproj", "{83186152-DCB8-4AED-97DD-F1E73E8C8BDA}"
 EndProject
-Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Marain.UserNotifications.Deployment", "Marain.UserNotifications.Deployment\Marain.UserNotifications.Deployment.deployproj", "{3C88450E-1BD4-4305-BCCF-01A457F15AFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Storage.AzureTable", "Marain.UserNotifications.Storage.AzureTable\Marain.UserNotifications.Storage.AzureTable.csproj", "{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.UserNotifications.Storage.AzureTable", "Marain.UserNotifications.Storage.AzureTable\Marain.UserNotifications.Storage.AzureTable.csproj", "{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Deployment", "Marain.UserNotifications.Deployment\Marain.UserNotifications.Deployment.csproj", "{795A7A4B-C140-44D4-A2F2-2F97BFE20B41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,14 +76,14 @@ Global
 		{83186152-DCB8-4AED-97DD-F1E73E8C8BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83186152-DCB8-4AED-97DD-F1E73E8C8BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83186152-DCB8-4AED-97DD-F1E73E8C8BDA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C88450E-1BD4-4305-BCCF-01A457F15AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C88450E-1BD4-4305-BCCF-01A457F15AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C88450E-1BD4-4305-BCCF-01A457F15AFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C88450E-1BD4-4305-BCCF-01A457F15AFB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{795A7A4B-C140-44D4-A2F2-2F97BFE20B41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{795A7A4B-C140-44D4-A2F2-2F97BFE20B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{795A7A4B-C140-44D4-A2F2-2F97BFE20B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{795A7A4B-C140-44D4-A2F2-2F97BFE20B41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,7 +92,7 @@ Global
 		{0177A15F-8354-421D-AB5E-435115865630} = {F87FC0E4-B4B0-4165-AA2F-C0E4E184E1AA}
 		{F105DB6A-EA75-44EC-8675-69201C981ED1} = {F87FC0E4-B4B0-4165-AA2F-C0E4E184E1AA}
 		{757E23A7-F479-4126-9967-D6FD112025DD} = {F87FC0E4-B4B0-4165-AA2F-C0E4E184E1AA}
-		{3C88450E-1BD4-4305-BCCF-01A457F15AFB} = {97C784FC-DAF6-4C04-B588-70C01245FC61}
+		{795A7A4B-C140-44D4-A2F2-2F97BFE20B41} = {97C784FC-DAF6-4C04-B588-70C01245FC61}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {118CE49C-AEFC-4868-B468-18749ADC3FC1}
