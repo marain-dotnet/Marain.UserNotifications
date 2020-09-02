@@ -69,7 +69,7 @@ jobs:
       - task: ArchiveFiles@2
         displayName: 'Archive Deployment Artifacts'
         inputs:
-          rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/Marain.UserNotifications.Deployment'
+          rootFolderOrFile: 'Solutions/Marain.UserNotifications.Deployment'
           includeRootFolder: false
           archiveType: 'zip'
           archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.UserNotifications.Deployment.zip'
