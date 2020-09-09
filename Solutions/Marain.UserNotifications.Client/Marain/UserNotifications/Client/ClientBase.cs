@@ -5,15 +5,17 @@
 namespace Marain.UserNotifications.Client
 {
     using System;
+    using System.IO;
     using System.Net.Http;
     using System.Text;
     using System.Text.Json;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
     /// Base class for the clients.
     /// </summary>
-    public class ClientBase
+    public abstract class ClientBase : IApiClient
     {
         /// <summary>
         /// Creates a new instance of the <see cref="ClientBase"/> class.
@@ -26,9 +28,7 @@ namespace Marain.UserNotifications.Client
             this.SerializerOptions = serializerOptions;
         }
 
-        /// <summary>
-        /// Gets or sets the base Uri for the service.
-        /// </summary>
+        /// <inheritdoc/>
         public Uri BaseUrl { get; set; }
 
         /// <summary>
@@ -40,6 +40,30 @@ namespace Marain.UserNotifications.Client
         /// Gets the serialization options that will be used to serialize and deserialize data.
         /// </summary>
         protected JsonSerializerOptions SerializerOptions { get; }
+
+        /// <inheritdoc/>
+        public async Task<ApiResponse<T>> GetPathAsync<T>(
+            string relativePath,
+            CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(relativePath))
+            {
+                throw new ArgumentNullException(nameof(relativePath));
+            }
+
+            var requestUri = new Uri(this.BaseUrl, relativePath);
+
+            HttpRequestMessage request = this.BuildRequest(HttpMethod.Get, requestUri);
+
+            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
+
+            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            T result = await JsonSerializer.DeserializeAsync<T>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+
+            return new ApiResponse<T>(
+                response.StatusCode,
+                result);
+        }
 
         /// <summary>
         /// Builds an HTTP request with the supplied data.
@@ -90,6 +114,32 @@ namespace Marain.UserNotifications.Client
             }
 
             return builder.Uri;
+        }
+
+        /// <summary>
+        /// Sends the supplied request and throws a <see cref="UserNotificationsApiException"/> if either the request
+        /// fails or the response status code does not indicate success.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The response.</returns>
+        protected async Task<HttpResponseMessage> SendRequestAndThrowOnFailure(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            HttpResponseMessage response = null;
+
+            try
+            {
+                response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                response.EnsureSuccessStatusCode();
+                return response;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new UserNotificationsApiException("Unexpected error when calling service; see InnerException for details.", ex)
+                {
+                    StatusCode = response?.StatusCode,
+                };
+            }
         }
 
         /// <summary>

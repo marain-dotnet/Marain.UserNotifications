@@ -5,6 +5,8 @@
 namespace Marain.UserNotifications.Specs.Steps
 {
     using System;
+    using System.Net;
+    using Marain.UserNotifications.Client;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
 
@@ -48,6 +50,14 @@ namespace Marain.UserNotifications.Specs.Steps
             {
                 Assert.Fail($"Expected an exception of type '{expectedExceptionTypeName}', but the thrown exception was of type '{actualExceptionTypeName}'.");
             }
+        }
+
+        [Then("the UserNotificationsApiException status code should be '(.*)'")]
+        public void ThenTheUserNotificationsApiExceptionStatusCodeShouldBe(HttpStatusCode expectedStatusCode)
+        {
+            var exception = (UserNotificationsApiException)this.scenarioContext.Get<Exception>(LastExceptionContextKey);
+
+            Assert.AreEqual(expectedStatusCode, exception.StatusCode);
         }
     }
 }

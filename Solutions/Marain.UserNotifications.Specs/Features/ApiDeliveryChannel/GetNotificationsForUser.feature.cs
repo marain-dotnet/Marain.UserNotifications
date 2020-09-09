@@ -436,7 +436,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 73
  testRunner.And("I have sent an API delivery request for 10 notifications for the user with Id \'us" +
-                        "er100\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        "er250\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 74
  testRunner.And("I have stored the value of the response object property called \'_links.next.href\'" +

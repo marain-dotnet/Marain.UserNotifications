@@ -12,7 +12,7 @@ namespace Marain.UserNotifications.Client.Management
     /// <summary>
     /// Interface for the management client.
     /// </summary>
-    public interface IUserNotificationsManagementClient
+    public interface IUserNotificationsManagementClient : IApiClient
     {
         /// <summary>Create a new notification for one or more users.</summary>
         /// <param name="tenantId">The tenant within which the request should operate.</param>

@@ -70,6 +70,30 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.WhenIUseTheClientToSendAnAPIDeliveryRequestForNotificationsForTheUserWithId(null, userId);
         }
 
+        [When("I use the client to send an API delivery request with an non-existent tenant Id for notifications for the user with Id '(.*)'")]
+        public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestWithAnNon_ExistentTenantIdForNotificationsForTheUserWithId(string userId)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsApiDeliveryChannelClient client = this.serviceProvider.GetRequiredService<IUserNotificationsApiDeliveryChannelClient>();
+
+            try
+            {
+                ApiResponse<PagedNotificationListResource> result = await client.GetUserNotificationsAsync(
+                    "75b9261673c2714681f14c97bc0439fb0000a5fa332426462456245252435600",
+                    userId,
+                    null,
+                    null,
+                    null).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [Given("I have used the client to send an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         [When("I use the client to send an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestForNotificationsForTheUserWithId(int? count, string userId)
         {
@@ -84,6 +108,27 @@ namespace Marain.UserNotifications.Specs.Steps
                     null,
                     count,
                     null).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When("I use the client to send an API delivery request for a paged list of notifications using the link called '(.*)' from the previous API delivery channel response")]
+        public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestForAPagedListOfNotificationsUsingTheLinkCalledFromThePreviousAPIDeliveryChannelResponse(string linkRelationName)
+        {
+            PagedNotificationListResource previousResponseBody = this.GetApiResponseBody<PagedNotificationListResource>();
+            WebLink nextLink = previousResponseBody.EnumerateLinks("next").Single();
+
+            IUserNotificationsApiDeliveryChannelClient client = this.serviceProvider.GetRequiredService<IUserNotificationsApiDeliveryChannelClient>();
+
+            try
+            {
+                ApiResponse<PagedNotificationListResource> result = await client.GetPathAsync<PagedNotificationListResource>(
+                    nextLink.Href).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
             }

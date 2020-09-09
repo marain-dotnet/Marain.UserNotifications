@@ -16,7 +16,38 @@ Scenario: Request notifications for a user
 	And the paged list of notifications in the API delivery channel response should contain 10 item links
 	And the paged list of notifications in the API delivery channel response should contain 10 embedded items
 	And the paged list of notifications in the API delivery channel response should have a 'self' link
+	And the paged list of notifications in the API delivery channel response should have a 'next' link
 	And the paged list of notifications in the API delivery channel response should have a 'newer' link
+
+Scenario: Request notifications for a user using a continuation token from a previous request
+	Given I have created and stored 25 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user250'
+	And I have created and stored 5 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user251'
+	And I have used the client to send an API delivery request for 10 notifications for the user with Id 'user250'	
+	When I use the client to send an API delivery request for a paged list of notifications using the link called 'next' from the previous API delivery channel response
+	Then no exception should be thrown
+	Then the client response status code should be 'OK'
+	And the paged list of notifications in the API delivery channel response should contain 10 item links
+	And the paged list of notifications in the API delivery channel response should contain 10 embedded items
+	And the paged list of notifications in the API delivery channel response should have a 'self' link
+	And the paged list of notifications in the API delivery channel response should have a 'next' link
+	And the paged list of notifications in the API delivery channel response should have a 'newer' link
+
+Scenario: Request notifications with an invalid tenant Id
+	When I use the client to send an API delivery request with an non-existent tenant Id for notifications for the user with Id 'user100'
+	Then a 'UserNotificationsApiException' should be thrown
+	And the UserNotificationsApiException status code should be 'NotFound'
+
+Scenario Outline: Request notifications with an invalid maximum number of items
+	When I use the client to send an API delivery request for <MaxItems> notifications for the user with Id 'user200'
+	Then a 'UserNotificationsApiException' should be thrown
+	And the UserNotificationsApiException status code should be 'BadRequest'
+
+	Examples:
+	| MaxItems |
+	| 0        |
+	| 101      |
+	| 1000     |
+	| -1       |
 
 Scenario: Request notifications for a user without specifying the maximum number of items to return
 	Given I have created and stored 60 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user150'

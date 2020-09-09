@@ -54,9 +54,7 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Get, requestUri);
 
-            HttpResponseMessage response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-            response.EnsureSuccessStatusCode();
+            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
             using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
             PagedNotificationListResource result = await JsonSerializer.DeserializeAsync<PagedNotificationListResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);

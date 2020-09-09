@@ -50,9 +50,7 @@ namespace Marain.UserNotifications.Client.Management
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Post, requestUri, body);
 
-            HttpResponseMessage response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-            response.EnsureSuccessStatusCode();
+            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
             var headers = new Dictionary<string, string>
             {
@@ -85,9 +83,7 @@ namespace Marain.UserNotifications.Client.Management
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Put, requestUri, body);
 
-            HttpResponseMessage response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-            response.EnsureSuccessStatusCode();
+            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
             var headers = new Dictionary<string, string>
             {

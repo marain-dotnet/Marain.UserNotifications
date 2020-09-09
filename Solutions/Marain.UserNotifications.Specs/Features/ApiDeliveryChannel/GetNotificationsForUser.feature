@@ -70,7 +70,7 @@ Scenario: Retrieve notifications for a user where none exist
 Scenario: Request notifications for a user using a continuation token from a previous request
 	Given I have created and stored 25 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user250'
 	And I have created and stored 5 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user251'
-	And I have sent an API delivery request for 10 notifications for the user with Id 'user100'	
+	And I have sent an API delivery request for 10 notifications for the user with Id 'user250'	
 	And I have stored the value of the response object property called '_links.next.href' as 'nextLink'
 	When I send an API delivery request using the path called 'nextLink'
 	Then the response status code should be 'OK'

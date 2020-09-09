@@ -11,7 +11,7 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
     /// <summary>
     /// Interface for the client for the API delivery channel.
     /// </summary>
-    public interface IUserNotificationsApiDeliveryChannelClient
+    public interface IUserNotificationsApiDeliveryChannelClient : IApiClient
     {
         /// <summary>
         /// Retrieves notifications for a user.
