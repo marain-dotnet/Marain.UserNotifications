@@ -117,6 +117,33 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [Given("I use the client to send an API delivery request for the user notification with the same Id as the user notification called '(.*)'")]
+        public Task GivenIUseTheClientToSendAnAPIDeliveryRequestForTheUserNotificationWithTheSameIdAsTheUserNotificationCalled(string notificationName)
+        {
+            UserNotification notification = this.scenarioContext.Get<UserNotification>(notificationName);
+            return this.WhenIUseTheClientToSendAnAPIDeliveryRequestForTheUserNotificationWithTheId(notification.Id!);
+        }
+
+        [When("I use the client to send an API delivery request for the user notification with the Id '(.*)'")]
+        public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestForTheUserNotificationWithTheId(string notificationId)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsApiDeliveryChannelClient client = this.serviceProvider.GetRequiredService<IUserNotificationsApiDeliveryChannelClient>();
+
+            try
+            {
+                ApiResponse<NotificationResource> result = await client.GetNotificationAsync(
+                    transientTenantId,
+                    notificationId).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
         [When("I use the client to send an API delivery request for a paged list of notifications using the link called '(.*)' from the previous API delivery channel response")]
         public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestForAPagedListOfNotificationsUsingTheLinkCalledFromThePreviousAPIDeliveryChannelResponse(string linkRelationName)
         {
@@ -171,6 +198,13 @@ namespace Marain.UserNotifications.Specs.Steps
         public void ThenThePagedListOfNotificationsInTheAPIDeliveryChannelResponseShouldHaveALink(string linkRelationName)
         {
             PagedNotificationListResource response = this.GetApiResponseBody<PagedNotificationListResource>();
+            Assert.AreNotEqual(default(WebLink), response.EnumerateLinks(linkRelationName).SingleOrDefault());
+        }
+
+        [Then("the notification in the API delivery channel response should have a '(.*)' link")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveALink(string linkRelationName)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
             Assert.AreNotEqual(default(WebLink), response.EnumerateLinks(linkRelationName).SingleOrDefault());
         }
 

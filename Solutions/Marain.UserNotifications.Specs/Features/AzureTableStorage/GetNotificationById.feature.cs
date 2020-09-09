@@ -106,20 +106,20 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                             "NotificationType",
                             "UserId",
                             "Timestamp",
                             "PropertiesJson",
                             "CorrelationIds"});
-                table2.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "marain.test.notification.v1",
                             "304ABC0E-08AF-4EF5-A9AC-281B67D633F4",
                             "2012-03-19T07:22Z",
                             "{ \"prop1\": \"val1\" }",
                             "[\"id1\", \"id2\"]"});
 #line 7
- testRunner.Given("I have a user notification called \'input\'", ((string)(null)), table2, "Given ");
+ testRunner.Given("I have a user notification called \'input\'", ((string)(null)), table3, "Given ");
 #line hidden
 #line 10
  testRunner.And("I have told the user notification store to store the user notification called \'in" +

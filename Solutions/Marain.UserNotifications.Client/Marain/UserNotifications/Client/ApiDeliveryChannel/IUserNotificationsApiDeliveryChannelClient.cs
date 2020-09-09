@@ -30,5 +30,17 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
             int? maxItems,
             string continuationToken,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Retrieves a single notification.
+        /// </summary>
+        /// <param name="tenantId">The tenant Id for the request.</param>
+        /// <param name="notificationId">The Id of the requested notification.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The requested notification.</returns>
+        Task<ApiResponse<NotificationResource>> GetNotificationAsync(
+            string tenantId,
+            string notificationId,
+            CancellationToken cancellationToken = default);
     }
 }

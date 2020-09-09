@@ -117,20 +117,20 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                             "NotificationType",
                             "UserIds",
                             "Timestamp",
                             "PropertiesJson",
                             "CorrelationIds"});
-                table6.AddRow(new string[] {
+                table7.AddRow(new string[] {
                             string.Format("{0}", notificationType),
                             string.Format("{0}", userIds),
                             string.Format("{0}", timestamp),
                             string.Format("{0}", propertiesJson),
                             string.Format("{0}", correlationIds)});
 #line 8
- testRunner.When("I use the client to send a management API request to create a new notification", ((string)(null)), table6, "When ");
+ testRunner.When("I use the client to send a management API request to create a new notification", ((string)(null)), table7, "When ");
 #line hidden
 #line 11
  testRunner.Then("no exception should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

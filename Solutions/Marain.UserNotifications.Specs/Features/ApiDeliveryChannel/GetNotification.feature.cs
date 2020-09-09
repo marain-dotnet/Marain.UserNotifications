@@ -109,13 +109,13 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                             "NotificationType",
                             "UserId",
                             "Timestamp",
                             "PropertiesJson",
                             "CorrelationIds"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "marain.test.notification.v1",
                             "304ABC0E-08AF-4EF5-A9AC-281B67D633F4",
                             "2012-03-19T07:22Z",
@@ -123,7 +123,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "[\"id1\", \"id2\"]"});
 #line 8
  testRunner.Given("I have created and stored a notification in the current transient tenant and call" +
-                        "ed the result \'output\'", ((string)(null)), table1, "Given ");
+                        "ed the result \'output\'", ((string)(null)), table2, "Given ");
 #line hidden
 #line 11
  testRunner.And("I send an API delivery request for the user notification with the same Id as the " +

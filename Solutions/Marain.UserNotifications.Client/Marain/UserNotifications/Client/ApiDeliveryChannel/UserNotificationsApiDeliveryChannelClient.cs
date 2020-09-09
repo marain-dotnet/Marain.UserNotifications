@@ -27,6 +27,36 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
         {
         }
 
+        /// <inheritdoc/>
+        public async Task<ApiResponse<NotificationResource>> GetNotificationAsync(
+            string tenantId,
+            string notificationId,
+            CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+
+            if (string.IsNullOrEmpty(notificationId))
+            {
+                throw new ArgumentNullException(nameof(notificationId));
+            }
+
+            Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/{notificationId}");
+
+            HttpRequestMessage request = this.BuildRequest(HttpMethod.Get, requestUri);
+
+            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
+
+            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            NotificationResource result = await JsonSerializer.DeserializeAsync<NotificationResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+
+            return new ApiResponse<NotificationResource>(
+                response.StatusCode,
+                result);
+        }
+
         /// <inheritdoc />
         public async Task<ApiResponse<PagedNotificationListResource>> GetUserNotificationsAsync(
             string tenantId,
