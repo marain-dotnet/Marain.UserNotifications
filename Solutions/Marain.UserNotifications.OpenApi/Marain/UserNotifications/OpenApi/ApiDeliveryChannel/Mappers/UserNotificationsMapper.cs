@@ -61,7 +61,10 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
         /// <inheritdoc/>
         public async ValueTask<HalDocument> MapAsync(GetNotificationsResult resource, UserNotificationsMappingContext context)
         {
-            HalDocument response = this.halDocumentFactory.CreateHalDocument();
+            HalDocument response = this.halDocumentFactory.CreateHalDocumentFrom(new
+            {
+                ContentType = "application/vnd.marain.usernotifications.apidelivery.notificationslist",
+            });
 
             HalDocument[] mappedItems =
                 await Task.WhenAll(

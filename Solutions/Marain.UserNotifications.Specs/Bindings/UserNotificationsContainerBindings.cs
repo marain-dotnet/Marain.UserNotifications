@@ -96,6 +96,21 @@ namespace Marain.UserNotifications.Specs.Bindings
                 });
         }
 
+        [BeforeFeature("useApis", Order = ContainerBeforeFeatureOrder.PopulateServiceCollection)]
+        public static void AddManagementApiClient(FeatureContext featureContext)
+        {
+            ContainerBindings.ConfigureServices(
+                featureContext,
+                services =>
+                {
+                    var managementConfig = new UserNotificationsManagementClientConfiguration { BaseUrl = FunctionsApiBindings.ManagementApiBaseUri.ToString() };
+                    services.AddUserNotificationsManagementClient(_ => managementConfig);
+
+                    var apiDeliveryChannelConfig = new UserNotificationsApiDeliveryChannelClientConfiguration { BaseUrl = FunctionsApiBindings.ApiDeliveryChannelBaseUri.ToString() };
+                    services.AddUserNotificationsApiDeliveryChannelClient(_ => apiDeliveryChannelConfig);
+                });
+        }
+
         [BeforeScenario("withUserNotificationTableStorage", Order = ContainerBeforeScenarioOrder.PopulateServiceCollection)]
         public static void AddTableStorage(ScenarioContext scenarioContext)
         {

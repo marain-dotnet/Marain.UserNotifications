@@ -97,6 +97,9 @@ components:
       - $ref: '#/components/schemas/Resource'
       - type: object
         properties:
+          contentType:
+            type: string
+            description: The content type of the response
           notificationType:
             type: string
             description: The type of the notification.
@@ -242,6 +245,9 @@ components:
           required:
           - _links
           properties:
+            contentType:
+              type: string
+              description: The content type of the response
             _links:
               type: object
               title: Hyperlinks

@@ -51,6 +51,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
         {
             HalDocument response = this.halDocumentFactory.CreateHalDocumentFrom(new
             {
+                ContentType = "application/vnd.marain.usernotifications.apidelivery.notification",
                 resource.UserId,
                 resource.NotificationType,
                 resource.Properties,
