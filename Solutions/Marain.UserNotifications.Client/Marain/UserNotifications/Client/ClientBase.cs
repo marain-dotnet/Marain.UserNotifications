@@ -149,9 +149,8 @@ namespace Marain.UserNotifications.Client
         /// <returns>The resulting JsonDocument.</returns>
         protected async Task<JsonDocument> GetResponseJsonDocumentAsync(HttpResponseMessage responseMessage)
         {
-            // TODO: Make this right
-            string json = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return JsonDocument.Parse(json);
+            using Stream content = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            return JsonDocument.Parse(content);
         }
     }
 }
