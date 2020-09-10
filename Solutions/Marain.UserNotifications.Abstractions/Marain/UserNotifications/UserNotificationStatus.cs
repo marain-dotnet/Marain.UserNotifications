@@ -5,6 +5,7 @@
 namespace Marain.UserNotifications
 {
     using System;
+    using System.ComponentModel;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -34,7 +35,7 @@ namespace Marain.UserNotifications
         /// <param name="readStatus">The <see cref="ReadStatus" />.</param>
         /// <param name="readStatusLastUpdatedUtc">The <see cref="ReadStatusLastUpdatedUtc" />.</param>
         [JsonConstructor]
-        [Obsolete("This constructor is intended only for use during deserialization.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public UserNotificationStatus(
             string deliveryChannelId,
             UserNotificationDeliveryStatus deliveryStatus,
