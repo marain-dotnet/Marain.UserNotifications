@@ -24,6 +24,10 @@ paths:
                 $ref: '#/components/schemas/PagedNotificationsListResponse'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
           description: Not found
         '403':
@@ -55,6 +59,10 @@ paths:
                 type: string
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
           description: Not found
         '403':
@@ -89,6 +97,10 @@ paths:
                 type: string
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
           description: Not found
         '403':
