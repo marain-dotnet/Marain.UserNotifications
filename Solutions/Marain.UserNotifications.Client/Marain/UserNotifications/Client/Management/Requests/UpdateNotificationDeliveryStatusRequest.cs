@@ -19,6 +19,6 @@ namespace Marain.UserNotifications.Client.Management.Requests
         /// <summary>
         /// Gets or sets the time at which the status change occurred.
         /// </summary>
-        public DateTime UpdateTimestamp { get; set; }
+        public DateTimeOffset UpdateTimestamp { get; set; }
     }
 }
