@@ -82,7 +82,6 @@ namespace Marain.UserNotifications.Specs.Steps
                     "75b9261673c2714681f14c97bc0439fb0000a5fa332426462456245252435600",
                     userId,
                     null,
-                    null,
                     null).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
@@ -106,8 +105,7 @@ namespace Marain.UserNotifications.Specs.Steps
                     transientTenantId,
                     userId,
                     null,
-                    count,
-                    null).ConfigureAwait(false);
+                    count).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
             }
@@ -154,7 +152,7 @@ namespace Marain.UserNotifications.Specs.Steps
 
             try
             {
-                ApiResponse<PagedNotificationListResource> result = await client.GetPathAsync<PagedNotificationListResource>(
+                ApiResponse<PagedNotificationListResource> result = await client.GetUserNotificationsByLinkAsync(
                     nextLink.Href).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);

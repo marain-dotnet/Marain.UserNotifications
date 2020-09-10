@@ -15,7 +15,7 @@ namespace Marain.UserNotifications.Client
     /// <summary>
     /// Base class for the clients.
     /// </summary>
-    public abstract class ClientBase : IApiClient
+    public abstract class ClientBase
     {
         /// <summary>
         /// Creates a new instance of the <see cref="ClientBase"/> class.
@@ -28,7 +28,9 @@ namespace Marain.UserNotifications.Client
             this.SerializerOptions = serializerOptions;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets or sets the base Url for the service.
+        /// </summary>
         public Uri BaseUrl { get; set; }
 
         /// <summary>
@@ -41,8 +43,14 @@ namespace Marain.UserNotifications.Client
         /// </summary>
         protected JsonSerializerOptions SerializerOptions { get; }
 
-        /// <inheritdoc/>
-        public async Task<ApiResponse<T>> GetPathAsync<T>(
+        /// <summary>
+        /// Gets data from the API using a link returned from a previous request.
+        /// </summary>
+        /// <typeparam name="T">The expected type of the response body.</typeparam>
+        /// <param name="relativePath">The Url to request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The response.</returns>
+        protected async Task<ApiResponse<T>> GetPathAsync<T>(
             string relativePath,
             CancellationToken cancellationToken = default)
         {

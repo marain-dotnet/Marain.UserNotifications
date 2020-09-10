@@ -63,7 +63,6 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
             string userId,
             string sinceNotificationId,
             int? maxItems,
-            string continuationToken,
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
@@ -79,8 +78,7 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
             Uri requestUri = this.ConstructUri(
                 $"/{tenantId}/marain/users/{userId}/notifications",
                 ("sinceNotificationId", sinceNotificationId),
-                ("maxItems", maxItems?.ToString()),
-                ("continuationToken", continuationToken));
+                ("maxItems", maxItems?.ToString()));
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Get, requestUri);
 
@@ -92,6 +90,14 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
             return new ApiResponse<PagedNotificationListResource>(
                 response.StatusCode,
                 result);
+        }
+
+        /// <inheritdoc />
+        public Task<ApiResponse<PagedNotificationListResource>> GetUserNotificationsByLinkAsync(
+            string link,
+            CancellationToken cancellationToken = default)
+        {
+            return this.GetPathAsync<PagedNotificationListResource>(link, cancellationToken);
         }
     }
 }

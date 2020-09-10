@@ -11,7 +11,7 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
     /// <summary>
     /// Interface for the client for the API delivery channel.
     /// </summary>
-    public interface IUserNotificationsApiDeliveryChannelClient : IApiClient
+    public interface IUserNotificationsApiDeliveryChannelClient
     {
         /// <summary>
         /// Retrieves notifications for a user.
@@ -20,7 +20,6 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
         /// <param name="userId">The Id of the user to retrieve notifications for.</param>
         /// <param name="sinceNotificationId">If supplied, only more recent notifications than specified will be returned.</param>
         /// <param name="maxItems">The maxiumum number of notifications to return.</param>
-        /// <param name="continuationToken">A continuation token from a previous request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The list of notifications.</returns>
         Task<ApiResponse<PagedNotificationListResource>> GetUserNotificationsAsync(
@@ -28,7 +27,20 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
             string userId,
             string sinceNotificationId,
             int? maxItems,
-            string continuationToken,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Retrieves notifications for a user from a link that was returned with a response from
+        /// <see cref="GetUserNotificationsAsync(string, string, string, int?, CancellationToken)"/>.
+        /// </summary>
+        /// <param name="link">The link to use to retrieve notifications.</param>
+        /// <returns>The list of notifications.</returns>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <remarks>
+        /// It's expected that clients will retrieve this link from either the "next" or "newer" link relations.
+        /// </remarks>
+        Task<ApiResponse<PagedNotificationListResource>> GetUserNotificationsByLinkAsync(
+            string link,
             CancellationToken cancellationToken = default);
 
         /// <summary>

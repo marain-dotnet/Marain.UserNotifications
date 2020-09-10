@@ -35,7 +35,10 @@ namespace Marain.UserNotifications.Client.Management
         /// <param name="body">The request body.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="ApiResponse"/>.</returns>
-        public async Task<ApiResponse> BatchDeliveryStatusUpdateAsync(string tenantId, IEnumerable<BatchDeliveryStatusUpdateRequestItem> body, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse> BatchDeliveryStatusUpdateAsync(
+            string tenantId,
+            IEnumerable<BatchDeliveryStatusUpdateRequestItem> body,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
@@ -66,7 +69,10 @@ namespace Marain.UserNotifications.Client.Management
         /// <param name="body">The request body.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="ApiResponse"/>.</returns>
-        public async Task<ApiResponse> CreateNotificationsAsync(string tenantId, CreateNotificationsRequest body, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse> CreateNotificationsAsync(
+            string tenantId,
+            CreateNotificationsRequest body,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
