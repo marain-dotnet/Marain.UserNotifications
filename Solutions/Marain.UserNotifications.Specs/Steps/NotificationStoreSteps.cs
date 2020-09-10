@@ -225,10 +225,10 @@ namespace Marain.UserNotifications.Specs.Steps
                 Assert.IsNotNull(actualStatus, $"Could not find channel delivery status for channel Id '{expectedStatus.DeliveryChannelId}'");
 
                 Assert.AreEqual(expectedStatus.DeliveryStatus, actualStatus!.DeliveryStatus, $"Delivery status mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
-                Assert.AreEqual(expectedStatus.DeliveryStatusLastUpdatedUtc, actualStatus!.DeliveryStatusLastUpdatedUtc, $"Delivery status last updated mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
+                Assert.AreEqual(expectedStatus.DeliveryStatusLastUpdated, actualStatus!.DeliveryStatusLastUpdated, $"Delivery status last updated mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
 
                 Assert.AreEqual(expectedStatus.ReadStatus, actualStatus!.ReadStatus, $"Read status mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
-                Assert.AreEqual(expectedStatus.ReadStatusLastUpdatedUtc, actualStatus!.ReadStatusLastUpdatedUtc, $"Read status last updated mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
+                Assert.AreEqual(expectedStatus.ReadStatusLastUpdated, actualStatus!.ReadStatusLastUpdated, $"Read status last updated mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
             }
 
             // As always, the easiest way to verify two property bags match is to serialize them.

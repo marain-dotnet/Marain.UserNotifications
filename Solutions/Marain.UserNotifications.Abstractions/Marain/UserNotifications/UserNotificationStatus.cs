@@ -21,9 +21,9 @@ namespace Marain.UserNotifications
         {
             this.DeliveryChannelId = deliveryChannelId;
             this.DeliveryStatus = UserNotificationDeliveryStatus.Unknown;
-            this.DeliveryStatusLastUpdatedUtc = DateTimeOffset.UtcNow;
+            this.DeliveryStatusLastUpdated = DateTimeOffset.UtcNow;
             this.ReadStatus = UserNotificationReadStatus.Unknown;
-            this.ReadStatusLastUpdatedUtc = DateTimeOffset.UtcNow;
+            this.ReadStatusLastUpdated = DateTimeOffset.UtcNow;
         }
 
         /// <summary>
@@ -31,23 +31,23 @@ namespace Marain.UserNotifications
         /// </summary>
         /// <param name="deliveryChannelId">The <see cref="DeliveryChannelId" />.</param>
         /// <param name="deliveryStatus">The <see cref="DeliveryStatus" />.</param>
-        /// <param name="deliveryStatusLastUpdatedUtc">The <see cref="DeliveryStatusLastUpdatedUtc" />.</param>
+        /// <param name="deliveryStatusLastUpdated">The <see cref="DeliveryStatusLastUpdated" />.</param>
         /// <param name="readStatus">The <see cref="ReadStatus" />.</param>
-        /// <param name="readStatusLastUpdatedUtc">The <see cref="ReadStatusLastUpdatedUtc" />.</param>
+        /// <param name="readStatusLastUpdated">The <see cref="ReadStatusLastUpdated" />.</param>
         [JsonConstructor]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public UserNotificationStatus(
             string deliveryChannelId,
             UserNotificationDeliveryStatus deliveryStatus,
-            DateTimeOffset deliveryStatusLastUpdatedUtc,
+            DateTimeOffset deliveryStatusLastUpdated,
             UserNotificationReadStatus readStatus,
-            DateTimeOffset readStatusLastUpdatedUtc)
+            DateTimeOffset readStatusLastUpdated)
         {
             this.DeliveryChannelId = deliveryChannelId;
             this.DeliveryStatus = deliveryStatus;
-            this.DeliveryStatusLastUpdatedUtc = deliveryStatusLastUpdatedUtc;
+            this.DeliveryStatusLastUpdated = deliveryStatusLastUpdated.ToUniversalTime();
             this.ReadStatus = readStatus;
-            this.ReadStatusLastUpdatedUtc = readStatusLastUpdatedUtc;
+            this.ReadStatusLastUpdated = readStatusLastUpdated.ToUniversalTime();
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Gets the date/time that the delivery status was last updated.
         /// </summary>
-        public DateTimeOffset DeliveryStatusLastUpdatedUtc { get; private set; }
+        public DateTimeOffset DeliveryStatusLastUpdated { get; private set; }
 
         /// <summary>
         /// Gets the read status.
@@ -73,28 +73,28 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Gets the date/time that the read status was last updated.
         /// </summary>
-        public DateTimeOffset ReadStatusLastUpdatedUtc { get; private set; }
+        public DateTimeOffset ReadStatusLastUpdated { get; private set; }
 
         /// <summary>
         /// Updates the delivery status to the specified value.
         /// </summary>
         /// <param name="newStatus">The new delivery status.</param>
-        /// <param name="effectiveDateTimeUtc">The time at which the update occurred.</param>
-        public void UpdateDeliveryStatus(UserNotificationDeliveryStatus newStatus, DateTimeOffset effectiveDateTimeUtc)
+        /// <param name="effectiveDateTime">The time at which the update occurred.</param>
+        public void UpdateDeliveryStatus(UserNotificationDeliveryStatus newStatus, DateTimeOffset effectiveDateTime)
         {
             this.DeliveryStatus = newStatus;
-            this.DeliveryStatusLastUpdatedUtc = effectiveDateTimeUtc;
+            this.DeliveryStatusLastUpdated = effectiveDateTime.ToUniversalTime();
         }
 
         /// <summary>
         /// Updates the read status to the specified value.
         /// </summary>
         /// <param name="newStatus">The new read status.</param>
-        /// <param name="effectiveDateTimeUtc">The time at which the update occurred.</param>
-        public void UpdateReadStatus(UserNotificationReadStatus newStatus, DateTimeOffset effectiveDateTimeUtc)
+        /// <param name="effectiveDateTime">The time at which the update occurred.</param>
+        public void UpdateReadStatus(UserNotificationReadStatus newStatus, DateTimeOffset effectiveDateTime)
         {
             this.ReadStatus = newStatus;
-            this.ReadStatusLastUpdatedUtc = effectiveDateTimeUtc;
+            this.ReadStatusLastUpdated = effectiveDateTime.ToUniversalTime();
         }
     }
 }

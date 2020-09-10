@@ -42,7 +42,7 @@ namespace Marain.UserNotifications
             this.Id = id;
             this.NotificationType = notificationType ?? throw new ArgumentNullException(nameof(notificationType));
             this.UserId = userId ?? throw new ArgumentNullException(nameof(userId));
-            this.Timestamp = timestamp != default ? timestamp : throw new ArgumentException(nameof(timestamp));
+            this.Timestamp = timestamp != default ? timestamp.ToUniversalTime() : throw new ArgumentException(nameof(timestamp));
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
             this.ChannelDeliveryStatuses = channelDeliveryStatuses?.ToList() ?? new List<UserNotificationStatus>();
