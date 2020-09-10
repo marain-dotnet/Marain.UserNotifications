@@ -2,6 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
+#pragma warning disable RCS1194 // Implement exception constructors.
 namespace Marain.UserNotifications.Client
 {
     using System;
@@ -14,13 +15,6 @@ namespace Marain.UserNotifications.Client
     [Serializable]
     public class UserNotificationsApiException : Exception
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserNotificationsApiException"/> class.
-        /// </summary>
-        public UserNotificationsApiException()
-        {
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UserNotificationsApiException"/> class.
         /// </summary>
