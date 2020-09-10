@@ -13,11 +13,6 @@ namespace Marain.UserNotifications
     public class UserNotificationStatus
     {
         /// <summary>
-        /// The Id of the API delivery channel.
-        /// </summary>
-        public const string ApiDeliveryChannelId = "marain.usernotifications.deliverychannels.api";
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="UserNotificationStatus"/> class.
         /// </summary>
         /// <param name="deliveryChannelId">The <see cref="DeliveryChannelId" />.</param>

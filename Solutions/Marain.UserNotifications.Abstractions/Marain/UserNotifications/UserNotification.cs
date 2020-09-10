@@ -45,10 +45,7 @@ namespace Marain.UserNotifications
             this.Timestamp = timestamp != default ? timestamp : throw new ArgumentException(nameof(timestamp));
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
-            this.ChannelDeliveryStatuses = channelDeliveryStatuses?.ToList() ?? new List<UserNotificationStatus>
-            {
-                new UserNotificationStatus(UserNotificationStatus.ApiDeliveryChannelId),
-            };
+            this.ChannelDeliveryStatuses = channelDeliveryStatuses?.ToList() ?? new List<UserNotificationStatus>();
         }
 
         /// <summary>

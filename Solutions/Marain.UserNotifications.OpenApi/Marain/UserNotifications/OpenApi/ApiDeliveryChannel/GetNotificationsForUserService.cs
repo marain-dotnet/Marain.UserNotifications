@@ -88,13 +88,6 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
                 throw new OpenApiBadRequestException();
             }
 
-            // Are there any notifications in the list that haven't been marked as "delivered" for the API delivery channel?
-            var undeliveredNotifications = results.Results.Where(r => r.ChannelDeliveryStatuses.Any(s => s.DeliveryChannelId == UserNotificationStatus.ApiDeliveryChannelId && s.DeliveryStatus != UserNotificationDeliveryStatus.Delivered)).ToList();
-            if (undeliveredNotifications.Count > 0)
-            {
-                // There are some notifications that haven't yet been marked as delivered. Send a request to update them.
-            }
-
             HalDocument result = await this.userNotificationsMapper.MapAsync(
                 results,
                 new UserNotificationsMappingContext(context, userId, sinceNotificationId, maxItems.Value, continuationToken)).ConfigureAwait(false);
