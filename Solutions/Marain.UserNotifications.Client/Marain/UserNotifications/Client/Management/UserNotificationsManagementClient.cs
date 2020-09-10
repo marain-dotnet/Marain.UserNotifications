@@ -6,6 +6,7 @@ namespace Marain.UserNotifications.Client.Management
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Net.Http;
     using System.Text.Json;
     using System.Threading;
@@ -52,12 +53,10 @@ namespace Marain.UserNotifications.Client.Management
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
-            var headers = new Dictionary<string, string>
-            {
-                { "Location", response.Headers.Location.ToString() },
-            };
+            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
+            builder.Add("Location", response.Headers.Location.ToString());
 
-            return new ApiResponse(response.StatusCode, headers);
+            return new ApiResponse(response.StatusCode, builder.ToImmutable());
         }
 
         /// <summary>
@@ -85,12 +84,10 @@ namespace Marain.UserNotifications.Client.Management
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
-            var headers = new Dictionary<string, string>
-            {
-                { "Location", response.Headers.Location.ToString() },
-            };
+            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
+            builder.Add("Location", response.Headers.Location.ToString());
 
-            return new ApiResponse(response.StatusCode, headers);
+            return new ApiResponse(response.StatusCode, builder.ToImmutable());
         }
     }
 }

@@ -4,7 +4,7 @@
 
 namespace Marain.UserNotifications.Client
 {
-    using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Net;
 
     /// <summary>
@@ -19,17 +19,17 @@ namespace Marain.UserNotifications.Client
         /// <param name="statusCode">The <see cref="ApiResponse.StatusCode"/>.</param>
         /// <param name="headers">The <see cref="ApiResponse.Headers"/>.</param>
         /// <param name="body">The <see cref="Body"/>.</param>
-        public ApiResponse(HttpStatusCode statusCode, in T body, IDictionary<string, string> headers = null)
+        public ApiResponse(HttpStatusCode statusCode, in T body, ImmutableDictionary<string, string> headers = null)
         {
             this.StatusCode = statusCode;
-            this.Headers = headers ?? new Dictionary<string, string>();
+            this.Headers = headers ?? ImmutableDictionary<string, string>.Empty;
             this.Body = body;
         }
 
         /// <summary>
         /// Gets the headers returned with the response.
         /// </summary>
-        public IDictionary<string, string> Headers { get; }
+        public ImmutableDictionary<string, string> Headers { get; }
 
         /// <summary>
         /// Gets the status code of the response.
