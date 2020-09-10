@@ -58,43 +58,53 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Gets the delivery status.
         /// </summary>
-        public UserNotificationDeliveryStatus DeliveryStatus { get; private set; }
+        public UserNotificationDeliveryStatus DeliveryStatus { get; }
 
         /// <summary>
         /// Gets the date/time that the delivery status was last updated.
         /// </summary>
-        public DateTimeOffset DeliveryStatusLastUpdated { get; private set; }
+        public DateTimeOffset DeliveryStatusLastUpdated { get; }
 
         /// <summary>
         /// Gets the read status.
         /// </summary>
-        public UserNotificationReadStatus ReadStatus { get; private set; }
+        public UserNotificationReadStatus ReadStatus { get; }
 
         /// <summary>
         /// Gets the date/time that the read status was last updated.
         /// </summary>
-        public DateTimeOffset ReadStatusLastUpdated { get; private set; }
+        public DateTimeOffset ReadStatusLastUpdated { get; }
 
         /// <summary>
-        /// Updates the delivery status to the specified value.
+        /// Creates a new instance of the class with the delivery status to the specified value.
         /// </summary>
         /// <param name="newStatus">The new delivery status.</param>
         /// <param name="effectiveDateTime">The time at which the update occurred.</param>
-        public void UpdateDeliveryStatus(UserNotificationDeliveryStatus newStatus, DateTimeOffset effectiveDateTime)
+        /// <returns>An updated instance of the <see cref="UserNotificationStatus"/>.</returns>
+        public UserNotificationStatus WithDeliveryStatus(UserNotificationDeliveryStatus newStatus, DateTimeOffset effectiveDateTime)
         {
-            this.DeliveryStatus = newStatus;
-            this.DeliveryStatusLastUpdated = effectiveDateTime.ToUniversalTime();
+            return new UserNotificationStatus(
+                this.DeliveryChannelId,
+                newStatus,
+                effectiveDateTime.ToUniversalTime(),
+                this.ReadStatus,
+                this.ReadStatusLastUpdated);
         }
 
         /// <summary>
-        /// Updates the read status to the specified value.
+        /// Creates a new instance of the class with the read status to the specified value.
         /// </summary>
         /// <param name="newStatus">The new read status.</param>
         /// <param name="effectiveDateTime">The time at which the update occurred.</param>
-        public void UpdateReadStatus(UserNotificationReadStatus newStatus, DateTimeOffset effectiveDateTime)
+        /// <returns>An updated instance of the <see cref="UserNotificationStatus"/>.</returns>
+        public UserNotificationStatus WithReadStatus(UserNotificationReadStatus newStatus, DateTimeOffset effectiveDateTime)
         {
-            this.ReadStatus = newStatus;
-            this.ReadStatusLastUpdated = effectiveDateTime.ToUniversalTime();
+            return new UserNotificationStatus(
+                this.DeliveryChannelId,
+                this.DeliveryStatus,
+                this.DeliveryStatusLastUpdated,
+                newStatus,
+                effectiveDateTime.ToUniversalTime());
         }
     }
 }

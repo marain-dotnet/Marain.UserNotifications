@@ -13,8 +13,6 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Json;
     using Corvus.Testing.SpecFlow;
     using Microsoft.Extensions.DependencyInjection;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
 
@@ -207,35 +205,10 @@ namespace Marain.UserNotifications.Specs.Steps
         [Then("the notification called '(.*)' should be the same as the notification called '(.*)'")]
         public void ThenTheNotificationCalledShouldBeTheSameAsTheNotificationCalled(string expectedName, string actualName)
         {
-            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
             UserNotification expected = this.scenarioContext.Get<UserNotification>(expectedName);
             UserNotification actual = this.scenarioContext.Get<UserNotification>(actualName);
 
-            Assert.AreEqual(expected.UserId, actual.UserId);
-            Assert.AreEqual(expected.NotificationType, actual.NotificationType);
-            Assert.AreEqual(expected.Timestamp, actual.Timestamp);
-
-            Assert.AreEqual(expected.Metadata.CorrelationIds, actual.Metadata.CorrelationIds);
-
-            Assert.AreEqual(expected.ChannelDeliveryStatuses.Count, actual.ChannelDeliveryStatuses.Count);
-            foreach (UserNotificationStatus expectedStatus in expected.ChannelDeliveryStatuses)
-            {
-                UserNotificationStatus? actualStatus = actual.ChannelDeliveryStatuses.Find(s => s.DeliveryChannelId == expectedStatus.DeliveryChannelId);
-
-                Assert.IsNotNull(actualStatus, $"Could not find channel delivery status for channel Id '{expectedStatus.DeliveryChannelId}'");
-
-                Assert.AreEqual(expectedStatus.DeliveryStatus, actualStatus!.DeliveryStatus, $"Delivery status mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
-                Assert.AreEqual(expectedStatus.DeliveryStatusLastUpdated, actualStatus!.DeliveryStatusLastUpdated, $"Delivery status last updated mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
-
-                Assert.AreEqual(expectedStatus.ReadStatus, actualStatus!.ReadStatus, $"Read status mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
-                Assert.AreEqual(expectedStatus.ReadStatusLastUpdated, actualStatus!.ReadStatusLastUpdated, $"Read status last updated mismatch for channel Id '{expectedStatus.DeliveryChannelId}'");
-            }
-
-            // As always, the easiest way to verify two property bags match is to serialize them.
-            string serializedActualProperties = JsonConvert.SerializeObject(actual.Properties, serializerSettingsProvider.Instance);
-            string serializedExpectedProperties = JsonConvert.SerializeObject(expected.Properties, serializerSettingsProvider.Instance);
-
-            Assert.AreEqual(serializedExpectedProperties, serializedActualProperties);
+            NotificationSteps.AssertUserNotificationsMatch(expected, actual, this.serializationSettingsProvider);
         }
     }
 }

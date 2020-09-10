@@ -6,6 +6,7 @@ namespace Marain.UserNotifications
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Diagnostics;
     using System.Linq;
     using System.Text;
@@ -36,7 +37,7 @@ namespace Marain.UserNotifications
             IPropertyBag properties,
             UserNotificationMetadata metadata,
 #pragma warning disable SA1011 // Closing square brackets should be spaced correctly
-            UserNotificationStatus[]? channelDeliveryStatuses = null)
+            IEnumerable<UserNotificationStatus>? channelDeliveryStatuses = null)
 #pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         {
             this.Id = id;
@@ -45,7 +46,7 @@ namespace Marain.UserNotifications
             this.Timestamp = timestamp != default ? timestamp.ToUniversalTime() : throw new ArgumentException(nameof(timestamp));
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
-            this.ChannelDeliveryStatuses = channelDeliveryStatuses?.ToList() ?? new List<UserNotificationStatus>();
+            this.ChannelDeliveryStatuses = (channelDeliveryStatuses ?? Enumerable.Empty<UserNotificationStatus>()).ToImmutableArray();
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Gets the notification statuses for each channel that the notification has been sent on.
         /// </summary>
-        public List<UserNotificationStatus> ChannelDeliveryStatuses { get; }
+        public ImmutableArray<UserNotificationStatus> ChannelDeliveryStatuses { get; }
 
         /// <summary>
         /// Constructs a hash for the notification that can be used to determine whether two notifications are
