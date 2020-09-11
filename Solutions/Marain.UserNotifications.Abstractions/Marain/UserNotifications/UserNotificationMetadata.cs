@@ -24,7 +24,7 @@ namespace Marain.UserNotifications
             // Note: although correlation Ids should not be null, some combinations of serializer settings can result
             // in an empty array not being serialized, meaning that when this constructor is called during
             // deserialization we will get a null value. As such, we'll just treat null the same as an empty array.
-            this.CorrelationIds = (correlationIds ?? Enumerable.Empty<string>()).ToImmutableArray();
+            this.CorrelationIds = correlationIds?.ToImmutableArray() ?? throw new ArgumentNullException(nameof(correlationIds));
             this.ETag = etag;
         }
 

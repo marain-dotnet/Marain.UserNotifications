@@ -46,7 +46,7 @@ namespace Marain.UserNotifications
             this.Timestamp = timestamp != default ? timestamp.ToUniversalTime() : throw new ArgumentException(nameof(timestamp));
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
-            this.ChannelDeliveryStatuses = (channelDeliveryStatuses ?? Enumerable.Empty<UserNotificationStatus>()).ToImmutableArray();
+            this.ChannelDeliveryStatuses = channelDeliveryStatuses?.ToImmutableArray() ?? ImmutableArray<UserNotificationStatus>.Empty;
         }
 
         /// <summary>
