@@ -14,11 +14,6 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class UserNotificationsClientServiceCollectionExtensions
     {
-        private static JsonSerializerOptions serializerOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        };
-
         /// <summary>
         /// Adds the management client to the service collection.
         /// </summary>
@@ -29,10 +24,10 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             Func<IServiceProvider, UserNotificationsManagementClientConfiguration> configurationCallback)
         {
-            services.AddSingleton<IUserNotificationsManagementClient>(sp =>
+            services.AddHttpClient<IUserNotificationsManagementClient, UserNotificationsManagementClient>((sp, client) =>
             {
                 UserNotificationsManagementClientConfiguration config = configurationCallback(sp);
-                return new UserNotificationsManagementClient(config.BaseUrl, serializerOptions);
+                client.BaseAddress = new Uri(config.BaseUrl);
             });
 
             return services;
@@ -48,10 +43,10 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             Func<IServiceProvider, UserNotificationsApiDeliveryChannelClientConfiguration> configurationCallback)
         {
-            services.AddSingleton<IUserNotificationsApiDeliveryChannelClient>(sp =>
+            services.AddHttpClient<IUserNotificationsApiDeliveryChannelClient, UserNotificationsApiDeliveryChannelClient>((sp, client) =>
             {
                 UserNotificationsApiDeliveryChannelClientConfiguration config = configurationCallback(sp);
-                return new UserNotificationsApiDeliveryChannelClient(config.BaseUrl, serializerOptions);
+                client.BaseAddress = new Uri(config.BaseUrl);
             });
 
             return services;

@@ -6,6 +6,7 @@ namespace Marain.UserNotifications.Client
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net.Http;
     using System.Text;
     using System.Text.Json;
@@ -20,23 +21,21 @@ namespace Marain.UserNotifications.Client
         /// <summary>
         /// Creates a new instance of the <see cref="ClientBase"/> class.
         /// </summary>
-        /// <param name="baseUrl">The base Url for the service.</param>
-        /// <param name="serializerOptions">The Json serializer options.</param>
-        protected ClientBase(string baseUrl, JsonSerializerOptions serializerOptions)
+        /// <param name="httpClient">The client to use for API requests.</param>
+        protected ClientBase(HttpClient httpClient)
         {
-            this.BaseUrl = new Uri(baseUrl, UriKind.Absolute);
-            this.SerializerOptions = serializerOptions;
+            this.SerializerOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+
+            this.Client = httpClient;
         }
 
         /// <summary>
-        /// Gets or sets the base Url for the service.
+        /// Gets the HTTP client.
         /// </summary>
-        public Uri BaseUrl { get; set; }
-
-        /// <summary>
-        /// Gets the HTTP client that will be used for underlying requests.
-        /// </summary>
-        protected HttpClient HttpClient { get; } = new HttpClient();
+        public HttpClient Client { get; }
 
         /// <summary>
         /// Gets the serialization options that will be used to serialize and deserialize data.
@@ -59,7 +58,7 @@ namespace Marain.UserNotifications.Client
                 throw new ArgumentNullException(nameof(relativePath));
             }
 
-            var requestUri = new Uri(this.BaseUrl, relativePath);
+            var requestUri = new Uri(relativePath, UriKind.Relative);
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Get, requestUri);
 
@@ -109,19 +108,16 @@ namespace Marain.UserNotifications.Client
         /// <param name="path">The path.</param>
         /// <param name="queryParameters">The query parameters.</param>
         /// <returns>The Uri.</returns>
-        protected Uri ConstructUri(string path, params (string, string)[] queryParameters)
+        protected Uri ConstructUri(string path, params (string Key, string Value)[] queryParameters)
         {
-            var builder = new UriBuilder(this.BaseUrl);
-            builder.Path = path;
-            foreach ((string key, string value) in queryParameters)
+            string query = string.Join("&", queryParameters.Where(x => !string.IsNullOrEmpty(x.Item2)).Select(x => $"{x.Key}={Uri.EscapeUriString(x.Value)}"));
+
+            if (!string.IsNullOrEmpty(query))
             {
-                if (!string.IsNullOrEmpty(value))
-                {
-                    builder.Query += $"{key}={Uri.EscapeUriString(value)}";
-                }
+                path += "?" + query;
             }
 
-            return builder.Uri;
+            return new Uri(path, UriKind.Relative);
         }
 
         /// <summary>
@@ -137,7 +133,7 @@ namespace Marain.UserNotifications.Client
 
             try
             {
-                response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                response = await this.Client.SendAsync(request, cancellationToken).ConfigureAwait(false);
                 response.EnsureSuccessStatusCode();
                 return response;
             }

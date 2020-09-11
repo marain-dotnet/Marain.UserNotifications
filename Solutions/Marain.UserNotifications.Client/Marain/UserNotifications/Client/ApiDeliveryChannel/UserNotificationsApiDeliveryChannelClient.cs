@@ -20,10 +20,9 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
         /// <summary>
         /// Creates a new instance of the <see cref="UserNotificationsApiDeliveryChannelClient"/> class.
         /// </summary>
-        /// <param name="baseUrl">The base Url for the service.</param>
-        /// <param name="serializerOptions">The Json serializer options.</param>
-        public UserNotificationsApiDeliveryChannelClient(string baseUrl, JsonSerializerOptions serializerOptions)
-            : base(baseUrl, serializerOptions)
+        /// <param name="httpClient">The HTTP client to use for requests. Should be initialised with the service base Url.</param>
+        public UserNotificationsApiDeliveryChannelClient(HttpClient httpClient)
+            : base(httpClient)
         {
         }
 

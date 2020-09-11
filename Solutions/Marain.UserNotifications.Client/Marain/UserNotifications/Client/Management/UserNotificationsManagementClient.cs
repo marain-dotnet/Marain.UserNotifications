@@ -21,10 +21,9 @@ namespace Marain.UserNotifications.Client.Management
         /// <summary>
         /// Creates a new instance of the <see cref="UserNotificationsManagementClient"/> class.
         /// </summary>
-        /// <param name="baseUrl">The base Url for the service.</param>
-        /// <param name="serializerOptions">The Json serializer options.</param>
-        public UserNotificationsManagementClient(string baseUrl, JsonSerializerOptions serializerOptions)
-            : base(baseUrl, serializerOptions)
+        /// <param name="httpClient">The HTTP client to use for requests. Should be initialised with the service base Url.</param>
+        public UserNotificationsManagementClient(HttpClient httpClient)
+            : base(httpClient)
         {
         }
 
@@ -50,7 +49,7 @@ namespace Marain.UserNotifications.Client.Management
                 throw new ArgumentNullException(nameof(body));
             }
 
-            var requestUri = new Uri(this.BaseUrl, $"/{tenantId}/marain/usernotifications/batchdeliverystatusupdate");
+            var requestUri = new Uri($"/{tenantId}/marain/usernotifications/batchdeliverystatusupdate", UriKind.Relative);
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Post, requestUri, body);
 
@@ -84,7 +83,7 @@ namespace Marain.UserNotifications.Client.Management
                 throw new ArgumentNullException(nameof(body));
             }
 
-            var requestUri = new Uri(this.BaseUrl, $"/{tenantId}/marain/usernotifications");
+            var requestUri = new Uri($"/{tenantId}/marain/usernotifications", UriKind.Relative);
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Put, requestUri, body);
 

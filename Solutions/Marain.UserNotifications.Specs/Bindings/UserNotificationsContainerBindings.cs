@@ -11,6 +11,8 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
     using Marain.Tenancy.Client;
+    using Marain.UserNotifications.Client.ApiDeliveryChannel;
+    using Marain.UserNotifications.Client.Management;
     using Marain.UserNotifications.Storage.AzureTable;
     using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
@@ -97,12 +99,15 @@ namespace Marain.UserNotifications.Specs.Bindings
         }
 
         [BeforeFeature("useApis", Order = ContainerBeforeFeatureOrder.PopulateServiceCollection)]
-        public static void AddManagementApiClient(FeatureContext featureContext)
+        public static void AddApiClients(FeatureContext featureContext)
         {
             ContainerBindings.ConfigureServices(
                 featureContext,
                 services =>
                 {
+                    services.AddHttpClient<IUserNotificationsManagementClient>();
+                    services.AddHttpClient<IUserNotificationsApiDeliveryChannelClient>();
+
                     var managementConfig = new UserNotificationsManagementClientConfiguration { BaseUrl = FunctionsApiBindings.ManagementApiBaseUri.ToString() };
                     services.AddUserNotificationsManagementClient(_ => managementConfig);
 
