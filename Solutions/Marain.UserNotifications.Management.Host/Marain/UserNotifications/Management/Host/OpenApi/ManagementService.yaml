@@ -24,6 +24,10 @@ paths:
                 $ref: '#/components/schemas/PagedNotificationsListResponse'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
           description: Not found
         '403':
@@ -55,6 +59,48 @@ paths:
                 type: string
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /{tenantId}/marain/usernotifications/batchdeliverystatusupdate:
+    post:
+      summary: Updates delivery statuses for a batch of user notifications
+      operationId: batchDeliveryStatusUpdate
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/BatchDeliveryStatusUpdateRequestItem'
+      responses:
+        '202':
+          description: Accepted
+          headers:
+            Location:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
           description: Not found
         '403':
@@ -100,6 +146,7 @@ components:
     CreateNotificationsRequest:
       description: Request data for creating a new notification for a user.
       required: 
+        - userIds
         - notificationType
         - timestamp
       properties:
@@ -109,6 +156,7 @@ components:
           nullable: false
         userIds:
           description: The Ids of the users that this notification is for
+          nullable: false
           type: array
           items:
             type: string
@@ -186,8 +234,15 @@ components:
           description: The time at which the status change occurred
           type: string
           format: date-time
-        correlationIds:
-          $ref: '#/components/schemas/CorrelationIds'
+
+    BatchDeliveryStatusUpdateRequestItem:
+      description: Request data item that forms part of a batch update of delivery statuses
+      allOf:
+        - $ref: '#/components/schemas/UpdateNotificationDeliveryStatusRequest'
+        - properties:
+            notificationId:
+              type: string
+              description: The Id of the notification to update
 
     UpdateNotificationReadStatusRequest:
       description: A request to update the "read" status of a notification
@@ -229,8 +284,6 @@ components:
             description: The date/time of the last update to the delivery status.
             type: string
             format: date-time
-          correlationIds:
-            $ref: '#/components/schemas/CorrelationIds'
           _links:
             type: object
             properties:

@@ -36,6 +36,11 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
         public string PropertiesJson { get; set; }
 
         /// <summary>
+        /// Gets or sets the channel delivery statuses, serialized as JSON.
+        /// </summary>
+        public string ChannelDeliveryStatusesJson { get; set; }
+
+        /// <summary>
         /// Creates a new <see cref="UserNotificationTableEntity"/> from a <see cref="UserNotification"/>.
         /// </summary>
         /// <param name="source">The source notification.</param>
@@ -52,6 +57,7 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
             long reversedTimestamp = long.MaxValue - source.Timestamp.ToUnixTimeMilliseconds();
             string correlationIdsJson = JsonConvert.SerializeObject(source.Metadata.CorrelationIds, serializerSettings);
             string propertiesJson = JsonConvert.SerializeObject(source.Properties, serializerSettings);
+            string channelDeliveryStatusesJson = JsonConvert.SerializeObject(source.ChannelDeliveryStatuses, serializerSettings);
             string hash = source.GetIdentityHash(serializerSettings);
             string rowKey = $"{reversedTimestamp:D21}-{hash}";
 
@@ -63,6 +69,7 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
                 NotificationTimestamp = source.Timestamp,
                 CorrelationIdsJson = correlationIdsJson,
                 PropertiesJson = propertiesJson,
+                ChannelDeliveryStatusesJson = channelDeliveryStatusesJson,
                 ETag = source.Metadata.ETag,
             };
         }
@@ -76,6 +83,7 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
         {
             string[] correlationIds = JsonConvert.DeserializeObject<string[]>(this.CorrelationIdsJson, serializerSettings);
             IPropertyBag properties = JsonConvert.DeserializeObject<IPropertyBag>(this.PropertiesJson, serializerSettings);
+            UserNotificationStatus[] channelDeliveryStatuses = JsonConvert.DeserializeObject<UserNotificationStatus[]>(this.ChannelDeliveryStatusesJson, serializerSettings);
             string id = new NotificationId(this.PartitionKey, this.RowKey).AsString(serializerSettings);
 
             return new UserNotification(
@@ -84,7 +92,8 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
                 this.PartitionKey,
                 this.NotificationTimestamp,
                 properties,
-                new UserNotificationMetadata(correlationIds, this.ETag));
+                new UserNotificationMetadata(correlationIds, this.ETag),
+                channelDeliveryStatuses);
         }
     }
 }

@@ -169,7 +169,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 async () =>
                 {
                     HttpResponseMessage response = await HttpClient.GetAsync(location).ConfigureAwait(false);
-                    string responseBody = await response.Content.ReadAsStringAsync();
+                    string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var operation = JObject.Parse(responseBody);
                     JToken targetToken = operation.SelectToken(operationPropertyPath);
                     string currentValue = targetToken.Value<string>();

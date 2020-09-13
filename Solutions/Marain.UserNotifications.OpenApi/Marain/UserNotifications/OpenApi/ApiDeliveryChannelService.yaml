@@ -24,6 +24,10 @@ paths:
                 $ref: '#/components/schemas/PagedNotificationsListResponse'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
           description: Not found
         '403':
@@ -51,6 +55,10 @@ paths:
                 $ref: '#/components/schemas/Notification'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
           description: Not found
         '403':
@@ -78,6 +86,10 @@ paths:
                 type: string
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
           description: Not found
         '403':
@@ -97,6 +109,9 @@ components:
       - $ref: '#/components/schemas/Resource'
       - type: object
         properties:
+          contentType:
+            type: string
+            description: The content type of the response
           notificationType:
             type: string
             description: The type of the notification.
@@ -242,6 +257,9 @@ components:
           required:
           - _links
           properties:
+            contentType:
+              type: string
+              description: The content type of the response
             _links:
               type: object
               title: Hyperlinks
@@ -333,3 +351,6 @@ components:
       required: false
       schema:
         type: integer
+        minimum: 1
+        maximum: 100
+        default: 50

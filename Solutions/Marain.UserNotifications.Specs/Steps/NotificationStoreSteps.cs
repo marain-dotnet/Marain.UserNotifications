@@ -13,8 +13,6 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Json;
     using Corvus.Testing.SpecFlow;
     using Microsoft.Extensions.DependencyInjection;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
 
@@ -207,22 +205,10 @@ namespace Marain.UserNotifications.Specs.Steps
         [Then("the notification called '(.*)' should be the same as the notification called '(.*)'")]
         public void ThenTheNotificationCalledShouldBeTheSameAsTheNotificationCalled(string expectedName, string actualName)
         {
-            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
             UserNotification expected = this.scenarioContext.Get<UserNotification>(expectedName);
             UserNotification actual = this.scenarioContext.Get<UserNotification>(actualName);
 
-            // TODO: Verify that properties are returned correctly.
-            Assert.AreEqual(expected.UserId, actual.UserId);
-            Assert.AreEqual(expected.NotificationType, actual.NotificationType);
-            Assert.AreEqual(expected.Timestamp, actual.Timestamp);
-
-            Assert.AreEqual(expected.Metadata.CorrelationIds, actual.Metadata.CorrelationIds);
-
-            // As always, the easiest way to verify two property bags match is to serialize them.
-            string serializedActualProperties = JsonConvert.SerializeObject(actual.Properties, serializerSettingsProvider.Instance);
-            string serializedExpectedProperties = JsonConvert.SerializeObject(expected.Properties, serializerSettingsProvider.Instance);
-
-            Assert.AreEqual(serializedExpectedProperties, serializedActualProperties);
+            NotificationSteps.AssertUserNotificationsMatch(expected, actual, this.serializationSettingsProvider);
         }
     }
 }
