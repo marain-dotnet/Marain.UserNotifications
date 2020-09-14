@@ -274,7 +274,7 @@ components:
           deliveryStatus:
             description: The delivery status for the channel. Not all channels will be able to track this, hence the need for more than just a true/false status.
             type: string
-            enum: ['Unknown', 'NotTracked', 'Undelivered', 'Delivered']
+            enum: ['unknown', 'notTracked', 'undelivered', 'delivered']
           deliveryStatusLastUpdated:
             description: The date/time of the last update to the delivery status.
             type: string
@@ -282,7 +282,7 @@ components:
           readStatus:
             description: The read status for the channel. Not all channels will be able to track this, hence the need for more than just a true/false status.
             type: string
-            enum: ['Unknown', 'NotTracked', 'Unread', 'Read']
+            enum: ['unknown', 'notTracked', 'unread', 'read']
           readStatusLastUpdated:
             description: The date/time of the last update to the delivery status.
             type: string
