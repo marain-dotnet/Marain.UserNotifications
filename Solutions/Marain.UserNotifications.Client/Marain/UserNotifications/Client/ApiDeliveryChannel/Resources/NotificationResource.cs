@@ -98,7 +98,7 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel.Resources
             get
             {
                 if (this.HalDocument.TryGetProperty("timestamp", out JsonElement timestamp) &&
-                    timestamp.ValueKind == JsonValueKind.Object)
+                    timestamp.ValueKind == JsonValueKind.String)
                 {
                     return DateTimeOffset.Parse(timestamp.GetString());
                 }

@@ -35,6 +35,15 @@ namespace Marain.UserNotifications.Specs
             Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was '{expectedValue}', but actual value was '{actualValue}'");
         }
 
+        [Then("the response content should have a boolean property called '(.*)' with value '(.*)'")]
+        public void ThenTheResponseContentShouldHaveABooleanPropertyCalledWithValue(string propertyPath, bool expectedValue)
+        {
+            JToken actualToken = this.GetRequiredTokenFromResponseObject(propertyPath);
+
+            bool actualValue = actualToken.Value<bool>();
+            Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was '{expectedValue}', but actual value was '{actualValue}'");
+        }
+
         [Then("the response content should have a date-time property called '(.*)' with value '(.*)'")]
         public void ThenTheResponseContentShouldHaveADate_TimePropertyCalledWithValue(string propertyPath, DateTimeOffset expectedValue)
         {

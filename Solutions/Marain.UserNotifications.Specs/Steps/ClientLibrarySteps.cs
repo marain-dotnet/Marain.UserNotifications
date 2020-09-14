@@ -245,6 +245,41 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.AreNotEqual(default(WebLink), response.EnumerateLinks(linkRelationName).SingleOrDefault());
         }
 
+        [Then("the notification in the API delivery channel response should have a Notification Type of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveANotificationTypeOf(string expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.NotificationType);
+        }
+
+        [Then("the notification in the API delivery channel response should have a User Id of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveAUserIdOf(string expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.UserId);
+        }
+
+        [Then("the notification in the API delivery channel response should have a Timestamp of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveATimestampOf(DateTimeOffset expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.Timestamp);
+        }
+
+        [Then("the notification in the API delivery channel response should have a Delivery Status of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveADeliveryStatusOf(bool expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.Delivered);
+        }
+
+        [Then("the notification in the API delivery channel response should have a Read Status of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveAReadStatusOf(bool expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.Read);
+        }
+
         private static CreateNotificationsRequest BuildCreateNotificationsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();

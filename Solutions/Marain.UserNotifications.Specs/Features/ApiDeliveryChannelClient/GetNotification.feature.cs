@@ -138,6 +138,26 @@ this.ScenarioInitialize(scenarioInfo);
 #line 14
  testRunner.And("the notification in the API delivery channel response should have a \'self\' link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
+#line 15
+ testRunner.And("the notification in the API delivery channel response should have a Notification " +
+                        "Type of \'marain.test.notification.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 16
+ testRunner.And("the notification in the API delivery channel response should have a User Id of \'3" +
+                        "04ABC0E-08AF-4EF5-A9AC-281B67D633F4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 17
+ testRunner.And("the notification in the API delivery channel response should have a Timestamp of " +
+                        "\'2012-03-19T07:22Z\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 18
+ testRunner.And("the notification in the API delivery channel response should have a Delivery Stat" +
+                        "us of \'true\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 19
+ testRunner.And("the notification in the API delivery channel response should have a Read Status o" +
+                        "f \'false\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
             }
             this.ScenarioCleanup();
         }
@@ -149,46 +169,6 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request a notification that doesn\'t exist", null, tagsOfScenario, argumentsOfScenario);
-#line 16
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 17
- testRunner.When(@"I use the client to send an API delivery request for the user notification with the Id 'eyJwYXJ0aXRpb25LZXkiOiJ1c2VyMiIsInJvd0tleSI6IjAwOTIyMzM3MDQ0MTQ5MDU2NzgwNy1kWE5sY2pJeE5UazFNelkwTWpBNE1EQXdhbTl1TG5SbGMzUXlMakY3SW5Sb2FXNW5NU0k2SW5aaGJIVmxNU0lzSW5Sb2FXNW5NaUk2SW5aaGJIVmxNaUo5In0='", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 18
- testRunner.Then("a \'UserNotificationsApiException\' should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 19
- testRunner.And("the UserNotificationsApiException status code should be \'NotFound\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Request a notification with an invalid ID")]
-        public virtual void RequestANotificationWithAnInvalidID()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request a notification with an invalid ID", null, tagsOfScenario, argumentsOfScenario);
 #line 21
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -210,13 +190,53 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 22
- testRunner.When("I use the client to send an API delivery request for the user notification with t" +
-                        "he Id \'BadId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(@"I use the client to send an API delivery request for the user notification with the Id 'eyJwYXJ0aXRpb25LZXkiOiJ1c2VyMiIsInJvd0tleSI6IjAwOTIyMzM3MDQ0MTQ5MDU2NzgwNy1kWE5sY2pJeE5UazFNelkwTWpBNE1EQXdhbTl1TG5SbGMzUXlMakY3SW5Sb2FXNW5NU0k2SW5aaGJIVmxNU0lzSW5Sb2FXNW5NaUk2SW5aaGJIVmxNaUo5In0='", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 23
  testRunner.Then("a \'UserNotificationsApiException\' should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 24
+ testRunner.And("the UserNotificationsApiException status code should be \'NotFound\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Request a notification with an invalid ID")]
+        public virtual void RequestANotificationWithAnInvalidID()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request a notification with an invalid ID", null, tagsOfScenario, argumentsOfScenario);
+#line 26
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 27
+ testRunner.When("I use the client to send an API delivery request for the user notification with t" +
+                        "he Id \'BadId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 28
+ testRunner.Then("a \'UserNotificationsApiException\' should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 29
  testRunner.And("the UserNotificationsApiException status code should be \'BadRequest\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

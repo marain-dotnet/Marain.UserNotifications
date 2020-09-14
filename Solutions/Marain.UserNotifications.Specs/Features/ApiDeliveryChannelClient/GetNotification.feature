@@ -12,6 +12,11 @@ Scenario: Retrieve a notification by its Id
 	Then no exception should be thrown
 	And the client response status code should be 'OK'
 	And the notification in the API delivery channel response should have a 'self' link
+	And the notification in the API delivery channel response should have a Notification Type of 'marain.test.notification.v1'
+	And the notification in the API delivery channel response should have a User Id of '304ABC0E-08AF-4EF5-A9AC-281B67D633F4'
+	And the notification in the API delivery channel response should have a Timestamp of '2012-03-19T07:22Z'
+	And the notification in the API delivery channel response should have a Delivery Status of 'true'
+	And the notification in the API delivery channel response should have a Read Status of 'false'
 
 Scenario: Request a notification that doesn't exist
 	When I use the client to send an API delivery request for the user notification with the Id 'eyJwYXJ0aXRpb25LZXkiOiJ1c2VyMiIsInJvd0tleSI6IjAwOTIyMzM3MDQ0MTQ5MDU2NzgwNy1kWE5sY2pJeE5UazFNelkwTWpBNE1EQXdhbTl1TG5SbGMzUXlMakY3SW5Sb2FXNW5NU0k2SW5aaGJIVmxNU0lzSW5Sb2FXNW5NaUk2SW5aaGJIVmxNaUo5In0='

@@ -60,6 +60,20 @@ namespace Marain.UserNotifications
         }
 
         /// <summary>
+        /// Returns a boolean indicating whether the notification has been marked as read via any channel.
+        /// </summary>
+        /// <param name="userNotification">The user notification to check.</param>
+        /// <returns>
+        /// True if there's at least one delivery channel with a <see cref="UserNotificationStatus.ReadStatus"/> of
+        /// <see cref="UserNotificationReadStatus.Read"/>, false otherwise.
+        /// </returns>
+        public static bool HasBeenReadOnAtLeastOneChannel(
+            this UserNotification userNotification)
+        {
+            return userNotification.ChannelStatuses.Any(s => s.ReadStatus == UserNotificationReadStatus.Read);
+        }
+
+        /// <summary>
         /// Creates an updated version of the supplied <see cref="UserNotification"/> with the delivery status for the
         /// specified channel set.
         /// </summary>

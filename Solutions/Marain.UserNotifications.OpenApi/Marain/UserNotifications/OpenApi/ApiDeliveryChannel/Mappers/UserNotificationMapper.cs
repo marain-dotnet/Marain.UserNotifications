@@ -56,6 +56,8 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
                 resource.NotificationType,
                 resource.Properties,
                 resource.Timestamp,
+                Delivered = true,
+                Read = resource.HasBeenReadOnAtLeastOneChannel(),
             });
 
             response.ResolveAndAddByOwnerAndRelationType(
