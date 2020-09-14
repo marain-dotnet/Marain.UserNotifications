@@ -27,6 +27,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddCommonUserNotificationsApiServices(
             this IServiceCollection services)
         {
+            // Monitoring - for better AppInsights integration
+            services.AddApplicationInsightsInstrumentationTelemetry();
+            services.AddInstrumentation();
+
             // Marain services integration, allowing shorthand calls to get and validate the current tenant in operation implementations.
             services.AddMarainServiceConfiguration();
             services.AddMarainServicesTenancy();
@@ -98,6 +102,20 @@ namespace Microsoft.Extensions.DependencyInjection
                     hostConfig.Documents.AddSwaggerEndpoint();
 
                     hostConfig.Exceptions.Map<UserNotificationNotFoundException>(404);
+                });
+
+            services.AddUserNotificationsManagementClient(
+                sp =>
+                {
+                    UserNotificationsManagementClientConfiguration managementClientConfiguration =
+                        sp.GetRequiredService<IConfiguration>().GetSection("UserNotificationsManagementClient").Get<UserNotificationsManagementClientConfiguration>();
+
+                    if (string.IsNullOrEmpty(managementClientConfiguration?.BaseUrl))
+                    {
+                        throw new OpenApiServiceMismatchException("Could not find a configuration value for UserNotificationsManagementClient:BaseUrl");
+                    }
+
+                    return managementClientConfiguration;
                 });
 
             return services;

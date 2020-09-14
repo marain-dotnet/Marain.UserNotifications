@@ -226,6 +226,9 @@ components:
       description: A request to update the "delivered" status of a notification
       type: object
       properties:
+        deliveryChannelId:
+          description: The delivery channel that this update applies to.
+          type: string
         newStatus:
           description: The new status for the notification
           type: string

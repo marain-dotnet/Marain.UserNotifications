@@ -105,6 +105,17 @@ namespace Marain.UserNotifications.Storage.AzureTable
 
             await this.table.CreateIfNotExistsAsync().ConfigureAwait(false);
 
+            if (string.IsNullOrEmpty(notification.Metadata.ETag))
+            {
+                // We're inserting this notification
+                return await this.InsertAsync(notification).ConfigureAwait(false);
+            }
+
+            return await this.UpdateAsync(notification).ConfigureAwait(false);
+        }
+
+        private async Task<UserNotification> InsertAsync(UserNotification notification)
+        {
             var notificationEntity = UserNotificationTableEntity.FromNotification(notification, this.serializerSettingsProvider.Instance);
 
             var createOperation = TableOperation.Insert(notificationEntity);
@@ -120,6 +131,29 @@ namespace Marain.UserNotifications.Storage.AzureTable
             catch (StorageException ex) when (ex.Message == "Conflict")
             {
                 throw new UserNotificationStoreConcurrencyException("Could not create the notification because a notification with the same identity hash already exists in the store.", ex);
+            }
+        }
+
+        private async Task<UserNotification> UpdateAsync(UserNotification notification)
+        {
+            var notificationEntity = UserNotificationTableEntity.FromNotification(notification, this.serializerSettingsProvider.Instance);
+
+            var replaceOperation = TableOperation.Replace(notificationEntity);
+
+            try
+            {
+                TableResult result = await this.table.ExecuteAsync(replaceOperation).ConfigureAwait(false);
+
+                var response = (UserNotificationTableEntity)result.Result;
+                return response.ToNotification(this.serializerSettingsProvider.Instance);
+            }
+            catch (StorageException ex) when (ex.Message == "Not Found")
+            {
+                throw new UserNotificationNotFoundException(notification.Id ?? "{null}");
+            }
+            catch (StorageException ex) when (ex.Message == "Precondition Failed")
+            {
+                throw new UserNotificationStoreConcurrencyException($"Could not update the notification with Id '{notification.Id}' because it has been modified by another process.", ex);
             }
         }
 
