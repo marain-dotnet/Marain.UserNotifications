@@ -41,9 +41,6 @@ namespace Marain.UserNotifications.Specs.Bindings
                     services.AddSingleton<IConfiguration>(config);
 
                     services.AddLogging();
-
-                    // We want the JSON serializer settings, but without the DateTimeOffset converter as we want our
-                    // API to serialize/deserialize from the OpenAPI string/date-time to DateTimeOffset.
                     services.AddOpenApiJsonSerializerSettings();
 
                     // Tenancy service client.

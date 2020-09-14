@@ -12,6 +12,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
     using Corvus.Monitoring.Instrumentation;
     using Corvus.Tenancy;
     using Marain.Services.Tenancy;
+    using Marain.UserNotifications.Client;
     using Marain.UserNotifications.Client.Management;
     using Marain.UserNotifications.Client.Management.Requests;
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers;
@@ -112,15 +113,15 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
         private async Task EnsureAllNotificationsMarkedAsDelivered(IOpenApiContext context, GetNotificationsResult results)
         {
             // See if there are any notifications we need to mark as delivered. Whilst we want this to happen, we're
-            // not going to fail the operation if something goes wrong, hence the catch-all exception handler.
+            // not going to fail the entire request operation if something goes wrong - hence the catch-all exception handler.
             try
             {
-                UserNotification[] notificationsToMarkAsDelivered = results.Results.Where(
-                    x => x.GetDeliveryStatusForChannel(Constants.ApiDeliveryChannelId) != UserNotificationDeliveryStatus.Delivered).ToArray();
+                IEnumerable<UserNotification> notificationsToMarkAsDelivered = results.Results.Where(
+                    x => x.GetDeliveryStatusForChannel(Constants.ApiDeliveryChannelId) != UserNotificationDeliveryStatus.Delivered);
 
-                if (notificationsToMarkAsDelivered.Length > 0)
+                if (notificationsToMarkAsDelivered.Any())
                 {
-                    this.logger.LogDebug($"Updating notification state to 'Delivered' for {notificationsToMarkAsDelivered.Length} notifications.");
+                    this.logger.LogDebug($"Updating notification state to 'Delivered' for {notificationsToMarkAsDelivered.Count()} notifications.");
 
                     DateTimeOffset timestamp = DateTimeOffset.UtcNow;
                     IEnumerable<BatchDeliveryStatusUpdateRequestItem> deliveryStatusUpdateBatch = notificationsToMarkAsDelivered.Select(
@@ -136,11 +137,14 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
                     // Although this call returns the location for the long running op it kicks off, we don't really
                     // care. We're going to return the notifications as "delivered" anyway (because the fact that
                     // we're returning them means they are delivered). So we'll send this request and hope that it
-                    // succeeds (safe in the knowledge that if it doesn't, we're logging the failure.
-                    await this.managementApiClient.BatchDeliveryStatusUpdateAsync(
+                    // succeeds, safe in the knowledge that if it doesn't, we're logging the failure.
+                    ApiResponse response = await this.managementApiClient.BatchDeliveryStatusUpdateAsync(
                         context.CurrentTenantId,
                         deliveryStatusUpdateBatch,
                         CancellationToken.None).ConfigureAwait(false);
+
+                    this.logger.LogInformation(
+                        $"Sent request to update notification delivery status; long running operation Url is {response.Headers["Location"]}");
                 }
             }
             catch (Exception ex)

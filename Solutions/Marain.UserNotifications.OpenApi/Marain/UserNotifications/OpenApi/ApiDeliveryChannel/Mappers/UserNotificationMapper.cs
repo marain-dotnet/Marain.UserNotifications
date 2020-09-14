@@ -49,6 +49,9 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
         /// <inheritdoc/>
         public ValueTask<HalDocument> MapAsync(UserNotification resource, IOpenApiContext context)
         {
+            // Note that we're hard coding "delivered" to true. This is because we're mapping the notification so we
+            // can return it from a request to the API - which means that even if it hasn't been delivered on any other
+            // channel, it's being delivered now on this one.
             HalDocument response = this.halDocumentFactory.CreateHalDocumentFrom(new
             {
                 ContentType = "application/vnd.marain.usernotifications.apidelivery.notification",
