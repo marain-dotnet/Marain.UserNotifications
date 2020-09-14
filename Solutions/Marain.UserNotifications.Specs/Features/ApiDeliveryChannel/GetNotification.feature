@@ -13,7 +13,7 @@ Scenario: Retrieve a notification by its Id
 	And the response content should have a property called '_links.self'
 	And the response content should have a string property called 'userId' with value '304ABC0E-08AF-4EF5-A9AC-281B67D633F4'
 	And the response content should have a string property called 'notificationType' with value 'marain.test.notification.v1'
-	And the response content should have a long property called 'timestamp.unixTime' with value 1332141720000
+	And the response content should have a date-time property called 'timestamp' with value '2012-03-19T07:22Z'
 	And the response content should have a string property called 'properties.prop1' with value 'val1'
 
 Scenario: Request a notification that doesn't exist

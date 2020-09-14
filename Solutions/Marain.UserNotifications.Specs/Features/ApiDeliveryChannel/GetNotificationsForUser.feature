@@ -23,6 +23,7 @@ Scenario: Request notifications for a user
 	And the response content should have a property called '_links.self'
 	And the response content should have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
+	And within 60 seconds, the first 10 notifications stored in the transient tenant for the user with Id 'user100' have the delivery status 'Delivered' for the delivery channel with Id 'marain.usernotifications.deliverychannels.api'
 
 Scenario: Request notifications for a user without specifying the maximum number of items to return
 	Given I have created and stored 60 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user150'
@@ -40,6 +41,7 @@ Scenario: Request notifications for a user without specifying the maximum number
 	And the response content should have a property called '_links.self'
 	And the response content should have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
+	And within 60 seconds, the first 50 notifications stored in the transient tenant for the user with Id 'user150' have the delivery status 'Delivered' for the delivery channel with Id 'marain.usernotifications.deliverychannels.api'
 
 Scenario: Request more notifications for a user than exist
 	Given I have created and stored 25 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user200'
@@ -57,6 +59,7 @@ Scenario: Request more notifications for a user than exist
 	And the response content should have a property called '_links.self'
 	And the response content should not have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
+	And within 60 seconds, the first 25 notifications stored in the transient tenant for the user with Id 'user200' have the delivery status 'Delivered' for the delivery channel with Id 'marain.usernotifications.deliverychannels.api'
 
 Scenario: Retrieve notifications for a user where none exist
 	When I send an API delivery request for 10 notifications for the user with Id 'userXXXXXX'
@@ -85,11 +88,12 @@ Scenario: Request notifications for a user using a continuation token from a pre
 	And the response content should have a property called '_links.self'
 	And the response content should have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
+	And within 60 seconds, the first 20 notifications stored in the transient tenant for the user with Id 'user250' have the delivery status 'Delivered' for the delivery channel with Id 'marain.usernotifications.deliverychannels.api'
 
 Scenario: Request the final page of notifications for a user using continuation tokens from previous requests
-	Given I have created and stored 25 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user250'
-	And I have created and stored 5 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user251'
-	And I have sent an API delivery request for 10 notifications for the user with Id 'user100'	
+	Given I have created and stored 25 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user300'
+	And I have created and stored 5 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user351'
+	And I have sent an API delivery request for 10 notifications for the user with Id 'user300'	
 	And I have stored the value of the response object property called '_links.next.href' as 'nextLink'
 	And I have sent an API delivery request using the path called 'nextLink'
 	And I have stored the value of the response object property called '_links.next.href' as 'nextLink'
@@ -106,6 +110,7 @@ Scenario: Request the final page of notifications for a user using continuation 
 	And the response content should have a property called '_links.self'
 	And the response content should not have a property called '_links.next'
 	And the response content should have a property called '_links.newer'
+	And within 60 seconds, the first 25 notifications stored in the transient tenant for the user with Id 'user300' have the delivery status 'Delivered' for the delivery channel with Id 'marain.usernotifications.deliverychannels.api'
 
 Scenario: Request notifications for a user since a previously retrieved notification when there are no new notifications
 	Given I have created and stored 10 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user350'

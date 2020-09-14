@@ -19,6 +19,7 @@
   <ItemGroup>
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ApiDeliveryChannelClient\GetNotification.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ApiDeliveryChannelClient\GetNotificationsForUser.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApiClient\BatchNotificationDeliveryStatusUpdate.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApiClient\CreateNotifications.feature.cs" />
   </ItemGroup>
 
@@ -52,6 +53,10 @@
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\ApiDeliveryChannelClient\GetNotificationsForUser.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\ManagementApiClient\BatchNotificationDeliveryStatusUpdate.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
@@ -97,6 +102,9 @@
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
     <Compile Update="Features\ApiDeliveryChannelClient\GetNotificationsForUser.feature.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Features\ManagementApiClient\BatchNotificationDeliveryStatusUpdate.feature.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
     <Compile Update="Features\ManagementApiClient\CreateNotifications.feature.cs">

@@ -165,6 +165,11 @@ this.ScenarioInitialize(scenarioInfo);
 #line 25
  testRunner.And("the response content should have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
+#line 26
+ testRunner.And("within 60 seconds, the first 10 notifications stored in the transient tenant for " +
+                        "the user with Id \'user100\' have the delivery status \'Delivered\' for the delivery" +
+                        " channel with Id \'marain.usernotifications.deliverychannels.api\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
             }
             this.ScenarioCleanup();
         }
@@ -178,7 +183,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request notifications for a user without specifying the maximum number of items t" +
                     "o return", null, tagsOfScenario, argumentsOfScenario);
-#line 27
+#line 28
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -198,60 +203,65 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 28
+#line 29
  testRunner.Given("I have created and stored 60 notifications in the current transient tenant with t" +
                         "imestamps at 30 second intervals for the user with Id \'user150\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 29
+#line 30
  testRunner.And("I have created and stored 5 notifications in the current transient tenant with ti" +
                         "mestamps at 30 second intervals for the user with Id \'user151\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 30
+#line 31
  testRunner.When("I send an API delivery request for notifications for the user with Id \'user150\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 31
+#line 32
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 32
+#line 33
  testRunner.And("the response content should have an array property called \'_links.items\' containi" +
                         "ng 50 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 33
+#line 34
  testRunner.And("the response content should have an array property called \'_embedded.items\' conta" +
                         "ining 50 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 34
+#line 35
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'userId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 35
+#line 36
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'notificationType\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 36
+#line 37
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'properties\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 37
+#line 38
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'timestamp\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 38
+#line 39
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 39
+#line 40
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.mark-read\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 40
+#line 41
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 41
+#line 42
  testRunner.And("the response content should have a property called \'_links.next\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 42
+#line 43
  testRunner.And("the response content should have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 44
+ testRunner.And("within 60 seconds, the first 50 notifications stored in the transient tenant for " +
+                        "the user with Id \'user150\' have the delivery status \'Delivered\' for the delivery" +
+                        " channel with Id \'marain.usernotifications.deliverychannels.api\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -264,7 +274,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request more notifications for a user than exist", null, tagsOfScenario, argumentsOfScenario);
-#line 44
+#line 46
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -284,61 +294,66 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 45
+#line 47
  testRunner.Given("I have created and stored 25 notifications in the current transient tenant with t" +
                         "imestamps at 30 second intervals for the user with Id \'user200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 46
+#line 48
  testRunner.And("I have created and stored 5 notifications in the current transient tenant with ti" +
                         "mestamps at 30 second intervals for the user with Id \'user201\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 47
+#line 49
  testRunner.When("I send an API delivery request for 100 notifications for the user with Id \'user20" +
                         "0\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 48
+#line 50
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 49
+#line 51
  testRunner.And("the response content should have an array property called \'_links.items\' containi" +
                         "ng 25 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 50
+#line 52
  testRunner.And("the response content should have an array property called \'_embedded.items\' conta" +
                         "ining 25 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 51
+#line 53
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'userId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 52
+#line 54
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'notificationType\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 53
+#line 55
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'properties\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 54
+#line 56
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'timestamp\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 55
+#line 57
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 56
+#line 58
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.mark-read\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 57
+#line 59
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 58
+#line 60
  testRunner.And("the response content should not have a property called \'_links.next\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 59
+#line 61
  testRunner.And("the response content should have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 62
+ testRunner.And("within 60 seconds, the first 25 notifications stored in the transient tenant for " +
+                        "the user with Id \'user200\' have the delivery status \'Delivered\' for the delivery" +
+                        " channel with Id \'marain.usernotifications.deliverychannels.api\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -351,7 +366,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieve notifications for a user where none exist", null, tagsOfScenario, argumentsOfScenario);
-#line 61
+#line 64
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -371,26 +386,26 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 62
+#line 65
  testRunner.When("I send an API delivery request for 10 notifications for the user with Id \'userXXX" +
                         "XXX\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 63
+#line 66
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 64
+#line 67
  testRunner.And("the response content should not have a property called \'_links.items\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 65
+#line 68
  testRunner.And("the response content should not have a property called \'_embedded.items\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 66
+#line 69
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 67
+#line 70
  testRunner.And("the response content should not have a property called \'_links.next\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 68
+#line 71
  testRunner.And("the response content should not have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -406,7 +421,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request notifications for a user using a continuation token from a previous reque" +
                     "st", null, tagsOfScenario, argumentsOfScenario);
-#line 70
+#line 73
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -426,68 +441,73 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 71
+#line 74
  testRunner.Given("I have created and stored 25 notifications in the current transient tenant with t" +
                         "imestamps at 30 second intervals for the user with Id \'user250\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 72
+#line 75
  testRunner.And("I have created and stored 5 notifications in the current transient tenant with ti" +
                         "mestamps at 30 second intervals for the user with Id \'user251\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 73
+#line 76
  testRunner.And("I have sent an API delivery request for 10 notifications for the user with Id \'us" +
                         "er250\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 74
+#line 77
  testRunner.And("I have stored the value of the response object property called \'_links.next.href\'" +
                         " as \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 75
+#line 78
  testRunner.When("I send an API delivery request using the path called \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 76
+#line 79
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 77
+#line 80
  testRunner.And("the response content should have an array property called \'_links.items\' containi" +
                         "ng 10 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 78
+#line 81
  testRunner.And("the response content should have an array property called \'_embedded.items\' conta" +
                         "ining 10 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 79
+#line 82
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'userId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 80
+#line 83
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'notificationType\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 81
+#line 84
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'properties\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 82
+#line 85
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'timestamp\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 83
+#line 86
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 84
+#line 87
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.mark-read\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 85
+#line 88
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 86
+#line 89
  testRunner.And("the response content should have a property called \'_links.next\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 87
+#line 90
  testRunner.And("the response content should have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 91
+ testRunner.And("within 60 seconds, the first 20 notifications stored in the transient tenant for " +
+                        "the user with Id \'user250\' have the delivery status \'Delivered\' for the delivery" +
+                        " channel with Id \'marain.usernotifications.deliverychannels.api\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -502,7 +522,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request the final page of notifications for a user using continuation tokens from" +
                     " previous requests", null, tagsOfScenario, argumentsOfScenario);
-#line 89
+#line 93
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -522,75 +542,80 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 90
- testRunner.Given("I have created and stored 25 notifications in the current transient tenant with t" +
-                        "imestamps at 30 second intervals for the user with Id \'user250\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 91
- testRunner.And("I have created and stored 5 notifications in the current transient tenant with ti" +
-                        "mestamps at 30 second intervals for the user with Id \'user251\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 92
- testRunner.And("I have sent an API delivery request for 10 notifications for the user with Id \'us" +
-                        "er100\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 93
- testRunner.And("I have stored the value of the response object property called \'_links.next.href\'" +
-                        " as \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
 #line 94
- testRunner.And("I have sent an API delivery request using the path called \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("I have created and stored 25 notifications in the current transient tenant with t" +
+                        "imestamps at 30 second intervals for the user with Id \'user300\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 95
+ testRunner.And("I have created and stored 5 notifications in the current transient tenant with ti" +
+                        "mestamps at 30 second intervals for the user with Id \'user351\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 96
+ testRunner.And("I have sent an API delivery request for 10 notifications for the user with Id \'us" +
+                        "er300\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 97
  testRunner.And("I have stored the value of the response object property called \'_links.next.href\'" +
                         " as \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 96
+#line 98
+ testRunner.And("I have sent an API delivery request using the path called \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 99
+ testRunner.And("I have stored the value of the response object property called \'_links.next.href\'" +
+                        " as \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 100
  testRunner.When("I send an API delivery request using the path called \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 97
+#line 101
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 98
+#line 102
  testRunner.And("the response content should have an array property called \'_links.items\' containi" +
                         "ng 5 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 99
+#line 103
  testRunner.And("the response content should have an array property called \'_embedded.items\' conta" +
                         "ining 5 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 100
+#line 104
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'userId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 101
+#line 105
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'notificationType\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 102
+#line 106
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'properties\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 103
+#line 107
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'timestamp\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 104
+#line 108
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 105
+#line 109
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.mark-read\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 106
+#line 110
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 107
+#line 111
  testRunner.And("the response content should not have a property called \'_links.next\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 108
+#line 112
  testRunner.And("the response content should have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 113
+ testRunner.And("within 60 seconds, the first 25 notifications stored in the transient tenant for " +
+                        "the user with Id \'user300\' have the delivery status \'Delivered\' for the delivery" +
+                        " channel with Id \'marain.usernotifications.deliverychannels.api\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -605,7 +630,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request notifications for a user since a previously retrieved notification when t" +
                     "here are no new notifications", null, tagsOfScenario, argumentsOfScenario);
-#line 110
+#line 115
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -625,37 +650,37 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 111
+#line 116
  testRunner.Given("I have created and stored 10 notifications in the current transient tenant with t" +
                         "imestamps at 30 second intervals for the user with Id \'user350\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 112
+#line 117
  testRunner.And("I have sent an API delivery request for 10 notifications for the user with Id \'us" +
                         "er350\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 113
+#line 118
  testRunner.And("I have stored the value of the response object property called \'_links.newer.href" +
                         "\' as \'newerLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 114
+#line 119
  testRunner.When("I send an API delivery request using the path called \'newerLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 115
+#line 120
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 116
+#line 121
  testRunner.And("the response content should not have a property called \'_links.items\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 117
+#line 122
  testRunner.And("the response content should not have a property called \'_embedded.items\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 118
+#line 123
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 119
+#line 124
  testRunner.And("the response content should not have a property called \'_links.next\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 120
+#line 125
  testRunner.And("the response content should not have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -671,7 +696,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request notifications for a user since a previously retrieved notification when t" +
                     "here is a single page of new notifications", null, tagsOfScenario, argumentsOfScenario);
-#line 122
+#line 127
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -691,67 +716,67 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 123
+#line 128
  testRunner.Given("I have created and stored 10 notifications in the current transient tenant with t" +
                         "imestamps at 300 second intervals for the user with Id \'user400\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 124
+#line 129
  testRunner.And("I have sent an API delivery request for 10 notifications for the user with Id \'us" +
                         "er400\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 125
+#line 130
  testRunner.And("I have stored the value of the response object property called \'_links.newer.href" +
                         "\' as \'newerLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 126
+#line 131
  testRunner.And("I have created and stored 3 notifications in the current transient tenant with ti" +
                         "mestamps at 1 second intervals for the user with Id \'user400\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 127
+#line 132
  testRunner.When("I send an API delivery request using the path called \'newerLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 128
+#line 133
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 129
+#line 134
  testRunner.And("the response content should have an array property called \'_links.items\' containi" +
                         "ng 3 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 130
+#line 135
  testRunner.And("the response content should have an array property called \'_embedded.items\' conta" +
                         "ining 3 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 131
+#line 136
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'userId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 132
+#line 137
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'notificationType\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 133
+#line 138
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'properties\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 134
+#line 139
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'timestamp\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 135
+#line 140
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 136
+#line 141
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.mark-read\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 137
+#line 142
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 138
+#line 143
  testRunner.And("the response content should not have a property called \'_links.next\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 139
+#line 144
  testRunner.And("the response content should have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -767,7 +792,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request notifications for a user since a previously retrieved notification when t" +
                     "here are multiple pages of new notifications", null, tagsOfScenario, argumentsOfScenario);
-#line 141
+#line 146
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -787,67 +812,67 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 142
+#line 147
  testRunner.Given("I have created and stored 10 notifications in the current transient tenant with t" +
                         "imestamps at 300 second intervals for the user with Id \'user450\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 143
+#line 148
  testRunner.And("I have sent an API delivery request for 10 notifications for the user with Id \'us" +
                         "er450\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 144
+#line 149
  testRunner.And("I have stored the value of the response object property called \'_links.newer.href" +
                         "\' as \'newerLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 145
+#line 150
  testRunner.And("I have created and stored 15 notifications in the current transient tenant with t" +
                         "imestamps at 1 second intervals for the user with Id \'user450\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 146
+#line 151
  testRunner.When("I send an API delivery request using the path called \'newerLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 147
+#line 152
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 148
+#line 153
  testRunner.And("the response content should have an array property called \'_links.items\' containi" +
                         "ng 10 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 149
+#line 154
  testRunner.And("the response content should have an array property called \'_embedded.items\' conta" +
                         "ining 10 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 150
+#line 155
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'userId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 151
+#line 156
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'notificationType\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 152
+#line 157
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'properties\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 153
+#line 158
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'timestamp\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 154
+#line 159
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 155
+#line 160
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.mark-read\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 156
+#line 161
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 157
+#line 162
  testRunner.And("the response content should have a property called \'_links.next\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 158
+#line 163
  testRunner.And("the response content should have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -863,7 +888,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Request a second page of notifications for a user since a previously retrieved no" +
                     "tification", null, tagsOfScenario, argumentsOfScenario);
-#line 160
+#line 165
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -883,74 +908,74 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 161
+#line 166
  testRunner.Given("I have created and stored 10 notifications in the current transient tenant with t" +
                         "imestamps at 300 second intervals for the user with Id \'user500\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 162
+#line 167
  testRunner.And("I have sent an API delivery request for 10 notifications for the user with Id \'us" +
                         "er500\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 163
+#line 168
  testRunner.And("I have stored the value of the response object property called \'_links.newer.href" +
                         "\' as \'newerLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 164
+#line 169
  testRunner.And("I have created and stored 15 notifications in the current transient tenant with t" +
                         "imestamps at 1 second intervals for the user with Id \'user500\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 165
+#line 170
  testRunner.And("I have sent an API delivery request using the path called \'newerLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 166
+#line 171
  testRunner.And("I have stored the value of the response object property called \'_links.next.href\'" +
                         " as \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 167
+#line 172
  testRunner.When("I send an API delivery request using the path called \'nextLink\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 168
+#line 173
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 169
+#line 174
  testRunner.And("the response content should have an array property called \'_links.items\' containi" +
                         "ng 5 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 170
+#line 175
  testRunner.And("the response content should have an array property called \'_embedded.items\' conta" +
                         "ining 5 entries", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 171
+#line 176
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'userId\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 172
+#line 177
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'notificationType\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 173
+#line 178
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'properties\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 174
+#line 179
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'timestamp\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 175
+#line 180
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 176
+#line 181
  testRunner.And("each item in the response content array property called \'_embedded.items\' should " +
                         "have a property called \'_links.mark-read\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 177
+#line 182
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 178
+#line 183
  testRunner.And("the response content should not have a property called \'_links.next\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 179
+#line 184
  testRunner.And("the response content should have a property called \'_links.newer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

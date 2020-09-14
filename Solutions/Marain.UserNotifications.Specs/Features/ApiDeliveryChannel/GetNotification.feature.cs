@@ -144,8 +144,8 @@ this.ScenarioInitialize(scenarioInfo);
                         " value \'marain.test.notification.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
- testRunner.And("the response content should have a long property called \'timestamp.unixTime\' with" +
-                        " value 1332141720000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the response content should have a date-time property called \'timestamp\' with val" +
+                        "ue \'2012-03-19T07:22Z\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
  testRunner.And("the response content should have a string property called \'properties.prop1\' with" +

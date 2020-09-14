@@ -28,6 +28,9 @@ namespace Marain.UserNotifications.Specs.Bindings
             FunctionsController functionsController = FunctionsBindings.GetFunctionsController(featureContext);
             FunctionConfiguration functionConfiguration = FunctionsBindings.GetFunctionConfiguration(featureContext);
 
+            functionConfiguration.EnvironmentVariables.Add("UserNotificationsManagementClient:BaseUrl", ManagementApiBaseUri.ToString());
+            functionConfiguration.EnvironmentVariables.Add("UserNotificationsApiDeliveryChannelClient:BaseUrl", ApiDeliveryChannelBaseUri.ToString());
+
             return Task.WhenAll(
                 functionsController.StartFunctionsInstance(
                     "Marain.UserNotifications.Management.Host",

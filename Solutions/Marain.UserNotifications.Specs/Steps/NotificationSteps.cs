@@ -6,8 +6,12 @@ namespace Marain.UserNotifications.Specs.Steps
 {
     using System;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Corvus.Extensions.Json;
+    using Corvus.Retry;
+    using Corvus.Retry.Policies;
+    using Corvus.Retry.Strategies;
     using Corvus.Testing.SpecFlow;
     using Marain.UserNotifications.Specs.Bindings;
     using Microsoft.Extensions.DependencyInjection;
@@ -25,10 +29,14 @@ namespace Marain.UserNotifications.Specs.Steps
 
         public NotificationSteps(FeatureContext featureContext, ScenarioContext scenarioContext)
         {
-            this.scenarioContext = scenarioContext;
-            this.serviceProvider = ContainerBindings.GetServiceProvider(featureContext);
-            this.serializationSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
             this.featureContext = featureContext;
+            this.scenarioContext = scenarioContext;
+
+            this.serviceProvider = featureContext.FeatureInfo.Tags.Contains("perFeatureContainer")
+                ? ContainerBindings.GetServiceProvider(featureContext)
+                : ContainerBindings.GetServiceProvider(scenarioContext);
+
+            this.serializationSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
         }
 
         public static void AssertUserNotificationsMatch(
@@ -103,6 +111,36 @@ namespace Marain.UserNotifications.Specs.Steps
             {
                 Assert.AreEqual(expectedDeliveryStatus, current.GetDeliveryStatusForChannel(deliveryChannelId));
             }
+        }
+
+        [Then("within (.*) seconds, the first (.*) notifications stored in the transient tenant for the user with Id '(.*)' have the delivery status '(.*)' for the delivery channel with Id '(.*)'")]
+        public Task ThenWithinSecondsTheFirstNotificationsStoredInTheTransientTenantForTheUserWithIdHaveTheDeliveryStatusForTheDeliveryChannelWithId(
+            int timeoutSeconds,
+            int count,
+            string userId,
+            UserNotificationDeliveryStatus expectedDeliveryStatus,
+            string deliveryChannelId)
+        {
+            var tokenSource = new CancellationTokenSource();
+            tokenSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+
+            return Retriable.RetryAsync(
+                async () =>
+                {
+                    GetNotificationsResult userNotifications = await this.GetNotificationsForUserAsync(userId, count).ConfigureAwait(false);
+
+                    foreach (UserNotification current in userNotifications.Results)
+                    {
+                        if (current.GetDeliveryStatusForChannel(deliveryChannelId) != expectedDeliveryStatus)
+                        {
+                            throw new Exception($"Notification with Id '{current.Id}' has delivery status '{current.GetDeliveryStatusForChannel(deliveryChannelId)}' instead of expected value '{expectedDeliveryStatus}'");
+                        }
+                    }
+                },
+                tokenSource.Token,
+                new Linear(TimeSpan.FromSeconds(5), int.MaxValue),
+                new AnyExceptionPolicy(),
+                false);
         }
 
         [Then("the first (.*) notifications stored in the transient tenant for the user with Id '(.*)' have the delivery status last updated set to within (.*) seconds of now for the delivery channel with Id '(.*)'")]

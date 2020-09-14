@@ -4,6 +4,7 @@
 
 namespace Marain.UserNotifications.Specs
 {
+    using System;
     using System.Linq;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
@@ -31,6 +32,15 @@ namespace Marain.UserNotifications.Specs
             JToken actualToken = this.GetRequiredTokenFromResponseObject(propertyPath);
 
             string actualValue = actualToken.Value<string>();
+            Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was '{expectedValue}', but actual value was '{actualValue}'");
+        }
+
+        [Then("the response content should have a date-time property called '(.*)' with value '(.*)'")]
+        public void ThenTheResponseContentShouldHaveADate_TimePropertyCalledWithValue(string propertyPath, DateTimeOffset expectedValue)
+        {
+            JToken actualToken = this.GetRequiredTokenFromResponseObject(propertyPath);
+
+            DateTimeOffset actualValue = actualToken.ToObject<DateTimeOffset>();
             Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was '{expectedValue}', but actual value was '{actualValue}'");
         }
 
