@@ -66,7 +66,7 @@ namespace Marain.UserNotifications.Specs
 
             foreach (JToken current in actualToken.ToArray())
             {
-                this.GetRequiredToken(current, itemPropertyPath);
+                GetRequiredToken(current, itemPropertyPath);
             }
         }
 
@@ -78,13 +78,13 @@ namespace Marain.UserNotifications.Specs
             this.scenarioContext.Set(valueAsString, storeAsName);
         }
 
-        private JToken GetRequiredTokenFromResponseObject(string propertyPath)
+        public JToken GetRequiredTokenFromResponseObject(string propertyPath)
         {
             JObject data = this.scenarioContext.Get<JObject>();
-            return this.GetRequiredToken(data, propertyPath);
+            return GetRequiredToken(data, propertyPath);
         }
 
-        private JToken GetRequiredToken(JToken data, string propertyPath)
+        public static JToken GetRequiredToken(JToken data, string propertyPath)
         {
             JToken token = data.SelectToken(propertyPath);
             Assert.IsNotNull(token, $"Could not locate a property with path '{propertyPath}' under the token with path '{data.Path}'");

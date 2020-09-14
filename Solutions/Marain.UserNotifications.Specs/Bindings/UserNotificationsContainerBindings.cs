@@ -5,9 +5,11 @@
 namespace Marain.UserNotifications.Specs.Bindings
 {
     using System;
+    using System.Linq;
     using Corvus.Azure.Storage.Tenancy;
     using Corvus.Configuration;
     using Corvus.Extensions.Json;
+    using Corvus.Extensions.Json.Internal;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
     using Marain.Tenancy.Client;
@@ -41,7 +43,10 @@ namespace Marain.UserNotifications.Specs.Bindings
                     services.AddSingleton<IConfiguration>(config);
 
                     services.AddLogging();
-                    services.AddJsonSerializerSettings();
+
+                    // We want the JSON serializer settings, but without the DateTimeOffset converter as we want our
+                    // API to serialize/deserialize from the OpenAPI string/date-time to DateTimeOffset.
+                    services.AddOpenApiJsonSerializerSettings();
 
                     // Tenancy service client.
                     services.AddSingleton(sp =>
@@ -94,7 +99,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                     sp.AddSingleton<IConfiguration>(config);
 
                     sp.AddLogging();
-                    sp.AddJsonSerializerSettings();
+                    sp.AddOpenApiJsonSerializerSettings();
                 });
         }
 

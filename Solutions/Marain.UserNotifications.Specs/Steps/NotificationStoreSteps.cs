@@ -61,7 +61,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 notification.Timestamp,
                 notification.Properties,
                 new UserNotificationMetadata(notification.Metadata.CorrelationIds, etag),
-                notification.ChannelDeliveryStatuses);
+                notification.ChannelStatuses);
 
             this.scenarioContext.Set(updatedNotification, name);
         }

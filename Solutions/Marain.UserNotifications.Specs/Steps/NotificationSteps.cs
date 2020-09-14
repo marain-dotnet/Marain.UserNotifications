@@ -6,8 +6,10 @@ namespace Marain.UserNotifications.Specs.Steps
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using Corvus.Extensions.Json;
     using Corvus.Testing.SpecFlow;
+    using Marain.UserNotifications.Specs.Bindings;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using NUnit.Framework;
@@ -19,12 +21,14 @@ namespace Marain.UserNotifications.Specs.Steps
         private readonly ScenarioContext scenarioContext;
         private readonly IServiceProvider serviceProvider;
         private readonly IJsonSerializerSettingsProvider serializationSettingsProvider;
+        private readonly FeatureContext featureContext;
 
-        public NotificationSteps(ScenarioContext scenarioContext)
+        public NotificationSteps(FeatureContext featureContext, ScenarioContext scenarioContext)
         {
             this.scenarioContext = scenarioContext;
-            this.serviceProvider = ContainerBindings.GetServiceProvider(scenarioContext);
+            this.serviceProvider = ContainerBindings.GetServiceProvider(featureContext);
             this.serializationSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            this.featureContext = featureContext;
         }
 
         public static void AssertUserNotificationsMatch(
@@ -42,10 +46,10 @@ namespace Marain.UserNotifications.Specs.Steps
                 Assert.AreEqual(expected.Metadata.CorrelationIds[idx], actual.Metadata.CorrelationIds[idx], $"Correlation Ids at index {idx} do not match.");
             }
 
-            Assert.AreEqual(expected.ChannelDeliveryStatuses.Count(), actual.ChannelDeliveryStatuses.Count());
-            foreach (UserNotificationStatus expectedStatus in expected.ChannelDeliveryStatuses)
+            Assert.AreEqual(expected.ChannelStatuses.Count(), actual.ChannelStatuses.Count());
+            foreach (UserNotificationStatus expectedStatus in expected.ChannelStatuses)
             {
-                UserNotificationStatus? actualStatus = actual.ChannelDeliveryStatuses.FirstOrDefault(s => s.DeliveryChannelId == expectedStatus.DeliveryChannelId);
+                UserNotificationStatus? actualStatus = actual.ChannelStatuses.FirstOrDefault(s => s.DeliveryChannelId == expectedStatus.DeliveryChannelId);
 
                 Assert.IsNotNull(actualStatus, $"Could not find channel delivery status for channel Id '{expectedStatus.DeliveryChannelId}'");
 
@@ -84,6 +88,79 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             UserNotification actual = this.scenarioContext.Get<UserNotification>(notificationName);
             Assert.IsNotNull(actual.Metadata.ETag);
+        }
+
+        [Then("the first (.*) notifications stored in the transient tenant for the user with Id '(.*)' have the delivery status '(.*)' for the delivery channel with Id '(.*)'")]
+        public async Task ThenTheFirstNotificationsStoredInTheTransientTenantForTheUserWithIdHaveTheDeliveryStatusForTheDeliveryChannelWithId(
+            int count,
+            string userId,
+            UserNotificationDeliveryStatus expectedDeliveryStatus,
+            string deliveryChannelId)
+        {
+            GetNotificationsResult userNotifications = await this.GetNotificationsForUserAsync(userId, count).ConfigureAwait(false);
+
+            foreach (UserNotification current in userNotifications.Results)
+            {
+                Assert.AreEqual(expectedDeliveryStatus, current.GetDeliveryStatusForChannel(deliveryChannelId));
+            }
+        }
+
+        [Then("the first (.*) notifications stored in the transient tenant for the user with Id '(.*)' have the delivery status last updated set to within (.*) seconds of now for the delivery channel with Id '(.*)'")]
+        public async Task ThenTheFirstNotificationsStoredInTheTransientTenantForTheUserWithIdHaveTheDeliveryStatusLastUpdatedSetToWithinSecondsOfNow(
+            int count,
+            string userId,
+            int allowableTimeRangeFromNow,
+            string deliveryChannelId)
+        {
+            GetNotificationsResult userNotifications = await this.GetNotificationsForUserAsync(userId, count).ConfigureAwait(false);
+
+            var timeRange = TimeSpan.FromSeconds(allowableTimeRangeFromNow);
+
+            foreach (UserNotification current in userNotifications.Results)
+            {
+                UserNotificationStatus status = current.ChannelStatuses.Single(x => x.DeliveryChannelId == deliveryChannelId);
+                Assert.LessOrEqual(DateTimeOffset.UtcNow - status.DeliveryStatusLastUpdated, timeRange);
+            }
+        }
+
+        [Then("the first (.*) notifications stored in the transient tenant for the user with Id '(.*)' have the read status '(.*)' for the delivery channel with Id '(.*)'")]
+        public async Task ThenTheFirstNotificationsStoredInTheTransientTenantForTheUserWithIdHaveTheDeliveryStatusForTheDeliveryChannelWithId(
+            int count,
+            string userId,
+            UserNotificationReadStatus expectedReadStatus,
+            string deliveryChannelId)
+        {
+            GetNotificationsResult userNotifications = await this.GetNotificationsForUserAsync(userId, count).ConfigureAwait(false);
+
+            foreach (UserNotification current in userNotifications.Results)
+            {
+                Assert.AreEqual(expectedReadStatus, current.GetReadStatusForChannel(deliveryChannelId));
+            }
+        }
+
+        [Then("the first (.*) notifications stored in the transient tenant for the user with Id '(.*)' have the read status last updated set to within (.*) seconds of now for the delivery channel with Id '(.*)'")]
+        public async Task ThenTheFirstNotificationsStoredInTheTransientTenantForTheUserWithIdHaveTheReadStatusLastUpdatedSetToWithinSecondsOfNow(
+            int count,
+            string userId,
+            int allowableTimeRangeFromNow,
+            string deliveryChannelId)
+        {
+            GetNotificationsResult userNotifications = await this.GetNotificationsForUserAsync(userId, count).ConfigureAwait(false);
+
+            var timeRange = TimeSpan.FromSeconds(allowableTimeRangeFromNow);
+
+            foreach (UserNotification current in userNotifications.Results)
+            {
+                UserNotificationStatus status = current.ChannelStatuses.Single(x => x.DeliveryChannelId == deliveryChannelId);
+                Assert.LessOrEqual(DateTimeOffset.UtcNow - status.ReadStatusLastUpdated, timeRange);
+            }
+        }
+
+        private async Task<GetNotificationsResult> GetNotificationsForUserAsync(string userId, int count)
+        {
+            ITenantedUserNotificationStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedUserNotificationStoreFactory>();
+            IUserNotificationStore store = await storeFactory.GetUserNotificationStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            return await store.GetAsync(userId, null, count).ConfigureAwait(false);
         }
     }
 }

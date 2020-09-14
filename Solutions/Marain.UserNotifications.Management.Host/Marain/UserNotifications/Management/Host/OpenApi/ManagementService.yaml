@@ -232,7 +232,7 @@ components:
         newStatus:
           description: The new status for the notification
           type: string
-          enum: ['NotTracked', 'Undelivered', 'Delivered']
+          enum: ['notTracked', 'undelivered', 'delivered']
         updateTimestamp:
           description: The time at which the status change occurred
           type: string
@@ -254,7 +254,7 @@ components:
         newStatus:
           description: The new status for the notification
           type: string
-          enum: ['NotTracked', 'Unread', 'Read']
+          enum: ['notTracked', 'unread', 'read']
         updateTimestamp:
           description: The time at which the status change occurred
           type: string

@@ -4,7 +4,10 @@
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    using System.Linq;
     using Corvus.Azure.Storage.Tenancy;
+    using Corvus.Extensions.Json;
+    using Corvus.Extensions.Json.Internal;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.Operations.Client.OperationsControl;
     using Marain.Tenancy.Client;
@@ -12,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel;
     using Menes;
     using Menes.Exceptions;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.Extensions.Configuration;
 
     /// <summary>
@@ -30,6 +34,8 @@ namespace Microsoft.Extensions.DependencyInjection
             // Monitoring - for better AppInsights integration
             services.AddApplicationInsightsInstrumentationTelemetry();
             services.AddInstrumentation();
+
+            services.AddOpenApiJsonSerializerSettings();
 
             // Marain services integration, allowing shorthand calls to get and validate the current tenant in operation implementations.
             services.AddMarainServiceConfiguration();
@@ -117,6 +123,29 @@ namespace Microsoft.Extensions.DependencyInjection
 
                     return managementClientConfiguration;
                 });
+
+            return services;
+        }
+
+        /// <summary>
+        /// Add the JSON serialization settings we need for the service.
+        /// </summary>
+        /// <param name="services">The target service collection.</param>
+        /// <returns>The service collection.</returns>
+        /// <remarks>
+        /// This is a modified version of the
+        /// <see cref="JsonSerializerSettingsProviderServiceCollectionExtensions.AddJsonSerializerSettings(IServiceCollection)"/>
+        /// method that doesn't register the <see cref="DateTimeOffsetConverter"/>. We don't want that particuar
+        /// converter as we want the DateTimeOffset to be serialized in the standard way, as defined in RFC3339 section 5.6.
+        /// </remarks>
+        public static IServiceCollection AddOpenApiJsonSerializerSettings(
+            this IServiceCollection services)
+        {
+            // Ideally we'd have a fully customised setup here rather than using the Corvus extension method and then
+            // removing what we don't want. However, it won't be possible to do that until
+            // https://github.com/corvus-dotnet/Corvus.Extensions.Newtonsoft.Json/issues/129 is resolved.
+            services.AddJsonSerializerSettings();
+            services.Remove(services.First(x => x.ImplementationType == typeof(DateTimeOffsetConverter)));
 
             return services;
         }

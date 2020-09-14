@@ -57,7 +57,7 @@ namespace Marain.UserNotifications.Storage.AzureTable.Internal
             long reversedTimestamp = long.MaxValue - source.Timestamp.ToUnixTimeMilliseconds();
             string correlationIdsJson = JsonConvert.SerializeObject(source.Metadata.CorrelationIds, serializerSettings);
             string propertiesJson = JsonConvert.SerializeObject(source.Properties, serializerSettings);
-            string channelDeliveryStatusesJson = JsonConvert.SerializeObject(source.ChannelDeliveryStatuses, serializerSettings);
+            string channelDeliveryStatusesJson = JsonConvert.SerializeObject(source.ChannelStatuses, serializerSettings);
             string hash = source.GetIdentityHash(serializerSettings);
             string rowKey = $"{reversedTimestamp:D21}-{hash}";
 

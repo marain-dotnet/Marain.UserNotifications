@@ -26,7 +26,7 @@ namespace Marain.UserNotifications
             this UserNotification userNotification,
             string deliveryChannelId)
         {
-            UserNotificationStatus? status = userNotification.ChannelDeliveryStatuses.FirstOrDefault(x => x.DeliveryChannelId == deliveryChannelId);
+            UserNotificationStatus? status = userNotification.ChannelStatuses.FirstOrDefault(x => x.DeliveryChannelId == deliveryChannelId);
 
             if (status is null)
             {
@@ -34,6 +34,29 @@ namespace Marain.UserNotifications
             }
 
             return status.DeliveryStatus;
+        }
+
+        /// <summary>
+        /// Gets the current <see cref="UserNotificationReadStatus"/> for the specified delivery channel.
+        /// </summary>
+        /// <param name="userNotification">The user notification to check.</param>
+        /// <param name="deliveryChannelId">The Id of the delivery channel to retrieve the status for.</param>
+        /// <returns>
+        /// The delivery status for the channel. If not explicitly set for the notification, the value
+        /// <see cref="UserNotificationReadStatus.Unknown"/> is returned.
+        /// </returns>
+        public static UserNotificationReadStatus GetReadStatusForChannel(
+            this UserNotification userNotification,
+            string deliveryChannelId)
+        {
+            UserNotificationStatus? status = userNotification.ChannelStatuses.FirstOrDefault(x => x.DeliveryChannelId == deliveryChannelId);
+
+            if (status is null)
+            {
+                return UserNotificationReadStatus.Unknown;
+            }
+
+            return status.ReadStatus;
         }
 
         /// <summary>
@@ -51,7 +74,7 @@ namespace Marain.UserNotifications
             UserNotificationDeliveryStatus newDeliveryStatus,
             DateTimeOffset effectiveDateTime)
         {
-            ImmutableArray<UserNotificationStatus> deliveryStatuses = notification.ChannelDeliveryStatuses;
+            ImmutableArray<UserNotificationStatus> deliveryStatuses = notification.ChannelStatuses;
             UserNotificationStatus? existingStatusForChannel = deliveryStatuses.FirstOrDefault(s => s.DeliveryChannelId == deliveryChannelId);
 
             var builder = deliveryStatuses.ToBuilder();
