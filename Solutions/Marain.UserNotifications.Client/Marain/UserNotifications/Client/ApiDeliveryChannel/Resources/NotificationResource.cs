@@ -5,7 +5,6 @@
 namespace Marain.UserNotifications.Client.ApiDeliveryChannel.Resources
 {
     using System;
-    using System.Collections.Generic;
     using System.Text.Json;
     using System.Text.Json.Serialization;
     using Menes.Hal;

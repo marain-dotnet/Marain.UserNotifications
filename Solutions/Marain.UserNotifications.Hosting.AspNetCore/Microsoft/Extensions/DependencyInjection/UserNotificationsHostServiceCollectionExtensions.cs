@@ -6,7 +6,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Linq;
     using Corvus.Azure.Storage.Tenancy;
-    using Corvus.Extensions.Json;
     using Corvus.Extensions.Json.Internal;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.Operations.Client.OperationsControl;
@@ -15,7 +14,6 @@ namespace Microsoft.Extensions.DependencyInjection
     using Marain.UserNotifications.OpenApi.ApiDeliveryChannel;
     using Menes;
     using Menes.Exceptions;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.Extensions.Configuration;
 
     /// <summary>

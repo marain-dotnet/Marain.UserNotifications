@@ -8,7 +8,6 @@ namespace Marain.UserNotifications.Client.Management
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Net.Http;
-    using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
     using Marain.UserNotifications.Client.Management.Requests;

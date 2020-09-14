@@ -6,7 +6,6 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
 {
     using System;
     using System.Linq;
-    using System.Runtime.Versioning;
     using System.Threading.Tasks;
     using Menes;
     using Menes.Hal;

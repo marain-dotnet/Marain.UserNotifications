@@ -5,9 +5,7 @@
 namespace Marain.UserNotifications.Client.Management.Requests
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using Corvus.Json;
 
     /// <summary>
     /// Request to create a new notification.

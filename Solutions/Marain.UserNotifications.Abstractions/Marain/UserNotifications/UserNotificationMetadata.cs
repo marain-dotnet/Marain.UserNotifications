@@ -7,7 +7,6 @@ namespace Marain.UserNotifications
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
-    using System.Linq;
 
     /// <summary>
     /// Class representing metadata for a <see cref="UserNotification"/>.

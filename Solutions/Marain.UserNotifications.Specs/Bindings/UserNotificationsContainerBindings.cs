@@ -5,11 +5,9 @@
 namespace Marain.UserNotifications.Specs.Bindings
 {
     using System;
-    using System.Linq;
     using Corvus.Azure.Storage.Tenancy;
     using Corvus.Configuration;
     using Corvus.Extensions.Json;
-    using Corvus.Extensions.Json.Internal;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
     using Marain.Tenancy.Client;

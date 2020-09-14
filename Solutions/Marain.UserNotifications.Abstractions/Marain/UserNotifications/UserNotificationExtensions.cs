@@ -26,14 +26,19 @@ namespace Marain.UserNotifications
             this UserNotification userNotification,
             string deliveryChannelId)
         {
-            UserNotificationStatus? status = userNotification.ChannelStatuses.FirstOrDefault(x => x.DeliveryChannelId == deliveryChannelId);
-
-            if (status is null)
+            if (userNotification is null)
             {
-                return UserNotificationDeliveryStatus.Unknown;
+                throw new ArgumentNullException(nameof(userNotification));
             }
 
-            return status.DeliveryStatus;
+            if (string.IsNullOrEmpty(deliveryChannelId))
+            {
+                throw new ArgumentNullException(nameof(deliveryChannelId));
+            }
+
+            return userNotification.ChannelStatuses
+                .SingleOrDefault(x => x.DeliveryChannelId == deliveryChannelId)
+                ?.DeliveryStatus ?? UserNotificationDeliveryStatus.Unknown;
         }
 
         /// <summary>
@@ -49,14 +54,19 @@ namespace Marain.UserNotifications
             this UserNotification userNotification,
             string deliveryChannelId)
         {
-            UserNotificationStatus? status = userNotification.ChannelStatuses.FirstOrDefault(x => x.DeliveryChannelId == deliveryChannelId);
-
-            if (status is null)
+            if (userNotification is null)
             {
-                return UserNotificationReadStatus.Unknown;
+                throw new ArgumentNullException(nameof(userNotification));
             }
 
-            return status.ReadStatus;
+            if (string.IsNullOrEmpty(deliveryChannelId))
+            {
+                throw new ArgumentNullException(nameof(deliveryChannelId));
+            }
+
+            return userNotification.ChannelStatuses
+                .SingleOrDefault(x => x.DeliveryChannelId == deliveryChannelId)
+                ?.ReadStatus ?? UserNotificationReadStatus.Unknown;
         }
 
         /// <summary>
@@ -70,6 +80,11 @@ namespace Marain.UserNotifications
         public static bool HasBeenReadOnAtLeastOneChannel(
             this UserNotification userNotification)
         {
+            if (userNotification is null)
+            {
+                throw new ArgumentNullException(nameof(userNotification));
+            }
+
             return userNotification.ChannelStatuses.Any(s => s.ReadStatus == UserNotificationReadStatus.Read);
         }
 
@@ -88,6 +103,16 @@ namespace Marain.UserNotifications
             UserNotificationDeliveryStatus newDeliveryStatus,
             DateTimeOffset effectiveDateTime)
         {
+            if (notification is null)
+            {
+                throw new ArgumentNullException(nameof(notification));
+            }
+
+            if (string.IsNullOrEmpty(deliveryChannelId))
+            {
+                throw new ArgumentNullException(nameof(deliveryChannelId));
+            }
+
             ImmutableArray<UserNotificationStatus> deliveryStatuses = notification.ChannelStatuses;
             UserNotificationStatus? existingStatusForChannel = deliveryStatuses.FirstOrDefault(s => s.DeliveryChannelId == deliveryChannelId);
 
@@ -96,7 +121,7 @@ namespace Marain.UserNotifications
             if (!(existingStatusForChannel is null))
             {
                 builder.Remove(existingStatusForChannel);
-                builder.Add(existingStatusForChannel.WithDeliveryStatus(newDeliveryStatus, effectiveDateTime.ToUniversalTime()));
+                builder.Add(existingStatusForChannel.WithDeliveryStatus(newDeliveryStatus, effectiveDateTime));
             }
             else
             {

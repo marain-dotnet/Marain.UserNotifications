@@ -20,7 +20,6 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Testing.SpecFlow;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications.Specs.Bindings;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
