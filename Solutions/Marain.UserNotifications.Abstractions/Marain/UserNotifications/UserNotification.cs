@@ -27,7 +27,7 @@ namespace Marain.UserNotifications
         /// <param name="timestamp">The <see cref="Timestamp" />.</param>
         /// <param name="properties">The <see cref="Properties" />.</param>
         /// <param name="metadata">The <see cref="Metadata"/>.</param>
-        /// <param name="channelDeliveryStatuses">The <see cref="ChannelStatuses"/>.</param>
+        /// <param name="channelStatuses">The <see cref="ChannelStatuses"/>.</param>
         public UserNotification(
             string? id,
             string notificationType,
@@ -36,7 +36,7 @@ namespace Marain.UserNotifications
             IPropertyBag properties,
             UserNotificationMetadata metadata,
 #pragma warning disable SA1011 // Closing square brackets should be spaced correctly
-            IEnumerable<UserNotificationStatus>? channelDeliveryStatuses = null)
+            IEnumerable<UserNotificationStatus>? channelStatuses = null)
 #pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         {
             this.Id = id;
@@ -45,7 +45,7 @@ namespace Marain.UserNotifications
             this.Timestamp = timestamp != default ? timestamp.ToUniversalTime() : throw new ArgumentException(nameof(timestamp));
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
-            this.ChannelStatuses = channelDeliveryStatuses?.ToImmutableArray() ?? ImmutableArray<UserNotificationStatus>.Empty;
+            this.ChannelStatuses = channelStatuses?.ToImmutableArray() ?? ImmutableArray<UserNotificationStatus>.Empty;
         }
 
         /// <summary>
