@@ -99,7 +99,7 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel.Resources
                 if (this.HalDocument.TryGetProperty("timestamp", out JsonElement timestamp) &&
                     timestamp.ValueKind == JsonValueKind.String)
                 {
-                    return DateTimeOffset.Parse(timestamp.GetString());
+                    return timestamp.GetDateTimeOffset();
                 }
 
                 throw new Exception("Schema violation - this value is required.");
