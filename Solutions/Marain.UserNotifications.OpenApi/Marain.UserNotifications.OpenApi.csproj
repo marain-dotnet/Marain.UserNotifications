@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Marain.UserNotifications.Abstractions\Marain.UserNotifications.Abstractions.csproj" />
+    <ProjectReference Include="..\Marain.UserNotifications.Client\Marain.UserNotifications.Client.csproj" />
   </ItemGroup>
 
 </Project>

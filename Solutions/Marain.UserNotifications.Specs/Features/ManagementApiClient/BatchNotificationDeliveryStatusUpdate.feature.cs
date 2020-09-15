@@ -20,11 +20,11 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Create Notifications via the client library")]
+    [NUnit.Framework.DescriptionAttribute("Batch update of notification delivery statuses via the client library")]
     [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
     [NUnit.Framework.CategoryAttribute("useApis")]
     [NUnit.Framework.CategoryAttribute("useTransientTenant")]
-    public partial class CreateNotificationsViaTheClientLibraryFeature
+    public partial class BatchUpdateOfNotificationDeliveryStatusesViaTheClientLibraryFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -34,14 +34,14 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
                 "useApis",
                 "useTransientTenant"};
         
-#line 1 "CreateNotifications.feature"
+#line 1 "BatchNotificationDeliveryStatusUpdate.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApiClient", "Create Notifications via the client library", null, ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApiClient", "Batch update of notification delivery statuses via the client library", null, ProgrammingLanguage.CSharp, new string[] {
                         "perFeatureContainer",
                         "useApis",
                         "useTransientTenant"});
@@ -83,20 +83,12 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Create notifications")]
-        [NUnit.Framework.TestCaseAttribute("Single user", "marain.test.notification.v1", "[\"304ABC0E-08AF-4EF5-A9AC-281B67D633F4\"]", "2012-03-19T07:22Z", "{ \"prop1\": \"val1\" }", "[\"id1\", \"id2\"]", null)]
-        [NUnit.Framework.TestCaseAttribute("Multiple users", "marain.test.notification.v1", "[\"304ABC0E-08AF-4EF5-A9AC-281B67D633F4\", \"5547F9E1-A3B1-4D39-BFA9-73129EF475A9\"]", "2012-03-19T07:22Z", "{ \"prop1\": \"val1\" }", "[\"id1\", \"id2\"]", null)]
-        public virtual void CreateNotifications(string notes, string notificationType, string userIds, string timestamp, string propertiesJson, string correlationIds, string[] exampleTags)
+        [NUnit.Framework.DescriptionAttribute("Set delivery state of a subset of notifications for a user")]
+        public virtual void SetDeliveryStateOfASubsetOfNotificationsForAUser()
         {
-            string[] tagsOfScenario = exampleTags;
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            argumentsOfScenario.Add("Notes", notes);
-            argumentsOfScenario.Add("NotificationType", notificationType);
-            argumentsOfScenario.Add("UserIds", userIds);
-            argumentsOfScenario.Add("Timestamp", timestamp);
-            argumentsOfScenario.Add("PropertiesJson", propertiesJson);
-            argumentsOfScenario.Add("CorrelationIds", correlationIds);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create notifications", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Set delivery state of a subset of notifications for a user", null, tagsOfScenario, argumentsOfScenario);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -117,20 +109,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
-                            "NotificationType",
-                            "UserIds",
-                            "Timestamp",
-                            "PropertiesJson",
-                            "CorrelationIds"});
-                table9.AddRow(new string[] {
-                            string.Format("{0}", notificationType),
-                            string.Format("{0}", userIds),
-                            string.Format("{0}", timestamp),
-                            string.Format("{0}", propertiesJson),
-                            string.Format("{0}", correlationIds)});
 #line 8
- testRunner.When("I use the client to send a management API request to create a new notification", ((string)(null)), table9, "When ");
+ testRunner.Given("I have created and stored 25 notifications in the current transient tenant with t" +
+                        "imestamps at 30 second intervals for the user with Id \'user100\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 9
+ testRunner.And("I have created and stored 5 notifications in the current transient tenant with ti" +
+                        "mestamps at 30 second intervals for the user with Id \'user101\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 10
+ testRunner.When("I use the client to send a management API request to batch update the delivery st" +
+                        "atus of the first 10 stored notifications for user \'user100\' to \'Delivered\' for " +
+                        "the delivery channel with Id \'api\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
  testRunner.Then("no exception should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

@@ -44,6 +44,7 @@ namespace Marain.UserNotifications.Management.Host
             services.AddSingleton<IOpenApiService, CreateNotificationsService>();
             services.AddSingleton<IOpenApiService, GetNotificationsService>();
             services.AddSingleton<IOpenApiService, GetNotificationStatusService>();
+            services.AddSingleton<IOpenApiService, BatchDeliveryStatusUpdateService>();
 
             services.AddOpenApiHttpRequestHosting<DurableFunctionsOpenApiContext>(
                 hostConfig =>

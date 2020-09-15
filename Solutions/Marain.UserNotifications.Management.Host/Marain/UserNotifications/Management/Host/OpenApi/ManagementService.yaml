@@ -226,10 +226,13 @@ components:
       description: A request to update the "delivered" status of a notification
       type: object
       properties:
+        deliveryChannelId:
+          description: The delivery channel that this update applies to.
+          type: string
         newStatus:
           description: The new status for the notification
           type: string
-          enum: ['NotTracked', 'Undelivered', 'Delivered']
+          enum: ['notTracked', 'undelivered', 'delivered']
         updateTimestamp:
           description: The time at which the status change occurred
           type: string
@@ -251,7 +254,7 @@ components:
         newStatus:
           description: The new status for the notification
           type: string
-          enum: ['NotTracked', 'Unread', 'Read']
+          enum: ['notTracked', 'unread', 'read']
         updateTimestamp:
           description: The time at which the status change occurred
           type: string
@@ -271,7 +274,7 @@ components:
           deliveryStatus:
             description: The delivery status for the channel. Not all channels will be able to track this, hence the need for more than just a true/false status.
             type: string
-            enum: ['Unknown', 'NotTracked', 'Undelivered', 'Delivered']
+            enum: ['unknown', 'notTracked', 'undelivered', 'delivered']
           deliveryStatusLastUpdated:
             description: The date/time of the last update to the delivery status.
             type: string
@@ -279,7 +282,7 @@ components:
           readStatus:
             description: The read status for the channel. Not all channels will be able to track this, hence the need for more than just a true/false status.
             type: string
-            enum: ['Unknown', 'NotTracked', 'Unread', 'Read']
+            enum: ['unknown', 'notTracked', 'unread', 'read']
           readStatusLastUpdated:
             description: The date/time of the last update to the delivery status.
             type: string

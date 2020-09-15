@@ -20,5 +20,10 @@ namespace Marain.UserNotifications.Client.Management.Requests
         /// Gets or sets the time at which the status change occurred.
         /// </summary>
         public DateTimeOffset UpdateTimestamp { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Id of the delivery channel whose status is being updated.
+        /// </summary>
+        public string DeliveryChannelId { get; set; }
     }
 }

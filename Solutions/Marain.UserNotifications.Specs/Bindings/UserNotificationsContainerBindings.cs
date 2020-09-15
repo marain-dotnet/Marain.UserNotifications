@@ -41,7 +41,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                     services.AddSingleton<IConfiguration>(config);
 
                     services.AddLogging();
-                    services.AddJsonSerializerSettings();
+                    services.AddOpenApiJsonSerializerSettings();
 
                     // Tenancy service client.
                     services.AddSingleton(sp =>
@@ -94,7 +94,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                     sp.AddSingleton<IConfiguration>(config);
 
                     sp.AddLogging();
-                    sp.AddJsonSerializerSettings();
+                    sp.AddOpenApiJsonSerializerSettings();
                 });
         }
 

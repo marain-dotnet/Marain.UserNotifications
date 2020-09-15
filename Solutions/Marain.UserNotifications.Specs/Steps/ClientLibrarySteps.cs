@@ -92,6 +92,45 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [When("I use the client to send a management API request to batch update the delivery status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToBatchUpdateTheDeliveryStatusOfTheFirstStoredNotificationsForUserToForTheDeliveryChannelWithId(
+            int countToUpdate,
+            string userId,
+            UpdateNotificationDeliveryStatusRequestNewStatus targetStatus,
+            string deliveryChannelId)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            List<UserNotification> notifications = this.scenarioContext.Get<List<UserNotification>>(DataSetupSteps.CreatedNotificationsKey);
+            BatchDeliveryStatusUpdateRequestItem[] requestBatch = notifications
+                .Where(n => n.UserId == userId)
+                .Take(countToUpdate)
+                .Select(
+                    n =>
+                    new BatchDeliveryStatusUpdateRequestItem
+                    {
+                        DeliveryChannelId = deliveryChannelId,
+                        NewStatus = targetStatus,
+                        NotificationId = n.Id!,
+                        UpdateTimestamp = DateTimeOffset.UtcNow,
+                    }).ToArray();
+
+            try
+            {
+                ApiResponse result = await client.BatchDeliveryStatusUpdateAsync(
+                    transientTenantId,
+                    requestBatch,
+                    CancellationToken.None).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
         [Given("I have used the client to send an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         [When("I use the client to send an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestForNotificationsForTheUserWithId(int? count, string userId)
@@ -204,6 +243,41 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             NotificationResource response = this.GetApiResponseBody<NotificationResource>();
             Assert.AreNotEqual(default(WebLink), response.EnumerateLinks(linkRelationName).SingleOrDefault());
+        }
+
+        [Then("the notification in the API delivery channel response should have a Notification Type of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveANotificationTypeOf(string expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.NotificationType);
+        }
+
+        [Then("the notification in the API delivery channel response should have a User Id of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveAUserIdOf(string expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.UserId);
+        }
+
+        [Then("the notification in the API delivery channel response should have a Timestamp of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveATimestampOf(DateTimeOffset expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.Timestamp);
+        }
+
+        [Then("the notification in the API delivery channel response should have a Delivery Status of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveADeliveryStatusOf(bool expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.Delivered);
+        }
+
+        [Then("the notification in the API delivery channel response should have a Read Status of '(.*)'")]
+        public void ThenTheNotificationInTheAPIDeliveryChannelResponseShouldHaveAReadStatusOf(bool expected)
+        {
+            NotificationResource response = this.GetApiResponseBody<NotificationResource>();
+            Assert.AreEqual(expected, response.Read);
         }
 
         private static CreateNotificationsRequest BuildCreateNotificationsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)

@@ -124,6 +124,12 @@ components:
             type: string
             format: date-time
             description: The date and time at which the event being notified took place.
+          delivered:
+            description: A boolean indicating whether or not the notification has been delivered via at least one channel.
+            type: boolean
+          read:
+            description: A boolean indicating whether or not the notification has been read/acknowledged via at least one channel.
+            type: boolean
           _links:
             type: object
             properties:

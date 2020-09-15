@@ -5,16 +5,23 @@
 namespace Marain.UserNotifications.Specs.Steps
 {
     using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using Corvus.Extensions.Json;
     using Corvus.Retry;
     using Corvus.Retry.Policies;
     using Corvus.Retry.Strategies;
     using Corvus.Testing.SpecFlow;
+    using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications.Specs.Bindings;
+    using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
@@ -54,7 +61,11 @@ namespace Marain.UserNotifications.Specs.Steps
         public void ThenTheResultStatusCodeShouldBe(HttpStatusCode expectedStatusCode)
         {
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
-            Assert.AreEqual(expectedStatusCode, response.StatusCode);
+
+            // If present, we'll use the response content as a message in case of failure
+            this.scenarioContext.TryGetValue(ResponseContent, out string responseContent);
+
+            Assert.AreEqual(expectedStatusCode, response.StatusCode, responseContent);
         }
 
         [When("I send a management API request to create a new notification:")]
@@ -77,6 +88,28 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [Given("I have sent a management API request to batch update the delivery status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
+        [When("I send a management API request to batch update the delivery status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
+        public Task WhenISendAManagementAPIRequestToBatchUpdateTheDeliveryStatusOfTheFirstStoredNotificationsToForTheDeliveryChannelWithId(int countToUpdate, string userId, UserNotificationDeliveryStatus targetStatus, string deliveryChannelId)
+        {
+            // Get the notifications from session state
+            List<UserNotification> notifications = this.scenarioContext.Get<List<UserNotification>>(DataSetupSteps.CreatedNotificationsKey);
+            BatchDeliveryStatusUpdateRequestItem[] requestBatch = notifications
+                .Where(n => n.UserId == userId)
+                .Take(countToUpdate)
+                .Select(
+                    n =>
+                    new BatchDeliveryStatusUpdateRequestItem(
+                        n.Id!,
+                        targetStatus,
+                        DateTimeOffset.UtcNow,
+                        deliveryChannelId)).ToArray();
+
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            return this.SendPostRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/batchdeliverystatusupdate", requestBatch);
+        }
+
         [Given("I send an API delivery request for the user notification with the same Id as the user notification called '(.*)'")]
         public Task GivenISendAnAPIDeliveryRequestForTheUserNotificationWithTheSameIdAsTheUserNotificationCalled(string notificationName)
         {
@@ -90,6 +123,25 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
             Assert.IsTrue(response.Headers.Contains(headerName));
+        }
+
+        [Given("I have waited for up to (.*) seconds for the long running operation whose Url is in the response Location header to have a '(.*)' of '(.*)'")]
+        public Task GivenIHaveWaitedForUpToSecondsForTheLongRunningOperationWhoseUrlIsInTheResponseLocationHeaderToHaveAOf(int timeout, string operationPropertyPath, string expectedOperationPropertyValue)
+        {
+            HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
+            Uri operationLocation = response.Headers.Location;
+
+            return this.LongRunningOperationPropertyCheck(
+                operationLocation,
+                operationPropertyPath,
+                timeout,
+                val =>
+                {
+                    if (val != expectedOperationPropertyValue)
+                    {
+                        throw new Exception($"Property '{operationPropertyPath}' has the value '{val}', not the required value '{expectedOperationPropertyValue}'");
+                    }
+                });
         }
 
         [Then("the long running operation whose Url is in the response Location header should have a '(.*)' of '(.*)' within (.*) seconds")]
@@ -195,6 +247,24 @@ namespace Marain.UserNotifications.Specs.Steps
             {
                 var parsedResponse = JObject.Parse(content);
                 this.scenarioContext.Set(parsedResponse);
+            }
+        }
+
+        private async Task SendPostRequest(Uri baseUri, string path, object data)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            string requestJson = JsonConvert.SerializeObject(data, serializerSettingsProvider.Instance);
+            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await HttpClient.PostAsync(new Uri(baseUri, path), content).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(ResponseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
             }
         }
     }

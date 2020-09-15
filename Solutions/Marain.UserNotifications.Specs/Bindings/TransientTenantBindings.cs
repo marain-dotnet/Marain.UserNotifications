@@ -12,7 +12,6 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Testing.AzureFunctions;
     using Corvus.Testing.AzureFunctions.SpecFlow;
     using Corvus.Testing.SpecFlow;
-    using Dynamitey;
     using Marain.TenantManagement.EnrollmentConfiguration;
     using Marain.TenantManagement.Testing;
     using Marain.UserNotifications.Storage.AzureTable;

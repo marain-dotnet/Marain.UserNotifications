@@ -5,7 +5,6 @@
 namespace Marain.UserNotifications.Client.ApiDeliveryChannel.Resources
 {
     using System;
-    using System.Collections.Generic;
     using System.Text.Json;
     using System.Text.Json.Serialization;
     using Menes.Hal;
@@ -98,9 +97,9 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel.Resources
             get
             {
                 if (this.HalDocument.TryGetProperty("timestamp", out JsonElement timestamp) &&
-                    timestamp.ValueKind == JsonValueKind.Object)
+                    timestamp.ValueKind == JsonValueKind.String)
                 {
-                    return DateTimeOffset.Parse(timestamp.GetString());
+                    return timestamp.GetDateTimeOffset();
                 }
 
                 throw new Exception("Schema violation - this value is required.");

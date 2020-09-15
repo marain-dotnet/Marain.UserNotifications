@@ -12,7 +12,6 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
     using Menes;
     using Menes.Exceptions;
     using Menes.Hal;
-    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Implements the user notifications retrieval endpoint for the API delivery channel.

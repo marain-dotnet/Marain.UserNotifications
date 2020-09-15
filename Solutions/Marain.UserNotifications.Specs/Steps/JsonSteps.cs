@@ -4,6 +4,7 @@
 
 namespace Marain.UserNotifications.Specs
 {
+    using System;
     using System.Linq;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
@@ -31,6 +32,24 @@ namespace Marain.UserNotifications.Specs
             JToken actualToken = this.GetRequiredTokenFromResponseObject(propertyPath);
 
             string actualValue = actualToken.Value<string>();
+            Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was '{expectedValue}', but actual value was '{actualValue}'");
+        }
+
+        [Then("the response content should have a boolean property called '(.*)' with value '(.*)'")]
+        public void ThenTheResponseContentShouldHaveABooleanPropertyCalledWithValue(string propertyPath, bool expectedValue)
+        {
+            JToken actualToken = this.GetRequiredTokenFromResponseObject(propertyPath);
+
+            bool actualValue = actualToken.Value<bool>();
+            Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was '{expectedValue}', but actual value was '{actualValue}'");
+        }
+
+        [Then("the response content should have a date-time property called '(.*)' with value '(.*)'")]
+        public void ThenTheResponseContentShouldHaveADate_TimePropertyCalledWithValue(string propertyPath, DateTimeOffset expectedValue)
+        {
+            JToken actualToken = this.GetRequiredTokenFromResponseObject(propertyPath);
+
+            DateTimeOffset actualValue = actualToken.ToObject<DateTimeOffset>();
             Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was '{expectedValue}', but actual value was '{actualValue}'");
         }
 
@@ -66,7 +85,7 @@ namespace Marain.UserNotifications.Specs
 
             foreach (JToken current in actualToken.ToArray())
             {
-                this.GetRequiredToken(current, itemPropertyPath);
+                GetRequiredToken(current, itemPropertyPath);
             }
         }
 
@@ -78,13 +97,13 @@ namespace Marain.UserNotifications.Specs
             this.scenarioContext.Set(valueAsString, storeAsName);
         }
 
-        private JToken GetRequiredTokenFromResponseObject(string propertyPath)
+        public JToken GetRequiredTokenFromResponseObject(string propertyPath)
         {
             JObject data = this.scenarioContext.Get<JObject>();
-            return this.GetRequiredToken(data, propertyPath);
+            return GetRequiredToken(data, propertyPath);
         }
 
-        private JToken GetRequiredToken(JToken data, string propertyPath)
+        public static JToken GetRequiredToken(JToken data, string propertyPath)
         {
             JToken token = data.SelectToken(propertyPath);
             Assert.IsNotNull(token, $"Could not locate a property with path '{propertyPath}' under the token with path '{data.Path}'");

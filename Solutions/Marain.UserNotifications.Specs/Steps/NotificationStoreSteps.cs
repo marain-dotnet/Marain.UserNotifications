@@ -47,6 +47,37 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [Given("the user notification called '(.*)' has the etag (.*)")]
+        public void GivenTheUserNotificationCalledHasTheEtag_Z(string name, string etag)
+        {
+            UserNotification notification = this.scenarioContext.Get<UserNotification>(name);
+
+            // Changing the etag of a notification is something we'd only want to do inside a test, so there isn't
+            // a "WithEtag" method on the notification. As such, we need to construct the updated notification manually.
+            var updatedNotification = new UserNotification(
+                notification.Id,
+                notification.NotificationType,
+                notification.UserId,
+                notification.Timestamp,
+                notification.Properties,
+                new UserNotificationMetadata(notification.Metadata.CorrelationIds, etag),
+                notification.ChannelStatuses);
+
+            this.scenarioContext.Set(updatedNotification, name);
+        }
+
+        [Given("I update the delivery status of the notification called '(.*)' to '(.*)' for the delivery channel '(.*)' and call it '(.*)'")]
+        public void GivenIUpdateTheDeliveryStatusOfTheNotificationCalledToForTheDeliveryChannelAndCallIt(
+            string originalName,
+            UserNotificationDeliveryStatus deliveryStatus,
+            string deliveryChannelId,
+            string newName)
+        {
+            UserNotification notification = this.scenarioContext.Get<UserNotification>(originalName);
+            UserNotification updatedNotification = notification.WithChannelDeliveryStatus(deliveryChannelId, deliveryStatus, DateTimeOffset.UtcNow);
+            this.scenarioContext.Set(updatedNotification, newName);
+        }
+
         [When("I tell the user notification store to store the user notification called '(.*)' and call the result '(.*)'")]
         public async Task WhenITellTheUserNotificationStoreToStoreTheUserNotificationCalledAndCallTheResult(string notificationName, string resultName)
         {

@@ -10,6 +10,7 @@ namespace Marain.UserNotifications.Client
     using System.Net.Http;
     using System.Text;
     using System.Text.Json;
+    using System.Text.Json.Serialization;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -28,6 +29,8 @@ namespace Marain.UserNotifications.Client
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
+
+            this.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 
             this.Client = httpClient;
         }
@@ -139,9 +142,14 @@ namespace Marain.UserNotifications.Client
             }
             catch (HttpRequestException ex)
             {
+                string responseContent = (response is null || response.Content is null)
+                    ? string.Empty
+                    : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
                 throw new UserNotificationsApiException("Unexpected error when calling service; see InnerException for details.", ex)
                 {
                     StatusCode = response?.StatusCode,
+                    ResponseMessage = responseContent,
                 };
             }
         }

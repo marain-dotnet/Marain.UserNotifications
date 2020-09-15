@@ -20,6 +20,8 @@ namespace Marain.UserNotifications.Specs.Steps
     [Binding]
     public class DataSetupSteps
     {
+        public const string CreatedNotificationsKey = "CreatedNotificationsKey";
+
         private readonly IServiceProvider serviceProvider;
         private readonly FeatureContext featureContext;
         private readonly ScenarioContext scenarioContext;
@@ -63,7 +65,7 @@ namespace Marain.UserNotifications.Specs.Steps
             var offset = TimeSpan.FromSeconds(interval);
             DateTimeOffset timestamp = DateTimeOffset.UtcNow - offset;
 
-            var tasks = new List<Task>();
+            var tasks = new List<Task<UserNotification>>();
             var propertiesDictionary = new Dictionary<string, object>
             {
                 { "prop1", "val1" },
@@ -81,7 +83,16 @@ namespace Marain.UserNotifications.Specs.Steps
                 timestamp -= offset;
             }
 
-            await Task.WhenAll(tasks).ConfigureAwait(false);
+            UserNotification[] newlyCreatedNotifications = await Task.WhenAll(tasks).ConfigureAwait(false);
+
+            // Store the notifications in session state
+            if (!this.scenarioContext.TryGetValue(CreatedNotificationsKey, out List<UserNotification> createdNotifications))
+            {
+                createdNotifications = new List<UserNotification>();
+                this.scenarioContext.Set(createdNotifications, CreatedNotificationsKey);
+            }
+
+            createdNotifications.AddRange(newlyCreatedNotifications);
         }
 
         [Given("I have created and stored a notification in the current transient tenant and called the result '(.*)'")]

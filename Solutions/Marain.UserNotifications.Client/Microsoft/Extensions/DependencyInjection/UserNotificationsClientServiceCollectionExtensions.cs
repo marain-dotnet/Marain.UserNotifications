@@ -5,7 +5,6 @@
 namespace Microsoft.Extensions.DependencyInjection
 {
     using System;
-    using System.Text.Json;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
 
