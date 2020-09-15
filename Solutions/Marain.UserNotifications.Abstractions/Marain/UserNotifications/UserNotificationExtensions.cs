@@ -14,15 +14,14 @@ namespace Marain.UserNotifications
     public static class UserNotificationExtensions
     {
         /// <summary>
-        /// Gets the current <see cref="UserNotificationDeliveryStatus"/> for the specified delivery channel.
+        /// Gets the current <see cref="UserNotificationStatus"/> for the specified delivery channel.
         /// </summary>
         /// <param name="userNotification">The user notification to check.</param>
         /// <param name="deliveryChannelId">The Id of the delivery channel to retrieve the status for.</param>
         /// <returns>
-        /// The delivery status for the channel. If not explicitly set for the notification, the value
-        /// <see cref="UserNotificationDeliveryStatus.Unknown"/> is returned.
+        /// The status for the channel, or null if not set.
         /// </returns>
-        public static UserNotificationDeliveryStatus GetDeliveryStatusForChannel(
+        public static UserNotificationStatus? GetStatusForChannel(
             this UserNotification userNotification,
             string deliveryChannelId)
         {
@@ -37,8 +36,24 @@ namespace Marain.UserNotifications
             }
 
             return userNotification.ChannelStatuses
-                .SingleOrDefault(x => x.DeliveryChannelId == deliveryChannelId)
-                ?.DeliveryStatus ?? UserNotificationDeliveryStatus.Unknown;
+                .SingleOrDefault(x => x.DeliveryChannelId == deliveryChannelId);
+        }
+
+        /// <summary>
+        /// Gets the current <see cref="UserNotificationDeliveryStatus"/> for the specified delivery channel.
+        /// </summary>
+        /// <param name="userNotification">The user notification to check.</param>
+        /// <param name="deliveryChannelId">The Id of the delivery channel to retrieve the status for.</param>
+        /// <returns>
+        /// The delivery status for the channel. If not explicitly set for the notification, the value
+        /// <see cref="UserNotificationDeliveryStatus.Unknown"/> is returned.
+        /// </returns>
+        public static UserNotificationDeliveryStatus GetDeliveryStatusForChannel(
+            this UserNotification userNotification,
+            string deliveryChannelId)
+        {
+            return userNotification.GetStatusForChannel(deliveryChannelId)?.DeliveryStatus
+                ?? UserNotificationDeliveryStatus.Unknown;
         }
 
         /// <summary>
@@ -54,19 +69,8 @@ namespace Marain.UserNotifications
             this UserNotification userNotification,
             string deliveryChannelId)
         {
-            if (userNotification is null)
-            {
-                throw new ArgumentNullException(nameof(userNotification));
-            }
-
-            if (string.IsNullOrEmpty(deliveryChannelId))
-            {
-                throw new ArgumentNullException(nameof(deliveryChannelId));
-            }
-
-            return userNotification.ChannelStatuses
-                .SingleOrDefault(x => x.DeliveryChannelId == deliveryChannelId)
-                ?.ReadStatus ?? UserNotificationReadStatus.Unknown;
+            return userNotification.GetStatusForChannel(deliveryChannelId)?.ReadStatus
+                ?? UserNotificationReadStatus.Unknown;
         }
 
         /// <summary>
