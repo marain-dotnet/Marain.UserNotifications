@@ -43,7 +43,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
 
             links.MapByContentTypeAndRelationTypeAndOperationId<UserNotification>(
                 "mark-read",
-                UpdateUserNotificationReadStatusService.MarkNotificationReadOperationId);
+                MarkNotificationAsReadService.MarkNotificationReadOperationId);
         }
 
         /// <inheritdoc/>

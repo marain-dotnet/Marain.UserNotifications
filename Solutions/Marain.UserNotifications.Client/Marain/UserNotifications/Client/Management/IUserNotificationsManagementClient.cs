@@ -22,7 +22,7 @@ namespace Marain.UserNotifications.Client.Management
         Task<ApiResponse> CreateNotificationsAsync(
             string tenantId,
             CreateNotificationsRequest body,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default);
 
         /// <summary>Updates delivery statuses for a batch of user notifications.</summary>
         /// <param name="tenantId">The tenant within which the request should operate.</param>
@@ -32,7 +32,7 @@ namespace Marain.UserNotifications.Client.Management
         Task<ApiResponse> BatchDeliveryStatusUpdateAsync(
             string tenantId,
             IEnumerable<BatchDeliveryStatusUpdateRequestItem> body,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default);
 
         /// <summary>Updates read statuses for a batch of user notifications.</summary>
         /// <param name="tenantId">The tenant within which the request should operate.</param>
@@ -42,6 +42,6 @@ namespace Marain.UserNotifications.Client.Management
         Task<ApiResponse> BatchReadStatusUpdateAsync(
             string tenantId,
             IEnumerable<BatchReadStatusUpdateRequestItem> body,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default);
     }
 }

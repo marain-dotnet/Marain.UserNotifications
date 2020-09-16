@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton<IOpenApiService, GetNotificationService>();
             services.AddSingleton<IOpenApiService, GetNotificationsForUserService>();
-            services.AddSingleton<IOpenApiService, UpdateUserNotificationReadStatusService>();
+            services.AddSingleton<IOpenApiService, MarkNotificationAsReadService>();
 
             return services;
         }
