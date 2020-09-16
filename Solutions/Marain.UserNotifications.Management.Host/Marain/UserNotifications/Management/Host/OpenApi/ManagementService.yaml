@@ -38,6 +38,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+        '501':
+          description: Not implemented
 
     put:
       summary: Create a new notification for one or more users
