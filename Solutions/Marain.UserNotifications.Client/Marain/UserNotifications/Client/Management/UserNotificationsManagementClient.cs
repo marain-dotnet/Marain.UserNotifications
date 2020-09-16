@@ -6,7 +6,6 @@ namespace Marain.UserNotifications.Client.Management
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;

@@ -6,14 +6,11 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
 {
     using System;
     using System.Threading.Tasks;
-    using Corvus.Monitoring.Instrumentation;
-    using Corvus.Tenancy;
     using Marain.Services.Tenancy;
     using Marain.UserNotifications.Client;
     using Marain.UserNotifications.Client.Management;
     using Marain.UserNotifications.Client.Management.Requests;
     using Menes;
-    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Implements the mark notification as read for the API delivery channel.

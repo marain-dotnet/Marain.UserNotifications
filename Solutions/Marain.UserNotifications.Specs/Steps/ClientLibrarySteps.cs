@@ -23,7 +23,6 @@ namespace Marain.UserNotifications.Specs.Steps
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
-    using Tavis.UriTemplates;
     using TechTalk.SpecFlow;
 
     [Binding]
