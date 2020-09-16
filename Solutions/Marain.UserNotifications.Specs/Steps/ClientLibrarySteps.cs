@@ -23,6 +23,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
+    using Tavis.UriTemplates;
     using TechTalk.SpecFlow;
 
     [Binding]
@@ -170,6 +171,7 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [Given("I have used the client to send an API delivery request for (.*) notification for the user with Id '(.*)'")]
         [Given("I have used the client to send an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         [When("I use the client to send an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestForNotificationsForTheUserWithId(int? count, string userId)
@@ -234,6 +236,27 @@ namespace Marain.UserNotifications.Specs.Steps
                     nextLink.Href).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When("I use the client to send a request to mark a notification as read using the Url from the notififcation in the client response")]
+        public async Task WhenIUseTheClientToSendARequestToMarkANotificationAsReadUsingTheUrlFromTheNotififcationInTheClientResponse()
+        {
+            PagedNotificationListResource previousResponse = this.GetApiResponseBody<PagedNotificationListResource>();
+            WebLink targetLink = previousResponse.Items.First().EnumerateLinks("mark-read").Single();
+
+            IUserNotificationsApiDeliveryChannelClient client = this.serviceProvider.GetRequiredService<IUserNotificationsApiDeliveryChannelClient>();
+
+            try
+            {
+                ApiResponse updateResponse = await client.MarkNotificationAsReadByLinkAsync(
+                    targetLink.Href).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(updateResponse.StatusCode, updateResponse.Headers);
             }
             catch (Exception ex)
             {

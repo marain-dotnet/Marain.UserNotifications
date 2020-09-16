@@ -73,26 +73,5 @@ namespace Marain.UserNotifications.Client.Management
 
             return this.CallLongRunningOperationEndpointAsync(requestUri, HttpMethod.Put, body, cancellationToken);
         }
-
-        private async Task<ApiResponse> CallLongRunningOperationEndpointAsync<T>(
-            Uri requestUri,
-            HttpMethod method,
-            T body,
-            CancellationToken cancellationToken)
-        {
-            if (body is null)
-            {
-                throw new ArgumentNullException(nameof(body));
-            }
-
-            HttpRequestMessage request = this.BuildRequest(method, requestUri, body);
-
-            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
-
-            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
-            builder.Add("Location", response.Headers.Location.ToString());
-
-            return new ApiResponse(response.StatusCode, builder.ToImmutable());
-        }
     }
 }
