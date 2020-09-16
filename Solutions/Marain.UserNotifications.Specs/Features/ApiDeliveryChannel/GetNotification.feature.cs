@@ -126,8 +126,8 @@ this.ScenarioInitialize(scenarioInfo);
                         "ed the result \'output\'", ((string)(null)), table2, "Given ");
 #line hidden
 #line 11
- testRunner.And("I send an API delivery request for the user notification with the same Id as the " +
-                        "user notification called \'output\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("I send an API delivery request for the user notification with the same Id as the " +
+                        "user notification called \'output\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 12
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
