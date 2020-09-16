@@ -33,5 +33,15 @@ namespace Marain.UserNotifications.Client.Management
             string tenantId,
             IEnumerable<BatchDeliveryStatusUpdateRequestItem> body,
             CancellationToken cancellationToken);
+
+        /// <summary>Updates read statuses for a batch of user notifications.</summary>
+        /// <param name="tenantId">The tenant within which the request should operate.</param>
+        /// <param name="body">The update batch.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>A task representing the operation status.</returns>
+        Task<ApiResponse> BatchReadStatusUpdateAsync(
+            string tenantId,
+            IEnumerable<BatchReadStatusUpdateRequestItem> body,
+            CancellationToken cancellationToken);
     }
 }

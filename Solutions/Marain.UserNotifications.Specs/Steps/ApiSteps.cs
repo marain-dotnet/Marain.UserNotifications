@@ -110,6 +110,28 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.SendPostRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/batchdeliverystatusupdate", requestBatch);
         }
 
+        [Given("I have sent a management API request to batch update the read status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
+        [When("I send a management API request to batch update the read status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
+        public Task WhenISendAManagementAPIRequestToBatchUpdateTheReadStatusOfTheFirstStoredNotificationsForUserToForTheDeliveryChannelWithId(int countToUpdate, string userId, UserNotificationReadStatus targetStatus, string deliveryChannelId)
+        {
+            // Get the notifications from session state
+            List<UserNotification> notifications = this.scenarioContext.Get<List<UserNotification>>(DataSetupSteps.CreatedNotificationsKey);
+            BatchReadStatusUpdateRequestItem[] requestBatch = notifications
+                .Where(n => n.UserId == userId)
+                .Take(countToUpdate)
+                .Select(
+                    n =>
+                    new BatchReadStatusUpdateRequestItem(
+                        n.Id!,
+                        targetStatus,
+                        DateTimeOffset.UtcNow,
+                        deliveryChannelId)).ToArray();
+
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            return this.SendPostRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/batchreadstatusupdate", requestBatch);
+        }
+
         [Given("I send an API delivery request for the user notification with the same Id as the user notification called '(.*)'")]
         public Task GivenISendAnAPIDeliveryRequestForTheUserNotificationWithTheSameIdAsTheUserNotificationCalled(string notificationName)
         {

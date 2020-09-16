@@ -1,37 +1,36 @@
-﻿// <copyright file="UpdateNotificationDeliveryStatusRequest.cs" company="Endjin Limited">
+﻿// <copyright file="UpdateNotificationStatusRequestItem.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Marain.UserNotifications.Management.Host.OpenApi
 {
     using System;
-    using Marain.UserNotifications;
 
     /// <summary>
     /// A request to update the "delivered" status of a notification.
     /// </summary>
-    public class UpdateNotificationDeliveryStatusRequest
+    public class UpdateNotificationStatusRequestItem
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateNotificationDeliveryStatusRequest"/> class.
+        /// Initializes a new instance of the <see cref="UpdateNotificationStatusRequestItem"/> class.
         /// </summary>
-        /// <param name="newStatus">The <see cref="NewStatus" />.</param>
+        /// <param name="notificationId">The <see cref="NotificationId" />.</param>
         /// <param name="updateTimestamp">The <see cref="UpdateTimestamp" />.</param>
         /// <param name="deliveryChannelId">The <see cref="DeliveryChannelId" />.</param>
-        public UpdateNotificationDeliveryStatusRequest(
-            UserNotificationDeliveryStatus newStatus,
+        public UpdateNotificationStatusRequestItem(
+            string notificationId,
             DateTimeOffset updateTimestamp,
             string deliveryChannelId)
         {
-            this.NewStatus = newStatus;
+            this.NotificationId = notificationId;
             this.UpdateTimestamp = updateTimestamp;
             this.DeliveryChannelId = deliveryChannelId;
         }
 
         /// <summary>
-        /// Gets the new status for the notification.
+        /// Gets the Id of the notification to update.
         /// </summary>
-        public UserNotificationDeliveryStatus NewStatus { get; }
+        public string NotificationId { get; }
 
         /// <summary>
         /// Gets the time at which the status change occurred.

@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApi\BatchNotificationDeliveryStatusUpdate - Copy.feature.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.0.0" />
     <PackageReference Include="Corvus.Extensions.Newtonsoft.Json" Version="1.0.0" />
     <PackageReference Include="Corvus.Testing.SpecFlow" Version="1.0.2" />
@@ -65,5 +69,12 @@
 
   <ItemGroup>
     <EmbeddedResource Include="..\Marain.UserNotifications.Deployment\ServiceManifests\UserNotificationsServiceManifest.jsonc" Link="ServiceManifests\UserNotificationsServiceManifest.jsonc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\ManagementApi\BatchNotificationReadStatusUpdate.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
   </ItemGroup>
 </Project>

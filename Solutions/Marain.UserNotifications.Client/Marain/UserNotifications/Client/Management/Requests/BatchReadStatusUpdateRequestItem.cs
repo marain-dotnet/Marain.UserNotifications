@@ -1,4 +1,4 @@
-﻿// <copyright file="BatchDeliveryStatusUpdateRequestItem.cs" company="Endjin Limited">
+﻿// <copyright file="BatchReadStatusUpdateRequestItem.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -9,12 +9,12 @@ namespace Marain.UserNotifications.Client.Management.Requests
     /// <summary>
     /// Request data item that forms part of a batch update of delivery statuses.
     /// </summary>
-    public class BatchDeliveryStatusUpdateRequestItem
+    public class BatchReadStatusUpdateRequestItem
     {
         /// <summary>
         /// Gets or sets the new status for the notification.
         /// </summary>
-        public UpdateNotificationDeliveryStatusRequestNewStatus NewStatus { get; set; }
+        public UpdateNotificationReadStatusRequestNewStatus NewStatus { get; set; }
 
         /// <summary>
         /// Gets or sets the time at which the status change occurred.

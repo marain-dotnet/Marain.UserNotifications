@@ -131,6 +131,45 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [When("I use the client to send a management API request to batch update the read status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToBatchUpdateTheReadStatusOfTheFirstStoredNotificationsForUserToForTheDeliveryChannelWithId(
+            int countToUpdate,
+            string userId,
+            UpdateNotificationReadStatusRequestNewStatus targetStatus,
+            string deliveryChannelId)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            List<UserNotification> notifications = this.scenarioContext.Get<List<UserNotification>>(DataSetupSteps.CreatedNotificationsKey);
+            BatchReadStatusUpdateRequestItem[] requestBatch = notifications
+                .Where(n => n.UserId == userId)
+                .Take(countToUpdate)
+                .Select(
+                    n =>
+                    new BatchReadStatusUpdateRequestItem
+                    {
+                        DeliveryChannelId = deliveryChannelId,
+                        NewStatus = targetStatus,
+                        NotificationId = n.Id!,
+                        UpdateTimestamp = DateTimeOffset.UtcNow,
+                    }).ToArray();
+
+            try
+            {
+                ApiResponse result = await client.BatchReadStatusUpdateAsync(
+                    transientTenantId,
+                    requestBatch,
+                    CancellationToken.None).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
         [Given("I have used the client to send an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         [When("I use the client to send an API delivery request for (.*) notifications for the user with Id '(.*)'")]
         public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestForNotificationsForTheUserWithId(int? count, string userId)
