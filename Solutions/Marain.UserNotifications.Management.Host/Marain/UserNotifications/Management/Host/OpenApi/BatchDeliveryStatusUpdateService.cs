@@ -60,7 +60,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             var operationId = Guid.NewGuid();
             CreateOperationHeaders response = await this.operationsControlClient.CreateOperationAsync(
                 delegatedTenantId,
-                operationId);
+                operationId).ConfigureAwait(false);
 
             IDurableOrchestrationClient orchestrationClient = context.AsDurableFunctionsOpenApiContext().OrchestrationClient
                 ?? throw new OpenApiServiceMismatchException($"Operation {BatchDeliveryStatusUpdateOperationId} has been invoked, but no Durable Orchestration Client is available on the OpenApi context.");
