@@ -72,8 +72,8 @@
     "keyVaultDeployName": "[concat(deployment().name, '-key-vault')]",
     "diagnosticsStorageDeployName": "[concat(variables('keyVaultDeployName'), '-diagnostics-storage-account')]",
     "notificationStorageDeployName": "[concat(deployment().name, '-storage-notifications')]",
-    "apiDeliveryChannelAppDeployName": "[concat(deployment().name, '-functions-app-api-delivery-channel')]",
-    "managementAppDeployName": "[concat(deployment().name, '-functions-app-management')]"
+    "apiDeliveryChannelAppDeployName": "[concat(deployment().name, '-fn-app-delivery-channel')]",
+    "managementAppDeployName": "[concat(deployment().name, '-fn-app-management')]"
   },
   "resources": [
     {
@@ -103,7 +103,7 @@
       }
     },
     {
-      "name": "[concat(variables('notificationStorageDeployName'), '-key-vault-secret')]",
+      "name": "[concat(variables('notificationStorageDeployName'), '-kv-secret')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
@@ -190,7 +190,7 @@
       }
     },
     {
-      "name": "[concat(variables('apiDeliveryChannelAppDeployName'), '-app-auth-settings')]",
+      "name": "[concat(variables('apiDeliveryChannelAppDeployName'), '-auth-settings')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
@@ -219,7 +219,7 @@
       }
     },
     {
-      "name": "[concat(variables('apiDeliveryChannelAppDeployName'), '-app-settings')]",
+      "name": "[concat(variables('apiDeliveryChannelAppDeployName'), '-settings')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
@@ -236,8 +236,6 @@
           "runFromPackage": { "value": "1" },
           "functionsAppName": { "value": "[variables('apiDeliveryChannelFunctionsAppName')]" },
           "applicationInsightsInstrumentationKey": { "value": "[parameters('appInsightsInstrumentationKey')]" },
-          "operationsControlServiceBaseUrl": { "value": "[parameters('operationsControlServiceBaseUrl')]" },
-          "operationsControlResourceIdForMsiAuthentication": { "value": "[parameters('operationsControlResourceIdForMsiAuthentication')]" },
           "managementClientBaseUrl": { "value": "[variables('managementClientBaseUrl')]" },
           "managementClientResourceIdForMsiAuthentication": { "value": "[parameters('managementFunctionAuthAadClientId')]" },
           "tenancyServiceBaseUri": { "value": "[parameters('tenancyServiceBaseUri')]" },
@@ -248,7 +246,7 @@
       }
     },
     {
-      "name": "[concat(variables('apiDeliveryChannelAppDeployName'), '-function-key-vault-access')]",
+      "name": "[concat(variables('apiDeliveryChannelAppDeployName'), '-kv-access')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
@@ -303,7 +301,7 @@
       }
     },
     {
-      "name": "[concat(variables('managementAppDeployName'), '-app-auth-settings')]",
+      "name": "[concat(variables('managementAppDeployName'), '-auth-settings')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
@@ -332,7 +330,7 @@
       }
     },
     {
-      "name": "[concat(variables('managementAppDeployName'), '-app-settings')]",
+      "name": "[concat(variables('managementAppDeployName'), '-settings')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
@@ -341,7 +339,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/functions-app-settings-engine-host.json', parameters('_artifactsLocationSasToken'))]",
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/functions-app-settings-management-host.json', parameters('_artifactsLocationSasToken'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -351,13 +349,15 @@
           "applicationInsightsInstrumentationKey": { "value": "[parameters('appInsightsInstrumentationKey')]" },
           "tenancyServiceBaseUri": { "value": "[parameters('tenancyServiceBaseUri')]" },
           "tenancyServiceResourceIdForMsiAuthentication": { "value": "[parameters('tenancyServiceResourceIdForMsiAuthentication')]" },
+          "operationsControlServiceBaseUrl": { "value": "[parameters('operationsControlServiceBaseUrl')]" },
+          "operationsControlResourceIdForMsiAuthentication": { "value": "[parameters('operationsControlResourceIdForMsiAuthentication')]" },
           "marainServiceTenantId": { "value": "[parameters('marainServiceTenantId')]" },
           "marainServiceTenantDisplayName": { "value": "[parameters('marainServiceTenantDisplayName')]" }
         }
       }
     },
     {
-      "name": "[concat(variables('managementAppDeployName'), '-function-key-vault-access')]",
+      "name": "[concat(variables('managementAppDeployName'), '-kv-access')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [

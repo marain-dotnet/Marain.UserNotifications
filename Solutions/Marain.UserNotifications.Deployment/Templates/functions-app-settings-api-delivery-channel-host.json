@@ -17,14 +17,6 @@
       "type": "string",
       "minLength": 1
     },
-    "operationsControlServiceBaseUrl": {
-      "type": "string",
-      "minLength": 1
-    },
-    "operationsControlResourceIdForMsiAuthentication": {
-      "type": "string",
-      "minLength": 1
-    },
     "managementClientBaseUrl": {
       "type": "string"
     },
@@ -66,8 +58,6 @@
         "FUNCTIONS_EXTENSION_VERSION": "~3",
         "FUNCTIONS_WORKER_RUNTIME": "dotnet",
 
-        "Operations:ControlServiceBaseUrl": "[parameters('operationsControlServiceBaseUrl')]",
-        "Operations:ResourceIdForMsiAuthentication": "[parameters('operationsControlResourceIdForMsiAuthentication')]",
         "UserNotificationsManagementClient:BaseUrl": "[parameters('managementClientBaseUrl')]",
         "UserNotificationsManagementClient:ResourceIdForAuthentication": "[parameters('managementClientResourceIdForMsiAuthentication')]",
 
