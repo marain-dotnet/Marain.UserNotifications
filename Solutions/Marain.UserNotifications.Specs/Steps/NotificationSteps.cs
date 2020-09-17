@@ -161,6 +161,15 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [Then("the first notification stored in the transient tenant for the user with Id '(.*)' has the read status '(.*)' for the delivery channel with Id '(.*)'")]
+        public Task ThenTheFirstNotificationStoredInTheTransientTenantForTheUserWithIdHasTheReadStatusForTheDeliveryChannelWithId(
+            string userId,
+            UserNotificationReadStatus expectedReadStatus,
+            string deliveryChannelId)
+        {
+            return this.ThenTheFirstNotificationsStoredInTheTransientTenantForTheUserWithIdHaveTheDeliveryStatusForTheDeliveryChannelWithId(1, userId, expectedReadStatus, deliveryChannelId);
+        }
+
         [Then("the first (.*) notifications stored in the transient tenant for the user with Id '(.*)' have the read status '(.*)' for the delivery channel with Id '(.*)'")]
         public async Task ThenTheFirstNotificationsStoredInTheTransientTenantForTheUserWithIdHaveTheDeliveryStatusForTheDeliveryChannelWithId(
             int count,

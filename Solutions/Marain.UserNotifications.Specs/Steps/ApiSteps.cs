@@ -110,7 +110,30 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.SendPostRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/batchdeliverystatusupdate", requestBatch);
         }
 
-        [Given("I send an API delivery request for the user notification with the same Id as the user notification called '(.*)'")]
+        [Given("I have sent a management API request to batch update the read status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
+        [When("I send a management API request to batch update the read status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
+        public Task WhenISendAManagementAPIRequestToBatchUpdateTheReadStatusOfTheFirstStoredNotificationsForUserToForTheDeliveryChannelWithId(int countToUpdate, string userId, UserNotificationReadStatus targetStatus, string deliveryChannelId)
+        {
+            // Get the notifications from session state
+            List<UserNotification> notifications = this.scenarioContext.Get<List<UserNotification>>(DataSetupSteps.CreatedNotificationsKey);
+            BatchReadStatusUpdateRequestItem[] requestBatch = notifications
+                .Where(n => n.UserId == userId)
+                .Take(countToUpdate)
+                .Select(
+                    n =>
+                    new BatchReadStatusUpdateRequestItem(
+                        n.Id!,
+                        targetStatus,
+                        DateTimeOffset.UtcNow,
+                        deliveryChannelId)).ToArray();
+
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            return this.SendPostRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/batchreadstatusupdate", requestBatch);
+        }
+
+        [Given("I have sent an API delivery request for the user notification with the same Id as the user notification called '(.*)'")]
+        [When("I send an API delivery request for the user notification with the same Id as the user notification called '(.*)'")]
         public Task GivenISendAnAPIDeliveryRequestForTheUserNotificationWithTheSameIdAsTheUserNotificationCalled(string notificationName)
         {
             UserNotification notification = this.scenarioContext.Get<UserNotification>(notificationName);
@@ -190,6 +213,7 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.SendGetRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, $"/{transientTenantId}/marain/users/{userId}/notifications?maxItems={count}");
         }
 
+        [Given("I have sent an API delivery request for notifications for the user with Id '(.*)'")]
         [When("I send an API delivery request for notifications for the user with Id '(.*)'")]
         public Task WhenISendAnAPIDeliveryRequestForNotificationsForTheUserWithId(string userId)
         {
@@ -210,6 +234,15 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
             return this.SendGetRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, $"/{transientTenantId}/marain/usernotifications/{WebUtility.UrlEncode(notificationId)}");
+        }
+
+        [When("I send a request to mark a notification as read using the Url from the response property '(.*)'")]
+        public Task WhenISendARequestToMarkANotificationAsReadUsingTheUrlFromTheResponseProperty(string path)
+        {
+            // Get the previous response
+            JObject previousResponse = this.scenarioContext.Get<JObject>();
+            JToken url = JsonSteps.GetRequiredToken(previousResponse, path);
+            return this.SendPostRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, url.Value<string>(), null);
         }
 
         private Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)
@@ -250,11 +283,16 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        private async Task SendPostRequest(Uri baseUri, string path, object data)
+        private async Task SendPostRequest(Uri baseUri, string path, object? data)
         {
-            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
-            string requestJson = JsonConvert.SerializeObject(data, serializerSettingsProvider.Instance);
-            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            HttpContent? content = null;
+
+            if (!(data is null))
+            {
+                IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+                string requestJson = JsonConvert.SerializeObject(data, serializerSettingsProvider.Instance);
+                content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            }
 
             HttpResponseMessage response = await HttpClient.PostAsync(new Uri(baseUri, path), content).ConfigureAwait(false);
 

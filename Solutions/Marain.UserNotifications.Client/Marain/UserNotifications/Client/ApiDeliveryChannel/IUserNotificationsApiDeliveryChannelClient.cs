@@ -54,5 +54,16 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
             string tenantId,
             string notificationId,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Marks a notification as read using a link obtained from a <see cref="NotificationResource" /> using
+        /// the "mark-read" link relation.
+        /// </summary>
+        /// <param name="link">The link to use.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The response details.</returns>
+        Task<ApiResponse> MarkNotificationAsReadByLinkAsync(
+            string link,
+            CancellationToken cancellationToken = default);
     }
 }

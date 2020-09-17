@@ -1,4 +1,4 @@
-﻿// <copyright file="CreateNotificationsService.cs" company="Endjin Limited">
+﻿// <copyright file="BatchReadStatusUpdateService.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -17,14 +17,14 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 
     /// <summary>
-    /// Implements the create notifications endpoint for the management API.
+    /// Implements the batch delivery update endpoint for the management API.
     /// </summary>
-    public class CreateNotificationsService : IOpenApiService
+    public class BatchReadStatusUpdateService : IOpenApiService
     {
         /// <summary>
         /// The operation Id for the endpoint.
         /// </summary>
-        public const string CreateNotificationsOperationId = "createNotifications";
+        public const string BatchReadStatusUpdateOperationId = "batchReadStatusUpdate";
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly IMarainOperationsControl operationsControlClient;
@@ -34,7 +34,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// </summary>
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="operationsControlClient">The operations control client.</param>
-        public CreateNotificationsService(
+        public BatchReadStatusUpdateService(
             IMarainServicesTenancy marainServicesTenancy,
             IMarainOperationsControl operationsControlClient)
         {
@@ -43,15 +43,15 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         }
 
         /// <summary>
-        /// Creates new notification(s) for one or more users.
+        /// Starts a batch update of the delivery status for one or more notifications.
         /// </summary>
         /// <param name="context">The current OpenApi context.</param>
         /// <param name="body">The request body.</param>
         /// <returns>Confirmation that the update request has been accepted.</returns>
-        [OperationId(CreateNotificationsOperationId)]
-        public async Task<OpenApiResult> CreateNotificationsAsync(
+        [OperationId(BatchReadStatusUpdateOperationId)]
+        public async Task<OpenApiResult> UpdateReadStatusesAsync(
             IOpenApiContext context,
-            CreateNotificationsRequest body)
+            BatchReadStatusUpdateRequestItem[] body)
         {
             // We can guarantee tenant Id is available because it's part of the Uri.
             ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId!).ConfigureAwait(false);
@@ -63,11 +63,11 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 operationId).ConfigureAwait(false);
 
             IDurableOrchestrationClient orchestrationClient = context.AsDurableFunctionsOpenApiContext().OrchestrationClient
-                ?? throw new OpenApiServiceMismatchException($"Operation {CreateNotificationsOperationId} has been invoked, but no Durable Orchestration Client is available on the OpenApi context.");
+                ?? throw new OpenApiServiceMismatchException($"Operation {BatchReadStatusUpdateOperationId} has been invoked, but no Durable Orchestration Client is available on the OpenApi context.");
 
             await orchestrationClient.StartNewAsync(
-                nameof(CreateAndDispatchNotificationsOrchestration),
-                new TenantedFunctionData<CreateNotificationsRequest>(context.CurrentTenantId!, body, operationId)).ConfigureAwait(false);
+                nameof(UpdateNotificationReadStatusesOrchestration),
+                new TenantedFunctionData<BatchReadStatusUpdateRequestItem[]>(context.CurrentTenantId!, body, operationId)).ConfigureAwait(false);
 
             return this.AcceptedResult(response.Location);
         }

@@ -146,5 +146,60 @@ namespace Marain.UserNotifications
                 notification.Metadata,
                 builder.ToImmutable());
         }
+
+        /// <summary>
+        /// Creates an updated version of the supplied <see cref="UserNotification"/> with the delivery status for the
+        /// specified channel set.
+        /// </summary>
+        /// <param name="notification">The notification to which the status change applies.</param>
+        /// <param name="deliveryChannelId">The delivery channel that the status applies to.</param>
+        /// <param name="newReadStatus">The new status.</param>
+        /// <param name="effectiveDateTime">The time at which the status change happened.</param>
+        /// <returns>A copy of the notification with the updated delivery status.</returns>
+        public static UserNotification WithChannelReadStatus(
+            this UserNotification notification,
+            string deliveryChannelId,
+            UserNotificationReadStatus newReadStatus,
+            DateTimeOffset effectiveDateTime)
+        {
+            if (notification is null)
+            {
+                throw new ArgumentNullException(nameof(notification));
+            }
+
+            if (string.IsNullOrEmpty(deliveryChannelId))
+            {
+                throw new ArgumentNullException(nameof(deliveryChannelId));
+            }
+
+            ImmutableArray<UserNotificationStatus> deliveryStatuses = notification.ChannelStatuses;
+            UserNotificationStatus? existingStatusForChannel = deliveryStatuses.FirstOrDefault(s => s.DeliveryChannelId == deliveryChannelId);
+
+            var builder = deliveryStatuses.ToBuilder();
+
+            if (!(existingStatusForChannel is null))
+            {
+                builder.Remove(existingStatusForChannel);
+                builder.Add(existingStatusForChannel.WithReadStatus(newReadStatus, effectiveDateTime));
+            }
+            else
+            {
+                builder.Add(new UserNotificationStatus(
+                    deliveryChannelId,
+                    UserNotificationDeliveryStatus.Unknown,
+                    effectiveDateTime,
+                    newReadStatus,
+                    effectiveDateTime));
+            }
+
+            return new UserNotification(
+                notification.Id,
+                notification.NotificationType,
+                notification.UserId,
+                notification.Timestamp,
+                notification.Properties,
+                notification.Metadata,
+                builder.ToImmutable());
+        }
     }
 }

@@ -98,5 +98,16 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
         {
             return this.GetPathAsync<PagedNotificationListResource>(link, cancellationToken);
         }
+
+        /// <inheritdoc />
+        public Task<ApiResponse> MarkNotificationAsReadByLinkAsync(string link, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(link))
+            {
+                throw new ArgumentNullException(nameof(link));
+            }
+
+            return this.CallLongRunningOperationEndpointAsync(new Uri(link, UriKind.Relative), HttpMethod.Post);
+        }
     }
 }

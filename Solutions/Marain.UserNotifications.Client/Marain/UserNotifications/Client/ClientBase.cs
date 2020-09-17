@@ -5,6 +5,7 @@
 namespace Marain.UserNotifications.Client
 {
     using System;
+    using System.Collections.Immutable;
     using System.IO;
     using System.Linq;
     using System.Net.Http;
@@ -124,6 +125,48 @@ namespace Marain.UserNotifications.Client
         }
 
         /// <summary>
+        /// Shortcut method for invoking an endpoint that is expected to return a 202 status code and implement the
+        /// long running operation pattern.
+        /// </summary>
+        /// <typeparam name="T">The type of the request body.</typeparam>
+        /// <param name="requestUri">The Uri to request.</param>
+        /// <param name="method">The method use to request the Uri.</param>
+        /// <param name="body">Data to be sent in the request body.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>An API containing the Location header from the response.</returns>
+        protected Task<ApiResponse> CallLongRunningOperationEndpointAsync<T>(
+            Uri requestUri,
+            HttpMethod method,
+            T body,
+            CancellationToken cancellationToken = default)
+        {
+            if (body is null)
+            {
+                throw new ArgumentNullException(nameof(body));
+            }
+
+            HttpRequestMessage request = this.BuildRequest(method, requestUri, body);
+            return this.CallLongRunningOperationEndpointInternalAsync(request, cancellationToken);
+        }
+
+        /// <summary>
+        /// Shortcut method for invoking an endpoint that is expected to return a 202 status code and implement the
+        /// long running operation pattern.
+        /// </summary>
+        /// <param name="requestUri">The Uri to request.</param>
+        /// <param name="method">The method use to request the Uri.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>An API containing the Location header from the response.</returns>
+        protected Task<ApiResponse> CallLongRunningOperationEndpointAsync(
+            Uri requestUri,
+            HttpMethod method,
+            CancellationToken cancellationToken = default)
+        {
+            HttpRequestMessage request = this.BuildRequest(method, requestUri);
+            return this.CallLongRunningOperationEndpointInternalAsync(request, cancellationToken);
+        }
+
+        /// <summary>
         /// Sends the supplied request and throws a <see cref="UserNotificationsApiException"/> if either the request
         /// fails or the response status code does not indicate success.
         /// </summary>
@@ -163,6 +206,18 @@ namespace Marain.UserNotifications.Client
         {
             using Stream content = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
             return JsonDocument.Parse(content);
+        }
+
+        private async Task<ApiResponse> CallLongRunningOperationEndpointInternalAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken = default)
+        {
+            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
+
+            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
+            builder.Add("Location", response.Headers.Location.ToString());
+
+            return new ApiResponse(response.StatusCode, builder.ToImmutable());
         }
     }
 }

@@ -6,7 +6,6 @@ namespace Marain.UserNotifications.Client.Management
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -26,14 +25,8 @@ namespace Marain.UserNotifications.Client.Management
         {
         }
 
-        /// <summary>
-        /// Sends a batch of requests to update notification statuses.
-        /// </summary>
-        /// <param name="tenantId">The requesting tenant Id.</param>
-        /// <param name="body">The request body.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A <see cref="ApiResponse"/>.</returns>
-        public async Task<ApiResponse> BatchDeliveryStatusUpdateAsync(
+        /// <inheritdoc />
+        public Task<ApiResponse> BatchDeliveryStatusUpdateAsync(
             string tenantId,
             IEnumerable<BatchDeliveryStatusUpdateRequestItem> body,
             CancellationToken cancellationToken = default)
@@ -43,31 +36,29 @@ namespace Marain.UserNotifications.Client.Management
                 throw new ArgumentNullException(nameof(tenantId));
             }
 
-            if (body is null)
-            {
-                throw new ArgumentNullException(nameof(body));
-            }
-
             var requestUri = new Uri($"/{tenantId}/marain/usernotifications/batchdeliverystatusupdate", UriKind.Relative);
 
-            HttpRequestMessage request = this.BuildRequest(HttpMethod.Post, requestUri, body);
-
-            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
-
-            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
-            builder.Add("Location", response.Headers.Location.ToString());
-
-            return new ApiResponse(response.StatusCode, builder.ToImmutable());
+            return this.CallLongRunningOperationEndpointAsync(requestUri, HttpMethod.Post, body, cancellationToken);
         }
 
-        /// <summary>
-        /// Creates a new notification for one or more users.
-        /// </summary>
-        /// <param name="tenantId">The requesting tenant Id.</param>
-        /// <param name="body">The request body.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A <see cref="ApiResponse"/>.</returns>
-        public async Task<ApiResponse> CreateNotificationsAsync(
+        /// <inheritdoc />
+        public Task<ApiResponse> BatchReadStatusUpdateAsync(
+            string tenantId,
+            IEnumerable<BatchReadStatusUpdateRequestItem> body,
+            CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+
+            var requestUri = new Uri($"/{tenantId}/marain/usernotifications/batchreadstatusupdate", UriKind.Relative);
+
+            return this.CallLongRunningOperationEndpointAsync(requestUri, HttpMethod.Post, body, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public Task<ApiResponse> CreateNotificationsAsync(
             string tenantId,
             CreateNotificationsRequest body,
             CancellationToken cancellationToken = default)
@@ -77,21 +68,9 @@ namespace Marain.UserNotifications.Client.Management
                 throw new ArgumentNullException(nameof(tenantId));
             }
 
-            if (body is null)
-            {
-                throw new ArgumentNullException(nameof(body));
-            }
-
             var requestUri = new Uri($"/{tenantId}/marain/usernotifications", UriKind.Relative);
 
-            HttpRequestMessage request = this.BuildRequest(HttpMethod.Put, requestUri, body);
-
-            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
-
-            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
-            builder.Add("Location", response.Headers.Location.ToString());
-
-            return new ApiResponse(response.StatusCode, builder.ToImmutable());
+            return this.CallLongRunningOperationEndpointAsync(requestUri, HttpMethod.Put, body, cancellationToken);
         }
     }
 }

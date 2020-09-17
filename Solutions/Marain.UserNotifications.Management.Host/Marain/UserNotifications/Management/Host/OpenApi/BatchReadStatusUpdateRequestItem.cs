@@ -1,4 +1,4 @@
-﻿// <copyright file="BatchDeliveryStatusUpdateRequestItem.cs" company="Endjin Limited">
+﻿// <copyright file="BatchReadStatusUpdateRequestItem.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -9,18 +9,18 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     /// <summary>
     /// Request data item that forms part of a batch update of delivery statuses.
     /// </summary>
-    public class BatchDeliveryStatusUpdateRequestItem : UpdateNotificationStatusRequestItem
+    public class BatchReadStatusUpdateRequestItem : UpdateNotificationStatusRequestItem
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BatchDeliveryStatusUpdateRequestItem"/> class.
+        /// Initializes a new instance of the <see cref="BatchReadStatusUpdateRequestItem"/> class.
         /// </summary>
         /// <param name="notificationId">The <see cref="UpdateNotificationStatusRequestItem.NotificationId"/>.</param>
         /// <param name="newStatus">The <see cref="NewStatus" />.</param>
         /// <param name="updateTimestamp">The <see cref="UpdateNotificationStatusRequestItem.UpdateTimestamp" />.</param>
         /// <param name="deliveryChannelId">The <see cref="UpdateNotificationStatusRequestItem.DeliveryChannelId" />.</param>
-        public BatchDeliveryStatusUpdateRequestItem(
+        public BatchReadStatusUpdateRequestItem(
             string notificationId,
-            UserNotificationDeliveryStatus newStatus,
+            UserNotificationReadStatus newStatus,
             DateTimeOffset updateTimestamp,
             string deliveryChannelId)
             : base(notificationId, updateTimestamp, deliveryChannelId)
@@ -31,6 +31,6 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <summary>
         /// Gets the new status for the notification.
         /// </summary>
-        public UserNotificationDeliveryStatus NewStatus { get; }
+        public UserNotificationReadStatus NewStatus { get; }
     }
 }

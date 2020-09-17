@@ -38,6 +38,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+        '501':
+          description: Not implemented
 
     put:
       summary: Create a new notification for one or more users
@@ -88,6 +90,44 @@ paths:
               type: array
               items:
                 $ref: '#/components/schemas/BatchDeliveryStatusUpdateRequestItem'
+      responses:
+        '202':
+          description: Accepted
+          headers:
+            Location:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /{tenantId}/marain/usernotifications/batchreadstatusupdate:
+    post:
+      summary: Updates read statuses for a batch of user notifications
+      operationId: batchReadStatusUpdate
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/BatchReadStatusUpdateRequestItem'
       responses:
         '202':
           description: Accepted
@@ -222,45 +262,42 @@ components:
                   items:
                     $ref: '#/components/schemas/Notification'
 
-    UpdateNotificationDeliveryStatusRequest:
-      description: A request to update the "delivered" status of a notification
+    BatchStatusUpdateRequestItem:
+      description: Common properties for delivery/read status updates as part of a batch.
       type: object
       properties:
         deliveryChannelId:
           description: The delivery channel that this update applies to.
           type: string
-        newStatus:
-          description: The new status for the notification
-          type: string
-          enum: ['notTracked', 'undelivered', 'delivered']
         updateTimestamp:
           description: The time at which the status change occurred
           type: string
           format: date-time
+        notificationId:
+          type: string
+          description: The Id of the notification to update
 
     BatchDeliveryStatusUpdateRequestItem:
       description: Request data item that forms part of a batch update of delivery statuses
       allOf:
-        - $ref: '#/components/schemas/UpdateNotificationDeliveryStatusRequest'
-        - properties:
-            notificationId:
+        - $ref: '#/components/schemas/BatchStatusUpdateRequestItem'
+        - type: object
+          properties:
+            newStatus:
+              description: The new status for the notification
               type: string
-              description: The Id of the notification to update
+              enum: ['notTracked', 'undelivered', 'delivered']
 
-    UpdateNotificationReadStatusRequest:
-      description: A request to update the "read" status of a notification
-      type: object
-      properties:
-        newStatus:
-          description: The new status for the notification
-          type: string
-          enum: ['notTracked', 'unread', 'read']
-        updateTimestamp:
-          description: The time at which the status change occurred
-          type: string
-          format: date-time
-        correlationIds:
-          $ref: '#/components/schemas/CorrelationIds'
+    BatchReadStatusUpdateRequestItem:
+      description: Request data item that forms part of a batch update of delivery statuses
+      allOf:
+        - $ref: '#/components/schemas/BatchStatusUpdateRequestItem'
+        - type: object
+          properties:
+            newStatus:
+              description: The new status for the notification
+              type: string
+              enum: ['notTracked', 'unread', 'read']
 
     NotificationStatus:
       description: The delivery/read status for a notification on a delivery channel.

@@ -43,7 +43,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
 
             links.MapByContentTypeAndRelationTypeAndOperationId<UserNotification>(
                 "mark-read",
-                UpdateUserNotificationReadStatusService.MarkNotificationReadOperationId);
+                MarkNotificationAsReadService.MarkNotificationReadOperationId);
         }
 
         /// <inheritdoc/>
@@ -70,12 +70,15 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel.Mappers
                 ("tenantId", context.CurrentTenantId),
                 ("notificationId", resource.Id));
 
-            response.ResolveAndAddByOwnerAndRelationType(
-                this.openApiWebLinkResolver,
-                resource,
-                "mark-read",
-                ("tenantId", context.CurrentTenantId),
-                ("notificationId", resource.Id));
+            if (resource.GetReadStatusForChannel(Constants.ApiDeliveryChannelId) != UserNotificationReadStatus.Read)
+            {
+                response.ResolveAndAddByOwnerAndRelationType(
+                    this.openApiWebLinkResolver,
+                    resource,
+                    "mark-read",
+                    ("tenantId", context.CurrentTenantId),
+                    ("notificationId", resource.Id));
+            }
 
             return new ValueTask<HalDocument>(response);
         }
