@@ -5,10 +5,12 @@
 namespace Benchmarks
 {
     using System;
+    using System.Collections.Generic;
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
     using BenchmarkDotNet.Attributes;
+    using Marain.UserNotifications.Client.Management.Requests;
 
     /// <summary>
     /// Benchmarks for the management API.
@@ -18,64 +20,30 @@ namespace Benchmarks
     [HtmlExporter]
     public class ManagementApiBenchmarks : BenchmarksBase
     {
-        private readonly Uri managementApiBaseUrl;
-        private readonly string managementApiResourceId;
-        private readonly string benchmarkClientTenantId;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ManagementApiBenchmarks"/> class.
-        /// </summary>
-        public ManagementApiBenchmarks()
-        {
-            this.managementApiBaseUrl = new Uri(this.Configuration["ManagementApi:BaseUri"]);
-            this.managementApiResourceId = this.Configuration["ManagementApi:ResourceIdForMsiAuthentication"];
-            this.benchmarkClientTenantId = this.Configuration["BenchmarkClientTenantId"];
-        }
-
-        /// <summary>
-        /// Benchmarks the /swagger endpoint.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [Benchmark]
-        public async Task GetSwagger()
-        {
-            HttpRequestMessage request = await this.GetHttpRequestMessageWithAuthorizationHeaderAsync(this.managementApiResourceId).ConfigureAwait(false);
-            request.Method = HttpMethod.Get;
-            request.RequestUri = new Uri(this.managementApiBaseUrl, "/swagger");
-
-            HttpResponseMessage response = await this.HttpClient.SendAsync(request).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-        }
-
         /// <summary>
         /// Benchmarks calls to the notification creation endpoint without waiting for the resulting long running
         /// operation to complete.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Benchmark]
-        public async Task CreateSingleNotificationInitialResponse()
+        public Task CreateSingleNotificationInitialResponse()
         {
-            HttpRequestMessage request = await this.GetHttpRequestMessageWithAuthorizationHeaderAsync(this.managementApiResourceId).ConfigureAwait(false);
-            request.Method = HttpMethod.Put;
-            request.RequestUri = new Uri(this.managementApiBaseUrl, $"/{this.benchmarkClientTenantId}/marain/usernotifications");
+            var properties = new Dictionary<string, object>
+            {
+                {  "thing1", "value 1" },
+                { "thing2", 2 },
+            };
 
-            string requestJson = "{" +
-                "'notificationType': 'marain.notifications.test.v1'," +
-                "'timestamp': '2020-07-21T17:32:28Z'," +
-                "'userIds': [" +
-                    "'" + Guid.NewGuid() + "'" +
-                "]," +
-                "'correlationIds': ['cid1', 'cid2']," +
-                "'properties': {" +
-                    "'thing1': 'value1'," +
-                    "'thing2': 'value2'" +
-                "}" +
-            "}";
+            var body = new CreateNotificationsRequest
+            {
+                NotificationType = "marain.notifications.test.v1",
+                CorrelationIds = new[] { "cid1", "cid2" },
+                Properties = properties,
+                Timestamp = DateTime.UtcNow,
+                UserIds = new[] { Guid.NewGuid().ToString() },
+            };
 
-            request.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await this.HttpClient.SendAsync(request).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
+            return this.ManagementClient.CreateNotificationsAsync(this.BenchmarkClientTenantId, body);
         }
     }
 }

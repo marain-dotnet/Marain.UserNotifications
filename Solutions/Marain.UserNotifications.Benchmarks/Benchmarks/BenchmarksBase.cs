@@ -8,6 +8,8 @@ namespace Benchmarks
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
+    using Marain.UserNotifications.Client.ApiDeliveryChannel;
+    using Marain.UserNotifications.Client.Management;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -34,45 +36,35 @@ namespace Benchmarks
                     AzureServicesAuthConnectionString = this.Configuration["AzureServicesAuthConnectionString"],
                 });
 
+            services.AddUserNotificationsManagementClient(_ => this.Configuration.GetSection("ManagementApi").Get<UserNotificationsManagementClientConfiguration>());
+            services.AddUserNotificationsApiDeliveryChannelClient(_ => this.Configuration.GetSection("ApiDeliveryChannel").Get<UserNotificationsApiDeliveryChannelClientConfiguration>());
+
             ServiceProvider serviceProvider = services.BuildServiceProvider();
 
-            this.TokenSource = serviceProvider.GetRequiredService<IServiceIdentityTokenSource>();
+            this.ApiDeliveryChannelClient = serviceProvider.GetRequiredService<IUserNotificationsApiDeliveryChannelClient>();
+            this.ManagementClient = serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            this.BenchmarkClientTenantId = this.Configuration["BenchmarkClientTenantId"];
         }
+
+        /// <summary>
+        /// Gets the API delivery channel client.
+        /// </summary>
+        public IUserNotificationsApiDeliveryChannelClient ApiDeliveryChannelClient { get; }
+
+        /// <summary>
+        /// Gets the management client.
+        /// </summary>
+        public IUserNotificationsManagementClient ManagementClient { get; }
+
+        /// <summary>
+        /// Gets the tenant Id for benchmarking.
+        /// </summary>
+        public string BenchmarkClientTenantId { get; }
 
         /// <summary>
         /// Gets the configuration.
         /// </summary>
         protected IConfiguration Configuration { get; }
-
-        /// <summary>
-        /// Gets the HttpClient.
-        /// </summary>
-        protected HttpClient HttpClient { get; } = new HttpClient();
-
-        /// <summary>
-        /// Gets the token source.
-        /// </summary>
-        protected IServiceIdentityTokenSource TokenSource { get; }
-
-        /// <summary>
-        /// Gets a new <see cref="HttpRequestMessage"/> configured with the correct Authorization header if required.
-        /// </summary>
-        /// <param name="authenticationResourceId">The resource Id for authentication. If null/empty, no authorization header will be added.</param>
-        /// <returns>The new <see cref="HttpRequestMessage"/>.</returns>
-        protected async Task<HttpRequestMessage> GetHttpRequestMessageWithAuthorizationHeaderAsync(string authenticationResourceId)
-        {
-            var request = new HttpRequestMessage();
-
-            if (!string.IsNullOrEmpty(authenticationResourceId))
-            {
-                string? token = await this.TokenSource.GetAccessToken(authenticationResourceId).ConfigureAwait(false);
-                if (!string.IsNullOrEmpty(token))
-                {
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                }
-            }
-
-            return request;
-        }
     }
 }
