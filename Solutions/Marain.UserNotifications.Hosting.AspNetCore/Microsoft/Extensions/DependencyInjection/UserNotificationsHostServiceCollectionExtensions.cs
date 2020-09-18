@@ -114,7 +114,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     UserNotificationsManagementClientConfiguration managementClientConfiguration =
                         sp.GetRequiredService<IConfiguration>().GetSection("UserNotificationsManagementClient").Get<UserNotificationsManagementClientConfiguration>();
 
-                    if (string.IsNullOrEmpty(managementClientConfiguration?.BaseUrl))
+                    if (string.IsNullOrEmpty(managementClientConfiguration?.BaseUri))
                     {
                         throw new OpenApiServiceMismatchException("Could not find a configuration value for UserNotificationsManagementClient:BaseUrl");
                     }

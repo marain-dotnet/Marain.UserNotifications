@@ -14,6 +14,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Gets or sets the base Url of the API.
         /// </summary>
-        public string BaseUrl { get; set; }
+        public string BaseUri { get; set; }
     }
 }

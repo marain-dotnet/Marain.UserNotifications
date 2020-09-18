@@ -26,7 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHttpClient<IUserNotificationsManagementClient, UserNotificationsManagementClient>((sp, client) =>
             {
                 UserNotificationsManagementClientConfiguration config = configurationCallback(sp);
-                client.BaseAddress = new Uri(config.BaseUrl);
+                client.BaseAddress = new Uri(config.BaseUri);
             });
 
             return services;
@@ -45,7 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHttpClient<IUserNotificationsApiDeliveryChannelClient, UserNotificationsApiDeliveryChannelClient>((sp, client) =>
             {
                 UserNotificationsApiDeliveryChannelClientConfiguration config = configurationCallback(sp);
-                client.BaseAddress = new Uri(config.BaseUrl);
+                client.BaseAddress = new Uri(config.BaseUri);
             });
 
             return services;
