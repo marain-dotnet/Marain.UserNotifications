@@ -36,9 +36,6 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 IServiceIdentityTokenSource tokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
                 UserNotificationsManagementClientConfiguration config = configurationCallback(sp);
-                var provider = new ServiceIdentityTokenProvider(tokenSource, config.ResourceIdForMsiAuthentication);
-                var credentials = new TokenCredentials(provider);
-
                 return new AddAuthenticationHeaderHandler(tokenSource, config.ResourceIdForMsiAuthentication);
             });
 
@@ -63,9 +60,6 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 IServiceIdentityTokenSource tokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
                 UserNotificationsApiDeliveryChannelClientConfiguration config = configurationCallback(sp);
-                var provider = new ServiceIdentityTokenProvider(tokenSource, config.ResourceIdForMsiAuthentication);
-                var credentials = new TokenCredentials(provider);
-
                 return new AddAuthenticationHeaderHandler(tokenSource, config.ResourceIdForMsiAuthentication);
             });
 
