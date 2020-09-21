@@ -24,9 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\Marain.UserNotifications.Client\Marain.UserNotifications.Client.csproj" />
   </ItemGroup>
 
 </Project>

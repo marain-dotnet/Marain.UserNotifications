@@ -108,10 +108,10 @@ namespace Marain.UserNotifications.Specs.Bindings
                     services.AddHttpClient<IUserNotificationsManagementClient>();
                     services.AddHttpClient<IUserNotificationsApiDeliveryChannelClient>();
 
-                    var managementConfig = new UserNotificationsManagementClientConfiguration { BaseUrl = FunctionsApiBindings.ManagementApiBaseUri.ToString() };
+                    var managementConfig = new UserNotificationsManagementClientConfiguration { BaseUri = FunctionsApiBindings.ManagementApiBaseUri.ToString() };
                     services.AddUserNotificationsManagementClient(_ => managementConfig);
 
-                    var apiDeliveryChannelConfig = new UserNotificationsApiDeliveryChannelClientConfiguration { BaseUrl = FunctionsApiBindings.ApiDeliveryChannelBaseUri.ToString() };
+                    var apiDeliveryChannelConfig = new UserNotificationsApiDeliveryChannelClientConfiguration { BaseUri = FunctionsApiBindings.ApiDeliveryChannelBaseUri.ToString() };
                     services.AddUserNotificationsApiDeliveryChannelClient(_ => apiDeliveryChannelConfig);
                 });
         }

@@ -14,6 +14,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Gets or sets the base Url of the API.
         /// </summary>
-        public string BaseUrl { get; set; }
+        public string BaseUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resource Id to use when authenticating.
+        /// </summary>
+        public string ResourceIdForMsiAuthentication { get; set; }
     }
 }
