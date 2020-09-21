@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Marain.UserNotifications.ApiDeliveryChannel.Host": {
+      "commandName": "Project",
+      "commandLineArgs": "host start -p 7081"
+    }
+  }
+}
