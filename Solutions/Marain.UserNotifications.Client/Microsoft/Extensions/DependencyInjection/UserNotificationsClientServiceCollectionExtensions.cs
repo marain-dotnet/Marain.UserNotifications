@@ -68,22 +68,21 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private class AddAuthenticationHeaderHandler : DelegatingHandler
         {
-            private readonly TokenCredentials credentials;
+            private readonly ServiceIdentityTokenProvider provider;
 
             public AddAuthenticationHeaderHandler(IServiceIdentityTokenSource tokenSource, string resourceIdForMsiAuthentication)
             {
                 if (!string.IsNullOrEmpty(resourceIdForMsiAuthentication))
                 {
-                    var provider = new ServiceIdentityTokenProvider(tokenSource, resourceIdForMsiAuthentication);
-                    this.credentials = new TokenCredentials(provider);
+                    this.provider = new ServiceIdentityTokenProvider(tokenSource, resourceIdForMsiAuthentication);
                 }
             }
 
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
-                if (this.credentials != null)
+                if (this.provider != null)
                 {
-                    await this.credentials.ProcessHttpRequestAsync(request, cancellationToken).ConfigureAwait(false);
+                    request.Headers.Authorization = await this.provider.GetAuthenticationHeaderAsync(cancellationToken).ConfigureAwait(false);
                 }
 
                 return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
