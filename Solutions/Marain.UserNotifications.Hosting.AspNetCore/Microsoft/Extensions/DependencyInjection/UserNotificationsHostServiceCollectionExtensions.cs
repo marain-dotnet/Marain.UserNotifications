@@ -31,7 +31,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             // Monitoring - for better AppInsights integration
             services.AddApplicationInsightsInstrumentationTelemetry();
-            services.AddInstrumentation();
 
             services.AddOpenApiJsonSerializerSettings();
 
