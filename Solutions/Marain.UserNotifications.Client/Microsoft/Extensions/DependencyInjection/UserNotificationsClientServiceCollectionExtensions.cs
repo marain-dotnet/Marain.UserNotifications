@@ -28,7 +28,8 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             Func<IServiceProvider, UserNotificationsManagementClientConfiguration> configurationCallback)
         {
-            services.AddHttpClient<IUserNotificationsManagementClient, UserNotificationsManagementClient>((sp, client) =>
+            services.AddHttpClient(nameof(UserNotificationsManagementClient))
+                .ConfigureHttpClient((sp, client) =>
             {
                 UserNotificationsManagementClientConfiguration config = configurationCallback(sp);
                 client.BaseAddress = new Uri(config.BaseUri);
@@ -37,6 +38,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 IServiceIdentityTokenSource tokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
                 UserNotificationsManagementClientConfiguration config = configurationCallback(sp);
                 return new AddAuthenticationHeaderHandler(tokenSource, config.ResourceIdForMsiAuthentication);
+            });
+
+            services.AddSingleton<IUserNotificationsManagementClient>(sp =>
+            {
+                IHttpClientFactory httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                return new UserNotificationsManagementClient(httpClientFactory.CreateClient(nameof(UserNotificationsManagementClient)));
             });
 
             return services;
@@ -52,15 +59,23 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             Func<IServiceProvider, UserNotificationsApiDeliveryChannelClientConfiguration> configurationCallback)
         {
-            services.AddHttpClient<IUserNotificationsApiDeliveryChannelClient, UserNotificationsApiDeliveryChannelClient>((sp, client) =>
+            services.AddHttpClient(nameof(UserNotificationsApiDeliveryChannelClient))
+                .ConfigureHttpClient((sp, client) =>
+                {
+                    UserNotificationsApiDeliveryChannelClientConfiguration config = configurationCallback(sp);
+                    client.BaseAddress = new Uri(config.BaseUri);
+                })
+                .AddHttpMessageHandler(sp =>
+                {
+                    IServiceIdentityTokenSource tokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
+                    UserNotificationsApiDeliveryChannelClientConfiguration config = configurationCallback(sp);
+                    return new AddAuthenticationHeaderHandler(tokenSource, config.ResourceIdForMsiAuthentication);
+                });
+
+            services.AddSingleton<IUserNotificationsApiDeliveryChannelClient>(sp =>
             {
-                UserNotificationsApiDeliveryChannelClientConfiguration config = configurationCallback(sp);
-                client.BaseAddress = new Uri(config.BaseUri);
-            }).AddHttpMessageHandler(sp =>
-            {
-                IServiceIdentityTokenSource tokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
-                UserNotificationsApiDeliveryChannelClientConfiguration config = configurationCallback(sp);
-                return new AddAuthenticationHeaderHandler(tokenSource, config.ResourceIdForMsiAuthentication);
+                IHttpClientFactory httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                return new UserNotificationsApiDeliveryChannelClient(httpClientFactory.CreateClient(nameof(UserNotificationsApiDeliveryChannelClient)));
             });
 
             return services;
