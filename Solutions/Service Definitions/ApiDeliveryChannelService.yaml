@@ -1,20 +1,20 @@
 ﻿openapi: '3.0.0'
 info:
   version: 1.0.0
-  title: Marain User Notifications Management Service
+  title: Marain User Notifications API Delivery Channel
 servers:
-  - url: http://localhost:7080/
+  - url: http://localhost:7081
 paths:
-  /{tenantId}/marain/usernotifications:
+  /{tenantId}/marain/users/{userId}/notifications:
     get:
-      summary: Query notifications
-      operationId: getNotifications
+      summary: Get all notifications for a user
+      operationId: getNotificationsForUser
       parameters:
         - $ref: '#/components/parameters/tenantId'
-        - $ref: '#/components/parameters/userIdFilter'
-        - $ref: '#/components/parameters/notificationTypeFilter'
-        - $ref: '#/components/parameters/continuationToken'
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/sinceNotificationId'
         - $ref: '#/components/parameters/maxItems'
+        - $ref: '#/components/parameters/continuationToken'
       responses:
         '200':
           description: Successful operation
@@ -38,138 +38,58 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-        '501':
-          description: Not implemented
 
-    put:
-      summary: Create a new notification for one or more users
-      operationId: createNotifications
-      parameters:
-        - $ref: '#/components/parameters/tenantId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateNotificationsRequest'
-      responses:
-        '202':
-          description: Accepted
-          headers:
-            Location:
-              schema:
-                type: string
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        '404':
-          description: Not found
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-
-  /{tenantId}/marain/usernotifications/batchdeliverystatusupdate:
-    post:
-      summary: Updates delivery statuses for a batch of user notifications
-      operationId: batchDeliveryStatusUpdate
-      parameters:
-        - $ref: '#/components/parameters/tenantId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/BatchDeliveryStatusUpdateRequestItem'
-      responses:
-        '202':
-          description: Accepted
-          headers:
-            Location:
-              schema:
-                type: string
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        '404':
-          description: Not found
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-
-  /{tenantId}/marain/usernotifications/batchreadstatusupdate:
-    post:
-      summary: Updates read statuses for a batch of user notifications
-      operationId: batchReadStatusUpdate
-      parameters:
-        - $ref: '#/components/parameters/tenantId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/BatchReadStatusUpdateRequestItem'
-      responses:
-        '202':
-          description: Accepted
-          headers:
-            Location:
-              schema:
-                type: string
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        '404':
-          description: Not found
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-
-  /{tenantId}/marain/usernotifications/{notificationId}/status:
+  /{tenantId}/marain/usernotifications/{notificationId}:
     get:
-      summary: Gets the delivery/read status of the notification for each channel it's been dispatched to
-      operationId: getNotificationStatus
+      summary: Gets a single notification
+      operationId: getNotification
       parameters:
         - $ref: '#/components/parameters/tenantId'
         - $ref: '#/components/parameters/notificationId'
-        - $ref: '#/components/parameters/continuationToken'
-        - $ref: '#/components/parameters/maxItems'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PagedNotificationStatusListResponse'
+                $ref: '#/components/schemas/Notification'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /{tenantId}/marain/usernotifications/{notificationId}/read:
+    post:
+      summary: Mark the specified notification as read
+      operationId: markNotificationRead
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+        - $ref: '#/components/parameters/notificationId'
+      responses:
+        '202':
+          description: Accepted
+          headers:
+            Location:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
           description: Not found
         '403':
@@ -183,55 +103,27 @@ paths:
 
 components:
   schemas:
-    CreateNotificationsRequest:
-      description: Request data for creating a new notification for a user.
-      required: 
-        - userIds
-        - notificationType
-        - timestamp
-      properties:
-        notificationType:
-          type: string
-          description: The type of the notification. These types are defined by the consuming application, so can be arbitrary strings. It is strongly recommended that you version these types, as shown in the example.
-          nullable: false
-        userIds:
-          description: The Ids of the users that this notification is for
-          nullable: false
-          type: array
-          items:
-            type: string
-        correlationIds:
-          $ref: '#/components/schemas/CorrelationIds'
-        properties:
-          $ref: '#/components/schemas/PropertyBag'
-        timestamp:
-          type: string
-          format: date-time
-          description: The date and time at which the event being notified took place.
-
     Notification:
       description: A single notification for a specific user.
-      allOf:
+      anyOf:
       - $ref: '#/components/schemas/Resource'
       - type: object
         properties:
+          contentType:
+            type: string
+            description: The content type of the response
           notificationType:
             type: string
             description: The type of the notification.
             nullable: false
           properties:
             $ref: '#/components/schemas/PropertyBag'
-          sequenceId:
-            type: integer
-            format: int64
           userId:
             type: string
           timestamp:
             type: string
             format: date-time
             description: The date and time at which the event being notified took place.
-          correlationIds:
-            $ref: '#/components/schemas/CorrelationIds'
           delivered:
             description: A boolean indicating whether or not the notification has been delivered via at least one channel.
             type: boolean
@@ -243,15 +135,20 @@ components:
             properties:
               self:
                 $ref: '#/components/schemas/Link'
-              status:
+              mark-read:
                 $ref: '#/components/schemas/Link'
 
     PagedNotificationsListResponse:
       description: A paged list of notifications
-      allOf:
+      anyOf:
       - $ref: '#/components/schemas/PagedListResource'
       - type: object
         properties:
+          _links:
+            type: object
+            properties:
+              newer:
+                $ref: '#/components/schemas/Link'
           _embedded:
             type: object
             properties:
@@ -261,94 +158,6 @@ components:
                 - type: array
                   items:
                     $ref: '#/components/schemas/Notification'
-
-    BatchStatusUpdateRequestItem:
-      description: Common properties for delivery/read status updates as part of a batch.
-      type: object
-      properties:
-        deliveryChannelId:
-          description: The delivery channel that this update applies to.
-          type: string
-        updateTimestamp:
-          description: The time at which the status change occurred
-          type: string
-          format: date-time
-        notificationId:
-          type: string
-          description: The Id of the notification to update
-
-    BatchDeliveryStatusUpdateRequestItem:
-      description: Request data item that forms part of a batch update of delivery statuses
-      allOf:
-        - $ref: '#/components/schemas/BatchStatusUpdateRequestItem'
-        - type: object
-          properties:
-            newStatus:
-              description: The new status for the notification
-              type: string
-              enum: ['notTracked', 'undelivered', 'delivered']
-
-    BatchReadStatusUpdateRequestItem:
-      description: Request data item that forms part of a batch update of delivery statuses
-      allOf:
-        - $ref: '#/components/schemas/BatchStatusUpdateRequestItem'
-        - type: object
-          properties:
-            newStatus:
-              description: The new status for the notification
-              type: string
-              enum: ['notTracked', 'unread', 'read']
-
-    NotificationStatus:
-      description: The delivery/read status for a notification on a delivery channel.
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        properties:
-          channelId:
-            description: The unique identifier for the channel on which the notification was dispatched
-            type: string
-          deliveryStatus:
-            description: The delivery status for the channel. Not all channels will be able to track this, hence the need for more than just a true/false status.
-            type: string
-            enum: ['unknown', 'notTracked', 'undelivered', 'delivered']
-          deliveryStatusLastUpdated:
-            description: The date/time of the last update to the delivery status.
-            type: string
-            format: date-time
-          readStatus:
-            description: The read status for the channel. Not all channels will be able to track this, hence the need for more than just a true/false status.
-            type: string
-            enum: ['unknown', 'notTracked', 'unread', 'read']
-          readStatusLastUpdated:
-            description: The date/time of the last update to the delivery status.
-            type: string
-            format: date-time
-          _links:
-            type: object
-            properties:
-              self:
-                $ref: '#/components/schemas/Link'
-              update-delivery-status:
-                $ref: '#/components/schemas/Link'
-              update-read-status:
-                $ref: '#/components/schemas/Link'
-
-    PagedNotificationStatusListResponse:
-      description: A paged list of notification statuses
-      allOf:
-      - $ref: '#/components/schemas/PagedListResource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              items:
-                oneOf:
-                - $ref: '#/components/schemas/NotificationStatus'
-                - type: array
-                  items:
-                    $ref: '#/components/schemas/NotificationStatus'
 
     CorrelationIds:
       description: A list of Ids that can be used to correlate log entries. 
@@ -453,12 +262,15 @@ components:
 
     PagedListResource:
       description: A resource representation of a paged list
-      allOf:
+      anyOf:
         - $ref: '#/components/schemas/Resource'
         - type: object
           required:
           - _links
           properties:
+            contentType:
+              type: string
+              description: The content type of the response
             _links:
               type: object
               title: Hyperlinks
@@ -469,8 +281,6 @@ components:
                     - $ref: '#/components/schemas/Link'
                     - $ref: '#/components/schemas/LinkCollection'
                 next:
-                  $ref: '#/components/schemas/Link'
-                prev:
                   $ref: '#/components/schemas/Link'
               additionalProperties:
                 anyOf:
@@ -510,51 +320,35 @@ components:
       required: true
       schema:
         type: string
-    notificationId:
-      name: notificationId
-      in: path
-      x-ms-parameter-location: method
-      description: The Id of the notification for the request.
-      required: true
-      schema:
-        type: string
-    channelId:
-      name: channelId
-      in: path
-      x-ms-parameter-location: method
-      description: The Id of the channel for the request.
-      required: true
-      schema:
-        type: string
-    userIdFilter:
+    userId:
       name: userId
-      in: query
+      in: path
       x-ms-parameter-location: method
       description: The Id of the user for whom data is being operated on
       required: true
       schema:
         type: string
-    notificationTypeFilter:
-      name: notificationType
-      in: query
+    notificationId:
+      name: notificationId
+      in: path
       x-ms-parameter-location: method
-      description: The type of notification being queried
+      description: The Id of the notification being updated
       required: true
       schema:
         type: string
-    sinceSequenceId:
-      name: sinceSequenceId
+    sinceNotificationId:
+      name: sinceNotificationId
       in: query
       x-ms-parameter-location: method
       description: When retrieving notifications, all returned notifications should have a greater sequence number than the supplied value
       required: false
       schema:
-        type: integer
+        type: string
     continuationToken:
       name: continuationToken
       in: query
       x-ms-parameter-location: method
-      description: A continuation token for an operation where more data is available
+      description: A continuation token for an operation where more data is available. If continuation token is specified, other query parameters are ignored.
       required: false
       schema:
         type: string
@@ -566,3 +360,6 @@ components:
       required: false
       schema:
         type: integer
+        minimum: 1
+        maximum: 100
+        default: 50

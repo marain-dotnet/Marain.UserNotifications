@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Marain\UserNotifications\OpenApi\ApiDeliveryChannelService.yaml" />
+    <EmbeddedResource Include="..\Service Definitions\ApiDeliveryChannelService.yaml" Link="Marain\UserNotifications\OpenApi\ApiDeliveryChannelService.yaml" />
   </ItemGroup>
 
   <ItemGroup>
