@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Marain.UserNotifications.Management.Host": {
+      "commandName": "Project",
+      "commandLineArgs": "host start -p 7080"
+    }
+  }
+}

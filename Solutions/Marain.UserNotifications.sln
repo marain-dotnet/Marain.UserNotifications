@@ -46,6 +46,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Cl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Deployment", "Marain.UserNotifications.Deployment\Marain.UserNotifications.Deployment.csproj", "{795A7A4B-C140-44D4-A2F2-2F97BFE20B41}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service Definitions", "Service Definitions", "{85F0FC1A-5883-4BF5-B033-B6BDFF097D67}"
+	ProjectSection(SolutionItems) = preProject
+		Service Definitions\ApiDeliveryChannelService.yaml = Service Definitions\ApiDeliveryChannelService.yaml
+		Service Definitions\ManagementService.yaml = Service Definitions\ManagementService.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

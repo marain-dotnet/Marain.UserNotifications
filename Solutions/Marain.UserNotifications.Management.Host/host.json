@@ -7,16 +7,9 @@
   },
   "logging": {
     "logLevel": {
-      "default": "Debug"
-    },
-    "console": {
-      "isEnabled": true
-    },
-    "applicationInsights": {
-      "samplingExcludedTypes": "Request",
-      "samplingSettings": {
-        "isEnabled": true
-      }
+      "default": "Information",
+      "Host.Results": "Information",
+      "Host.Aggregator": "Information"
     }
   }
 }
