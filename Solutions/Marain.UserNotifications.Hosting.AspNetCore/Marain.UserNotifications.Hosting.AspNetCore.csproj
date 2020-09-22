@@ -16,7 +16,7 @@
     <PackageReference Include="Marain.Services.Tenancy" Version="1.1.0" />
     <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.0.0" />
     <PackageReference Include="Menes.Hosting.AspNetCore" Version="1.1.0" />
-    <PackageReference Include="Marain.Operations.ControlClient" Version="0.9.0" />
+    <PackageReference Include="Marain.Operations.ControlClient" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
