@@ -17,7 +17,7 @@ Function MarainDeployment([MarainServiceDeploymentContext] $ServiceDeploymentCon
     $ManagementAppId = $ServiceDeploymentContext.GetAppId("mng")
 
     $TemplateParameters = @{
-        appName="notifications"
+        appName="usrnoti"
         apiDeliveryChannelFunctionAuthAadClientId=$ApiDeliveryChannelAppId
         managementFunctionAuthAadClientId=$ManagementAppId
         operationsControlServiceBaseUrl=$OperationsService.BaseUrl
