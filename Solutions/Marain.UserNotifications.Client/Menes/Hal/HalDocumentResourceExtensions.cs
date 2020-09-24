@@ -2,6 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
+#nullable enable
 namespace Menes.Hal
 {
     using System.Linq;
