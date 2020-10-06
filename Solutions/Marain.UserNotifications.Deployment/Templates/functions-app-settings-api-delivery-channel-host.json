@@ -59,7 +59,7 @@
         "FUNCTIONS_WORKER_RUNTIME": "dotnet",
 
         "UserNotificationsManagementClient:BaseUri": "[parameters('managementClientBaseUrl')]",
-        "UserNotificationsManagementClient:ResourceIdForAuthentication": "[parameters('managementClientResourceIdForMsiAuthentication')]",
+        "UserNotificationsManagementClient:ResourceIdForMsiAuthentication": "[parameters('managementClientResourceIdForMsiAuthentication')]",
 
         "TenancyClient:TenancyServiceBaseUri": "[parameters('tenancyServiceBaseUri')]",
         "TenancyClient:ResourceIdForMsiAuthentication": "[parameters('tenancyServiceResourceIdForMsiAuthentication')]",
