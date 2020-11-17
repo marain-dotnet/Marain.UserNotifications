@@ -1,5 +1,12 @@
 # New delivery channel creation and integration
 
+## Definitions/Terms used in this document
+| Word/Phrase  | Meaning  |
+|---|---|
+| end user  | A client/user who is using a system that uses Marain.UserNotifications in the backeground to handle the delivery of notifications  |
+| application developer | A developer who integrates and/or mantains Marain.UserNotifications in their application () |
+| | |
+
 ## Status
 
 Proposed
@@ -38,13 +45,15 @@ When a new notification for a user is sent to the management api, the management
 
 ### User notifications and user settings
 
-A user should be able to choose what kind of communication types they receive based on the notification type and notification severity. There are two ways of approaching this, either:
+A user should be able to choose what kind of communication types they receive based on the notification type. There are two ways of approaching this, either:
 1. Send different types of notifications through all channels that are provided by the consumer of this service, and leave the communication type and user configuration for the consumer of the Marain.UserNotifications service. (ie, the consumer of the Marain.UserNotifications service should specify which delivery channels they want to send notifications via an api call when a notification is created)
-2. Store user preferences somewhere that is accessible to the management api, then when a new notification with a certain notification type and notification severity comes through, check what type of communication types  the user has 'subscribed' to and then send a message through the delivery channel.
+2. Store user preferences somewhere that is accessible to the management api, then when a new notification with a certain notification type comes through, check what type of communication types  the user has 'subscribed' to and then send a message through the delivery channel.
 
 The latter option was chosen as it provides a user the ability to choose what notifications they want out of the box, if the former is chosen, all users/businesses integrating with this service will then need to write their own notifications user management service.
 
-User settings for which notifications will go to what communication types for each user will be stored inside a User Notifications Settings table which will be accessed by the Management Api. Configuration in this table will include the Notification Type and the appropriate communication types associated to that notification type. This table will have an associated crud api that will allow a user to view/change the stored settings.
+
+
+Settings for which communication channel a user can receive a notification through will be stored inside a User Notifications Settings table which will be accessed by the Management Api. Configuration in this table will include the Notification Type and the appropriate communication types associated to that notification type. This table will have an associated crud api that will allow a consumer of `Marain.UserNotifications` to view/change the stored settings.
 
 ### Management Api and usable Delivery Channels
 
@@ -70,11 +79,19 @@ A delivery channel will have a generic api that can be consumed by the Managemen
 
 ### Delivery Channel configuration 
 
-A delivery channel will also need the configuration of the underlying platform to be stored somewhere (api keys, secrets, etc). This will be stored in a keyvault. If a delivery channel needs to be used, modifying the keyvault with the correct key and updating the configuration for the delivery channel in the management api to specify which communication types will be used. 
+A delivery channel will also need the configuration of the underlying platform to be stored somewhere (api keys, secrets, etc). This will be stored in the `Marain.UserNotifications` keyvault. If a delivery channel needs to be used, there are two things that need to be added/modified:
+1. Modify the `Marain.UserNotifications` key vault secrets setion with the correct key/value pair (this is described in more details below).
+2. Update the configuration for the delivery channel in the management api to specify which communication types will use the delivery channel. 
 
 Keys for the different platforms in the delivery channels will be stored in a format as follows:
-- `Marain:DeliveryChannel:<Platform_name>:<key_name>`
-- `Marain:DeliveryChannel:Airship:ApiMasterSecret`
+`<TenantId>-<key_name>`
+ an example with this format would look like:
+`75b9261673c2714681f14c97bc0439fb00000000000000000000000000000000-ApiMasterSecret`
+
+A key vault will be associated to each channel in the `Marain.UserNotifications` These key vaults will be created with the following format:
+`deliverychannel-<ChannelName>`
+an example with this format would be:
+`deliverychannel-airship`
 
 The Delivery Channel will also have to have it's own kind of configuration specifying the supported Communication Types. These will be hardcoded values and created when the coding of the new delivery channel is done. 
 
