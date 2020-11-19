@@ -1,12 +1,5 @@
 # New delivery channel creation and integration
 
-## Definitions/Terms used in this document
-| Word/Phrase  | Meaning  |
-|---|---|
-| end user  | A client/user who is using a system that uses Marain.UserNotifications in the backeground to handle the delivery of notifications  |
-| application developer | A developer who integrates and/or mantains Marain.UserNotifications in their application () |
-| | |
-
 ## Status
 
 Proposed
