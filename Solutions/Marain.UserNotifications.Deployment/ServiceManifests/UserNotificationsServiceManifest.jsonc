@@ -16,6 +16,14 @@
         "tableName": "usernotifications"
       },
       "description": "User notifications store."
+    },
+    {
+      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage",
+      "key": "userPreferencesStore",
+      "containerDefinition": {
+        "containerName": "userpreferences"
+      },
+      "description": "User preferences store."
     }
   ]
 }

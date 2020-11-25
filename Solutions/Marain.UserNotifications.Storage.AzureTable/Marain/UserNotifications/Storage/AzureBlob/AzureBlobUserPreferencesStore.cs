@@ -44,8 +44,10 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         /// <inheritdoc/>
         public async Task<UserPreference?> GetAsync(string userId)
         {
+            // Gets the blob reference by the userId
             CloudBlockBlob blob = this.blobContainer.GetBlockBlobReference(userId);
 
+            // Check if the blob exists
             bool exists = await blob.ExistsAsync().ConfigureAwait(false);
 
             if (!exists)
@@ -53,6 +55,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
                 return null;
             }
 
+            // Download and convert the blob text into UserPreference object
             string json = await blob.DownloadTextAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserPreference>(json, this.serializerSettingsProvider.Instance);
         }
@@ -64,10 +67,13 @@ namespace Marain.UserNotifications.Storage.AzureBlob
                 "Storing notification for user ",
                 userPreference.UserId);
 
+            // Gets the blob reference by the userId
             CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(userPreference.UserId);
 
+            // Serialise the userPreference object
             string userPreferenceBlob = JsonConvert.SerializeObject(userPreference, this.serializerSettingsProvider.Instance);
 
+            // Save the user preferences to the blob storage
             await blockBlob.UploadTextAsync(userPreferenceBlob).ConfigureAwait(false);
 
             return userPreference;

@@ -181,6 +181,70 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
 
+  /{tenantId}/marain/usernotifications/userpreference:
+    get:
+      summary: Query user preference
+      operationId: getUserPreference
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+        - $ref: '#/components/parameters/userIdFilter'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreference'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '501':
+          description: Not implemented
+
+    put:
+      summary: Create or update a new user preference for the users
+      operationId: createUserPreference
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPreference'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
 components:
   schemas:
     CreateNotificationsRequest:
@@ -298,6 +362,32 @@ components:
               description: The new status for the notification
               type: string
               enum: ['notTracked', 'unread', 'read']
+
+    UserPreference:
+      description: Request data for creating a new user preference object.
+      required: 
+        - userId
+      properties:
+        userId:
+          description: The Id of the user
+          nullable: false
+          type: string
+        email:
+          description: The email of the user
+          nullable: true
+          type: string
+        phoneNumber:
+          description: The phone number of the user
+          nullable: true
+          type: string
+        communicationChannelsPerNotificationConfiguration:
+          description: This is a key value pair (string - list<string>) of notification type for multiple communication channels configured
+          type: object
+          additionalProperties: true
+        timestamp:
+          type: string
+          format: date-time
+          description: The date and time at which the user preferences were last updated.
 
     NotificationStatus:
       description: The delivery/read status for a notification on a delivery channel.

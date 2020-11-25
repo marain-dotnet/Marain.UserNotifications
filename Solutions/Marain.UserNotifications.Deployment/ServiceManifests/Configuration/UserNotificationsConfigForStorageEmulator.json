@@ -15,5 +15,14 @@
       "container": "operations",
       "disableTenantIdPrefix": false
     }
+  },
+  {
+    "key": "userPreferencesStore",
+    "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azureblobstorage",
+    "configuration": {
+      "accountName": null,
+      "container": "userpreferences",
+      "disableTenantIdPrefix": false
+    }
   }
 ]

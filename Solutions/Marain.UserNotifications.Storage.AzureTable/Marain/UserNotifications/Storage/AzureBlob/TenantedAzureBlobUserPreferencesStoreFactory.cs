@@ -49,6 +49,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         /// <inheritdoc/>#
         public async Task<IUserPreferencesStore> GetUserPreferencesStoreForTenantAsync(ITenant tenant)
         {
+            // Gets the blob container for the tenant or creates a new one if it does not exists
             CloudBlobContainer blob = await this.blobContainerFactory.GetBlobContainerForTenantAsync(tenant, BlobContainerDefinition).ConfigureAwait(false);
 
             // No need to cache these instances as they are lightweight wrappers around the container.
