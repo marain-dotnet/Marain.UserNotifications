@@ -20,19 +20,17 @@ namespace Marain.UserPreferences
         /// <param name="email">The Email of the owner.</param>
         /// <param name="phoneNumber">The PhoneNumber of the owner.</param>
         /// <param name="communicationChannelsPerNotificationConfiguration">The communication channels configured for a notification type.</param>
-        /// <param name="timestamp"><see cref="Timestamp"/>.</param>
         public UserPreference(
             string userId,
             string? email,
             string? phoneNumber,
-            Dictionary<string, List<string>> communicationChannelsPerNotificationConfiguration,
-            DateTimeOffset timestamp)
+            Dictionary<string, List<string>> communicationChannelsPerNotificationConfiguration)
         {
             this.UserId = userId;
             this.Email = email;
             this.PhoneNumber = phoneNumber;
             this.CommunicationChannelsPerNotificationConfiguration = communicationChannelsPerNotificationConfiguration;
-            this.Timestamp = timestamp != default ? timestamp.ToUniversalTime() : throw new ArgumentException(nameof(timestamp));
+            this.Timestamp = DateTimeOffset.UtcNow;
         }
 
         /// <summary>

@@ -384,10 +384,6 @@ components:
           description: This is a key value pair (string - list<string>) of notification type for multiple communication channels configured
           type: object
           additionalProperties: true
-        timestamp:
-          type: string
-          format: date-time
-          description: The date and time at which the user preferences were last updated.
 
     NotificationStatus:
       description: The delivery/read status for a notification on a delivery channel.
