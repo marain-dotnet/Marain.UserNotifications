@@ -20,6 +20,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Testing.SpecFlow;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications.Specs.Bindings;
+    using Marain.UserPreferences;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -243,6 +244,37 @@ namespace Marain.UserNotifications.Specs.Steps
             JObject previousResponse = this.scenarioContext.Get<JObject>();
             JToken url = JsonSteps.GetRequiredToken(previousResponse, path);
             return this.SendPostRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, url.Value<string>(), null);
+        }
+
+        [When(@"I send a user prefence API a request to create a new user preference")]
+        public async Task WhenISendAUserPrefenceAPIARequestToCreateANewUserPreference(string requestJson)
+        {
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            HttpResponseMessage response = await HttpClient.PutAsync(
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference"),
+                requestContent).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
+            }
+        }
+
+        [When(@"I send a user preference API request to retreive a user preference")]
+        public Task WhenISendAUserPreferenceAPIRequestToRetreiveAUserPreference()
+        {
+            UserPreference userPreference = this.scenarioContext.Get<UserPreference>();
+
+            string userId = userPreference.UserId;
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            return this.SendGetRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference?userId={userId}");
         }
 
         private Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)

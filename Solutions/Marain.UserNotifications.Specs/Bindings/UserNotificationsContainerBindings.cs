@@ -74,6 +74,13 @@ namespace Marain.UserNotifications.Specs.Bindings
                         {
                             AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
                         });
+
+                    // Add the tenanted blob store for user preferences so we can clear up our own mess after the test.
+                    services.AddTenantedAzureBlobUserPreferencesStore(
+                        sp => new TenantCloudBlobContainerFactoryOptions
+                        {
+                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
+                        });
                 });
         }
 

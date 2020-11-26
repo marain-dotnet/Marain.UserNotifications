@@ -12,6 +12,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Json;
     using Corvus.Testing.SpecFlow;
     using Marain.UserNotifications.Specs.Bindings;
+    using Marain.UserPreferences;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -47,6 +48,18 @@ namespace Marain.UserNotifications.Specs.Steps
                 DateTime.Parse(tableRow["Timestamp"]),
                 properties,
                 new UserNotificationMetadata(correlationIds, null));
+        }
+
+        public static UserPreference BuildUserPreferenceFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        {
+            Dictionary<string, List<string>> communicationChannelsPerNotificationConfiguration = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(tableRow["communicationChannelsPerNotificationConfiguration"], serializerSettings);
+
+            return new UserPreference(
+                tableRow["userId"],
+                tableRow["email"],
+                tableRow["phoneNumber"],
+                communicationChannelsPerNotificationConfiguration,
+                DateTimeOffset.Now);
         }
 
         [Given("I have created and stored a notification in the current transient tenant for the user with Id '(.*)'")]
@@ -106,6 +119,20 @@ namespace Marain.UserNotifications.Specs.Steps
             UserNotification result = await store.StoreAsync(notification).ConfigureAwait(false);
 
             this.scenarioContext.Set(result, resultName);
+        }
+
+        [Given(@"I have created and stored a user preference for user")]
+        public async Task GivenIHaveCreatedAndStoredAUserPreferenceForUser(Table table)
+        {
+            ITenantedUserPreferencesStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedUserPreferencesStoreFactory>();
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+
+            UserPreference preference = BuildUserPreferenceFrom(table.Rows[0], serializerSettingsProvider.Instance);
+
+            IUserPreferencesStore store = await storeFactory.GetUserPreferencesStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            UserPreference result = await store.StoreAsync(preference).ConfigureAwait(false);
+
+            this.scenarioContext.Set(result);
         }
     }
 }
