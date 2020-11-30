@@ -24,6 +24,14 @@
         "containerName": "userpreferences"
       },
       "description": "User preferences store."
+    },
+    {
+      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage",
+      "key": "templateStore",
+      "containerDefinition": {
+        "containerName": "templates"
+      },
+      "description": "Template Store"
     }
   ]
 }

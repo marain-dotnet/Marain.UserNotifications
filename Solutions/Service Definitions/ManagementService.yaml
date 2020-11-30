@@ -244,6 +244,106 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+                
+  /{tenantId}/marain/usernotifications/templates:
+    get:
+      summary: Query templates
+      operationId: getTemplate
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+        - $ref: '#/components/parameters/notificationType'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTypeTemplate'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '501':
+          description: Not implemented
+
+    put:
+      summary: Create or update a new template for different notification types
+      operationId: createTemplate
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationTypeTemplate'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /{tenantId}/marain/usernotifications/generatetemplate:
+    put:
+      summary: Returns generated templates for the provided notification type
+      operationId: generateTemplate
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNotificationsRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTypeTemplate'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
 
 components:
   schemas:
@@ -362,6 +462,26 @@ components:
               description: The new status for the notification
               type: string
               enum: ['notTracked', 'unread', 'read']
+
+    SMSObject:
+      description: The sms object.
+      properties:
+        body:
+          description: The inner templated body for the sms object.
+          nullable: false
+          type: string
+          
+    NotificationTypeTemplate:
+      description: The template wrapper which will stored per notification type.
+      required:
+        - notificationType
+      properties:
+        notificationType:
+          description: The notification type for the template.
+          nullable: false
+          type: string
+        smsObject:
+          $ref: '#/components/schemas/SMSObject'
 
     UserPreference:
       description: Request data for creating a new user preference object.
@@ -609,6 +729,14 @@ components:
       in: path
       x-ms-parameter-location: method
       description: The Id of the channel for the request.
+      required: true
+      schema:
+        type: string
+    notificationType:
+      name: notificationType
+      in: query
+      x-ms-parameter-location: method
+      description: The notification type for the request.
       required: true
       schema:
         type: string

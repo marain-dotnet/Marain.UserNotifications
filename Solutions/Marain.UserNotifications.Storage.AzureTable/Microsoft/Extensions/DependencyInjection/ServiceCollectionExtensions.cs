@@ -57,5 +57,26 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return services;
         }
+
+        /// <summary>
+        /// Adds Azure blob-based implementation of <see cref="ITenantedTemplateStoreFactory"/> to the service container.
+        /// </summary>
+        /// <param name="services">The collection.</param>
+        /// <param name="getTenantCloudBlobContainerFactoryOptions">A callback function that returns the <see cref="TenantCloudBlobContainerFactoryOptions"/>.</param>
+        /// <returns>The configured <see cref="IServiceCollection"/>.</returns>
+        public static IServiceCollection AddTenantedAzureBlobTemplateStore(
+            this IServiceCollection services,
+            Func<IServiceProvider, TenantCloudBlobContainerFactoryOptions> getTenantCloudBlobContainerFactoryOptions)
+        {
+            if (services.Any(s => s.ServiceType is ITenantedTemplateStoreFactory))
+            {
+                return services;
+            }
+
+            services.AddTenantCloudBlobContainerFactory(getTenantCloudBlobContainerFactoryOptions);
+            services.AddSingleton<ITenantedTemplateStoreFactory, TenantedAzureBlobTemplateStoreFactory>();
+
+            return services;
+        }
     }
 }

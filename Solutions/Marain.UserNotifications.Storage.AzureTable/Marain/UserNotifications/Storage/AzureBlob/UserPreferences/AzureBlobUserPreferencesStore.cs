@@ -63,9 +63,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         /// <inheritdoc/>
         public async Task<UserPreference> StoreAsync(UserPreference userPreference)
         {
-            this.logger.LogDebug(
-                "Storing notification for user ",
-                userPreference.UserId);
+            this.logger.LogDebug("Storing UserPreference for user ", userPreference.UserId);
 
             // Gets the blob reference by the userId
             CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(userPreference.UserId);

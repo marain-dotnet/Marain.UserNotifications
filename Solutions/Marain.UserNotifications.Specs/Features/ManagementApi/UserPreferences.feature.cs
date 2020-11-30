@@ -165,18 +165,18 @@ this.ScenarioInitialize(scenarioInfo);
 #line 27
     testRunner.When("I send a user preference API request to retreive a user preference", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 29
+#line 28
     testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 30
+#line 29
     testRunner.And("the response content should have a string property called \'userId\' with value \'1\'" +
                         "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 31
+#line 30
     testRunner.And("the response content should have a string property called \'email\' with value \'tes" +
                         "t@test.com\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 32
+#line 31
     testRunner.And("the response content should have a string property called \'phoneNumber\' with valu" +
                         "e \'041532211\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
