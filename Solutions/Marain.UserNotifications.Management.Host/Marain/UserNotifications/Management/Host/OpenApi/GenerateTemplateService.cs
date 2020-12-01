@@ -23,7 +23,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         public const string GenerateTemplateOperationId = "generateTemplate";
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
-        private readonly ITenantedTemplateStoreFactory tenantedTemplateStoreFactory;
+        private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
         private readonly ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="tenantedUserPreferencesStoreFactory">User Preference store factory.</param>
         public GenerateTemplateService(
             IMarainServicesTenancy marainServicesTenancy,
-            ITenantedTemplateStoreFactory tenantedTemplateStoreFactory,
+            ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory,
             ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory)
         {
             this.marainServicesTenancy = marainServicesTenancy;
@@ -78,16 +78,16 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 throw new Exception($"There is no communication channel set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
             }
 
-            List<string> innerCommunicationChannels = userPreference.CommunicationChannelsPerNotificationConfiguration[body.NotificationType];
+            List<CommunicationType>? innerCommunicationChannels = userPreference.CommunicationChannelsPerNotificationConfiguration[body.NotificationType];
 
             // TODO: Based of the communication channels configured for this notification type we need to populate the NotificationTypeTemplate
             // by using the LiquidDotNet library.
 
             // Gets the AzureBlobTemplateStore
-            ITemplateStore templateStore = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
+            INotificationTemplateStore templateStore = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
 
             // Get the notification template for the notification type
-            NotificationTypeTemplate? rawNotificationTypeTemplate = await templateStore.GetAsync(body.NotificationType).ConfigureAwait(false);
+            NotificationTemplate? rawNotificationTypeTemplate = await templateStore.GetAsync(body.NotificationType).ConfigureAwait(false);
 
             // and replace with the tags inside the template with the ones received from the property bag in the CreateNotificationsRequest
             return this.OkResult();

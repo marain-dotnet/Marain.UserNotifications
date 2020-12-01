@@ -170,6 +170,11 @@ namespace Marain.UserNotifications.Specs.Bindings
                     Key = "userPreferencesStore",
                     Configuration = blobStorageConfiguration,
                 },
+                new EnrollmentBlobStorageConfigurationItem
+                {
+                    Key = "templateStore",
+                    Configuration = blobStorageConfiguration,
+                },
             };
         }
     }

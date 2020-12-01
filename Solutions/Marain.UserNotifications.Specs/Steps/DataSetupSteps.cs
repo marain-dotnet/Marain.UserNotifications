@@ -52,7 +52,8 @@ namespace Marain.UserNotifications.Specs.Steps
 
         public static UserPreference BuildUserPreferenceFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
-            Dictionary<string, List<string>> communicationChannelsPerNotificationConfiguration = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(tableRow["communicationChannelsPerNotificationConfiguration"], serializerSettings);
+            Dictionary<string, List<CommunicationType>> communicationChannelsPerNotificationConfiguration
+                = JsonConvert.DeserializeObject<Dictionary<string, List<CommunicationType>>>(tableRow["communicationChannelsPerNotificationConfiguration"], serializerSettings);
 
             return new UserPreference(
                 tableRow["userId"],
@@ -60,6 +61,20 @@ namespace Marain.UserNotifications.Specs.Steps
                 tableRow["phoneNumber"],
                 communicationChannelsPerNotificationConfiguration,
                 DateTimeOffset.Now);
+        }
+
+        public static NotificationTemplate BuildNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        {
+            Sms? deserialisedSms = tableRow.ContainsKey("sms") ? JsonConvert.DeserializeObject<Sms>(tableRow["sms"]) : null;
+            Email? deserialisedEmail = tableRow.ContainsKey("email") ? JsonConvert.DeserializeObject<Email>(tableRow["Email"]) : null;
+            WebPush? deserialisedWebPush = tableRow.ContainsKey("webPush") ? JsonConvert.DeserializeObject<WebPush>(tableRow["WebPush"]) : null;
+
+            return new NotificationTemplate(
+                tableRow["notificationType"],
+                null,
+                deserialisedSms,
+                deserialisedEmail,
+                deserialisedWebPush);
         }
 
         [Given("I have created and stored a notification in the current transient tenant for the user with Id '(.*)'")]
@@ -121,8 +136,8 @@ namespace Marain.UserNotifications.Specs.Steps
             this.scenarioContext.Set(result, resultName);
         }
 
-        [Given(@"I have created and stored a user preference for user")]
-        public async Task GivenIHaveCreatedAndStoredAUserPreferenceForUser(Table table)
+        [Given(@"I have created and stored a user preference for a user")]
+        public async Task GivenIHaveCreatedAndStoredAUserPreferenceForAUser(Table table)
         {
             ITenantedUserPreferencesStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedUserPreferencesStoreFactory>();
             IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
@@ -131,6 +146,20 @@ namespace Marain.UserNotifications.Specs.Steps
 
             IUserPreferencesStore store = await storeFactory.GetUserPreferencesStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
             UserPreference result = await store.StoreAsync(preference).ConfigureAwait(false);
+
+            this.scenarioContext.Set(result);
+        }
+
+        [Given(@"I have created and stored a notification template")]
+        public async Task GivenIHaveCreatedAndStoredANotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+
+            NotificationTemplate notificationTemplate = BuildNotificationTemplateFrom(table.Rows[0], serializerSettingsProvider.Instance);
+
+            INotificationTemplateStore store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            NotificationTemplate result = await store.StoreAsync(notificationTemplate).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }

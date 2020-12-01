@@ -21,7 +21,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         public const string CreateTemplateOperationId = "createTemplate";
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
-        private readonly ITenantedTemplateStoreFactory tenantedTemplateStoreFactory;
+        private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
 
         /// <summary>
         /// Initializes a new instance of <see cref="CreateTemplateService"/> class.
@@ -30,7 +30,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="tenantedTemplateStoreFactory">Template store factory.</param>
         public CreateTemplateService(
             IMarainServicesTenancy marainServicesTenancy,
-            ITenantedTemplateStoreFactory tenantedTemplateStoreFactory)
+            ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory)
         {
             this.marainServicesTenancy = marainServicesTenancy;
             this.tenantedTemplateStoreFactory = tenantedTemplateStoreFactory;
@@ -45,13 +45,13 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         [OperationId(CreateTemplateOperationId)]
         public async Task<OpenApiResult> CreateTemplateAsync(
             IOpenApiContext context,
-            NotificationTypeTemplate body)
+            NotificationTemplate body)
         {
             // We can guarantee tenant Id is available because it's part of the Uri.
             ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId!).ConfigureAwait(false);
 
             // Gets the AzureBlobTemplateStore
-            ITemplateStore store = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
+            INotificationTemplateStore store = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
 
             // Save the TemplateWrapper object in the blob
             await store.StoreAsync(body).ConfigureAwait(false);

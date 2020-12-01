@@ -14,9 +14,9 @@ namespace Marain.UserNotifications.Storage.AzureBlob
     using Newtonsoft.Json;
 
     /// <summary>
-    /// An implementation of <see cref="ITemplateStore"/> over Azure Blob storage.
+    /// An implementation of <see cref="INotificationTemplateStore"/> over Azure Blob storage.
     /// </summary>
-    public class AzureBlobTemplateStore : ITemplateStore
+    public class AzureBlobTemplateStore : INotificationTemplateStore
     {
         private readonly ILogger logger;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
@@ -42,7 +42,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationTypeTemplate> StoreAsync(NotificationTypeTemplate template)
+        public async Task<NotificationTemplate> StoreAsync(NotificationTemplate template)
         {
             this.logger.LogDebug("Storing template for notification type ", template.NotificationType);
 
@@ -59,7 +59,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationTypeTemplate?> GetAsync(string notificationType)
+        public async Task<NotificationTemplate?> GetAsync(string notificationType)
         {
             // Gets the blob reference by the notificationType
             CloudBlockBlob blob = this.blobContainer.GetBlockBlobReference(notificationType);
@@ -74,7 +74,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
 
             // Download and convert the blob text into TemplateWrapper object
             string json = await blob.DownloadTextAsync().ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<NotificationTypeTemplate>(json, this.serializerSettingsProvider.Instance);
+            return JsonConvert.DeserializeObject<NotificationTemplate>(json, this.serializerSettingsProvider.Instance);
         }
     }
 }

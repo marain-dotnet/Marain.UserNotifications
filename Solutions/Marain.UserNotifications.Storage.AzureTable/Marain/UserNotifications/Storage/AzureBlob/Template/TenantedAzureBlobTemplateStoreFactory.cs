@@ -13,9 +13,9 @@ namespace Marain.UserNotifications.Storage.AzureBlob
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// An implementation of <see cref="ITenantedTemplateStoreFactory"/> for <see cref="TenantedAzureBlobTemplateStoreFactory"/>.
+    /// An implementation of <see cref="ITenantedNotificationTemplateStoreFactory"/> for <see cref="TenantedAzureBlobTemplateStoreFactory"/>.
     /// </summary>
-    public class TenantedAzureBlobTemplateStoreFactory : ITenantedTemplateStoreFactory
+    public class TenantedAzureBlobTemplateStoreFactory : ITenantedNotificationTemplateStoreFactory
     {
         /// <summary>
         /// The blob definition for the store. This is used to look up the corresponding configuration from.
@@ -28,7 +28,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         private readonly ITenantCloudBlobContainerFactory blobContainerFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ITemplateStore"/> class.
+        /// Initializes a new instance of the <see cref="INotificationTemplateStore"/> class.
         /// </summary>
         /// <param name="blobContainerFactory">The cloud blob factory.</param>
         /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
@@ -47,7 +47,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         }
 
         /// <inheritdoc/>
-        public async Task<ITemplateStore> GetTemplateStoreForTenantAsync(ITenant tenant)
+        public async Task<INotificationTemplateStore> GetTemplateStoreForTenantAsync(ITenant tenant)
         {
             // Gets the blob container for the tenant or creates a new one if it does not exists
             CloudBlobContainer blob = await this.blobContainerFactory.GetBlobContainerForTenantAsync(tenant, BlobContainerDefinition).ConfigureAwait(false);

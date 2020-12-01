@@ -25,7 +25,7 @@ namespace Marain.UserPreferences
             string userId,
             string? email,
             string? phoneNumber,
-            Dictionary<string, List<string>> communicationChannelsPerNotificationConfiguration,
+            Dictionary<string, List<CommunicationType>> communicationChannelsPerNotificationConfiguration,
             DateTimeOffset timestamp)
         {
             this.UserId = userId;
@@ -54,7 +54,7 @@ namespace Marain.UserPreferences
         /// Gets the CommunicationChannelsPerNotificationConfiguration.
         /// This will be notification: list of communication channels configured.
         /// </summary>
-        public Dictionary<string, List<string>> CommunicationChannelsPerNotificationConfiguration { get; }
+        public Dictionary<string, List<CommunicationType>> CommunicationChannelsPerNotificationConfiguration { get; }
 
         /// <summary>
         /// Gets the date and time at which the user preferences were last updated.

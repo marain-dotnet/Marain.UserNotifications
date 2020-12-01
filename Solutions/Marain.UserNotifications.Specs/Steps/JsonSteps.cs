@@ -97,6 +97,14 @@ namespace Marain.UserNotifications.Specs
             this.scenarioContext.Set(valueAsString, storeAsName);
         }
 
+        [Then(@"the response content should have a json property called '(.*)' with value '(.*)'")]
+        public void ThenTheResponseContentShouldHaveAJsonPropertyCalledWithValue(string propertyPath, string storeAsJson)
+        {
+            JToken token = this.GetRequiredTokenFromResponseObject(propertyPath);
+            string valueAsString = token.ToString().Replace("\r\n", string.Empty);
+            this.scenarioContext.Set(valueAsString, storeAsJson);
+        }
+
         public JToken GetRequiredTokenFromResponseObject(string propertyPath)
         {
             JObject data = this.scenarioContext.Get<JObject>();

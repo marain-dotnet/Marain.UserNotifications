@@ -23,7 +23,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         public const string GetTemplateOperationId = "getTemplate";
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
-        private readonly ITenantedTemplateStoreFactory tenantedTemplateStoreFactory;
+        private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
 
         /// <summary>
         /// Initializes a new instance of <see cref="GetTemplateService"/> class.
@@ -32,7 +32,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="tenantedTemplateStoreFactory">Template store factory.</param>
         public GetTemplateService(
             IMarainServicesTenancy marainServicesTenancy,
-            ITenantedTemplateStoreFactory tenantedTemplateStoreFactory)
+            ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory)
         {
             this.marainServicesTenancy = marainServicesTenancy;
             this.tenantedTemplateStoreFactory = tenantedTemplateStoreFactory;
@@ -52,10 +52,10 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // We can guarantee tenant Id is available because it's part of the Uri.
             ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId!).ConfigureAwait(false);
 
-            ITemplateStore store = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
+            INotificationTemplateStore store = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
 
             // Gets the template by notificationType
-            NotificationTypeTemplate? templateObj = await store.GetAsync(notificationType).ConfigureAwait(false);
+            NotificationTemplate? templateObj = await store.GetAsync(notificationType).ConfigureAwait(false);
 
             if (templateObj == null)
             {
