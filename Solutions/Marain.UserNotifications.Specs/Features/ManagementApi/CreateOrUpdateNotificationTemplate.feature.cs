@@ -20,11 +20,11 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Create Notification Template")]
+    [NUnit.Framework.DescriptionAttribute("Create Or Update Notification Template")]
     [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
     [NUnit.Framework.CategoryAttribute("useApis")]
     [NUnit.Framework.CategoryAttribute("useTransientTenant")]
-    public partial class CreateNotificationTemplateFeature
+    public partial class CreateOrUpdateNotificationTemplateFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -34,14 +34,14 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
                 "useApis",
                 "useTransientTenant"};
         
-#line 1 "CreateNotificationTemplate.feature"
+#line 1 "CreateOrUpdateNotificationTemplate.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApi", "Create Notification Template", null, ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApi", "Create Or Update Notification Template", null, ProgrammingLanguage.CSharp, new string[] {
                         "perFeatureContainer",
                         "useApis",
                         "useTransientTenant"});
@@ -148,19 +148,19 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                             "notificationType",
                             "sms"});
-                table10.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "Marain.Notification.NewLead.v1",
                             "{\"body\": \"A new lead was added by {leadAddedBy}\"}"});
 #line 21
- testRunner.Given("I have created and stored a notification template", ((string)(null)), table10, "Given ");
+ testRunner.Given("I have created and stored a notification template", ((string)(null)), table12, "Given ");
 #line hidden
 #line 24
  testRunner.When("I send the user notification template API a request to create a new user notifica" +
-                        "tion template", "{\r\n\t\"notificationType\": \"smartr365.lead.added.v1\",\r\n\t\"smsObject\": \r\n\t{\r\n\t\t\"body\":" +
-                        " \"Different template\"\r\n\t}\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+                        "tion template", "{\r\n\t\"notificationType\": \"Marain.Notification.NewLead.v1\",\r\n\t\"sms\": \r\n\t{\r\n\t\t\"body\"" +
+                        ": \"Different template\"\r\n\t}\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 34
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

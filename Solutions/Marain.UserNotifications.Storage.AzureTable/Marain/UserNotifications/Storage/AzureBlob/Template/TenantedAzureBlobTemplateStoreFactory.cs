@@ -9,6 +9,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
     using Corvus.Azure.Storage.Tenancy;
     using Corvus.Extensions.Json;
     using Corvus.Tenancy;
+    using Marain.NotificationTemplate.NotificationTemplate;
     using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.Logging;
 

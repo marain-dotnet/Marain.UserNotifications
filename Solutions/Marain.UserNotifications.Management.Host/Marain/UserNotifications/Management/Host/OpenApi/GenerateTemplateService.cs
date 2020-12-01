@@ -8,6 +8,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
+    using Marain.NotificationTemplate.NotificationTemplate;
     using Marain.Services.Tenancy;
     using Marain.UserPreferences;
     using Menes;

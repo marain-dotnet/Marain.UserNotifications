@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserNotifications
+namespace Marain.UserPreferences
 {
     using System.Threading.Tasks;
     using Marain.UserPreferences;

@@ -7,8 +7,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
     using System;
     using System.Threading.Tasks;
     using Corvus.Extensions.Json;
-    using Marain.UserNotifications;
-    using Marain.UserPreferences;
+    using Marain.NotificationTemplate.NotificationTemplate;
     using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;

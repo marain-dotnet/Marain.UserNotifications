@@ -2,7 +2,7 @@
 @useApis
 @useTransientTenant
 
-Feature: Create Notification Template
+Feature: Create Or Update Notification Template
 
 Scenario: Create a notification template for a certain tenant
 	When I send the user notification template API a request to create a new user notification template
@@ -24,8 +24,8 @@ Scenario: Update a notification template for a certain tenant
 	When I send the user notification template API a request to create a new user notification template
 		"""
 		{
-			"notificationType": "smartr365.lead.added.v1",
-			"smsObject": 
+			"notificationType": "Marain.Notification.NewLead.v1",
+			"sms": 
 			{
 				"body": "Different template"
 			}

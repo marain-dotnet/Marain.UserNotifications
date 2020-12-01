@@ -11,6 +11,8 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Extensions.Json;
     using Corvus.Json;
     using Corvus.Testing.SpecFlow;
+    using Marain.NotificationTemplate.NotificationTemplate;
+    using Marain.NotificationTemplate.NotificationTemplate.CommunicationObjects;
     using Marain.UserNotifications.Specs.Bindings;
     using Marain.UserPreferences;
     using Microsoft.Extensions.DependencyInjection;

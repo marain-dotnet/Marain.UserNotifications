@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserPreferences
+namespace Marain.UserNotifications.Client.Management.Resources
 {
     /// <summary>
     /// Webpush Object.

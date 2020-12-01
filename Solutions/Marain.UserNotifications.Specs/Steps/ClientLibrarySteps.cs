@@ -194,6 +194,47 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [When(@"I use the client to send the notification template API a request to create a new notification template")]
+        public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewNotificationTemplate(string request)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            // notification template
+            Client.Management.Resources.NotificationTemplate notificationTemplate = JsonConvert.DeserializeObject<Client.Management.Resources.NotificationTemplate>(request);
+
+            try
+            {
+                ApiResponse result = await client.SetNotificationTemplate(
+                    transientTenantId,
+                    notificationTemplate).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, notificationTemplate);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When(@"I use the client to send the notification template API a request to get a notification template with notification type '(.*)'")]
+        public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToGetANotificationTemplateWithNotificationType(string notificationType)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            try
+            {
+                ApiResponse<Client.Management.Resources.NotificationTemplate> result = await client.GetNotificationTemplate(transientTenantId, notificationType).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
         [Given("I use the client to send an API delivery request for the user notification with the same Id as the user notification called '(.*)'")]
         public Task GivenIUseTheClientToSendAnAPIDeliveryRequestForTheUserNotificationWithTheSameIdAsTheUserNotificationCalled(string notificationName)
         {

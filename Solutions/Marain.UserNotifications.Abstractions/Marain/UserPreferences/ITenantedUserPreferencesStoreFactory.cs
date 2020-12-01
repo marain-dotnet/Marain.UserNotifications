@@ -2,13 +2,13 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserNotifications
+namespace Marain.UserPreferences
 {
     using System.Threading.Tasks;
     using Corvus.Tenancy;
 
     /// <summary>
-    /// Interface for a factory that can create a tenant-specific <see cref="IUserNotificationStore"/>.
+    /// Interface for a factory that can create a tenant-specific <see cref="IUserPreferencesStore"/>.
     /// </summary>
     public interface ITenantedUserPreferencesStoreFactory
     {

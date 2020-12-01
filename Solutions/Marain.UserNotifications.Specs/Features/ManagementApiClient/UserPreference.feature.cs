@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace Marain.UserNotifications.Specs.Features.ManagementApi
+namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
 {
     using TechTalk.SpecFlow;
     using System;
@@ -20,11 +20,11 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Get User Preferences")]
+    [NUnit.Framework.DescriptionAttribute("Create, update or get User Preferences via the client library")]
     [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
     [NUnit.Framework.CategoryAttribute("useApis")]
     [NUnit.Framework.CategoryAttribute("useTransientTenant")]
-    public partial class GetUserPreferencesFeature
+    public partial class CreateUpdateOrGetUserPreferencesViaTheClientLibraryFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -34,14 +34,14 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
                 "useApis",
                 "useTransientTenant"};
         
-#line 1 "GetUserPreferences.feature"
+#line 1 "UserPreference.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApi", "Get User Preferences", null, ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApiClient", "Create, update or get User Preferences via the client library", null, ProgrammingLanguage.CSharp, new string[] {
                         "perFeatureContainer",
                         "useApis",
                         "useTransientTenant"});
@@ -83,12 +83,12 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get a user preference for a certain user")]
-        public virtual void GetAUserPreferenceForACertainUser()
+        [NUnit.Framework.DescriptionAttribute("Create a User Preference")]
+        public virtual void CreateAUserPreference()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a user preference for a certain user", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a User Preference", null, tagsOfScenario, argumentsOfScenario);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -109,37 +109,68 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
-                            "userId",
-                            "email",
-                            "phoneNumber",
-                            "communicationChannelsPerNotificationConfiguration"});
-                table14.AddRow(new string[] {
-                            "1",
-                            "test@test.com",
-                            "041532211",
-                            "{\"notificationType1\": [\"email\", \"sms\"]}"});
-#line 8
-    testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table14, "Given ");
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Update a User Preference")]
+        public virtual void UpdateAUserPreference()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a User Preference", null, tagsOfScenario, argumentsOfScenario);
+#line 9
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Get a User Preference")]
+        public virtual void GetAUserPreference()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a User Preference", null, tagsOfScenario, argumentsOfScenario);
 #line 11
-    testRunner.When("I send a user preference API request to retreive a user preference", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
-#line 12
-    testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 13
-    testRunner.And("the response content should have a string property called \'userId\' with value \'1\'" +
-                        "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 14
-    testRunner.And("the response content should have a string property called \'email\' with value \'tes" +
-                        "t@test.com\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 15
-    testRunner.And("the response content should have a string property called \'phoneNumber\' with valu" +
-                        "e \'041532211\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
             }
             this.ScenarioCleanup();
         }

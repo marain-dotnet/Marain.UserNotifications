@@ -109,14 +109,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                             "notificationType",
                             "sms"});
-                table11.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "Marain.Notification.NewLead.v1",
                             "{\"body\": \"A new lead was added by {leadAddedBy}\"}"});
 #line 8
- testRunner.Given("I have created and stored a notification template", ((string)(null)), table11, "Given ");
+ testRunner.Given("I have created and stored a notification template", ((string)(null)), table13, "Given ");
 #line hidden
 #line 11
  testRunner.When("I send the notification template API a request to retreive a notification templat" +

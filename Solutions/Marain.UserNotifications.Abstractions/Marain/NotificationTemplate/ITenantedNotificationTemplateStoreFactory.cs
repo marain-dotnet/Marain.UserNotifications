@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserNotifications
+namespace Marain.NotificationTemplate.NotificationTemplate
 {
     using System.Threading.Tasks;
     using Corvus.Tenancy;
