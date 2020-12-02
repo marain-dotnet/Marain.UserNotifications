@@ -139,7 +139,7 @@ namespace Marain.UserNotifications.Client.Management
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            Uri requestUri = this.ConstructUri($"{tenantId}/marain/usernotifications/userpreference");
+            Uri requestUri = this.ConstructUri($"{tenantId}/marain/usernotifications/userpreference?userId={userId}");
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Get, requestUri);
 

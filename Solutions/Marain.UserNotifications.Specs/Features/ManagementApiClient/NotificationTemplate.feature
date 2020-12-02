@@ -2,7 +2,7 @@
 @useApis
 @useTransientTenant
 
-Feature: Create, update or get a Notification Template via the client library
+Feature: Notification Template via the client library
 
 Scenario: Create a Notification Template
 	When I use the client to send the notification template API a request to create a new notification template

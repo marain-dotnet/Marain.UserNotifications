@@ -6,7 +6,8 @@ namespace Marain.UserNotifications.Client.Management.Resources
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text.Json.Serialization;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// The user preference structure.
@@ -14,51 +15,30 @@ namespace Marain.UserNotifications.Client.Management.Resources
     public class UserPreference
     {
         /// <summary>
-        /// Create UserPreference Object.
+        /// Gets or Sets the UserId of the owner.
         /// </summary>
-        /// <param name="userId">The UserId of the owner.</param>
-        /// <param name="email">The Email of the owner.</param>
-        /// <param name="phoneNumber">The PhoneNumber of the owner.</param>
-        /// <param name="communicationChannelsPerNotificationConfiguration">The communication channels configured for a notification type.</param>
-        /// <param name="timestamp"><see cref="Timestamp"/>.</param>
-        public UserPreference(
-            string userId,
-            string email,
-            string phoneNumber,
-            Dictionary<string, List<CommunicationType>> communicationChannelsPerNotificationConfiguration,
-            DateTimeOffset timestamp)
-        {
-            this.UserId = userId;
-            this.Email = email;
-            this.PhoneNumber = phoneNumber;
-            this.CommunicationChannelsPerNotificationConfiguration = communicationChannelsPerNotificationConfiguration;
-            this.Timestamp = timestamp != default ? timestamp.ToUniversalTime() : DateTimeOffset.UtcNow;
-        }
+        public string UserId { get; set; }
 
         /// <summary>
-        /// Gets the UserId of the owner.
+        /// Gets or Sets the Email of the owner.
         /// </summary>
-        public string UserId { get; }
+        public string Email { get; set; }
 
         /// <summary>
-        /// Gets the Email of the owner.
+        /// Gets or Sets the PhoneNumber of the owner.
         /// </summary>
-        public string Email { get; }
+        public string PhoneNumber { get; set; }
 
         /// <summary>
-        /// Gets the PhoneNumber of the owner.
-        /// </summary>
-        public string PhoneNumber { get; }
-
-        /// <summary>
-        /// Gets the CommunicationChannelsPerNotificationConfiguration.
+        /// Gets or Sets the CommunicationChannelsPerNotificationConfiguration.
         /// This will be notification: list of communication channels configured.
         /// </summary>
-        public Dictionary<string, List<CommunicationType>> CommunicationChannelsPerNotificationConfiguration { get; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Dictionary<string, List<CommunicationType>> CommunicationChannelsPerNotificationConfiguration { get; set; }
 
         /// <summary>
-        /// Gets the date and time at which the user preferences were last updated.
+        /// Gets or Sets the date and time at which the user preferences were last updated.
         /// </summary>
-        public DateTimeOffset Timestamp { get; }
+        public DateTimeOffset Timestamp { get; set; }
     }
 }

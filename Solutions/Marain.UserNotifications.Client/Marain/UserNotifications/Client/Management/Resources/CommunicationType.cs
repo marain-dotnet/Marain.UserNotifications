@@ -4,6 +4,9 @@
 
 namespace Marain.UserNotifications.Client.Management.Resources
 {
+    using System.Text.Json.Serialization;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// Values for the communication types a delivery channel could use.
     /// </summary>

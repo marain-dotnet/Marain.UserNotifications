@@ -20,11 +20,11 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Create, update or get a Notification Template via the client library")]
+    [NUnit.Framework.DescriptionAttribute("Notification Template via the client library")]
     [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
     [NUnit.Framework.CategoryAttribute("useApis")]
     [NUnit.Framework.CategoryAttribute("useTransientTenant")]
-    public partial class CreateUpdateOrGetANotificationTemplateViaTheClientLibraryFeature
+    public partial class NotificationTemplateViaTheClientLibraryFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -41,7 +41,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApiClient", "Create, update or get a Notification Template via the client library", null, ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApiClient", "Notification Template via the client library", null, ProgrammingLanguage.CSharp, new string[] {
                         "perFeatureContainer",
                         "useApis",
                         "useTransientTenant"});

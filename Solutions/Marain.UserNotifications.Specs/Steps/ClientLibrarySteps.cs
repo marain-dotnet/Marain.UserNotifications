@@ -17,6 +17,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Marain.UserNotifications.Client.ApiDeliveryChannel.Resources;
     using Marain.UserNotifications.Client.Management;
     using Marain.UserNotifications.Client.Management.Requests;
+    using Marain.UserNotifications.Client.Management.Resources;
     using Marain.UserNotifications.Specs.Bindings;
     using Menes.Hal;
     using Microsoft.Extensions.DependencyInjection;
@@ -382,6 +383,58 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.AreEqual(expected, response.Read);
         }
 
+        [Then(@"the user preference in the UserManagement API response should have a '(.*)' with value '(.*)'")]
+        public void ThenTheUserPreferenceInTheUserManagementAPIResponseShouldHaveAUserIdWithValue(string propertyName, string expectedValue)
+        {
+            UserPreference response = this.GetApiResponseBody<UserPreference>();
+            object? actualValue = this.GetPropertyValue(response, propertyName);
+            Assert.AreEqual(expectedValue, actualValue);
+        }
+
+        [When(@"I use the client to send a management API request to create a User Preference")]
+        [When(@"I use the client to send a management API request to update a User Preference")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToCreateAUserPreference(string request)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            Client.Management.Resources.UserPreference userPreference = JsonConvert.DeserializeObject<Client.Management.Resources.UserPreference>(request);
+
+            try
+            {
+                ApiResponse result = await client.SetUserPreference(
+                    transientTenantId,
+                    userPreference).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, userPreference);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When(@"I use the client to send a management API request to get a User Preference for userId '(.*)'")]
+        [Then(@"I use the client to send a management API request to get a User Preference for userId '(.*)'")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToGetAUserPreferenceForUserId(string userId)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            try
+            {
+                ApiResponse<Client.Management.Resources.UserPreference> result = await client.GetUserPreference(
+                    transientTenantId,
+                    userId).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
         private static CreateNotificationsRequest BuildCreateNotificationsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();
@@ -421,6 +474,11 @@ namespace Marain.UserNotifications.Specs.Steps
         private T GetApiResponseBody<T>()
         {
             return this.scenarioContext.Get<T>(ApiResponseBodyKey);
+        }
+
+        private object? GetPropertyValue(object src, string propName)
+        {
+            return src?.GetType()?.GetProperty(propName)?.GetValue(src, null);
         }
     }
 }
