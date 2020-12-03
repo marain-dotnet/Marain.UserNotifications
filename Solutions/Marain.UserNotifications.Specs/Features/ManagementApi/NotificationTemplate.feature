@@ -4,7 +4,7 @@
 
 Feature: Notification Template
 
-Scenario: Create a notification template for a certain tenant
+Scenario: Create a notification template
 	When I send the user notification template API a request to create a new user notification template
 		"""
 		{
@@ -17,11 +17,11 @@ Scenario: Create a notification template for a certain tenant
 		"""
 	Then the response status code should be 'OK'
 	
-Scenario: Update a notification template for a certain tenant
+Scenario: Update a notification template
 	Given I have created and stored a notification template
 	| notificationType				 | sms                                               |
 	| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {leadAddedBy}"} |
-	When I send the user notification template API a request to create a new user notification template
+	When I send the user notification template API a request to update a new user notification template
 		"""
 		{
 			"notificationType": "Marain.Notification.NewLead.v1",

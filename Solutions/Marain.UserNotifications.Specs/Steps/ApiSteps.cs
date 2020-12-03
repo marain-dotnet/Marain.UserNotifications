@@ -278,6 +278,7 @@ namespace Marain.UserNotifications.Specs.Steps
         }
 
         [When(@"I send the user notification template API a request to create a new user notification template")]
+        [When(@"I send the user notification template API a request to update a new user notification template")]
         public async Task WhenISendTheUserNotificationTemplateAPIARequestToCreateANewUserNotificationTemplate(string requestJson)
         {
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
