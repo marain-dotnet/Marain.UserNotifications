@@ -83,12 +83,12 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Create a notification template for a certain tenant")]
-        public virtual void CreateANotificationTemplateForACertainTenant()
+        [NUnit.Framework.DescriptionAttribute("Create a notification template")]
+        public virtual void CreateANotificationTemplate()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a notification template for a certain tenant", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a notification template", null, tagsOfScenario, argumentsOfScenario);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -122,12 +122,12 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Update a notification template for a certain tenant")]
-        public virtual void UpdateANotificationTemplateForACertainTenant()
+        [NUnit.Framework.DescriptionAttribute("Update a notification template")]
+        public virtual void UpdateANotificationTemplate()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a notification template for a certain tenant", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a notification template", null, tagsOfScenario, argumentsOfScenario);
 #line 20
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -158,9 +158,9 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("I have created and stored a notification template", ((string)(null)), table16, "Given ");
 #line hidden
 #line 24
- testRunner.When("I send the user notification template API a request to create a new user notifica" +
-                        "tion template", "{\r\n\t\"notificationType\": \"Marain.Notification.NewLead.v1\",\r\n\t\"smsTemplate\": \r\n\t{\r\n" +
-                        "\t\t\"body\": \"Different template\"\r\n\t}\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I send the user notification template API a request to update a new user notifica" +
+                        "tion template", "{\r\n\t\"notificationType\": \"Marain.Notification.NewLead.v1\",\r\n\t\"sms\": \r\n\t{\r\n\t\t\"body\"" +
+                        ": \"Different template\"\r\n\t}\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 34
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
