@@ -153,14 +153,14 @@ this.ScenarioInitialize(scenarioInfo);
                             "smsTemplate"});
                 table16.AddRow(new string[] {
                             "Marain.Notification.NewLead.v1",
-                            "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
+                            "{\"body\": \"A new lead was added by {leadAddedBy}\"}"});
 #line 21
  testRunner.Given("I have created and stored a notification template", ((string)(null)), table16, "Given ");
 #line hidden
 #line 24
  testRunner.When("I send the user notification template API a request to update a new user notifica" +
-                        "tion template", "{\r\n\t\"notificationType\": \"Marain.Notification.NewLead.v1\",\r\n\t\"sms\": \r\n\t{\r\n\t\t\"body\"" +
-                        ": \"Different template\"\r\n\t}\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+                        "tion template", "{\r\n\t\"notificationType\": \"Marain.Notification.NewLead.v1\",\r\n\t\"smsTemplate\": \r\n\t{\r\n" +
+                        "\t\t\"body\": \"Different template\"\r\n\t}\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 34
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
