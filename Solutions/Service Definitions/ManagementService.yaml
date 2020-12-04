@@ -258,7 +258,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotificationTypeTemplate'
+                $ref: '#/components/schemas/NotificationTemplate'
         '400':
           description: Bad request
           content:
@@ -288,7 +288,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NotificationTypeTemplate'
+              $ref: '#/components/schemas/NotificationTemplate'
       responses:
         '200':
           description: Successful operation
@@ -309,7 +309,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
 
-  /{tenantId}/marain/usernotifications/generatetemplate:
+  /{tenantId}/marain/usernotifications/templates/generate:
     put:
       summary: Returns generated templates for the provided notification type
       operationId: generateTemplate
@@ -327,7 +327,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotificationTypeTemplate'
+                $ref: '#/components/schemas/NotificationTemplate'
         '400':
           description: Bad request
           content:
@@ -463,15 +463,47 @@ components:
               type: string
               enum: ['notTracked', 'unread', 'read']
 
-    SMSObject:
+    SmsTemplate:
       description: The sms object.
       properties:
         body:
           description: The inner templated body for the sms object.
           nullable: false
           type: string
+
+    EmailTemplate:
+      description: The email object.
+      properties:
+        body:
+          description: The inner templated body for the email object.
+          nullable: false
+          type: string
+        subject:
+          description: The subject of the email object.
+          nullable: false
+          type: string
+        important:
+          description: Mark is the email is important.
+          nullable: true
+          type: string
           
-    NotificationTypeTemplate:
+    WebPushTemplate:
+      description: The webpush object.
+      properties:
+        body:
+          description: The inner templated body for the email object.
+          nullable: false
+          type: string
+        title:
+          description: The title of the email object.
+          nullable: false
+          type: string
+        image:
+          description: The Base64 image of webpush notification.
+          nullable: true
+          type: string
+
+    NotificationTemplate:
       description: The template wrapper which will stored per notification type.
       required:
         - notificationType
@@ -480,8 +512,12 @@ components:
           description: The notification type for the template.
           nullable: false
           type: string
-        smsObject:
-          $ref: '#/components/schemas/SMSObject'
+        smsTemplate:
+          $ref: '#/components/schemas/SmsTemplate'
+        emailTemplate:
+          $ref: '#/components/schemas/EmailTemplate'
+        webPushTemplate:
+          $ref: '#/components/schemas/WebPushTemplate'
 
     UserPreference:
       description: Request data for creating a new user preference object.

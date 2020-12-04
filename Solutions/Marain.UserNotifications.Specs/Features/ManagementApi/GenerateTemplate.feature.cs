@@ -20,11 +20,11 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("User Preference")]
+    [NUnit.Framework.DescriptionAttribute("Generate Template")]
     [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
     [NUnit.Framework.CategoryAttribute("useApis")]
     [NUnit.Framework.CategoryAttribute("useTransientTenant")]
-    public partial class UserPreferenceFeature
+    public partial class GenerateTemplateFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -34,14 +34,14 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
                 "useApis",
                 "useTransientTenant"};
         
-#line 1 "UserPreferences.feature"
+#line 1 "GenerateTemplate.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApi", "User Preference", null, ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApi", "Generate Template", null, ProgrammingLanguage.CSharp, new string[] {
                         "perFeatureContainer",
                         "useApis",
                         "useTransientTenant"});
@@ -83,102 +83,77 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Create a user prefence for a user")]
-        public virtual void CreateAUserPrefenceForAUser()
+        [NUnit.Framework.DescriptionAttribute("Generate populated template")]
+        public virtual void GeneratePopulatedTemplate()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a user prefence for a user", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generate populated template", null, tagsOfScenario, argumentsOfScenario);
+#line 6
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                            "notificationType",
+                            "smsTemplate"});
+                table14.AddRow(new string[] {
+                            "marain.notifications.test.v1",
+                            "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
 #line 7
-this.ScenarioInitialize(scenarioInfo);
+ testRunner.Given("I have created and stored a notification template", ((string)(null)), table14, "Given ");
 #line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 8
-    testRunner.When("I send the user preference API a request to create a new user preference", "{\r\n    \"userId\": \"1\",\r\n    \"email\": \"test@test.com\",\r\n    \"phoneNumber\": \"\",\r\n   " +
-                        " \"communicationChannelsPerNotificationConfiguration\": \r\n    {\r\n        \"notifica" +
-                        "tiontype1\": [\"Sms\", \"Email\"],\r\n        \"notificationtype2\": [\"Sms\", \"WebPush\"]\r\n" +
-                        "    },\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 21
-    testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get a user preference for a certain user")]
-        public virtual void GetAUserPreferenceForACertainUser()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a user preference for a certain user", null, tagsOfScenario, argumentsOfScenario);
-#line 23
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-                TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table18.AddRow(new string[] {
+                table15.AddRow(new string[] {
                             "1",
                             "test@test.com",
                             "041532211",
-                            "{\"notificationType1\": [\"email\", \"sms\"]}"});
-#line 24
-    testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table18, "Given ");
+                            "{\"marain.notifications.test.v1\": [\"email\", \"sms\"]}"});
+#line 10
+ testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table15, "And ");
+#line hidden
+#line 13
+ testRunner.When("I send the generate template API request", @"      {
+          ""notificationType"": ""marain.notifications.test.v1"",
+          ""timestamp"": ""2020-07-21T17:32:28Z"",
+          ""userIds"": [
+              ""1""
+          ],
+          ""correlationIds"": [""cid1"", ""cid2""],
+          ""properties"": {
+              ""leadAddedBy"": ""TestUser123"",
+          }
+      }", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 27
-    testRunner.When("I send a user preference API request to retreive a user preference", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 28
-    testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.And("the response content should have a string property called \'notificationType\' with" +
+                        " value \'marain.notifications.test.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 29
-    testRunner.And("the response content should have a string property called \'userId\' with value \'1\'" +
-                        "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 30
-    testRunner.And("the response content should have a string property called \'email\' with value \'tes" +
-                        "t@test.com\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 31
-    testRunner.And("the response content should have a string property called \'phoneNumber\' with valu" +
-                        "e \'041532211\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("the response content should have a json property called \'smsTemplate\' with value " +
+                        "\'{\"body\": \"A new lead was added by TestUser123\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

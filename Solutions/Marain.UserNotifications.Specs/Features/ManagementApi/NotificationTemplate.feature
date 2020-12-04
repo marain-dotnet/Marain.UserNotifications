@@ -9,9 +9,9 @@ Scenario: Create a notification template for a certain tenant
 		"""
 		{
 			"notificationType": "smartr365.lead.added.v1",
-			"smsObject": 
+			"smsTemplate": 
 			{
-				"body": "A new lead was added by {leadAddedBy}"
+				"body": "A new lead was added by {{leadAddedBy}}"
 			}
 		}
 		"""
@@ -19,13 +19,13 @@ Scenario: Create a notification template for a certain tenant
 	
 Scenario: Update a notification template for a certain tenant
 	Given I have created and stored a notification template
-	| notificationType				 | sms                                               |
-	| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {leadAddedBy}"} |
+	| notificationType               | smsTemplate                                       |
+	| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	When I send the user notification template API a request to create a new user notification template
 		"""
 		{
 			"notificationType": "Marain.Notification.NewLead.v1",
-			"sms": 
+			"smsTemplate": 
 			{
 				"body": "Different template"
 			}
@@ -35,9 +35,9 @@ Scenario: Update a notification template for a certain tenant
 	
 Scenario: Get a notification template
 	Given I have created and stored a notification template
-		| notificationType				 | sms                                               |
-		| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {leadAddedBy}"} |
+		| notificationType               | smsTemplate                                       |
+		| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	When I send the notification template API a request to retreive a notification template with notificationType 'Marain.Notification.NewLead.v1'
 	Then the response status code should be 'OK'
 	And the response content should have a string property called 'notificationType' with value 'Marain.Notification.NewLead.v1'
-	And the response content should have a json property called 'sms' with value '{"body": "A new lead was added by {leadAddedBy}"}'
+	And the response content should have a json property called 'smsTemplate' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'

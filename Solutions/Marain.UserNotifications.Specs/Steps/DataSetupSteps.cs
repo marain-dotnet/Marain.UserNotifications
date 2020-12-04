@@ -12,7 +12,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Json;
     using Corvus.Testing.SpecFlow;
     using Marain.NotificationTemplate.NotificationTemplate;
-    using Marain.NotificationTemplate.NotificationTemplate.CommunicationObjects;
+    using Marain.NotificationTemplate.NotificationTemplate.CommunicationTemplates;
     using Marain.UserNotifications.Specs.Bindings;
     using Marain.UserPreferences;
     using Microsoft.Extensions.DependencyInjection;
@@ -67,9 +67,9 @@ namespace Marain.UserNotifications.Specs.Steps
 
         public static NotificationTemplate BuildNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
-            Sms? deserialisedSms = tableRow.ContainsKey("sms") ? JsonConvert.DeserializeObject<Sms>(tableRow["sms"]) : null;
-            Email? deserialisedEmail = tableRow.ContainsKey("email") ? JsonConvert.DeserializeObject<Email>(tableRow["Email"]) : null;
-            WebPush? deserialisedWebPush = tableRow.ContainsKey("webPush") ? JsonConvert.DeserializeObject<WebPush>(tableRow["WebPush"]) : null;
+            SmsTemplate? deserialisedSms = tableRow.ContainsKey("smsTemplate") ? JsonConvert.DeserializeObject<SmsTemplate>(tableRow["smsTemplate"], serializerSettings) : null;
+            EmailTemplate? deserialisedEmail = tableRow.ContainsKey("emailTemplate") ? JsonConvert.DeserializeObject<EmailTemplate>(tableRow["emailTemplate"], serializerSettings) : null;
+            WebPushTemplate? deserialisedWebPush = tableRow.ContainsKey("webPushTemplate") ? JsonConvert.DeserializeObject<WebPushTemplate>(tableRow["webPushTemplate"], serializerSettings) : null;
 
             return new NotificationTemplate(
                 tableRow["notificationType"],

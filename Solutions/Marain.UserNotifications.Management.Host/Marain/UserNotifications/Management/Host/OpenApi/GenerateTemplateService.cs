@@ -8,10 +8,13 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
+    using DotLiquid;
     using Marain.NotificationTemplate.NotificationTemplate;
+    using Marain.NotificationTemplate.NotificationTemplate.CommunicationTemplates;
     using Marain.Services.Tenancy;
     using Marain.UserPreferences;
     using Menes;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Implements the generate template endpoint for the management API.
@@ -79,10 +82,12 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 throw new Exception($"There is no communication channel set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
             }
 
-            List<CommunicationType>? innerCommunicationChannels = userPreference.CommunicationChannelsPerNotificationConfiguration[body.NotificationType];
+            List<CommunicationType>? registeredCommunicationChannels = userPreference.CommunicationChannelsPerNotificationConfiguration[body.NotificationType];
 
-            // TODO: Based of the communication channels configured for this notification type we need to populate the NotificationTypeTemplate
-            // by using the LiquidDotNet library.
+            if (registeredCommunicationChannels == null || registeredCommunicationChannels.Count == 0)
+            {
+                throw new Exception($"There are no communication channel set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
+            }
 
             // Gets the AzureBlobTemplateStore
             INotificationTemplateStore templateStore = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
@@ -90,8 +95,70 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // Get the notification template for the notification type
             NotificationTemplate? rawNotificationTypeTemplate = await templateStore.GetAsync(body.NotificationType).ConfigureAwait(false);
 
+            if (rawNotificationTypeTemplate == null)
+            {
+                throw new Exception($"There is no notification template set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
+            }
+
+            var communicationTypeDeliveryStatus = new Dictionary<CommunicationType, bool>();
+            EmailTemplate? emailTemplate = null;
+            SmsTemplate? smsTemplate = null;
+
+            foreach (CommunicationType channel in registeredCommunicationChannels)
+            {
+                switch (channel)
+                {
+                    case CommunicationType.Email:
+
+                        if (rawNotificationTypeTemplate.EmailTemplate != null && body.Properties != null)
+                        {
+                            Dictionary<string, object> existingProperties = PropertyBagHelpers.GetDictionaryFromPropertyBag(body.Properties);
+
+                            // Email
+                            var emailBodyTemplate = Template.Parse(rawNotificationTypeTemplate.EmailTemplate.Body);
+                            string templatedBody = await emailBodyTemplate.RenderAsync(Hash.FromDictionary(existingProperties));
+
+                            // Subject
+                            var subjectTemplate = Template.Parse(rawNotificationTypeTemplate.EmailTemplate.Subject);
+                            string templatedSubject = await subjectTemplate.RenderAsync(Hash.FromDictionary(existingProperties));
+
+                            emailTemplate = new EmailTemplate(templatedBody, templatedSubject, false);
+                            communicationTypeDeliveryStatus.Add(channel, true);
+                            break;
+                        }
+
+                        communicationTypeDeliveryStatus.Add(channel, false);
+                        break;
+                    case CommunicationType.Sms:
+                        if (rawNotificationTypeTemplate.SmsTemplate != null && body.Properties != null)
+                        {
+                            // SMS
+                            var smsBodyTemplate = Template.Parse(rawNotificationTypeTemplate.SmsTemplate.Body);
+
+                            Dictionary<string, object> existingProperties = PropertyBagHelpers.GetDictionaryFromPropertyBag(body.Properties);
+                            string smsTemplatedBody = await smsBodyTemplate.RenderAsync(Hash.FromDictionary(existingProperties));
+
+                            smsTemplate = new SmsTemplate(smsTemplatedBody);
+                            communicationTypeDeliveryStatus.Add(channel, true);
+                            break;
+                        }
+
+                        communicationTypeDeliveryStatus.Add(channel, false);
+                        break;
+                    case CommunicationType.WebPush:
+                        break;
+                    case CommunicationType.MMS:
+                        break;
+                }
+            }
+
+            var responseTemplate = new NotificationTemplate(
+                body.NotificationType,
+                smsTemplate: smsTemplate,
+                emailTemplate: emailTemplate);
+
             // and replace with the tags inside the template with the ones received from the property bag in the CreateNotificationsRequest
-            return this.OkResult();
+            return this.OkResult(responseTemplate);
         }
     }
 }

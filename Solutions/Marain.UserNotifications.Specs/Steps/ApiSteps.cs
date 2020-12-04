@@ -305,6 +305,29 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.SendGetRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates?notificationType={notificationType}");
         }
 
+        [When(@"I send the generate template API request")]
+        public async Task WhenISendTheGenerateTemplateAPIRequest(string requestJson)
+        {
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            HttpResponseMessage response = await HttpClient.PutAsync(
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates/generate"),
+                requestContent).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            this.scenarioContext.Set(content, ResponseContent);
+
+            if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(content))
+            {
+                var parsedResponse = JObject.Parse(content);
+                this.scenarioContext.Set(parsedResponse);
+            }
+        }
+
         private Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)
         {
             var tokenSource = new CancellationTokenSource();

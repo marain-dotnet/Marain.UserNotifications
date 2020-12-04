@@ -5,7 +5,7 @@
 namespace Marain.NotificationTemplate.NotificationTemplate
 {
     using System;
-    using Marain.NotificationTemplate.NotificationTemplate.CommunicationObjects;
+    using Marain.NotificationTemplate.NotificationTemplate.CommunicationTemplates;
 
     /// <summary>
     /// The Notification Template structure.
@@ -17,21 +17,21 @@ namespace Marain.NotificationTemplate.NotificationTemplate
         /// </summary>
         /// <param name="notificationType">The notification type.</param>
         /// <param name="timestamp">The last updated time.</param>
-        /// <param name="sms">The SMS object for the template.</param>
-        /// <param name="email">The email object for the notification.</param>
-        /// <param name="webPush">The web push object for the notification.</param>
+        /// <param name="smsTemplate">The SMS object for the template.</param>
+        /// <param name="emailTemplate">The email object for the notification.</param>
+        /// <param name="webPushTemplate">The web push object for the notification.</param>
         public NotificationTemplate(
             string notificationType,
             DateTimeOffset? timestamp = null,
-            Sms? sms = null,
-            Email? email = null,
-            WebPush? webPush = null)
+            SmsTemplate? smsTemplate = null,
+            EmailTemplate? emailTemplate = null,
+            WebPushTemplate? webPushTemplate = null)
         {
             this.NotificationType = notificationType;
             this.Timestamp = timestamp != null && timestamp != default ? timestamp.Value.ToUniversalTime() : DateTimeOffset.UtcNow;
-            this.Sms = sms;
-            this.Email = email;
-            this.WebPush = webPush;
+            this.SmsTemplate = smsTemplate;
+            this.EmailTemplate = emailTemplate;
+            this.WebPushTemplate = webPushTemplate;
         }
 
         /// <summary>
@@ -48,18 +48,18 @@ namespace Marain.NotificationTemplate.NotificationTemplate
         /// Gets the Sms object.
         /// The object should be defined if this notification type uses Sms templates.
         /// </summary>
-        public Sms? Sms { get; }
+        public SmsTemplate? SmsTemplate { get; }
 
         /// <summary>
         /// Gets the email object.
         /// The object should be defined if this notification type uses Email templates.
         /// </summary>
-        public Email? Email { get; }
+        public EmailTemplate? EmailTemplate { get; }
 
         /// <summary>
         /// Gets the web push object.
         /// The object should be defined if this notification type uses web push templates.
         /// </summary>
-        public WebPush? WebPush { get; }
+        public WebPushTemplate? WebPushTemplate { get; }
     }
 }

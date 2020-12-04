@@ -1,13 +1,13 @@
-﻿// <copyright file="WebPush.cs" company="Endjin Limited">
+﻿// <copyright file="WebPushTemplate.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserNotifications.Client.Management.Resources
+namespace Marain.NotificationTemplate.NotificationTemplate.CommunicationTemplates
 {
     /// <summary>
     /// Webpush Object.
     /// </summary>
-    public class WebPush
+    public class WebPushTemplate
     {
         /// <summary>
         /// Constructor for WebPush object.
@@ -15,17 +15,14 @@ namespace Marain.UserNotifications.Client.Management.Resources
         /// <param name="body">The inner templated text.</param>
         /// <param name="title">The title of the notification.</param>
         /// <param name="image">The image of the webpush notification.</param>
-        /// <param name="userIdentifier">The id of the webpush notification.</param>
-        public WebPush(
+        public WebPushTemplate(
             string body,
             string title,
-            string image,
-            string userIdentifier)
+            string image)
         {
             this.Body = body;
             this.Title = title;
             this.Image = image;
-            this.UserIdentifier = userIdentifier;
         }
 
         /// <summary>
@@ -42,10 +39,5 @@ namespace Marain.UserNotifications.Client.Management.Resources
         /// Gets the Base64 image of a WebPush notification.
         /// </summary>
         public string Image { get; }
-
-        /// <summary>
-        /// Gets the unique user identifier for a WebPush notification.
-        /// </summary>
-        public string UserIdentifier { get; }
     }
 }

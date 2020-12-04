@@ -9,9 +9,9 @@ Scenario: Create a Notification Template
 		"""
 		{
 			"notificationType": "Marain.Notification.NewLead.v1",
-			"sms": 
+			"smsTemplate": 
 			{
-				"body": "A new lead was added by {leadAddedBy}"
+				"body": "A new lead was added by {{leadAddedBy}}"
 			}
 		}
 		"""
@@ -19,13 +19,13 @@ Scenario: Create a Notification Template
 
 Scenario: Update a Notification Template
 	Given I have created and stored a notification template
-	| notificationType				 | sms                                               |
-	| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {leadAddedBy}"} |
+	| notificationType               | smsTemplate                                         |
+	| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	When I use the client to send the notification template API a request to create a new notification template
 		"""
 		{
 			"notificationType": "Marain.Notification.NewLead.v1",
-			"sms": 
+			"smsTemplate": 
 			{
 				"body": "Different template"
 			}
@@ -36,9 +36,9 @@ Scenario: Update a Notification Template
 
 Scenario: Get a notification template
 	Given I have created and stored a notification template
-	| notificationType				 | sms                                               |
-	| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {leadAddedBy}"} |
+	| notificationType               | smsTemplate                                         |
+	| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	When I use the client to send the notification template API a request to get a notification template with notification type 'Marain.Notification.NewLead.v1'
 	Then the response content should have a string property called 'notificationType' with value 'Marain.Notification.NewLead.v1'
-	And the response content should have a json property called 'sms' with value '{"body": "Different template"}'
+	And the response content should have a json property called 'smsTemplate' with value '{"body": "Different template"}'
 	

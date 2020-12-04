@@ -236,11 +236,6 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("the user preference in the UserManagement API response should have a \'PhoneNumber" +
                         "\' with value \'+44911222000000\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 51
- testRunner.And("the user preference in the UserManagement API response should have a communicatio" +
-                        "nChannelsPerNotificationConfiguration with value \'{ \"NotificationType1\": [\"Email" +
-                        "\", \"Sms\", \"WebPush\"] }\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
             }
             this.ScenarioCleanup();
         }

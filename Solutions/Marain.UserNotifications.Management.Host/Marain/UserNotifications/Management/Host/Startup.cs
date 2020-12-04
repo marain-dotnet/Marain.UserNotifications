@@ -50,6 +50,7 @@ namespace Marain.UserNotifications.Management.Host
             services.AddSingleton<IOpenApiService, GetUserPreferenceService>();
             services.AddSingleton<IOpenApiService, GetTemplateService>();
             services.AddSingleton<IOpenApiService, CreateTemplateService>();
+            services.AddSingleton<IOpenApiService, GenerateTemplateService>();
 
             services.AddOpenApiHttpRequestHosting<DurableFunctionsOpenApiContext>(
                 hostConfig =>

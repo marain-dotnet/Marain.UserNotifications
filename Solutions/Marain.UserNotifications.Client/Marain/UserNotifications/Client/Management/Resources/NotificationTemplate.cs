@@ -32,18 +32,18 @@ namespace Marain.UserNotifications.Client.Management.Resources
         /// Gets or Sets the Sms object.
         /// The object should be defined if this notification type uses Sms templates.
         /// </summary>
-        public Sms Sms { get; set; }
+        public SmsTemplate SmsTemplate { get; set; }
 
         /// <summary>
         /// Gets or Sets the email object.
         /// The object should be defined if this notification type uses Email templates.
         /// </summary>
-        public Email Email { get; set; }
+        public EmailTemplate EmailTemplate { get; set; }
 
         /// <summary>
         /// Gets or Sets the web push object.
         /// The object should be defined if this notification type uses web push templates.
         /// </summary>
-        public WebPush WebPush { get; set; }
+        public WebPushTemplate WebPushTemplate { get; set; }
     }
 }
