@@ -148,18 +148,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table18.AddRow(new string[] {
+                table20.AddRow(new string[] {
                             "123",
                             "nottesting@gmail.com",
                             "+44911222000000",
                             "{ \"NotificationType1\": [\"Email\", \"Sms\", \"WebPush\"] }"});
 #line 23
- testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table18, "Given ");
+ testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table20, "Given ");
 #line hidden
 #line 26
  testRunner.When("I use the client to send a management API request to update a User Preference", "\t{\r\n\t\t\"userId\": \"123\",\r\n\t\t\"email\": \"testing@test.com\",\r\n\t\t\"phoneNumber\": \"+449112" +
@@ -204,18 +204,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table19.AddRow(new string[] {
+                table21.AddRow(new string[] {
                             "123",
                             "nottesting@gmail.com",
                             "+44911222000000",
                             "{ \"NotificationType1\": [\"Email\", \"Sms\", \"WebPush\"] }"});
 #line 43
- testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table19, "Given ");
+ testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table21, "Given ");
 #line hidden
 #line 46
  testRunner.When("I use the client to send a management API request to get a User Preference for us" +

@@ -14,7 +14,6 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Marain.Services.Tenancy;
     using Marain.UserPreferences;
     using Menes;
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Implements the generate template endpoint for the management API.
@@ -103,6 +102,8 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             var communicationTypeDeliveryStatus = new Dictionary<CommunicationType, bool>();
             EmailTemplate? emailTemplate = null;
             SmsTemplate? smsTemplate = null;
+            WebPushTemplate? webPushTemplate = null;
+            Dictionary<string, object> existingProperties = PropertyBagHelpers.GetDictionaryFromPropertyBag(body.Properties);
 
             foreach (CommunicationType channel in registeredCommunicationChannels)
             {
@@ -112,17 +113,10 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
                         if (rawNotificationTypeTemplate.EmailTemplate != null && body.Properties != null)
                         {
-                            Dictionary<string, object> existingProperties = PropertyBagHelpers.GetDictionaryFromPropertyBag(body.Properties);
+                            string emailBody = await this.GenerateTemplateForField(rawNotificationTypeTemplate.EmailTemplate.Body, existingProperties);
+                            string emailSubject = await this.GenerateTemplateForField(rawNotificationTypeTemplate.EmailTemplate.Subject, existingProperties);
 
-                            // Email
-                            var emailBodyTemplate = Template.Parse(rawNotificationTypeTemplate.EmailTemplate.Body);
-                            string templatedBody = await emailBodyTemplate.RenderAsync(Hash.FromDictionary(existingProperties));
-
-                            // Subject
-                            var subjectTemplate = Template.Parse(rawNotificationTypeTemplate.EmailTemplate.Subject);
-                            string templatedSubject = await subjectTemplate.RenderAsync(Hash.FromDictionary(existingProperties));
-
-                            emailTemplate = new EmailTemplate(templatedBody, templatedSubject, false);
+                            emailTemplate = new EmailTemplate(emailBody, emailSubject, false);
                             communicationTypeDeliveryStatus.Add(channel, true);
                             break;
                         }
@@ -132,13 +126,9 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                     case CommunicationType.Sms:
                         if (rawNotificationTypeTemplate.SmsTemplate != null && body.Properties != null)
                         {
-                            // SMS
-                            var smsBodyTemplate = Template.Parse(rawNotificationTypeTemplate.SmsTemplate.Body);
+                            string smsBody = await this.GenerateTemplateForField(rawNotificationTypeTemplate.SmsTemplate.Body, existingProperties);
 
-                            Dictionary<string, object> existingProperties = PropertyBagHelpers.GetDictionaryFromPropertyBag(body.Properties);
-                            string smsTemplatedBody = await smsBodyTemplate.RenderAsync(Hash.FromDictionary(existingProperties));
-
-                            smsTemplate = new SmsTemplate(smsTemplatedBody);
+                            smsTemplate = new SmsTemplate(smsBody);
                             communicationTypeDeliveryStatus.Add(channel, true);
                             break;
                         }
@@ -146,6 +136,18 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                         communicationTypeDeliveryStatus.Add(channel, false);
                         break;
                     case CommunicationType.WebPush:
+                        if (rawNotificationTypeTemplate.WebPushTemplate != null && body.Properties != null)
+                        {
+                            string webPushTitle = await this.GenerateTemplateForField(rawNotificationTypeTemplate.WebPushTemplate.Title, existingProperties);
+                            string webPushBody = await this.GenerateTemplateForField(rawNotificationTypeTemplate.WebPushTemplate.Body, existingProperties);
+                            string webPushImage = await this.GenerateTemplateForField(rawNotificationTypeTemplate.WebPushTemplate.Image, existingProperties);
+
+                            webPushTemplate = new WebPushTemplate(webPushBody, webPushTitle, webPushImage);
+                            communicationTypeDeliveryStatus.Add(channel, false);
+                            break;
+                        }
+
+                        communicationTypeDeliveryStatus.Add(channel, false);
                         break;
                     case CommunicationType.MMS:
                         break;
@@ -155,10 +157,23 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             var responseTemplate = new NotificationTemplate(
                 body.NotificationType,
                 smsTemplate: smsTemplate,
-                emailTemplate: emailTemplate);
+                emailTemplate: emailTemplate,
+                webPushTemplate: webPushTemplate);
 
             // and replace with the tags inside the template with the ones received from the property bag in the CreateNotificationsRequest
             return this.OkResult(responseTemplate);
+        }
+
+        /// <summary>
+        /// Generate a template for a single field.
+        /// </summary>
+        /// <param name="templateBody">A string with handlebars. </param>
+        /// <param name="properties">A dictionary of all properties that can be used to render the templateBody string. </param>
+        /// <returns>A rendered string. </returns>
+        private async Task<string> GenerateTemplateForField(string templateBody, Dictionary<string, object> properties)
+        {
+            var template = Template.Parse(templateBody);
+            return await template.RenderAsync(Hash.FromDictionary(properties));
         }
     }
 }

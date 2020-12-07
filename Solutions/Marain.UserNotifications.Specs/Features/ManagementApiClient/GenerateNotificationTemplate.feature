@@ -29,6 +29,34 @@ Scenario: Generate a Notification Template
     And the client response for the notification template property 'SmsTemplate' should not be null
     And the client response for the object 'SmsTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123'
 
+Scenario: Generate a WebPush Notification Template
+    Given I have created and stored a notification template
+		| notificationType             | webPushTemplate                                                                                           |
+		| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}", "title": "You have a {{mortgageType}} case", "image": "", "userIdentifier": ""} |
+	And I have created and stored a user preference for a user
+		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration  |
+		| 1      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush", "sms"]} |
+	When I use the client to send a generate template API request
+		"""
+        {
+            "notificationType": "marain.notifications.test.v1",
+            "timestamp": "2020-07-21T17:32:28Z",
+            "userIds": [
+                "1"
+            ],
+            "correlationIds": ["cid1", "cid2"],
+            "properties": {
+                "leadAddedBy": "TestUser123",
+                "mortgageType": "First time buyer"
+            }
+        }
+		"""
+	Then the client response status code should be 'OK'
+    And the client response for the notification template property 'WebPushTemplate' should not be null
+    And the client response for the object 'WebPushTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123'
+    And the client response for the object 'WebPushTemplate' with property 'Title' should have a value of 'You have a First time buyer case'
+    And the client response for the object 'WebPushTemplate' with property 'Image' should have a value of ''
+
 Scenario: Generation of a Notification Template is UnSuccessful
 	Given I have created and stored a notification template
 		| notificationType             | smsTemplate                                         |
