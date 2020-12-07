@@ -174,5 +174,32 @@ namespace Marain.UserNotifications.Client.Management
 
             return new ApiResponse(response.StatusCode);
         }
+
+        /// <inheritdoc />
+        public async Task<ApiResponse<NotificationTemplate>> GenerateNotificationTemplate(string tenantId, CreateNotificationsRequest createNotificationsRequest, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+
+            if (createNotificationsRequest == null)
+            {
+                throw new ArgumentNullException(nameof(createNotificationsRequest));
+            }
+
+            Uri requestUri = this.ConstructUri($"{tenantId}/marain/usernotifications/templates/generate");
+
+            HttpRequestMessage request = this.BuildRequest(HttpMethod.Put, requestUri, createNotificationsRequest);
+
+            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
+
+            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            NotificationTemplate result = await JsonSerializer.DeserializeAsync<NotificationTemplate>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+
+            return new ApiResponse<NotificationTemplate>(
+                response.StatusCode,
+                result);
+        }
     }
 }

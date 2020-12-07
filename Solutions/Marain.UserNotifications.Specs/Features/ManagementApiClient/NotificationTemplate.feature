@@ -39,4 +39,6 @@ Scenario: Get a notification template
 	| notificationType               | smsTemplate                                         |
 	| Marain.Notification.NewLead.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	When I use the client to send the notification template API a request to get a notification template with notification type 'Marain.Notification.NewLead.v1'
+	Then the client response status code should be 'OK'
+
 	

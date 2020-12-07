@@ -92,5 +92,17 @@ namespace Marain.UserNotifications.Client.Management
             string tenantId,
             NotificationTemplate notificationTemplate,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get the generated notification template for a certain notification.
+        /// </summary>
+        /// <param name="tenantId">The tenant within which the request should operate.</param>
+        /// <param name="createNotificationsRequest">The notification request object that will be applied to different communication templates.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>A Notification template.</returns>
+        Task<ApiResponse<NotificationTemplate>> GenerateNotificationTemplate(
+            string tenantId,
+            CreateNotificationsRequest createNotificationsRequest,
+            CancellationToken cancellationToken = default);
     }
 }

@@ -149,18 +149,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table18.AddRow(new string[] {
+                table22.AddRow(new string[] {
                             "1",
                             "test@test.com",
                             "041532211",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
 #line 24
-    testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table18, "Given ");
+    testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table22, "Given ");
 #line hidden
 #line 27
     testRunner.When("I send a user preference API request to retreive a user preference", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");

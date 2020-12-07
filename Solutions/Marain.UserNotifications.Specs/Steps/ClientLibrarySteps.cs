@@ -201,7 +201,6 @@ namespace Marain.UserNotifications.Specs.Steps
             string transientTenantId = this.featureContext.GetTransientTenantId();
             IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
 
-            // notification template
             Client.Management.Resources.NotificationTemplate notificationTemplate = JsonConvert.DeserializeObject<Client.Management.Resources.NotificationTemplate>(request);
 
             try
@@ -226,9 +225,29 @@ namespace Marain.UserNotifications.Specs.Steps
 
             try
             {
-                ApiResponse<Client.Management.Resources.NotificationTemplate> result = await client.GetNotificationTemplate(transientTenantId, notificationType).ConfigureAwait(false);
+                ApiResponse<NotificationTemplate> result = await client.GetNotificationTemplate(transientTenantId, notificationType).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers, result);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When(@"I use the client to send a generate template API request")]
+        public async Task WhenIUseTheClientToSendAGenerateTemplateAPIRequest(string request)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            CreateNotificationsRequest createNotificationRequest = JsonConvert.DeserializeObject<CreateNotificationsRequest>(request);
+
+            try
+            {
+                ApiResponse<Client.Management.Resources.NotificationTemplate> result = await client.GenerateNotificationTemplate(transientTenantId, createNotificationRequest).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
             }
             catch (Exception ex)
             {
@@ -298,6 +317,50 @@ namespace Marain.UserNotifications.Specs.Steps
                     targetLink.Href).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(updateResponse.StatusCode, updateResponse.Headers);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When(@"I use the client to send a management API request to create a User Preference")]
+        [When(@"I use the client to send a management API request to update a User Preference")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToCreateAUserPreference(string request)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            Client.Management.Resources.UserPreference userPreference = JsonConvert.DeserializeObject<Client.Management.Resources.UserPreference>(request);
+
+            try
+            {
+                ApiResponse result = await client.SetUserPreference(
+                    transientTenantId,
+                    userPreference).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, userPreference);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When(@"I use the client to send a management API request to get a User Preference for userId '(.*)'")]
+        [Then(@"I use the client to send a management API request to get a User Preference for userId '(.*)'")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToGetAUserPreferenceForUserId(string userId)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            try
+            {
+                ApiResponse<Client.Management.Resources.UserPreference> result = await client.GetUserPreference(
+                    transientTenantId,
+                    userId).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
             }
             catch (Exception ex)
             {
@@ -391,47 +454,28 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.AreEqual(expectedValue, actualValue);
         }
 
-        [When(@"I use the client to send a management API request to create a User Preference")]
-        [When(@"I use the client to send a management API request to update a User Preference")]
-        public async Task WhenIUseTheClientToSendAManagementAPIRequestToCreateAUserPreference(string request)
+        [Then(@"the client response for the notification template property '(.*)' should not be null")]
+        public void ThenTheClientResponseForTheNotificationTemplatePropertyShouldNotBeNull(string propertyName)
         {
-            string transientTenantId = this.featureContext.GetTransientTenantId();
-            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
-
-            Client.Management.Resources.UserPreference userPreference = JsonConvert.DeserializeObject<Client.Management.Resources.UserPreference>(request);
-
-            try
-            {
-                ApiResponse result = await client.SetUserPreference(
-                    transientTenantId,
-                    userPreference).ConfigureAwait(false);
-
-                this.StoreApiResponseDetails(result.StatusCode, result.Headers, userPreference);
-            }
-            catch (Exception ex)
-            {
-                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
-            }
+            NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
+            object? actualValue = this.GetPropertyValue(response, propertyName);
+            Assert.IsNotNull(actualValue);
         }
 
-        [When(@"I use the client to send a management API request to get a User Preference for userId '(.*)'")]
-        [Then(@"I use the client to send a management API request to get a User Preference for userId '(.*)'")]
-        public async Task WhenIUseTheClientToSendAManagementAPIRequestToGetAUserPreferenceForUserId(string userId)
+        [Then(@"the client response for the object '(.*)' with property '(.*)' should have a value of '(.*)'")]
+        public void ThenTheClientResponseForTheObjectWithPropertyShouldHaveAValueOf(string objectName, string propertyName, string propertyValue)
         {
-            string transientTenantId = this.featureContext.GetTransientTenantId();
-            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+            NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
+            object? objectValue = this.GetPropertyValue(response, objectName);
 
-            try
+            if (objectValue != null)
             {
-                ApiResponse<Client.Management.Resources.UserPreference> result = await client.GetUserPreference(
-                    transientTenantId,
-                    userId).ConfigureAwait(false);
-
-                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+                object? propertyObjectValue = this.GetPropertyValue(objectValue, propertyName);
+                Assert.AreEqual(propertyValue, propertyObjectValue);
             }
-            catch (Exception ex)
+            else
             {
-                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+                Assert.Fail($"Could not find the value for the property {propertyName} in the client response");
             }
         }
 

@@ -20,11 +20,11 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Notification Template via the client library")]
+    [NUnit.Framework.DescriptionAttribute("Generate Notification Template via the client library")]
     [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
     [NUnit.Framework.CategoryAttribute("useApis")]
     [NUnit.Framework.CategoryAttribute("useTransientTenant")]
-    public partial class NotificationTemplateViaTheClientLibraryFeature
+    public partial class GenerateNotificationTemplateViaTheClientLibraryFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -34,14 +34,14 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
                 "useApis",
                 "useTransientTenant"};
         
-#line 1 "NotificationTemplate.feature"
+#line 1 "GenerateNotificationTemplate.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApiClient", "Notification Template via the client library", null, ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApiClient", "Generate Notification Template via the client library", null, ProgrammingLanguage.CSharp, new string[] {
                         "perFeatureContainer",
                         "useApis",
                         "useTransientTenant"});
@@ -83,12 +83,12 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Create a Notification Template")]
-        public virtual void CreateANotificationTemplate()
+        [NUnit.Framework.DescriptionAttribute("Generate a Notification Template")]
+        public virtual void GenerateANotificationTemplate()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a Notification Template", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generate a Notification Template", null, tagsOfScenario, argumentsOfScenario);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -109,26 +109,64 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                            "notificationType",
+                            "smsTemplate"});
+                table10.AddRow(new string[] {
+                            "marain.notifications.test.v1",
+                            "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
 #line 8
- testRunner.When("I use the client to send the notification template API a request to create a new " +
-                        "notification template", "{\r\n\t\"notificationType\": \"Marain.Notification.NewLead.v1\",\r\n\t\"smsTemplate\": \r\n\t{\r\n" +
-                        "\t\t\"body\": \"A new lead was added by {{leadAddedBy}}\"\r\n\t}\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Given("I have created and stored a notification template", ((string)(null)), table10, "Given ");
 #line hidden
-#line 18
+                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+                            "userId",
+                            "email",
+                            "phoneNumber",
+                            "communicationChannelsPerNotificationConfiguration"});
+                table11.AddRow(new string[] {
+                            "1",
+                            "test@test.com",
+                            "041532211",
+                            "{\"marain.notifications.test.v1\": [\"webpush\", \"sms\"]}"});
+#line 11
+ testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table11, "And ");
+#line hidden
+#line 14
+ testRunner.When("I use the client to send a generate template API request", @"      {
+          ""notificationType"": ""marain.notifications.test.v1"",
+          ""timestamp"": ""2020-07-21T17:32:28Z"",
+          ""userIds"": [
+              ""1""
+          ],
+          ""correlationIds"": [""cid1"", ""cid2""],
+          ""properties"": {
+              ""leadAddedBy"": ""TestUser123"",
+          }
+      }", ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 28
  testRunner.Then("the client response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 29
+    testRunner.And("the client response for the notification template property \'SmsTemplate\' should n" +
+                        "ot be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 30
+    testRunner.And("the client response for the object \'SmsTemplate\' with property \'Body\' should have" +
+                        " a value of \'A new lead was added by TestUser123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Update a Notification Template")]
-        public virtual void UpdateANotificationTemplate()
+        [NUnit.Framework.DescriptionAttribute("Incorrectly generate a Notification Template")]
+        public virtual void IncorrectlyGenerateANotificationTemplate()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a Notification Template", null, tagsOfScenario, argumentsOfScenario);
-#line 20
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Incorrectly generate a Notification Template", null, tagsOfScenario, argumentsOfScenario);
+#line 32
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -148,68 +186,42 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                             "notificationType",
                             "smsTemplate"});
-                table14.AddRow(new string[] {
-                            "Marain.Notification.NewLead.v1",
+                table12.AddRow(new string[] {
+                            "marain.notifications.test.v1",
                             "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
-#line 21
- testRunner.Given("I have created and stored a notification template", ((string)(null)), table14, "Given ");
+#line 33
+ testRunner.Given("I have created and stored a notification template", ((string)(null)), table12, "Given ");
 #line hidden
-#line 24
- testRunner.When("I use the client to send the notification template API a request to create a new " +
-                        "notification template", "{\r\n\t\"notificationType\": \"Marain.Notification.NewLead.v1\",\r\n\t\"smsTemplate\": \r\n\t{\r\n" +
-                        "\t\t\"body\": \"Different template\"\r\n\t}\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+                            "userId",
+                            "email",
+                            "phoneNumber",
+                            "communicationChannelsPerNotificationConfiguration"});
+                table13.AddRow(new string[] {
+                            "1",
+                            "test@test.com",
+                            "041532211",
+                            "{\"marain.notifications.test.v1\": [\"webpush\"]}"});
+#line 36
+ testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table13, "And ");
 #line hidden
-#line 34
- testRunner.Then("the client response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 39
+ testRunner.When("I use the client to send a generate template API request", @"      {
+          ""notificationType"": ""marain.notifications.test.v1"",
+          ""timestamp"": ""2020-07-21T17:32:28Z"",
+          ""userIds"": [
+              ""1""
+          ],
+          ""correlationIds"": [""cid1"", ""cid2""],
+          ""properties"": {
+              ""leadAddedBy"": ""TestUser123"",
+          }
+      }", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get a notification template")]
-        public virtual void GetANotificationTemplate()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a notification template", null, tagsOfScenario, argumentsOfScenario);
-#line 37
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
-                            "notificationType",
-                            "smsTemplate"});
-                table15.AddRow(new string[] {
-                            "Marain.Notification.NewLead.v1",
-                            "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
-#line 38
- testRunner.Given("I have created and stored a notification template", ((string)(null)), table15, "Given ");
-#line hidden
-#line 41
- testRunner.When("I use the client to send the notification template API a request to get a notific" +
-                        "ation template with notification type \'Marain.Notification.NewLead.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 42
+#line 53
  testRunner.Then("the client response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
