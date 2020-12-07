@@ -202,7 +202,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
                 table13.AddRow(new string[] {
-                            "1",
+                            "2",
                             "test@test.com",
                             "041532211",
                             "{\"marain.notifications.test.v1\": [\"webpush\", \"sms\"]}"});
@@ -214,7 +214,7 @@ this.ScenarioInitialize(scenarioInfo);
           ""notificationType"": ""marain.notifications.test.v1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
           ""userIds"": [
-              ""1""
+              ""2""
           ],
           ""correlationIds"": [""cid1"", ""cid2""],
           ""properties"": {
@@ -288,7 +288,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
                 table15.AddRow(new string[] {
-                            "1",
+                            "3",
                             "test@test.com",
                             "041532211",
                             "{\"marain.notifications.test.v1\": [\"webpush\"]}"});
@@ -300,7 +300,7 @@ this.ScenarioInitialize(scenarioInfo);
           ""notificationType"": ""marain.notifications.test.v1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
           ""userIds"": [
-              ""1""
+              ""3""
           ],
           ""correlationIds"": [""cid1"", ""cid2""],
           ""properties"": {
@@ -364,7 +364,7 @@ this.ScenarioInitialize(scenarioInfo);
           ""notificationType"": ""marain.notifications.test.v1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
           ""userIds"": [
-              ""1""
+              ""3""
           ],
           ""correlationIds"": [""cid1"", ""cid2""],
           ""properties"": {
@@ -412,19 +412,19 @@ this.ScenarioInitialize(scenarioInfo);
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
                 table17.AddRow(new string[] {
-                            "1",
+                            "4",
                             "test@test.com",
                             "041532211",
-                            "{\"marain.notifications.test.v1\": [\"webpush\"]}"});
+                            "{\"marain.notifications.test.v2\": [\"webpush\"]}"});
 #line 106
    testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table17, "Given ");
 #line hidden
 #line 109
  testRunner.When("I use the client to send a generate template API request", @"      {
-          ""notificationType"": ""marain.notifications.test.v1"",
+          ""notificationType"": ""marain.notifications.test.v2"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
           ""userIds"": [
-              ""1""
+              ""4""
           ],
           ""correlationIds"": [""cid1"", ""cid2""],
           ""properties"": {

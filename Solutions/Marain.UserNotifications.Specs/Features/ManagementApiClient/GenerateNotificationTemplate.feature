@@ -35,14 +35,14 @@ Scenario: Generate a WebPush Notification Template
 		| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}", "title": "You have a {{mortgageType}} case", "image": "", "userIdentifier": ""} |
 	And I have created and stored a user preference for a user
 		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration  |
-		| 1      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush", "sms"]} |
+		| 2      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush", "sms"]} |
 	When I use the client to send a generate template API request
 		"""
         {
             "notificationType": "marain.notifications.test.v1",
             "timestamp": "2020-07-21T17:32:28Z",
             "userIds": [
-                "1"
+                "2"
             ],
             "correlationIds": ["cid1", "cid2"],
             "properties": {
@@ -63,14 +63,14 @@ Scenario: Generation of a Notification Template is UnSuccessful
 		| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	And I have created and stored a user preference for a user
 		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration |
-		| 1      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush"]}     |
+		| 3      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush"]}     |
 	When I use the client to send a generate template API request
 		"""
         {
             "notificationType": "marain.notifications.test.v1",
             "timestamp": "2020-07-21T17:32:28Z",
             "userIds": [
-                "1"
+                "3"
             ],
             "correlationIds": ["cid1", "cid2"],
             "properties": {
@@ -92,7 +92,7 @@ Scenario: Generate a notification template for unconfigured user
             "notificationType": "marain.notifications.test.v1",
             "timestamp": "2020-07-21T17:32:28Z",
             "userIds": [
-                "1"
+                "3"
             ],
             "correlationIds": ["cid1", "cid2"],
             "properties": {
@@ -105,14 +105,14 @@ Scenario: Generate a notification template for unconfigured user
 Scenario: Generate a notification template for unconfigured communication channel
    Given I have created and stored a user preference for a user
 		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration |
-		| 1      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush"]}     |
+		| 4      | test@test.com | 041532211   | {"marain.notifications.test.v2": ["webpush"]}     |
 	When I use the client to send a generate template API request
 		"""
         {
-            "notificationType": "marain.notifications.test.v1",
+            "notificationType": "marain.notifications.test.v2",
             "timestamp": "2020-07-21T17:32:28Z",
             "userIds": [
-                "1"
+                "4"
             ],
             "correlationIds": ["cid1", "cid2"],
             "properties": {
