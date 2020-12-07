@@ -69,17 +69,17 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // Check if the user has set the communication channels for the incoming notification type
             if (userPreference == null)
             {
-                throw new Exception($"There is no user preference set up for this user {body.UserIds[0]} for tenant {tenant.Id}");
+                throw new UserNotificationNotFoundException($"There is no user preference set up for this user {body.UserIds[0]} for tenant {tenant.Id}");
             }
 
             if (userPreference.CommunicationChannelsPerNotificationConfiguration == null)
             {
-                throw new Exception($"There are no communication channel set up for the user {body.UserIds[0]} for tenant {tenant.Id}");
+                throw new UserNotificationNotFoundException($"There are no communication channel set up for the user {body.UserIds[0]} for tenant {tenant.Id}");
             }
 
             if (!userPreference.CommunicationChannelsPerNotificationConfiguration.ContainsKey(body.NotificationType))
             {
-                throw new Exception($"There is no communication channel set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
+                throw new UserNotificationNotFoundException($"There is no communication channel set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
             }
 
             List<CommunicationType>? registeredCommunicationChannels = userPreference.CommunicationChannelsPerNotificationConfiguration[body.NotificationType];
@@ -97,7 +97,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
             if (rawNotificationTypeTemplate == null)
             {
-                throw new Exception($"There is no notification template set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
+                throw new UserNotificationNotFoundException($"There is no notification template set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
             }
 
             var communicationTypeDeliveryStatus = new Dictionary<CommunicationType, bool>();

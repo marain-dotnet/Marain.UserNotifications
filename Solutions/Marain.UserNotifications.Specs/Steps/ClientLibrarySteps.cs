@@ -245,7 +245,7 @@ namespace Marain.UserNotifications.Specs.Steps
 
             try
             {
-                ApiResponse<Client.Management.Resources.NotificationTemplate> result = await client.GenerateNotificationTemplate(transientTenantId, createNotificationRequest).ConfigureAwait(false);
+                ApiResponse<NotificationTemplate> result = await client.GenerateNotificationTemplate(transientTenantId, createNotificationRequest).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
             }
@@ -460,6 +460,14 @@ namespace Marain.UserNotifications.Specs.Steps
             NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
             object? actualValue = this.GetPropertyValue(response, propertyName);
             Assert.IsNotNull(actualValue);
+        }
+
+        [Then(@"the client response for the notification template property '(.*)' should be null")]
+        public void ThenTheClientResponseForTheNotificationTemplatePropertyShouldBeNull(string propertyName)
+        {
+            NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
+            object? actualValue = this.GetPropertyValue(response, propertyName);
+            Assert.IsNull(actualValue);
         }
 
         [Then(@"the client response for the object '(.*)' with property '(.*)' should have a value of '(.*)'")]
