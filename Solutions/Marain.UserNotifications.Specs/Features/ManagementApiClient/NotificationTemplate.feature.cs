@@ -209,14 +209,6 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("I use the client to send the notification template API a request to get a notific" +
                         "ation template with notification type \'Marain.Notification.NewLead.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 42
- testRunner.Then("the response content should have a string property called \'notificationType\' with" +
-                        " value \'Marain.Notification.NewLead.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 43
- testRunner.And("the response content should have a json property called \'smsTemplate\' with value " +
-                        "\'{\"body\": \"Different template\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
             }
             this.ScenarioCleanup();
         }
