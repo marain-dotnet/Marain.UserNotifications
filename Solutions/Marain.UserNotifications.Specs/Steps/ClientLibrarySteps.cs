@@ -195,7 +195,7 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When(@"I use the client to send the notification template API a request to create a new notification template")]
+        [When("I use the client to send the notification template API a request to create a new notification template")]
         public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewNotificationTemplate(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -217,7 +217,7 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When(@"I use the client to send the notification template API a request to get a notification template with notification type '(.*)'")]
+        [When("I use the client to send the notification template API a request to get a notification template with notification type '(.*)'")]
         public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToGetANotificationTemplateWithNotificationType(string notificationType)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -235,7 +235,7 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When(@"I use the client to send a generate template API request")]
+        [When("I use the client to send a generate template API request")]
         public async Task WhenIUseTheClientToSendAGenerateTemplateAPIRequest(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -324,8 +324,8 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When(@"I use the client to send a management API request to create a User Preference")]
-        [When(@"I use the client to send a management API request to update a User Preference")]
+        [When("I use the client to send a management API request to create a User Preference")]
+        [When("I use the client to send a management API request to update a User Preference")]
         public async Task WhenIUseTheClientToSendAManagementAPIRequestToCreateAUserPreference(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -347,8 +347,8 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When(@"I use the client to send a management API request to get a User Preference for userId '(.*)'")]
-        [Then(@"I use the client to send a management API request to get a User Preference for userId '(.*)'")]
+        [When("I use the client to send a management API request to get a User Preference for userId '(.*)'")]
+        [Then("I use the client to send a management API request to get a User Preference for userId '(.*)'")]
         public async Task WhenIUseTheClientToSendAManagementAPIRequestToGetAUserPreferenceForUserId(string userId)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -446,7 +446,7 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.AreEqual(expected, response.Read);
         }
 
-        [Then(@"the user preference in the UserManagement API response should have a '(.*)' with value '(.*)'")]
+        [Then("the user preference in the UserManagement API response should have a '(.*)' with value '(.*)'")]
         public void ThenTheUserPreferenceInTheUserManagementAPIResponseShouldHaveAUserIdWithValue(string propertyName, string expectedValue)
         {
             UserPreference response = this.GetApiResponseBody<UserPreference>();
@@ -454,7 +454,7 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.AreEqual(expectedValue, actualValue);
         }
 
-        [Then(@"the client response for the notification template property '(.*)' should not be null")]
+        [Then("the client response for the notification template property '(.*)' should not be null")]
         public void ThenTheClientResponseForTheNotificationTemplatePropertyShouldNotBeNull(string propertyName)
         {
             NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
@@ -462,7 +462,7 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.IsNotNull(actualValue);
         }
 
-        [Then(@"the client response for the notification template property '(.*)' should be null")]
+        [Then("the client response for the notification template property '(.*)' should be null")]
         public void ThenTheClientResponseForTheNotificationTemplatePropertyShouldBeNull(string propertyName)
         {
             NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
@@ -470,7 +470,7 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.IsNull(actualValue);
         }
 
-        [Then(@"the client response for the object '(.*)' with property '(.*)' should have a value of '(.*)'")]
+        [Then("the client response for the object '(.*)' with property '(.*)' should have a value of '(.*)'")]
         public void ThenTheClientResponseForTheObjectWithPropertyShouldHaveAValueOf(string objectName, string propertyName, string propertyValue)
         {
             NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();

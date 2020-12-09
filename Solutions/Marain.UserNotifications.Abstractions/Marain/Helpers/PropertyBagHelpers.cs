@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain
+namespace Marain.Helper
 {
     using System;
     using System.Collections.Generic;

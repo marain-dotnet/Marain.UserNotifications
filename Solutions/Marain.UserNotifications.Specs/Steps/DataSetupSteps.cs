@@ -138,7 +138,7 @@ namespace Marain.UserNotifications.Specs.Steps
             this.scenarioContext.Set(result, resultName);
         }
 
-        [Given(@"I have created and stored a user preference for a user")]
+        [Given("I have created and stored a user preference for a user")]
         public async Task GivenIHaveCreatedAndStoredAUserPreferenceForAUser(Table table)
         {
             ITenantedUserPreferencesStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedUserPreferencesStoreFactory>();

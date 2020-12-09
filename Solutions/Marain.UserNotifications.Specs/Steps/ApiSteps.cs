@@ -246,7 +246,7 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.SendPostRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, url.Value<string>(), null);
         }
 
-        [When(@"I send the user preference API a request to create a new user preference")]
+        [When("I send the user preference API a request to create a new user preference")]
         public async Task WhenISendTheUserPreferenceAPIARequestToCreateANewUserPreference(string requestJson)
         {
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
@@ -266,7 +266,7 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When(@"I send a user preference API request to retreive a user preference")]
+        [When("I send a user preference API request to retreive a user preference")]
         public Task WhenISendAUserPreferenceAPIRequestToRetreiveAUserPreference()
         {
             UserPreference userPreference = this.scenarioContext.Get<UserPreference>();
@@ -277,8 +277,8 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.SendGetRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference?userId={userId}");
         }
 
-        [When(@"I send the user notification template API a request to create a new user notification template")]
-        [When(@"I send the user notification template API a request to update a new user notification template")]
+        [When("I send the user notification template API a request to create a new user notification template")]
+        [When("I send the user notification template API a request to update a new user notification template")]
         public async Task WhenISendTheUserNotificationTemplateAPIARequestToCreateANewUserNotificationTemplate(string requestJson)
         {
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
@@ -298,7 +298,7 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When(@"I send the notification template API a request to retreive a notification template with notificationType '(.*)'")]
+        [When("I send the notification template API a request to retreive a notification template with notificationType '(.*)'")]
         public Task WhenISendTheNotificationTemplateAPIARequestToRetreiveANotificationTemplateWithNotificationType(string notificationType)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -306,7 +306,7 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.SendGetRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates?notificationType={notificationType}");
         }
 
-        [When(@"I send the generate template API request")]
+        [When("I send the generate template API request")]
         public async Task WhenISendTheGenerateTemplateAPIRequest(string requestJson)
         {
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
