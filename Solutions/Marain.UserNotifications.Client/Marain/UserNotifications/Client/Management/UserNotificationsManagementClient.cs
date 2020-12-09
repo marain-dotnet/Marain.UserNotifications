@@ -11,7 +11,6 @@ namespace Marain.UserNotifications.Client.Management
     using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
-    using Marain.UserNotifications.Client.ApiDeliveryChannel.Resources;
     using Marain.UserNotifications.Client.Management.Requests;
     using Marain.UserNotifications.Client.Management.Resources;
 

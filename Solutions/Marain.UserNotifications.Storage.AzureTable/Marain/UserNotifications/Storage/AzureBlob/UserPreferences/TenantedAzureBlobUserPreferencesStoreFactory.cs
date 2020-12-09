@@ -47,7 +47,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
                 ?? throw new ArgumentNullException(nameof(blobContainerFactory));
         }
 
-        /// <inheritdoc/>#
+        /// <inheritdoc/>
         public async Task<IUserPreferencesStore> GetUserPreferencesStoreForTenantAsync(ITenant tenant)
         {
             // Gets the blob container for the tenant or creates a new one if it does not exists

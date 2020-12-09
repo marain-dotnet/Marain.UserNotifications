@@ -67,12 +67,12 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             UserPreference? userPreference = await userPreferencesStore.GetAsync(body.UserIds[0]).ConfigureAwait(false);
 
             // Check if the user has set the communication channels for the incoming notification type
-            if (userPreference == null)
+            if (userPreference is null)
             {
                 throw new UserNotificationNotFoundException($"There is no user preference set up for this user {body.UserIds[0]} for tenant {tenant.Id}");
             }
 
-            if (userPreference.CommunicationChannelsPerNotificationConfiguration == null)
+            if (userPreference.CommunicationChannelsPerNotificationConfiguration is null)
             {
                 throw new UserNotificationNotFoundException($"There are no communication channel set up for the user {body.UserIds[0]} for tenant {tenant.Id}");
             }
@@ -84,7 +84,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
             List<CommunicationType>? registeredCommunicationChannels = userPreference.CommunicationChannelsPerNotificationConfiguration[body.NotificationType];
 
-            if (registeredCommunicationChannels == null || registeredCommunicationChannels.Count == 0)
+            if (registeredCommunicationChannels is null || registeredCommunicationChannels.Count == 0)
             {
                 throw new Exception($"There are no communication channel set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
             }
@@ -95,7 +95,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // Get the notification template for the notification type
             NotificationTemplate? rawNotificationTypeTemplate = await templateStore.GetAsync(body.NotificationType).ConfigureAwait(false);
 
-            if (rawNotificationTypeTemplate == null)
+            if (rawNotificationTypeTemplate is null)
             {
                 throw new UserNotificationNotFoundException($"There is no notification template set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
             }
@@ -111,11 +111,10 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 switch (channel)
                 {
                     case CommunicationType.Email:
-
                         if (rawNotificationTypeTemplate.EmailTemplate != null && body.Properties != null)
                         {
-                            string emailBody = await this.GenerateTemplateForField(rawNotificationTypeTemplate.EmailTemplate.Body, existingProperties);
-                            string emailSubject = await this.GenerateTemplateForField(rawNotificationTypeTemplate.EmailTemplate.Subject, existingProperties);
+                            string emailBody = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.EmailTemplate.Body, existingProperties).ConfigureAwait(false);
+                            string emailSubject = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.EmailTemplate.Subject, existingProperties).ConfigureAwait(false);
 
                             emailTemplate = new EmailTemplate(emailBody, emailSubject, false);
                             communicationTypeDeliveryStatus.Add(channel, true);
@@ -127,7 +126,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                     case CommunicationType.Sms:
                         if (rawNotificationTypeTemplate.SmsTemplate != null && body.Properties != null)
                         {
-                            string smsBody = await this.GenerateTemplateForField(rawNotificationTypeTemplate.SmsTemplate.Body, existingProperties);
+                            string smsBody = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.SmsTemplate.Body, existingProperties).ConfigureAwait(false);
 
                             smsTemplate = new SmsTemplate(smsBody);
                             communicationTypeDeliveryStatus.Add(channel, true);
@@ -139,9 +138,9 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                     case CommunicationType.WebPush:
                         if (rawNotificationTypeTemplate.WebPushTemplate != null && body.Properties != null)
                         {
-                            string webPushTitle = await this.GenerateTemplateForField(rawNotificationTypeTemplate.WebPushTemplate.Title, existingProperties);
-                            string webPushBody = await this.GenerateTemplateForField(rawNotificationTypeTemplate.WebPushTemplate.Body, existingProperties);
-                            string webPushImage = await this.GenerateTemplateForField(rawNotificationTypeTemplate.WebPushTemplate.Image, existingProperties);
+                            string webPushTitle = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.WebPushTemplate.Title, existingProperties).ConfigureAwait(false);
+                            string webPushBody = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.WebPushTemplate.Body, existingProperties).ConfigureAwait(false);
+                            string webPushImage = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.WebPushTemplate.Image, existingProperties).ConfigureAwait(false);
 
                             webPushTemplate = new WebPushTemplate(webPushBody, webPushTitle, webPushImage);
                             communicationTypeDeliveryStatus.Add(channel, false);
@@ -171,10 +170,10 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="templateBody">A string with handlebars. </param>
         /// <param name="properties">A dictionary of all properties that can be used to render the templateBody string. </param>
         /// <returns>A rendered string. </returns>
-        private async Task<string> GenerateTemplateForField(string templateBody, Dictionary<string, object> properties)
+        private async Task<string> GenerateTemplateForFieldAsync(string templateBody, Dictionary<string, object> properties)
         {
             var template = Template.Parse(templateBody);
-            return await template.RenderAsync(Hash.FromDictionary(properties));
+            return await template.RenderAsync(Hash.FromDictionary(properties)).ConfigureAwait(false);
         }
     }
 }

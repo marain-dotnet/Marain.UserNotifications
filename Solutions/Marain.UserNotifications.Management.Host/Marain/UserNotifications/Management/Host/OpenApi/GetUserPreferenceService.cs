@@ -60,7 +60,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // Gets the user preference by userId
             UserPreference? userObject = await store.GetAsync(userId).ConfigureAwait(false);
 
-            if (userObject == null)
+            if (userObject is null)
             {
                 throw new OpenApiNotFoundException($"The user preference for userId: {userId} was not found.");
             }

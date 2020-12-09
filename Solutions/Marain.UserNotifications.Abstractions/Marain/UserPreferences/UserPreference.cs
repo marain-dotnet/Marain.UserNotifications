@@ -6,7 +6,8 @@ namespace Marain.UserPreferences
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text.Json.Serialization;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// The user preference structure.

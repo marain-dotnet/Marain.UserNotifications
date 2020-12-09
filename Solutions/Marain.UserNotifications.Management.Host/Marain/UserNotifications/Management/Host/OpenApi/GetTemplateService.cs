@@ -58,7 +58,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // Gets the template by notificationType
             NotificationTemplate? templateObj = await store.GetAsync(notificationType).ConfigureAwait(false);
 
-            if (templateObj == null)
+            if (templateObj is null)
             {
                 throw new OpenApiNotFoundException($"The template for notificationType: {notificationType} was not found.");
             }

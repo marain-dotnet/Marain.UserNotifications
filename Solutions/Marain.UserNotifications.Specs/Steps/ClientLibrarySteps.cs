@@ -331,7 +331,7 @@ namespace Marain.UserNotifications.Specs.Steps
             string transientTenantId = this.featureContext.GetTransientTenantId();
             IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
 
-            Client.Management.Resources.UserPreference userPreference = JsonConvert.DeserializeObject<Client.Management.Resources.UserPreference>(request);
+            UserPreference userPreference = JsonConvert.DeserializeObject<UserPreference>(request);
 
             try
             {
@@ -356,7 +356,7 @@ namespace Marain.UserNotifications.Specs.Steps
 
             try
             {
-                ApiResponse<Client.Management.Resources.UserPreference> result = await client.GetUserPreference(
+                ApiResponse<UserPreference> result = await client.GetUserPreference(
                     transientTenantId,
                     userId).ConfigureAwait(false);
 

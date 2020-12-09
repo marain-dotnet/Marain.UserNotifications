@@ -15,6 +15,13 @@ namespace Marain.UserNotifications.Client.Management.Resources
     public class UserPreference
     {
         /// <summary>
+        /// Constructor for <see cref="UserPreference"/>.
+        /// </summary>
+        public UserPreference()
+        {
+        }
+
+        /// <summary>
         /// Gets or Sets the UserId of the owner.
         /// </summary>
         public string UserId { get; set; }
@@ -33,7 +40,6 @@ namespace Marain.UserNotifications.Client.Management.Resources
         /// Gets or Sets the CommunicationChannelsPerNotificationConfiguration.
         /// This will be notification: list of communication channels configured.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public Dictionary<string, List<CommunicationType>> CommunicationChannelsPerNotificationConfiguration { get; set; }
 
         /// <summary>
