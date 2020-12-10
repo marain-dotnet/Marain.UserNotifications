@@ -252,21 +252,43 @@ namespace Marain.UserNotifications.Specs.Steps
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             string transientTenantId = this.featureContext.GetTransientTenantId();
 
-            HttpResponseMessage response = await HttpClient.PutAsync(
-                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference"),
-                requestContent).ConfigureAwait(false);
+            await this.SendPutRequest(requestContent, transientTenantId).ConfigureAwait(false);
+        }
 
-            this.scenarioContext.Set(response);
+        [When("I send a user preference API request to update a previously saved user preference")]
+        public async Task WhenISendAUserPreferenceAPIRequestToUpdateAUserPreference(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
 
-            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            // get the stored user preference
+            UserPreference? savedUserPreference = this.scenarioContext.Get<UserPreference>();
 
-            if (!string.IsNullOrEmpty(responseContent))
-            {
-                this.scenarioContext.Set(responseContent, ResponseContent);
-            }
+            UserPreference preference = DataSetupSteps.BuildUserPreferenceFrom(table.Rows[0], savedUserPreference.ETag, serializerSettingsProvider.Instance);
+
+            string? requestJson = JsonConvert.SerializeObject(preference, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            await this.SendPutRequest(requestContent, transientTenantId).ConfigureAwait(false);
+        }
+
+        [When("I send a user preference API request to update a previously saved user preference that has no etag in the request body")]
+        [When("I send a user preference API request to update a previously saved user preference that has an invalid etag in the request body")]
+        public async Task WhenISendAUserPreferenceAPIRequestToUpdateAPreviouslySavedUserPreferenceThatHasAnInvalidEtag(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+
+            UserPreference preference = DataSetupSteps.BuildUserPreferenceFrom(table.Rows[0], serializerSettingsProvider.Instance);
+
+            string? requestJson = JsonConvert.SerializeObject(preference, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            await this.SendPutRequest(requestContent, transientTenantId).ConfigureAwait(false);
         }
 
         [When("I send a user preference API request to retreive a user preference")]
+        [Then("I send a user preference API request to retreive a user preference")]
         public Task WhenISendAUserPreferenceAPIRequestToRetreiveAUserPreference()
         {
             UserPreference userPreference = this.scenarioContext.Get<UserPreference>();
@@ -364,6 +386,22 @@ namespace Marain.UserNotifications.Specs.Steps
             {
                 var parsedResponse = JObject.Parse(content);
                 this.scenarioContext.Set(parsedResponse);
+            }
+        }
+
+        private async Task SendPutRequest(StringContent requestContent, string transientTenantId)
+        {
+            HttpResponseMessage response = await HttpClient.PutAsync(
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference"),
+                requestContent).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
             }
         }
 

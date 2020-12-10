@@ -9,6 +9,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
     using Corvus.Extensions.Json;
     using Marain.UserNotifications;
     using Marain.UserPreferences;
+    using Microsoft.Azure.Storage;
     using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
@@ -45,10 +46,10 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         public async Task<UserPreference?> GetAsync(string userId)
         {
             // Gets the blob reference by the userId
-            CloudBlockBlob blob = this.blobContainer.GetBlockBlobReference(userId);
+            CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(userId);
 
             // Check if the blob exists
-            bool exists = await blob.ExistsAsync().ConfigureAwait(false);
+            bool exists = await blockBlob.ExistsAsync().ConfigureAwait(false);
 
             if (!exists)
             {
@@ -56,8 +57,9 @@ namespace Marain.UserNotifications.Storage.AzureBlob
             }
 
             // Download and convert the blob text into UserPreference object
-            string json = await blob.DownloadTextAsync().ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<UserPreference>(json, this.serializerSettingsProvider.Instance);
+            string json = await blockBlob.DownloadTextAsync().ConfigureAwait(false);
+            UserPreference? userPreferenceObject = JsonConvert.DeserializeObject<UserPreference>(json, this.serializerSettingsProvider.Instance);
+            return userPreferenceObject.AddETag(userPreferenceObject, blockBlob.Properties.ETag);
         }
 
         /// <inheritdoc/>
@@ -68,13 +70,22 @@ namespace Marain.UserNotifications.Storage.AzureBlob
             // Gets the blob reference by the userId
             CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(userPreference.UserId);
 
+            // Check if the blob exists
+            bool exists = await blockBlob.ExistsAsync().ConfigureAwait(false);
+
+            if (exists && string.IsNullOrWhiteSpace(userPreference.ETag))
+            {
+                throw new StorageException("ETag was not present in the UserPreference object.");
+            }
+
             // Serialise the userPreference object
             string userPreferenceBlob = JsonConvert.SerializeObject(userPreference, this.serializerSettingsProvider.Instance);
 
             // Save the user preferences to the blob storage
-            await blockBlob.UploadTextAsync(userPreferenceBlob).ConfigureAwait(false);
+            await blockBlob.UploadTextAsync(userPreferenceBlob, null, accessCondition: AccessCondition.GenerateIfMatchCondition(userPreference.ETag), null, null).ConfigureAwait(false);
 
-            return userPreference;
+            UserPreference? fetchStoredUserPreference = await this.GetAsync(userPreference.UserId).ConfigureAwait(false);
+            return fetchStoredUserPreference!;
         }
     }
 }

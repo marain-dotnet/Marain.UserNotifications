@@ -8,8 +8,8 @@ Scenario: Generate populated template
 		| notificationType             | smsTemplate                                         |
 		| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	And I have created and stored a user preference for a user
-		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration  |
-		| 1      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["email", "sms"]} |
+		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration  | eTag |
+		| 1      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["email", "sms"]} | null |
 	When I send the generate template API request
 		"""
         {
@@ -25,5 +25,5 @@ Scenario: Generate populated template
         }
 		"""
 	Then the response status code should be 'OK'
-    And the response content should have a string property called 'notificationType' with value 'marain.notifications.test.v1'
-    And the response content should have a json property called 'smsTemplate' with value '{"body": "A new lead was added by TestUser123"}'
+	And the response content should have a string property called 'notificationType' with value 'marain.notifications.test.v1'
+	And the response content should have a json property called 'smsTemplate' with value '{"body": "A new lead was added by TestUser123"}'

@@ -22,18 +22,21 @@ namespace Marain.UserPreferences
         /// <param name="phoneNumber">The PhoneNumber of the owner.</param>
         /// <param name="communicationChannelsPerNotificationConfiguration">The communication channels configured for a notification type.</param>
         /// <param name="timestamp"><see cref="Timestamp"/>.</param>
+        /// <param name="etag">The <see cref="ETag"/>.</param>
         public UserPreference(
             string userId,
             string? email,
             string? phoneNumber,
             Dictionary<string, List<CommunicationType>> communicationChannelsPerNotificationConfiguration,
-            DateTimeOffset timestamp)
+            DateTimeOffset timestamp,
+            string? etag)
         {
             this.UserId = userId;
             this.Email = email;
             this.PhoneNumber = phoneNumber;
             this.CommunicationChannelsPerNotificationConfiguration = communicationChannelsPerNotificationConfiguration;
             this.Timestamp = timestamp != default ? timestamp.ToUniversalTime() : DateTimeOffset.UtcNow;
+            this.ETag = etag;
         }
 
         /// <summary>
@@ -61,5 +64,27 @@ namespace Marain.UserPreferences
         /// Gets the date and time at which the user preferences were last updated.
         /// </summary>
         public DateTimeOffset Timestamp { get; }
+
+        /// <summary>
+        /// Gets the notification's etag.
+        /// </summary>
+        public string? ETag { get; }
+
+        /// <summary>
+        /// Add Etag to <see cref="UserPreference"/> and keep the object immutable.
+        /// </summary>
+        /// <param name="userPreference">The <see cref="UserPreference"/> object.</param>
+        /// <param name="eTag">Etag from the CloudBlockBlob Properties.</param>
+        /// <returns><see cref="UserPreference"/> object.</returns>
+        public UserPreference AddETag(UserPreference userPreference, string? eTag)
+        {
+            return new UserPreference(
+                userPreference.UserId,
+                userPreference.Email,
+                userPreference.PhoneNumber,
+                userPreference.CommunicationChannelsPerNotificationConfiguration,
+                userPreference.Timestamp,
+                eTag);
+        }
     }
 }

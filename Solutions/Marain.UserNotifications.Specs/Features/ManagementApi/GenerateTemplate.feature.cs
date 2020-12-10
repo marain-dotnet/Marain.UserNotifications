@@ -122,12 +122,14 @@ this.ScenarioInitialize(scenarioInfo);
                             "userId",
                             "email",
                             "phoneNumber",
-                            "communicationChannelsPerNotificationConfiguration"});
+                            "communicationChannelsPerNotificationConfiguration",
+                            "eTag"});
                 table23.AddRow(new string[] {
                             "1",
                             "test@test.com",
                             "041532211",
-                            "{\"marain.notifications.test.v1\": [\"email\", \"sms\"]}"});
+                            "{\"marain.notifications.test.v1\": [\"email\", \"sms\"]}",
+                            "null"});
 #line 10
  testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table23, "And ");
 #line hidden
@@ -148,11 +150,11 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 28
-    testRunner.And("the response content should have a string property called \'notificationType\' with" +
+ testRunner.And("the response content should have a string property called \'notificationType\' with" +
                         " value \'marain.notifications.test.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 29
-    testRunner.And("the response content should have a json property called \'smsTemplate\' with value " +
+ testRunner.And("the response content should have a json property called \'smsTemplate\' with value " +
                         "\'{\"body\": \"A new lead was added by TestUser123\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

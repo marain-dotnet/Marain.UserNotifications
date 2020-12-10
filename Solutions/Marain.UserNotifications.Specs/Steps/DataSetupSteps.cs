@@ -62,7 +62,22 @@ namespace Marain.UserNotifications.Specs.Steps
                 tableRow["email"],
                 tableRow["phoneNumber"],
                 communicationChannelsPerNotificationConfiguration,
-                DateTimeOffset.Now);
+                DateTimeOffset.Now,
+                tableRow.ContainsKey("eTag") ? tableRow["eTag"] : null);
+        }
+
+        public static UserPreference BuildUserPreferenceFrom(TableRow tableRow, string? etag, JsonSerializerSettings serializerSettings)
+        {
+            Dictionary<string, List<CommunicationType>> communicationChannelsPerNotificationConfiguration
+                = JsonConvert.DeserializeObject<Dictionary<string, List<CommunicationType>>>(tableRow["communicationChannelsPerNotificationConfiguration"], serializerSettings);
+
+            return new UserPreference(
+                tableRow["userId"],
+                tableRow["email"],
+                tableRow["phoneNumber"],
+                communicationChannelsPerNotificationConfiguration,
+                DateTimeOffset.Now,
+                etag);
         }
 
         public static NotificationTemplate BuildNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
@@ -152,7 +167,7 @@ namespace Marain.UserNotifications.Specs.Steps
             this.scenarioContext.Set(result);
         }
 
-        [Given(@"I have created and stored a notification template")]
+        [Given("I have created and stored a notification template")]
         public async Task GivenIHaveCreatedAndStoredANotificationTemplate(Table table)
         {
             ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();

@@ -13,6 +13,8 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Marain.Services.Tenancy;
     using Marain.UserPreferences;
     using Menes;
+    using Menes.Exceptions;
+    using Microsoft.Azure.Storage;
 
     /// <summary>
     /// Implements the create user preferences endpoint for the management API.
@@ -57,8 +59,20 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // Gets the AzureBlobUserPreferencesStore
             IUserPreferencesStore store = await this.tenantedUserPreferencesStoreFactory.GetUserPreferencesStoreForTenantAsync(tenant).ConfigureAwait(false);
 
-            // Save the UserPreference object in the blob
-            await store.StoreAsync(body).ConfigureAwait(false);
+            try
+            {
+                // Save the UserPreference object in the blob
+                await store.StoreAsync(body).ConfigureAwait(false);
+            }
+            catch (StorageException e)
+            {
+                if (e?.RequestInformation?.HttpStatusCode == (int)System.Net.HttpStatusCode.PreconditionFailed)
+                {
+                    throw new OpenApiBadRequestException("Precondition failure. Blob's ETag does not match ETag provided.");
+                }
+
+                throw;
+            }
 
             return this.OkResult();
         }
