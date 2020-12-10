@@ -46,5 +46,10 @@ namespace Marain.UserNotifications.Client.Management.Resources
         /// Gets or Sets the date and time at which the user preferences were last updated.
         /// </summary>
         public DateTimeOffset Timestamp { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the notification's etag.
+        /// </summary>
+        public string ETag { get; set; }
     }
 }

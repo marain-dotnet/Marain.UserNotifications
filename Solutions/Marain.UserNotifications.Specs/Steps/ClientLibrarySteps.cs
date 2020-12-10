@@ -324,8 +324,36 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When("I use the client to send a management API request to create a User Preference")]
         [When("I use the client to send a management API request to update a User Preference")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToUpdateAUserPreference(string request)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            UserPreference userPreference = JsonConvert.DeserializeObject<UserPreference>(request);
+
+            // Try get the stored UserPreference and retrieve eTag value if exists.
+            UserPreference response = this.GetApiResponseBody<UserPreference>();
+            if (response is not null)
+            {
+                userPreference.ETag = response.ETag;
+            }
+
+            try
+            {
+                ApiResponse result = await client.SetUserPreference(
+                    transientTenantId,
+                    userPreference).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, userPreference);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When("I use the client to send a management API request to create a User Preference")]
         public async Task WhenIUseTheClientToSendAManagementAPIRequestToCreateAUserPreference(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();

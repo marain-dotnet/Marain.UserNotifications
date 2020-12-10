@@ -89,7 +89,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a User Preference", null, tagsOfScenario, argumentsOfScenario);
-#line 7
+#line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -109,12 +109,12 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 8
+#line 7
  testRunner.When("I use the client to send a management API request to create a User Preference", "\t{\r\n\t\t\"userId\": \"123\",\r\n\t\t\"email\": \"testing@test.com\",\r\n\t\t\"phoneNumber\": \"+449112" +
                         "22000000\",\r\n\t\t\"communicationChannelsPerNotificationConfiguration\": \r\n\t\t{\r\n\t\t\t\"No" +
                         "tificationType1\": [\"Email\", \"Sms\", \"WebPush\"]\r\n\t\t}\r\n\t}", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 20
+#line 19
  testRunner.Then("the client response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -128,7 +128,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a User Preference", null, tagsOfScenario, argumentsOfScenario);
-#line 22
+#line 21
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -154,17 +154,21 @@ this.ScenarioInitialize(scenarioInfo);
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
                 table20.AddRow(new string[] {
-                            "123",
+                            "12",
                             "nottesting@gmail.com",
                             "+44911222000000",
                             "{ \"NotificationType1\": [\"Email\", \"Sms\", \"WebPush\"] }"});
-#line 23
+#line 22
  testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table20, "Given ");
 #line hidden
+#line 25
+ testRunner.When("I use the client to send a management API request to get a User Preference for us" +
+                        "erId \'12\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
 #line 26
- testRunner.When("I use the client to send a management API request to update a User Preference", "\t{\r\n\t\t\"userId\": \"123\",\r\n\t\t\"email\": \"testing@test.com\",\r\n\t\t\"phoneNumber\": \"+449112" +
-                        "22000000\",\r\n\t\t\"communicationChannelsPerNotificationConfiguration\": \r\n\t\t{\r\n\t\t\t\"No" +
-                        "tificationType1\": [\"Email\", \"Sms\", \"WebPush\"]\r\n\t\t}\r\n\t}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("I use the client to send a management API request to update a User Preference", "\t{\r\n\t\t\"userId\": \"12\",\r\n\t\t\"email\": \"testing@test.com\",\r\n\t\t\"phoneNumber\": \"+4491122" +
+                        "2000000\",\r\n\t\t\"communicationChannelsPerNotificationConfiguration\": \r\n\t\t{\r\n\t\t\t\"Not" +
+                        "ificationType1\": [\"Email\", \"Sms\", \"WebPush\"]\r\n\t\t}\r\n\t}", ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 38
  testRunner.Then("the client response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -184,7 +188,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a User Preference", null, tagsOfScenario, argumentsOfScenario);
-#line 42
+#line 41
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -210,29 +214,29 @@ this.ScenarioInitialize(scenarioInfo);
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
                 table21.AddRow(new string[] {
-                            "123",
+                            "1234",
                             "nottesting@gmail.com",
                             "+44911222000000",
                             "{ \"NotificationType1\": [\"Email\", \"Sms\", \"WebPush\"] }"});
-#line 43
+#line 42
  testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table21, "Given ");
 #line hidden
-#line 46
+#line 45
  testRunner.When("I use the client to send a management API request to get a User Preference for us" +
-                        "erId \'123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+                        "erId \'1234\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 47
+#line 46
  testRunner.Then("the client response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 48
+#line 47
  testRunner.And("the user preference in the UserManagement API response should have a \'UserId\' wit" +
-                        "h value \'123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        "h value \'1234\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 49
+#line 48
  testRunner.And("the user preference in the UserManagement API response should have a \'Email\' with" +
                         " value \'nottesting@gmail.com\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 50
+#line 49
  testRunner.And("the user preference in the UserManagement API response should have a \'PhoneNumber" +
                         "\' with value \'+44911222000000\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
