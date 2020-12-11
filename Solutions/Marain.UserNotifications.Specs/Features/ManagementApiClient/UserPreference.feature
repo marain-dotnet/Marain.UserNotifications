@@ -21,7 +21,7 @@ Scenario: Create a User Preference
 Scenario: Update a User Preference
 	Given I have created and stored a user preference for a user
 		| userId | email                | phoneNumber     | communicationChannelsPerNotificationConfiguration    |
-		| 12    | nottesting@gmail.com | +44911222000000 | { "NotificationType1": ["Email", "Sms", "WebPush"] } |
+		| 12     | nottesting@gmail.com | +44911222000000 | { "NotificationType1": ["Email", "Sms", "WebPush"] } |
 	When I use the client to send a management API request to get a User Preference for userId '12'
 	And I use the client to send a management API request to update a User Preference
 		"""
@@ -36,7 +36,6 @@ Scenario: Update a User Preference
 			}
 		"""
 	Then the client response status code should be 'OK'
-	And I use the client to send a management API request to get a User Preference for userId '123'
 
 Scenario: Get a User Preference
 	Given I have created and stored a user preference for a user
@@ -47,3 +46,11 @@ Scenario: Get a User Preference
 	And the user preference in the UserManagement API response should have a 'UserId' with value '1234'
 	And the user preference in the UserManagement API response should have a 'Email' with value 'nottesting@gmail.com'
 	And the user preference in the UserManagement API response should have a 'PhoneNumber' with value '+44911222000000'
+
+Scenario: Request user preference for a user by self link
+	Given I have created and stored a user preference for a user
+		| userId | email                | phoneNumber     | communicationChannelsPerNotificationConfiguration    |
+		| 12345  | nottesting@gmail.com | +44911222000000 | { "NotificationType1": ["Email", "Sms", "WebPush"] } |
+	And I use the client to send a management API request to get a User Preference for userId '12345'
+	When I use the client to send a management API request to get a User Preference using the link called 'self' from the previous API response
+	Then the client response status code should be 'OK'

@@ -52,7 +52,7 @@ namespace Marain.UserNotifications.Client.Management
         /// <param name="userId">The id of the user.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>The UserPreference object.</returns>
-        Task<ApiResponse<UserPreference>> GetUserPreference(
+        Task<ApiResponse<UserPreferenceResource>> GetUserPreference(
             string tenantId,
             string userId,
             CancellationToken cancellationToken = default);
@@ -67,6 +67,16 @@ namespace Marain.UserNotifications.Client.Management
         Task<ApiResponse> SetUserPreference(
             string tenantId,
             UserPreference body,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Set the UserPrefence object for the provided link.
+        /// </summary>
+        /// <param name="link">The self link for the user preference.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>The UserPreference object.</returns>
+        Task<ApiResponse<UserPreferenceResource>> GetUserPreferenceByLinkAsync(
+            string link,
             CancellationToken cancellationToken = default);
 
         /// <summary>

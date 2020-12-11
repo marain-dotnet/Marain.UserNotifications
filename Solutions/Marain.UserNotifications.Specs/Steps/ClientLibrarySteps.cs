@@ -282,6 +282,27 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [When("I use the client to send a management API request to get a User Preference using the link called '(.*)' from the previous API response")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToGetAUserPreferenceUsingTheLinkCalledFromThePreviousAPIResponse(string linkRelationName)
+        {
+            UserPreferenceResource previousResponseBody = this.GetApiResponseBody<UserPreferenceResource>();
+            WebLink nextLink = previousResponseBody.EnumerateLinks(linkRelationName).Single();
+
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            try
+            {
+                ApiResponse<UserPreferenceResource> result = await client.GetUserPreferenceByLinkAsync(
+                    nextLink.Href).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
         [When("I use the client to send an API delivery request for a paged list of notifications using the link called '(.*)' from the previous API delivery channel response")]
         public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestForAPagedListOfNotificationsUsingTheLinkCalledFromThePreviousAPIDeliveryChannelResponse(string linkRelationName)
         {
@@ -332,8 +353,8 @@ namespace Marain.UserNotifications.Specs.Steps
 
             UserPreference userPreference = JsonConvert.DeserializeObject<UserPreference>(request);
 
-            // Try get the stored UserPreference and retrieve eTag value if exists.
-            UserPreference response = this.GetApiResponseBody<UserPreference>();
+            // Try get the stored UserPreferenceResource object and retrieve eTag value if exists.
+            UserPreferenceResource response = this.GetApiResponseBody<UserPreferenceResource>();
             if (response is not null)
             {
                 userPreference.ETag = response.ETag;
@@ -384,7 +405,7 @@ namespace Marain.UserNotifications.Specs.Steps
 
             try
             {
-                ApiResponse<UserPreference> result = await client.GetUserPreference(
+                ApiResponse<UserPreferenceResource> result = await client.GetUserPreference(
                     transientTenantId,
                     userId).ConfigureAwait(false);
 
@@ -477,7 +498,7 @@ namespace Marain.UserNotifications.Specs.Steps
         [Then("the user preference in the UserManagement API response should have a '(.*)' with value '(.*)'")]
         public void ThenTheUserPreferenceInTheUserManagementAPIResponseShouldHaveAUserIdWithValue(string propertyName, string expectedValue)
         {
-            UserPreference response = this.GetApiResponseBody<UserPreference>();
+            UserPreferenceResource response = this.GetApiResponseBody<UserPreferenceResource>();
             object? actualValue = this.GetPropertyValue(response, propertyName);
             Assert.AreEqual(expectedValue, actualValue);
         }

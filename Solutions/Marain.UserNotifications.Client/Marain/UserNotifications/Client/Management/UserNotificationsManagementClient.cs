@@ -126,7 +126,7 @@ namespace Marain.UserNotifications.Client.Management
         }
 
         /// <inheritdoc />
-        public async Task<ApiResponse<UserPreference>> GetUserPreference(string tenantId, string userId, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse<UserPreferenceResource>> GetUserPreference(string tenantId, string userId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
@@ -145,11 +145,19 @@ namespace Marain.UserNotifications.Client.Management
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
             using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            UserPreference result = await JsonSerializer.DeserializeAsync<UserPreference>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+            UserPreferenceResource result = await JsonSerializer.DeserializeAsync<UserPreferenceResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
-            return new ApiResponse<UserPreference>(
+            return new ApiResponse<UserPreferenceResource>(
                 response.StatusCode,
                 result);
+        }
+
+        /// <inheritdoc />
+        public Task<ApiResponse<UserPreferenceResource>> GetUserPreferenceByLinkAsync(
+            string link,
+            CancellationToken cancellationToken = default)
+        {
+            return this.GetPathAsync<UserPreferenceResource>(link, cancellationToken);
         }
 
         /// <inheritdoc />
