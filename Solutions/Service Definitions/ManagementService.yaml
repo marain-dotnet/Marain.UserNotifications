@@ -194,7 +194,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserPreference'
+                $ref: '#/components/schemas/UserPreferenceResource'
         '400':
           description: Bad request
           content:
@@ -252,13 +252,14 @@ paths:
       parameters:
         - $ref: '#/components/parameters/tenantId'
         - $ref: '#/components/parameters/notificationType'
+        - $ref: '#/components/parameters/communicationChannel'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotificationTemplate'
+                $ref: '#/components/schemas/NotificationTemplateResponse'
         '400':
           description: Bad request
           content:
@@ -327,7 +328,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotificationTemplate'
+                $ref: '#/components/schemas/NotificationTemplateResponse'
         '400':
           description: Bad request
           content:
@@ -463,17 +464,56 @@ components:
               type: string
               enum: ['notTracked', 'unread', 'read']
 
+    NotificationTemplateResponse:
+      description: A notification template.
+      oneOf:
+      - $ref: '#/components/schemas/SmsTemplateResource'
+      - $ref: '#/components/schemas/EmailTemplateResource'
+      - $ref: '#/components/schemas/WebPushTemplateResource'
+
     SmsTemplate:
-      description: The sms object.
+      description: The sms template object.
       properties:
+        notificationType:
+          description: The notification type for the template.
+          nullable: false
+          type: string
+        communicationTypeChannel:
+          description: The notification type for the template.
+          nullable: false
+          type: string
         body:
           description: The inner templated body for the sms object.
           nullable: false
           type: string
+          
+    SmsTemplateResource:
+      description: The sms template object
+      allOf:
+        - $ref: '#/components/schemas/Resource'
+        - type: object
+          properties:
+            body:
+              description: The inner templated body for the sms object.
+              nullable: false
+              type: string
+            _links:
+              type: object
+              properties:
+                self:
+                  $ref: '#/components/schemas/Link'
 
     EmailTemplate:
-      description: The email object.
+      description: The email template object.
       properties:
+        notificationType:
+          description: The notification type for the template.
+          nullable: false
+          type: string
+        communicationTypeChannel:
+          description: The notification type for the template.
+          nullable: false
+          type: string
         body:
           description: The inner templated body for the email object.
           nullable: false
@@ -487,9 +527,41 @@ components:
           nullable: true
           type: string
           
+    EmailTemplateResource:
+      description: The email resource object.
+      allOf:
+        - $ref: '#/components/schemas/Resource'
+        - type: object
+          properties:
+            body:
+              description: The inner templated body for the email object.
+              nullable: false
+              type: string
+            subject:
+              description: The subject of the email object.
+              nullable: false
+              type: string
+            important:
+              description: Mark is the email is important.
+              nullable: true
+              type: string
+            _links:
+              type: object
+              properties:
+                self:
+                  $ref: '#/components/schemas/Link'
+          
     WebPushTemplate:
-      description: The webpush object.
+      description: The webpush template object.
       properties:
+        notificationType:
+          description: The notification type for the template.
+          nullable: false
+          type: string
+        communicationTypeChannel:
+          description: The notification type for the template.
+          nullable: false
+          type: string
         body:
           description: The inner templated body for the email object.
           nullable: false
@@ -502,25 +574,72 @@ components:
           description: The Base64 image of webpush notification.
           nullable: true
           type: string
+          
+    WebPushTemplateResource:
+      description: The webpush object.
+      allOf:
+        - $ref: '#/components/schemas/Resource'
+        - type: object
+          properties:
+            body:
+              description: The inner templated body for the email object.
+              nullable: false
+              type: string
+            title:
+              description: The title of the email object.
+              nullable: false
+              type: string
+            image:
+              description: The Base64 image of webpush notification.
+              nullable: true
+              type: string
+            _links:
+              type: object
+              properties:
+                self:
+                  $ref: '#/components/schemas/Link'
 
     NotificationTemplate:
-      description: The template wrapper which will stored per notification type.
-      required:
-        - notificationType
-      properties:
-        notificationType:
-          description: The notification type for the template.
-          nullable: false
-          type: string
-        smsTemplate:
-          $ref: '#/components/schemas/SmsTemplate'
-        emailTemplate:
-          $ref: '#/components/schemas/EmailTemplate'
-        webPushTemplate:
-          $ref: '#/components/schemas/WebPushTemplate'
+      description: A notification template response.
+      oneOf:
+      - $ref: '#/components/schemas/SmsTemplate'
+      - $ref: '#/components/schemas/EmailTemplate'
+      - $ref: '#/components/schemas/WebPushTemplate'
 
+    UserPreferenceResource:
+      description: The user preference resource object
+      allOf:
+        - $ref: '#/components/schemas/Resource'
+        - type: object
+          properties:
+            userId:
+              description: The Id of the user
+              nullable: false
+              type: string
+            email:
+              description: The email of the user
+              nullable: true
+              type: string
+            phoneNumber:
+              description: The phone number of the user
+              nullable: true
+              type: string
+            communicationChannelsPerNotificationConfiguration:
+              description: This is a key value pair (string - list<string>) of notification type for multiple communication channels configured
+              type: object
+              additionalProperties: true
+            eTag: 
+              description: Etag for the user preference object.
+              nullable: true
+              type: string
+            _links:
+              type: object
+              properties:
+                self:
+                  $ref: '#/components/schemas/Link'
+                    
     UserPreference:
-      description: Request data for creating a new user preference object.
+      description: Object used to create/update a new user preference object.
       required: 
         - userId
       properties:
@@ -540,7 +659,11 @@ components:
           description: This is a key value pair (string - list<string>) of notification type for multiple communication channels configured
           type: object
           additionalProperties: true
-
+        eTag: 
+          description: Etag for the current object
+          nullable: true
+          type: string
+              
     NotificationStatus:
       description: The delivery/read status for a notification on a delivery channel.
       allOf:
@@ -748,7 +871,7 @@ components:
       name: tenantId
       in: path
       x-ms-parameter-location: method
-      description: The tenant within which the request should operate
+      description: The tenant within which the request should operate.
       required: true
       schema:
         type: string
@@ -780,7 +903,7 @@ components:
       name: userId
       in: query
       x-ms-parameter-location: method
-      description: The Id of the user for whom data is being operated on
+      description: The Id of the user for whom data is being operated on.
       required: true
       schema:
         type: string
@@ -788,7 +911,7 @@ components:
       name: notificationType
       in: query
       x-ms-parameter-location: method
-      description: The type of notification being queried
+      description: The type of notification being queried.
       required: true
       schema:
         type: string
@@ -796,7 +919,7 @@ components:
       name: sinceSequenceId
       in: query
       x-ms-parameter-location: method
-      description: When retrieving notifications, all returned notifications should have a greater sequence number than the supplied value
+      description: When retrieving notifications, all returned notifications should have a greater sequence number than the supplied value.
       required: false
       schema:
         type: integer
@@ -804,7 +927,7 @@ components:
       name: continuationToken
       in: query
       x-ms-parameter-location: method
-      description: A continuation token for an operation where more data is available
+      description: A continuation token for an operation where more data is available.
       required: false
       schema:
         type: string
@@ -816,3 +939,13 @@ components:
       required: false
       schema:
         type: integer
+    communicationChannel: 
+      name: communicationChannels
+      in: query
+      x-ms-parameter-location: method
+      description: The communication channel enum.
+      required: true
+      schema:
+        type: string
+        enum: ['email', 'sms', 'webPush']
+
