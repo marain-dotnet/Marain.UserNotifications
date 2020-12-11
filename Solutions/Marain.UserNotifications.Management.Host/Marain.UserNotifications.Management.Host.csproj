@@ -46,4 +46,7 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Marain\UserNotifications\Management\Host\Mappers\" />
+  </ItemGroup>
 </Project>

@@ -11,9 +11,11 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Corvus.Tenancy;
     using Marain.Operations.Client.OperationsControl;
     using Marain.Services.Tenancy;
+    using Marain.UserNotifications.Management.Host.Mappers;
     using Marain.UserPreferences;
     using Menes;
     using Menes.Exceptions;
+    using Menes.Hal;
 
     /// <summary>
     /// Implements the get user preferences endpoint for the management API.
@@ -27,18 +29,25 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory;
+        private readonly UserPreferenceMapper userPreferenceMapper;
 
         /// <summary>
         /// Initializes a new instance of <see cref="GetUserPreferenceService"/> class.
         /// </summary>
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="tenantedUserPreferencesStoreFactory">User preferences store factory.</param>
+        /// <param name="userPreferenceMapper">The <see cref="UserPreferenceMapper"/>for this class.</param>
         public GetUserPreferenceService(
             IMarainServicesTenancy marainServicesTenancy,
-            ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory)
+            ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory,
+            UserPreferenceMapper userPreferenceMapper)
         {
-            this.marainServicesTenancy = marainServicesTenancy;
-            this.tenantedUserPreferencesStoreFactory = tenantedUserPreferencesStoreFactory;
+            this.marainServicesTenancy = marainServicesTenancy
+                ?? throw new ArgumentNullException(nameof(marainServicesTenancy));
+            this.tenantedUserPreferencesStoreFactory = tenantedUserPreferencesStoreFactory
+                ?? throw new ArgumentNullException(nameof(tenantedUserPreferencesStoreFactory));
+            this.userPreferenceMapper = userPreferenceMapper
+                ?? throw new ArgumentNullException(nameof(userPreferenceMapper));
         }
 
         /// <summary>
@@ -65,7 +74,9 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 throw new OpenApiNotFoundException($"The user preference for userId: {userId} was not found.");
             }
 
-            return this.OkResult(userObject!);
+            HalDocument response = await this.userPreferenceMapper.MapAsync(userObject, context).ConfigureAwait(false);
+
+            return this.OkResult(response!);
         }
     }
 }

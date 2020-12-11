@@ -7,7 +7,9 @@
 namespace Marain.UserNotifications.Management.Host
 {
     using Marain.UserNotifications.Management.Host.Helpers;
+    using Marain.UserNotifications.Management.Host.Mappers;
     using Marain.UserNotifications.Management.Host.OpenApi;
+    using Marain.UserPreferences;
     using Menes;
     using Microsoft.Azure.Functions.Extensions.DependencyInjection;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -41,6 +43,8 @@ namespace Marain.UserNotifications.Management.Host
         /// <param name="services">The service collection.</param>
         private static void AddTenantedUserNotificationsManagementApi(IServiceCollection services)
         {
+            services.AddHalDocumentMapper<UserPreference, IOpenApiContext, UserPreferenceMapper>();
+
             services.AddSingleton<IOpenApiService, CreateNotificationsService>();
             services.AddSingleton<IOpenApiService, GetNotificationsService>();
             services.AddSingleton<IOpenApiService, GetNotificationStatusService>();
