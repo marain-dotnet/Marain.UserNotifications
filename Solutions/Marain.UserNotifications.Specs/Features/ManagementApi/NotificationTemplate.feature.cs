@@ -241,8 +241,8 @@ this.ScenarioInitialize(scenarioInfo);
                         " value \'marain.test.template2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 37
- testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +
-                        "\": \"A new lead was added by {{leadAddedBy}}\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the response content should have a json property called \'body\' with value \'A new " +
+                        "lead was added by {{leadAddedBy}}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 38
  testRunner.And("the response content should have a json property called \'title\' with value \'test\'" +
@@ -408,7 +408,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "image",
                             "notificationType"});
                 table35.AddRow(new string[] {
-                            "body",
+                            "A new lead was added by {{leadAddedBy}}",
                             "test",
                             "true",
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
@@ -429,15 +429,15 @@ this.ScenarioInitialize(scenarioInfo);
                         " value \'marain.test.template4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 75
- testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +
-                        "\": \"A new lead was added by {{leadAddedBy}}\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the response content should have a json property called \'body\' with value \'A new " +
+                        "lead was added by {{leadAddedBy}}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 76
  testRunner.And("the response content should have a json property called \'subject\' with value \'tes" +
                         "t\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 77
- testRunner.And("the response content should have a json property called \'important\' with value \'t" +
+ testRunner.And("the response content should have a json property called \'important\' with value \'T" +
                         "rue\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 78
@@ -599,8 +599,8 @@ this.ScenarioInitialize(scenarioInfo);
                         " value \'marain.test.notification6\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 111
- testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +
-                        "\": \"A new lead was added by {{leadAddedBy}}\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the response content should have a json property called \'body\' with value \'A new " +
+                        "lead was added by {{leadAddedBy}}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 112
  testRunner.And("the response content should have a json property called \'contentType\' with value " +
