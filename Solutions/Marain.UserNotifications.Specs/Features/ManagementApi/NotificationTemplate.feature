@@ -22,15 +22,9 @@ Scenario: Update a web push notification template
 	Given I have created and stored a web push notification template
 		| body | title | contentType                                                                      | image        | notificationType      |
 		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template1 |
-	When I send the user notification template API a request to update a new user notification template
-		"""
-		{
-			"body": "this is an updated test template2",
-			"title": "test",
-			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
-			"notificationType": "marain.test.template1"
-		}
-		"""
+	When I send the user notification template API a request to update an existing web push notification template
+		| body                  | title | contentType                                                                      | image        | notificationType      |
+		| updated body template | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template1 |
 	Then the response status code should be 'OK'
 
 Scenario: Get a web push notification template
@@ -66,16 +60,9 @@ Scenario: Update an email notification template
 	Given I have created and stored an email notification template
 		| body | subject | important | contentType                                                                    | image        | notificationType      |
 		| body | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template3 |
-	When I send the user notification template API a request to update a new user notification template
-		"""
-		{
-			"body": "this is a different test template",
-			"subject": "not a real test",
-			"important": false,
-			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
-			"notificationType": "marain.test.template3"
-		}
-		"""
+	When I send the user notification template API a request to update an existing email notification template
+		| body                  | subject | important | contentType                                                                    | image        | notificationType      |
+		| updated body template | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template3 |
 	Then the response status code should be 'OK'
 
 Scenario: Get an email notification template
@@ -109,14 +96,9 @@ Scenario: Update a sms notification template
 	Given I have created and stored a sms notification template
 		| body | contentType                                                                  | notificationType          |
 		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
-	When I send the user notification template API a request to update a new user notification template
-		"""
-		{
-			"body": "this is an updated sms test template2",
-			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-			"notificationType": "marain.test.notification5"
-		}
-		"""
+	When I send the user notification template API a request to update an existing sms notification template
+		| body                                  | contentType                                                                  | notificationType          |
+		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
 	Then the response status code should be 'OK'
 
 Scenario: Get a sms notification template

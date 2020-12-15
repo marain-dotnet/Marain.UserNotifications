@@ -18,6 +18,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Retry.Policies;
     using Corvus.Retry.Strategies;
     using Corvus.Testing.SpecFlow;
+    using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications.Specs.Bindings;
     using Marain.UserPreferences;
@@ -300,7 +301,7 @@ namespace Marain.UserNotifications.Specs.Steps
         }
 
         [When("I send the user notification template API a request to create a new user notification template")]
-        [When("I send the user notification template API a request to update a new user notification template")]
+        [When("I send the user notification template API a request to update an existing notification template")]
         public async Task WhenISendTheUserNotificationTemplateAPIARequestToCreateANewUserNotificationTemplate(string requestJson)
         {
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
@@ -318,6 +319,53 @@ namespace Marain.UserNotifications.Specs.Steps
             {
                 this.scenarioContext.Set(responseContent, ResponseContent);
             }
+        }
+
+        [When("I send the user notification template API a request to update an existing web push notification template")]
+        public async Task WhenISendTheUserNotificationTemplateAPIARequestToUpdateAnExistingWebPushNotificationTemplate(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            WebPushTemplate? savedWebPushTemplate = this.scenarioContext.Get<WebPushTemplate>();
+
+            WebPushTemplate notificationTemplate = DataSetupSteps.BuildWebPushNotificationTemplateFrom(table.Rows[0], savedWebPushTemplate.ETag);
+
+            string? requestJson = JsonConvert.SerializeObject(notificationTemplate, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            var path = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates");
+            await this.SendPutRequest(requestContent, path.ToString()).ConfigureAwait(false);
+        }
+
+        [When("I send the user notification template API a request to update an existing email notification template")]
+        public async Task WhenISendTheUserNotificationTemplateAPIARequestToUpdateAnExistingEmailNotificationTemplate(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            EmailTemplate? savedEmailTemplate = this.scenarioContext.Get<EmailTemplate>();
+
+            EmailTemplate notificationTemplate = DataSetupSteps.BuildEmailNotificationTemplateFrom(table.Rows[0], savedEmailTemplate.ETag);
+
+            string? requestJson = JsonConvert.SerializeObject(notificationTemplate, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            var path = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates");
+            await this.SendPutRequest(requestContent, path.ToString()).ConfigureAwait(false);
+        }
+
+        [When("I send the user notification template API a request to update an existing sms notification template")]
+        public async Task WhenISendTheUserNotificationTemplateAPIARequestToUpdateAnExistingSmsNotificationTemplate(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            SmsTemplate? savedSmsTemplate = this.scenarioContext.Get<SmsTemplate>();
+
+            SmsTemplate notificationTemplate = DataSetupSteps.BuildSmsNotificationTemplateFrom(table.Rows[0], savedSmsTemplate.ETag);
+            string? requestJson = JsonConvert.SerializeObject(notificationTemplate, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            var path = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates");
+            await this.SendPutRequest(requestContent, path.ToString()).ConfigureAwait(false);
         }
 
         [When("I send the notification template API a request to retreive a notification template with notificationType '(.*)' and communicationType '(.*)'")]
