@@ -28,6 +28,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
         private readonly WebPushTemplateMapper webPushTemplateMapper;
+        private readonly EmailTemplateMapper emailTemplateMapper;
 
         /// <summary>
         /// Initializes a new instance of <see cref="GetTemplateService"/> class.
@@ -35,14 +36,17 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="tenantedTemplateStoreFactory">Template store factory.</param>
         /// <param name="webPushTemplateMapper">WebPush Template Mapper.</param>
+        /// <param name="emailTemplateMapper">Email Template Mapper.</param>
         public GetTemplateService(
             IMarainServicesTenancy marainServicesTenancy,
             ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory,
-            WebPushTemplateMapper webPushTemplateMapper)
+            WebPushTemplateMapper webPushTemplateMapper,
+            EmailTemplateMapper emailTemplateMapper)
         {
             this.marainServicesTenancy = marainServicesTenancy;
             this.tenantedTemplateStoreFactory = tenantedTemplateStoreFactory;
             this.webPushTemplateMapper = webPushTemplateMapper;
+            this.emailTemplateMapper = emailTemplateMapper;
         }
 
         /// <summary>
@@ -71,7 +75,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 case CommunicationType.Email:
                     EmailTemplate emailTemplate = await this.GetTemplateAsync<EmailTemplate>(store, context, notificationType, communicationType).ConfigureAwait(false);
 
-                    // response = await this.emailTemplateMapper.MapAsync(emailTemplate, context).ConfigureAwait(false);
+                    response = await this.emailTemplateMapper.MapAsync(emailTemplate, context).ConfigureAwait(false);
                     break;
                 case CommunicationType.Sms:
                     SmsTemplate smsTemplate = await this.GetTemplateAsync<SmsTemplate>(store, context, notificationType, communicationType).ConfigureAwait(false);

@@ -63,6 +63,23 @@ namespace Marain.UserNotifications.Specs.Steps
             };
         }
 
+        public static EmailTemplate BuildEmailNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        {
+            bool? important = null;
+            if (bool.TryParse(tableRow["important"], out import))
+            {
+                important = my
+            }
+
+            return new EmailTemplate()
+            {
+                Body = tableRow["body"],
+                Subject = tableRow["subject"],
+                Important = tableRow["important"],
+                NotificationType = tableRow["notificationType"],
+            };
+        }
+
         public static UserPreference BuildUserPreferenceFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             Dictionary<string, List<CommunicationType>> communicationChannelsPerNotificationConfiguration
@@ -205,5 +222,20 @@ namespace Marain.UserNotifications.Specs.Steps
 
             this.scenarioContext.Set(result);
         }
+
+        [Given(@"I have created and stored an email notification template")]
+        public async Task GivenIHaveCreatedAndStoredAnEmailNotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+
+            EmailTemplate notificationTemplate = BuildEmailNotificationTemplateFrom(table.Rows[0], serializerSettingsProvider.Instance);
+
+            INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            EmailTemplate? result = await store.StoreAsync<EmailTemplate>(notificationTemplate.NotificationType!, CommunicationType.Email, notificationTemplate).ConfigureAwait(false);
+
+            this.scenarioContext.Set(result);
+        }
+
     }
 }
