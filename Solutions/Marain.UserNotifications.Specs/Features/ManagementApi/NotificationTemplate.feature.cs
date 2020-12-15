@@ -647,7 +647,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table39.AddRow(new string[] {
                             "body",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "marain.test.notification5"});
+                            "marain.test.notification7"});
 #line 116
  testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table39, "Given ");
 #line hidden
@@ -658,7 +658,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table40.AddRow(new string[] {
                             "this is an updated sms test template2",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "marain.test.notification5"});
+                            "marain.test.notification7"});
 #line 119
  testRunner.When("I send the user notification template API a request to update an existing sms not" +
                         "ification template without an eTag", ((string)(null)), table40, "When ");
@@ -704,7 +704,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table41.AddRow(new string[] {
                             "body",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "marain.test.notification5"});
+                            "marain.test.notification8"});
 #line 125
  testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table41, "Given ");
 #line hidden
@@ -716,7 +716,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table42.AddRow(new string[] {
                             "this is an updated sms test template2",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "marain.test.notification5",
+                            "marain.test.notification8",
                             "\"\\\"0x8D89CF9D612C7F1\\\"\""});
 #line 128
  testRunner.When("I send the user notification template API a request to update an existing sms not" +

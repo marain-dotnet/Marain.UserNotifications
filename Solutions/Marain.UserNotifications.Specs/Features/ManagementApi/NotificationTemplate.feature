@@ -115,17 +115,17 @@ Scenario: Get a sms notification template
 Scenario: Update a sms notification template without an eTag
 	Given I have created and stored a sms notification template
 		| body | contentType                                                                  | notificationType          |
-		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
+		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification7 |
 	When I send the user notification template API a request to update an existing sms notification template without an eTag
 		| body                                  | contentType                                                                  | notificationType          |
-		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
+		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification7 |
 	Then the response status code should be 'InternalServerError'
 
 Scenario: Update a sms notification template without an invalid eTag
 	Given I have created and stored a sms notification template
 		| body | contentType                                                                  | notificationType          |
-		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
+		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification8 |
 	When I send the user notification template API a request to update an existing sms notification template with an invalid eTag
 		| body                                  | contentType                                                                  | notificationType          | eTag                    |
-		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 | "\"0x8D89CF9D612C7F1\"" |
+		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification8 | "\"0x8D89CF9D612C7F1\"" |
 	Then the response status code should be 'BadRequest'
