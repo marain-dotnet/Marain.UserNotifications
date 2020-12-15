@@ -252,7 +252,7 @@ namespace Marain.UserNotifications.Specs.Steps
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             string transientTenantId = this.featureContext.GetTransientTenantId();
 
-            await this.SendPutRequest(requestContent, transientTenantId).ConfigureAwait(false);
+            await this.SendPutRequest(requestContent, $"/{transientTenantId}/marain/usernotifications/userpreference").ConfigureAwait(false);
         }
 
         [When("I send a user preference API request to update a previously saved user preference")]
@@ -269,7 +269,7 @@ namespace Marain.UserNotifications.Specs.Steps
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             string transientTenantId = this.featureContext.GetTransientTenantId();
 
-            await this.SendPutRequest(requestContent, transientTenantId).ConfigureAwait(false);
+            await this.SendPutRequest(requestContent, $"/{transientTenantId}/marain/usernotifications/userpreference").ConfigureAwait(false);
         }
 
         [When("I send a user preference API request to update a previously saved user preference that has no etag in the request body")]
@@ -284,7 +284,7 @@ namespace Marain.UserNotifications.Specs.Steps
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             string transientTenantId = this.featureContext.GetTransientTenantId();
 
-            await this.SendPutRequest(requestContent, transientTenantId).ConfigureAwait(false);
+            await this.SendPutRequest(requestContent, $"/{transientTenantId}/marain/usernotifications/userpreference").ConfigureAwait(false);
         }
 
         [When("I send a user preference API request to retreive a user preference")]
@@ -320,12 +320,12 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When("I send the notification template API a request to retreive a notification template with notificationType '(.*)'")]
-        public Task WhenISendTheNotificationTemplateAPIARequestToRetreiveANotificationTemplateWithNotificationType(string notificationType)
+        [When("I send the notification template API a request to retreive a notification template with notificationType '(.*)' and communicationType '(.*)'")]
+        public Task WhenISendTheNotificationTemplateAPIARequestToRetreiveANotificationTemplateWithNotificationTypeAndCommunicationType(string notificationType, string communicationType)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
 
-            return this.SendGetRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates?notificationType={notificationType}");
+            return this.SendGetRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates?notificationType={notificationType}&communicationType={communicationType}");
         }
 
         [When("I send the generate template API request")]
@@ -389,10 +389,10 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        private async Task SendPutRequest(StringContent requestContent, string transientTenantId)
+        private async Task SendPutRequest(StringContent requestContent, string path)
         {
             HttpResponseMessage response = await HttpClient.PutAsync(
-                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference"),
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, path),
                 requestContent).ConfigureAwait(false);
 
             this.scenarioContext.Set(response);

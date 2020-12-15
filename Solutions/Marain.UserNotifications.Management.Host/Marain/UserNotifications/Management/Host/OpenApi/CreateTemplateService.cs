@@ -4,12 +4,15 @@
 
 namespace Marain.UserNotifications.Management.Host.OpenApi
 {
+    using System;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
-    using Marain.NotificationTemplate.NotificationTemplate;
+    using Marain.NotificationTemplates;
+    using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.Services.Tenancy;
     using Marain.UserPreferences;
     using Menes;
+    using Menes.Exceptions;
 
     /// <summary>
     /// Implements the create template endpoint for the management API.
@@ -33,8 +36,10 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             IMarainServicesTenancy marainServicesTenancy,
             ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory)
         {
-            this.marainServicesTenancy = marainServicesTenancy;
-            this.tenantedTemplateStoreFactory = tenantedTemplateStoreFactory;
+            this.marainServicesTenancy = marainServicesTenancy
+                ?? throw new ArgumentNullException(nameof(marainServicesTenancy));
+            this.tenantedTemplateStoreFactory = tenantedTemplateStoreFactory
+                ?? throw new ArgumentNullException(nameof(tenantedTemplateStoreFactory));
         }
 
         /// <summary>
@@ -46,16 +51,43 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         [OperationId(CreateTemplateOperationId)]
         public async Task<OpenApiResult> CreateTemplateAsync(
             IOpenApiContext context,
-            NotificationTemplate body)
+            ICommunicationTemplate body)
         {
+            if (string.IsNullOrWhiteSpace(body.NotificationType))
+            {
+                throw new OpenApiNotFoundException("The NotificationType was not found in the object");
+            }
+
+            if (string.IsNullOrWhiteSpace(body.ContentType))
+            {
+                throw new OpenApiNotFoundException("The ContentType was not found in the object");
+            }
+
             // We can guarantee tenant Id is available because it's part of the Uri.
             ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId!).ConfigureAwait(false);
 
             // Gets the AzureBlobTemplateStore
             INotificationTemplateStore store = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
 
-            // Save the TemplateWrapper object in the blob
-            await store.StoreAsync(body).ConfigureAwait(false);
+            // I don't like this
+            // It also means that if we need to add another type, it will have to be done manually
+            if (body is EmailTemplate emailTemplate)
+            {
+                await store.StoreAsync<EmailTemplate>(body.NotificationType!, CommunicationType.Email, emailTemplate).ConfigureAwait(false);
+            }
+            else if (body is SmsTemplate smsTemplate)
+            {
+                await store.StoreAsync<SmsTemplate>(body.NotificationType!, CommunicationType.Sms, smsTemplate).ConfigureAwait(false);
+            }
+            else if (body is WebPushTemplate webPushTemplate)
+            {
+                await store.StoreAsync<WebPushTemplate>(body.NotificationType!, CommunicationType.WebPush, webPushTemplate).ConfigureAwait(false);
+            }
+            else
+            {
+                // this should be removed in future updates
+                throw new OpenApiNotFoundException($"The template for ContentType: {body.ContentType} is not a valid content type");
+            }
 
             return this.OkResult();
         }

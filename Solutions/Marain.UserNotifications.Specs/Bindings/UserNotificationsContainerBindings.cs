@@ -10,6 +10,7 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Extensions.Json;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
+    using Marain.Extensions.DependancyInjection;
     using Marain.Tenancy.Client;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
@@ -88,6 +89,8 @@ namespace Marain.UserNotifications.Specs.Bindings
                         {
                             AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
                         });
+
+                    services.RegisterCoreUserNotificationsContentTypes();
                 });
         }
 

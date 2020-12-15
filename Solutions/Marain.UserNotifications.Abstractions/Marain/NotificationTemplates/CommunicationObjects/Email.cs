@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.NotificationTemplate.NotificationTemplate.CommunicationObjects
+namespace Marain.NotificationTemplates.CommunicationObjects
 {
     using System.Collections.Generic;
 

@@ -2,10 +2,10 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.NotificationTemplate.NotificationTemplate
+namespace Marain.NotificationTemplates
 {
     using System;
-    using Marain.NotificationTemplate.NotificationTemplate.CommunicationTemplates;
+    using Marain.NotificationTemplates.CommunicationTemplates;
 
     /// <summary>
     /// The Notification Template structure.

@@ -76,7 +76,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
             HalDocument response = await this.userPreferenceMapper.MapAsync(userObject, context).ConfigureAwait(false);
 
-            return this.OkResult(response!);
+            return this.OkResult(response);
         }
     }
 }

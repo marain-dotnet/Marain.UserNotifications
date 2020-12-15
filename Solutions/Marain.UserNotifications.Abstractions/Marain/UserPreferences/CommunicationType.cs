@@ -23,10 +23,5 @@ namespace Marain.UserPreferences
         /// The delivery channel supports web push
         /// </summary>
         WebPush,
-
-        /// <summary>
-        /// The delivery channel support MMS.
-        /// </summary>
-        MMS,
     }
 }

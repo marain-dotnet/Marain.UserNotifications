@@ -6,6 +6,8 @@
 
 namespace Marain.UserNotifications.Management.Host
 {
+    using Marain.Extensions.DependancyInjection;
+    using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.Management.Host.Mappers;
     using Marain.UserNotifications.Management.Host.OpenApi;
@@ -34,6 +36,8 @@ namespace Marain.UserNotifications.Management.Host
 
             services.AddCommonUserNotificationsApiServices();
 
+            services.RegisterCoreUserNotificationsContentTypes();
+
             AddTenantedUserNotificationsManagementApi(services);
         }
 
@@ -44,6 +48,7 @@ namespace Marain.UserNotifications.Management.Host
         private static void AddTenantedUserNotificationsManagementApi(IServiceCollection services)
         {
             services.AddHalDocumentMapper<UserPreference, IOpenApiContext, UserPreferenceMapper>();
+            services.AddHalDocumentMapper<WebPushTemplate, IOpenApiContext, WebPushTemplateMapper>();
 
             services.AddSingleton<IOpenApiService, CreateNotificationsService>();
             services.AddSingleton<IOpenApiService, GetNotificationsService>();

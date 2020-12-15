@@ -252,7 +252,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/tenantId'
         - $ref: '#/components/parameters/notificationType'
-        - $ref: '#/components/parameters/communicationChannel'
+        - $ref: '#/components/parameters/communicationType'
       responses:
         '200':
           description: Successful operation
@@ -289,7 +289,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NotificationTemplate'
+              anyOf:
+               - $ref: '#/components/schemas/SmsTemplate'
+               - $ref: '#/components/schemas/EmailTemplate'
+               - $ref: '#/components/schemas/WebPushTemplate'
       responses:
         '200':
           description: Successful operation
@@ -466,7 +469,7 @@ components:
 
     NotificationTemplateResponse:
       description: A notification template.
-      oneOf:
+      anyOf:
       - $ref: '#/components/schemas/SmsTemplateResource'
       - $ref: '#/components/schemas/EmailTemplateResource'
       - $ref: '#/components/schemas/WebPushTemplateResource'
@@ -474,14 +477,14 @@ components:
     SmsTemplate:
       description: The sms template object.
       properties:
+        contentType: 
+          description: The content type that will be used when serializing/deserializing.
+          nullable: false
+          type: string
         notificationType:
-          description: The notification type for the template.
-          nullable: false
           type: string
-        communicationTypeChannel:
-          description: The notification type for the template.
+          description: The type of the notification. These types are defined by the consuming application, so can be arbitrary strings. It is strongly recommended that you version these types.
           nullable: false
-          type: string
         body:
           description: The inner templated body for the sms object.
           nullable: false
@@ -493,6 +496,12 @@ components:
         - $ref: '#/components/schemas/Resource'
         - type: object
           properties:
+            notificationType:
+              description: The notification type for the template.
+              nullable: false
+              type: string
+            communicationType:
+              $ref: '#/components/schemas/CommunicationType'
             body:
               description: The inner templated body for the sms object.
               nullable: false
@@ -506,14 +515,14 @@ components:
     EmailTemplate:
       description: The email template object.
       properties:
+        contentType: 
+          description: The content type that will be used when serializing/deserializing.
+          nullable: false
+          type: string
         notificationType:
-          description: The notification type for the template.
-          nullable: false
           type: string
-        communicationTypeChannel:
-          description: The notification type for the template.
+          description: The type of the notification. These types are defined by the consuming application, so can be arbitrary strings. It is strongly recommended that you version these types.
           nullable: false
-          type: string
         body:
           description: The inner templated body for the email object.
           nullable: false
@@ -533,6 +542,12 @@ components:
         - $ref: '#/components/schemas/Resource'
         - type: object
           properties:
+            notificationType:
+              description: The notification type for the template.
+              nullable: false
+              type: string
+            communicationType:
+              $ref: '#/components/schemas/CommunicationType'
             body:
               description: The inner templated body for the email object.
               nullable: false
@@ -554,14 +569,14 @@ components:
     WebPushTemplate:
       description: The webpush template object.
       properties:
+        contentType: 
+          description: The content type that will be used when serializing/deserializing.
+          nullable: false
+          type: string
         notificationType:
-          description: The notification type for the template.
-          nullable: false
           type: string
-        communicationTypeChannel:
-          description: The notification type for the template.
+          description: The type of the notification. These types are defined by the consuming application, so can be arbitrary strings. It is strongly recommended that you version these types.
           nullable: false
-          type: string
         body:
           description: The inner templated body for the email object.
           nullable: false
@@ -581,6 +596,14 @@ components:
         - $ref: '#/components/schemas/Resource'
         - type: object
           properties:
+            contentType: 
+              description: The content type that will be used when serializing/deserializing.
+              nullable: false
+              type: string
+            notificationType:
+              description: The notification type for the template.
+              nullable: false
+              type: string
             body:
               description: The inner templated body for the email object.
               nullable: false
@@ -593,18 +616,13 @@ components:
               description: The Base64 image of webpush notification.
               nullable: true
               type: string
+            communicationType:
+              $ref: '#/components/schemas/CommunicationType'
             _links:
               type: object
               properties:
                 self:
                   $ref: '#/components/schemas/Link'
-
-    NotificationTemplate:
-      description: A notification template response.
-      oneOf:
-      - $ref: '#/components/schemas/SmsTemplate'
-      - $ref: '#/components/schemas/EmailTemplate'
-      - $ref: '#/components/schemas/WebPushTemplate'
 
     UserPreferenceResource:
       description: The user preference resource object
@@ -699,6 +717,11 @@ components:
               update-read-status:
                 $ref: '#/components/schemas/Link'
 
+    CommunicationType:
+        description: Communication types
+        type: string
+        enum: ['email', 'sms', 'webPush']
+
     PagedNotificationStatusListResponse:
       description: A paged list of notification statuses
       allOf:
@@ -777,7 +800,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Link'
-
+    
     PropertyBag:
       type: object
       additionalProperties: true
@@ -939,13 +962,12 @@ components:
       required: false
       schema:
         type: integer
-    communicationChannel: 
-      name: communicationChannels
+    communicationType: 
+      name: communicationType
       in: query
       x-ms-parameter-location: method
-      description: The communication channel enum.
+      description: The communication type enum.
       required: true
       schema:
         type: string
         enum: ['email', 'sms', 'webPush']
-

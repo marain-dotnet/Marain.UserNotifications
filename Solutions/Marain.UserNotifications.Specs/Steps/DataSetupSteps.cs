@@ -11,8 +11,8 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Extensions.Json;
     using Corvus.Json;
     using Corvus.Testing.SpecFlow;
-    using Marain.NotificationTemplate.NotificationTemplate;
-    using Marain.NotificationTemplate.NotificationTemplate.CommunicationTemplates;
+    using Marain.NotificationTemplates;
+    using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Specs.Bindings;
     using Marain.UserPreferences;
     using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +50,17 @@ namespace Marain.UserNotifications.Specs.Steps
                 DateTime.Parse(tableRow["Timestamp"]),
                 properties,
                 new UserNotificationMetadata(correlationIds, null));
+        }
+
+        public static WebPushTemplate BuildWebPushNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        {
+            return new WebPushTemplate()
+            {
+                Body = tableRow["body"],
+                Title = tableRow["title"],
+                Image = tableRow["image"],
+                NotificationType = tableRow["notificationType"],
+            };
         }
 
         public static UserPreference BuildUserPreferenceFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
@@ -176,7 +187,21 @@ namespace Marain.UserNotifications.Specs.Steps
             NotificationTemplate notificationTemplate = BuildNotificationTemplateFrom(table.Rows[0], serializerSettingsProvider.Instance);
 
             INotificationTemplateStore store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            NotificationTemplate result = await store.StoreAsync(notificationTemplate).ConfigureAwait(false);
+            EmailTemplate? result = await store.StoreAsync<EmailTemplate>("testshouldbreak", CommunicationType.Email, notificationTemplate.EmailTemplate!).ConfigureAwait(false);
+
+            this.scenarioContext.Set(result);
+        }
+
+        [Given(@"I have created and stored a web push notification template")]
+        public async Task GivenIHaveCreatedAndStoredAWebPushNotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+
+            WebPushTemplate notificationTemplate = BuildWebPushNotificationTemplateFrom(table.Rows[0], serializerSettingsProvider.Instance);
+
+            INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            WebPushTemplate? result = await store.StoreAsync<WebPushTemplate>(notificationTemplate.NotificationType!, CommunicationType.WebPush, notificationTemplate).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }

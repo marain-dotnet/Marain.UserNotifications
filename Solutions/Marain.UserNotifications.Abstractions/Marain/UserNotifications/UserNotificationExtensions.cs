@@ -21,7 +21,7 @@ namespace Marain.UserNotifications
         /// <returns>
         /// The status for the channel, or null if not set.
         /// </returns>
-        public static UserNotificationStatus? GetStatusForChannel(
+        public static UserNotificationStatus GetStatusForChannel(
             this UserNotification userNotification,
             string deliveryChannelId)
         {

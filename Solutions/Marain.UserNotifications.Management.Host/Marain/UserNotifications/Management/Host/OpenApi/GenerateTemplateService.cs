@@ -10,8 +10,8 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Corvus.Tenancy;
     using DotLiquid;
     using Marain.Helper;
-    using Marain.NotificationTemplate.NotificationTemplate;
-    using Marain.NotificationTemplate.NotificationTemplate.CommunicationTemplates;
+    using Marain.NotificationTemplates;
+    using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.Services.Tenancy;
     using Marain.UserPreferences;
     using Menes;
@@ -92,15 +92,6 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // Gets the AzureBlobTemplateStore
             INotificationTemplateStore templateStore = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
 
-            // Get the notification template for the notification type
-            NotificationTemplate? rawNotificationTypeTemplate = await templateStore.GetAsync(body.NotificationType).ConfigureAwait(false);
-
-            if (rawNotificationTypeTemplate is null)
-            {
-                throw new UserNotificationNotFoundException($"There is no notification template set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
-            }
-
-            var communicationTypeDeliveryStatus = new Dictionary<CommunicationType, bool>();
             EmailTemplate? emailTemplate = null;
             SmsTemplate? smsTemplate = null;
             WebPushTemplate? webPushTemplate = null;
@@ -111,45 +102,38 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 switch (channel)
                 {
                     case CommunicationType.Email:
-                        if (rawNotificationTypeTemplate.EmailTemplate != null && body.Properties != null)
+                        EmailTemplate? emailRawTemplate = await templateStore.GetAsync<EmailTemplate>(body.NotificationType, CommunicationType.Email).ConfigureAwait(false);
+                        string? emailBody = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Body, existingProperties).ConfigureAwait(false);
+                        string? emailSubject = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Subject, existingProperties).ConfigureAwait(false);
+
+                        emailTemplate = new EmailTemplate()
                         {
-                            string emailBody = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.EmailTemplate.Body, existingProperties).ConfigureAwait(false);
-                            string emailSubject = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.EmailTemplate.Subject, existingProperties).ConfigureAwait(false);
-
-                            emailTemplate = new EmailTemplate(emailBody, emailSubject, false);
-                            communicationTypeDeliveryStatus.Add(channel, true);
-                            break;
-                        }
-
-                        communicationTypeDeliveryStatus.Add(channel, false);
+                            NotificationType = body.NotificationType,
+                            Body = emailBody,
+                            Subject = emailSubject,
+                            Important = false,
+                        };
                         break;
                     case CommunicationType.Sms:
-                        if (rawNotificationTypeTemplate.SmsTemplate != null && body.Properties != null)
-                        {
-                            string smsBody = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.SmsTemplate.Body, existingProperties).ConfigureAwait(false);
+                        SmsTemplate? smsRawTemplate = await templateStore.GetAsync<SmsTemplate>(body.NotificationType, CommunicationType.Sms).ConfigureAwait(false);
+                        string? smsBody = await this.GenerateTemplateForFieldAsync(smsRawTemplate.Body!, existingProperties).ConfigureAwait(false);
 
-                            smsTemplate = new SmsTemplate(smsBody);
-                            communicationTypeDeliveryStatus.Add(channel, true);
-                            break;
-                        }
-
-                        communicationTypeDeliveryStatus.Add(channel, false);
+                        smsTemplate = new SmsTemplate() { NotificationType = body.NotificationType, Body = smsBody };
                         break;
                     case CommunicationType.WebPush:
-                        if (rawNotificationTypeTemplate.WebPushTemplate != null && body.Properties != null)
+                        WebPushTemplate? webPushRawTemplate = await templateStore.GetAsync<WebPushTemplate>(body.NotificationType, CommunicationType.WebPush).ConfigureAwait(false);
+                        string? webPushTitle = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Title, existingProperties).ConfigureAwait(false);
+                        string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Body, existingProperties).ConfigureAwait(false);
+                        string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Image, existingProperties).ConfigureAwait(false);
+
+                        webPushTemplate = new WebPushTemplate()
                         {
-                            string webPushTitle = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.WebPushTemplate.Title, existingProperties).ConfigureAwait(false);
-                            string webPushBody = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.WebPushTemplate.Body, existingProperties).ConfigureAwait(false);
-                            string webPushImage = await this.GenerateTemplateForFieldAsync(rawNotificationTypeTemplate.WebPushTemplate.Image, existingProperties).ConfigureAwait(false);
+                            NotificationType = body.NotificationType,
+                            Body = webPushBody,
+                            Title = webPushTitle,
+                            Image = webPushImage,
+                        };
 
-                            webPushTemplate = new WebPushTemplate(webPushBody, webPushTitle, webPushImage);
-                            communicationTypeDeliveryStatus.Add(channel, false);
-                            break;
-                        }
-
-                        communicationTypeDeliveryStatus.Add(channel, false);
-                        break;
-                    case CommunicationType.MMS:
                         break;
                 }
             }
@@ -170,8 +154,13 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="templateBody">A string with handlebars. </param>
         /// <param name="properties">A dictionary of all properties that can be used to render the templateBody string. </param>
         /// <returns>A rendered string. </returns>
-        private async Task<string> GenerateTemplateForFieldAsync(string templateBody, Dictionary<string, object> properties)
+        private async Task<string?> GenerateTemplateForFieldAsync(string? templateBody, Dictionary<string, object> properties)
         {
+            if (string.IsNullOrEmpty(templateBody))
+            {
+                return null;
+            }
+
             var template = Template.Parse(templateBody);
             return await template.RenderAsync(Hash.FromDictionary(properties)).ConfigureAwait(false);
         }

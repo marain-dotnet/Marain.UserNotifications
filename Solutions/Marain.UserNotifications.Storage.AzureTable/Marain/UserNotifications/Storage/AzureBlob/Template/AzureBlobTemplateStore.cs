@@ -7,7 +7,8 @@ namespace Marain.UserNotifications.Storage.AzureBlob
     using System;
     using System.Threading.Tasks;
     using Corvus.Extensions.Json;
-    using Marain.NotificationTemplate.NotificationTemplate;
+    using Marain.NotificationTemplates;
+    using Marain.UserPreferences;
     using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
@@ -41,12 +42,12 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationTemplate> StoreAsync(NotificationTemplate template)
+        public async Task<T> StoreAsync<T>(string notificationType, CommunicationType communicationType, T template)
         {
-            this.logger.LogDebug("Storing template for notification type ", template.NotificationType);
+            this.logger.LogDebug("Storing template for notification type ", notificationType);
 
             // Gets the blob reference by the NotificationType
-            CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(template.NotificationType);
+            CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(this.GetBlockBlobName(notificationType, communicationType));
 
             // Serialise the TemplateWrapper object
             string templateBlob = JsonConvert.SerializeObject(template, this.serializerSettingsProvider.Instance);
@@ -58,22 +59,27 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationTemplate?> GetAsync(string notificationType)
+        public async Task<T?> GetAsync<T>(string notificationType, CommunicationType communicationType)
         {
             // Gets the blob reference by the notificationType
-            CloudBlockBlob blob = this.blobContainer.GetBlockBlobReference(notificationType);
+            CloudBlockBlob blob = this.blobContainer.GetBlockBlobReference(this.GetBlockBlobName(notificationType, communicationType));
 
             // Check if the blob exists
             bool exists = await blob.ExistsAsync().ConfigureAwait(false);
 
             if (!exists)
             {
-                return null;
+                return default(T);
             }
 
             // Download and convert the blob text into TemplateWrapper object
             string json = await blob.DownloadTextAsync().ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<NotificationTemplate>(json, this.serializerSettingsProvider.Instance);
+            return JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance);
+        }
+
+        private string GetBlockBlobName(string notificationType, CommunicationType communicationType)
+        {
+            return $"{notificationType}:{communicationType.ToString()}";
         }
     }
 }
