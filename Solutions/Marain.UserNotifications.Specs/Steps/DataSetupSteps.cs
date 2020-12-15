@@ -52,7 +52,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 new UserNotificationMetadata(correlationIds, null));
         }
 
-        public static WebPushTemplate BuildWebPushNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        public static WebPushTemplate BuildWebPushNotificationTemplateFrom(TableRow tableRow)
         {
             return new WebPushTemplate()
             {
@@ -63,7 +63,7 @@ namespace Marain.UserNotifications.Specs.Steps
             };
         }
 
-        public static EmailTemplate BuildEmailNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        public static EmailTemplate BuildEmailNotificationTemplateFrom(TableRow tableRow)
         {
             bool important;
             bool.TryParse(tableRow["important"], out important);
@@ -215,30 +215,26 @@ namespace Marain.UserNotifications.Specs.Steps
             this.scenarioContext.Set(result);
         }
 
-        [Given(@"I have created and stored a web push notification template")]
+        [Given("I have created and stored a web push notification template")]
         public async Task GivenIHaveCreatedAndStoredAWebPushNotificationTemplate(Table table)
         {
             ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
-            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
-
-            WebPushTemplate notificationTemplate = BuildWebPushNotificationTemplateFrom(table.Rows[0], serializerSettingsProvider.Instance);
+            WebPushTemplate notificationTemplate = BuildWebPushNotificationTemplateFrom(table.Rows[0]);
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            WebPushTemplate? result = await store.StoreAsync<WebPushTemplate>(notificationTemplate.NotificationType!, CommunicationType.WebPush, notificationTemplate).ConfigureAwait(false);
+            WebPushTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.WebPush, notificationTemplate).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }
 
-        [Given(@"I have created and stored an email notification template")]
+        [Given("I have created and stored an email notification template")]
         public async Task GivenIHaveCreatedAndStoredAnEmailNotificationTemplate(Table table)
         {
             ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
-            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
-
-            EmailTemplate notificationTemplate = BuildEmailNotificationTemplateFrom(table.Rows[0], serializerSettingsProvider.Instance);
+            EmailTemplate notificationTemplate = BuildEmailNotificationTemplateFrom(table.Rows[0]);
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            EmailTemplate? result = await store.StoreAsync<EmailTemplate>(notificationTemplate.NotificationType!, CommunicationType.Email, notificationTemplate).ConfigureAwait(false);
+            EmailTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Email, notificationTemplate).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }
