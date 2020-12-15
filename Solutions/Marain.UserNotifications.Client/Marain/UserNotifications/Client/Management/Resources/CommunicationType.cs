@@ -26,10 +26,5 @@ namespace Marain.UserNotifications.Client.Management.Resources
         /// The delivery channel supports web push
         /// </summary>
         WebPush,
-
-        /// <summary>
-        /// The delivery channel support MMS.
-        /// </summary>
-        MMS,
     }
 }

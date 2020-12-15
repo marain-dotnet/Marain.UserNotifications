@@ -9,6 +9,7 @@ namespace Marain.UserNotifications.Client.Management
     using System.Threading.Tasks;
     using Marain.UserNotifications.Client.Management.Requests;
     using Marain.UserNotifications.Client.Management.Resources;
+    using Marain.UserNotifications.Client.Management.Resources.CommunicationTemplates;
 
     /// <summary>
     /// Interface for the management client.
@@ -80,13 +81,37 @@ namespace Marain.UserNotifications.Client.Management
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Get the notification template for a certain notification.
+        /// Get the notification template for a Web Push notification.
         /// </summary>
         /// <param name="tenantId">The tenant within which the request should operate.</param>
         /// <param name="notificationType">The notification type of the stored template.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>A Notification template.</returns>
-        Task<ApiResponse<NotificationTemplate>> GetNotificationTemplate(
+        Task<ApiResponse<WebPushTemplateResource>> GetWebPushNotificationTemplate(
+            string tenantId,
+            string notificationType,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get the notification template for an Email notification.
+        /// </summary>
+        /// <param name="tenantId">The tenant within which the request should operate.</param>
+        /// <param name="notificationType">The notification type of the stored template.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>A Notification template.</returns>
+        Task<ApiResponse<EmailTemplateResource>> GetEmailNotificationTemplate(
+            string tenantId,
+            string notificationType,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get the notification template for an Sms notification.
+        /// </summary>
+        /// <param name="tenantId">The tenant within which the request should operate.</param>
+        /// <param name="notificationType">The notification type of the stored template.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>A Notification template.</returns>
+        Task<ApiResponse<SmsTemplateResource>> GetSmsNotificationTemplate(
             string tenantId,
             string notificationType,
             CancellationToken cancellationToken = default);
@@ -95,12 +120,12 @@ namespace Marain.UserNotifications.Client.Management
         /// Set a notification template for a certain notification type.
         /// </summary>
         /// <param name="tenantId">The tenant within which the request should operate.</param>
-        /// <param name="notificationTemplate">The template of the notification.</param>
+        /// <param name="communicationTemplate">The template of the notification.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>A Notification template.</returns>
         Task<ApiResponse> SetNotificationTemplate(
             string tenantId,
-            NotificationTemplate notificationTemplate,
+            ICommunicationTemplate communicationTemplate,
             CancellationToken cancellationToken = default);
 
         /// <summary>
