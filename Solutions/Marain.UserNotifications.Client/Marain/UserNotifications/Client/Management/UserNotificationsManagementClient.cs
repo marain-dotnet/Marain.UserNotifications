@@ -78,7 +78,10 @@ namespace Marain.UserNotifications.Client.Management
         }
 
         /// <inheritdoc/>
-        public async Task<ApiResponse<WebPushTemplateResource>> GetWebPushNotificationTemplate(string tenantId, string notificationType, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse<WebPushTemplateResource>> GetWebPushNotificationTemplate(
+            string tenantId,
+            string notificationType,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
@@ -107,8 +110,19 @@ namespace Marain.UserNotifications.Client.Management
                result);
         }
 
+        /// <inheritdoc />
+        public Task<ApiResponse<WebPushTemplateResource>> GetWebPushNotificationTemplateByLinkAsync(
+            string link,
+            CancellationToken cancellationToken = default)
+        {
+            return this.GetPathAsync<WebPushTemplateResource>(link, cancellationToken);
+        }
+
         /// <inheritdoc/>
-        public async Task<ApiResponse<EmailTemplateResource>> GetEmailNotificationTemplate(string tenantId, string notificationType, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse<EmailTemplateResource>> GetEmailNotificationTemplate(
+            string tenantId,
+            string notificationType,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
@@ -137,8 +151,19 @@ namespace Marain.UserNotifications.Client.Management
                result);
         }
 
+        /// <inheritdoc />
+        public Task<ApiResponse<EmailTemplateResource>> GetEmailNotificationTemplateByLinkAsync(
+            string link,
+            CancellationToken cancellationToken = default)
+        {
+            return this.GetPathAsync<EmailTemplateResource>(link, cancellationToken);
+        }
+
         /// <inheritdoc/>
-        public async Task<ApiResponse<SmsTemplateResource>> GetSmsNotificationTemplate(string tenantId, string notificationType, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse<SmsTemplateResource>> GetSmsNotificationTemplate(
+            string tenantId,
+            string notificationType,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
@@ -168,7 +193,18 @@ namespace Marain.UserNotifications.Client.Management
         }
 
         /// <inheritdoc />
-        public async Task<ApiResponse> SetNotificationTemplate(string tenantId, ICommunicationTemplate communicationTemplate, CancellationToken cancellationToken = default)
+        public Task<ApiResponse<SmsTemplateResource>> GetSmsNotificationTemplateByLinkAsync(
+            string link,
+            CancellationToken cancellationToken = default)
+        {
+            return this.GetPathAsync<SmsTemplateResource>(link, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<ApiResponse> SetNotificationTemplate(
+            string tenantId,
+            ICommunicationTemplate communicationTemplate,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
@@ -190,7 +226,10 @@ namespace Marain.UserNotifications.Client.Management
         }
 
         /// <inheritdoc />
-        public async Task<ApiResponse<UserPreferenceResource>> GetUserPreference(string tenantId, string userId, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse<UserPreferenceResource>> GetUserPreference(
+            string tenantId,
+            string userId,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
@@ -225,7 +264,10 @@ namespace Marain.UserNotifications.Client.Management
         }
 
         /// <inheritdoc />
-        public async Task<ApiResponse> SetUserPreference(string tenantId, UserPreference userPreference, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse> SetUserPreference(
+            string tenantId,
+            UserPreference userPreference,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
@@ -247,7 +289,10 @@ namespace Marain.UserNotifications.Client.Management
         }
 
         /// <inheritdoc />
-        public async Task<ApiResponse<NotificationTemplate>> GenerateNotificationTemplate(string tenantId, CreateNotificationsRequest createNotificationsRequest, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse<NotificationTemplate>> GenerateNotificationTemplate(
+            string tenantId,
+            CreateNotificationsRequest createNotificationsRequest,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {

@@ -93,6 +93,16 @@ namespace Marain.UserNotifications.Client.Management
             CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Get the notification template for a Web Push notification by link.
+        /// </summary>
+        /// <param name="link">The self link for the WebPushTemplateResource.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>A Notification template.</returns>
+        Task<ApiResponse<WebPushTemplateResource>> GetWebPushNotificationTemplateByLinkAsync(
+            string link,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Get the notification template for an Email notification.
         /// </summary>
         /// <param name="tenantId">The tenant within which the request should operate.</param>
@@ -105,6 +115,16 @@ namespace Marain.UserNotifications.Client.Management
             CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Get the notification template for an Email notification by link.
+        /// </summary>
+        /// <param name="link">The self link for the WebPushTemplateResource.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>A Notification template.</returns>
+        public Task<ApiResponse<EmailTemplateResource>> GetEmailNotificationTemplateByLinkAsync(
+           string link,
+           CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Get the notification template for an Sms notification.
         /// </summary>
         /// <param name="tenantId">The tenant within which the request should operate.</param>
@@ -114,6 +134,16 @@ namespace Marain.UserNotifications.Client.Management
         Task<ApiResponse<SmsTemplateResource>> GetSmsNotificationTemplate(
             string tenantId,
             string notificationType,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get the notification template for an Sms notification by link.
+        /// </summary>
+        /// <param name="link">The self link for the WebPushTemplateResource.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>A Notification template.</returns>
+        public Task<ApiResponse<SmsTemplateResource>> GetSmsNotificationTemplateByLinkAsync(
+            string link,
             CancellationToken cancellationToken = default);
 
         /// <summary>

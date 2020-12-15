@@ -265,6 +265,7 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [Given("I use the client to send the notification template API a request to get a notification template with notification type '(.*)' and communication type '(.*)'")]
         [When("I use the client to send the notification template API a request to get a notification template with notification type '(.*)' and communication type '(.*)'")]
         public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToGetANotificationTemplateWithNotificationType(string notificationType, string communicationType)
         {
@@ -288,8 +289,6 @@ namespace Marain.UserNotifications.Specs.Steps
                     case CommunicationType.WebPush:
                         ApiResponse<WebPushTemplateResource> webPushResult = await client.GetWebPushNotificationTemplate(transientTenantId, notificationType).ConfigureAwait(false);
                         this.StoreApiResponseDetails(webPushResult.StatusCode, webPushResult.Headers, webPushResult.Body);
-                        break;
-                    default:
                         break;
                 }
             }
@@ -357,6 +356,27 @@ namespace Marain.UserNotifications.Specs.Steps
             try
             {
                 ApiResponse<UserPreferenceResource> result = await client.GetUserPreferenceByLinkAsync(
+                    nextLink.Href).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When("I use the client to send a management API request to get a sms notification template using the link called '(.*)' from the previous API response")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToGetASmsNotificationTemplateUsingTheLinkCalledFromThePreviousAPIResponse(string linkRelationName)
+        {
+            SmsTemplateResource previousResponseBody = this.GetApiResponseBody<SmsTemplateResource>();
+            WebLink nextLink = previousResponseBody.EnumerateLinks(linkRelationName).Single();
+
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            try
+            {
+                ApiResponse<SmsTemplateResource> result = await client.GetSmsNotificationTemplateByLinkAsync(
                     nextLink.Href).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
@@ -460,6 +480,7 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [Given("I use the client to send a management API request to get a User Preference for userId '(.*)'")]
         [When("I use the client to send a management API request to get a User Preference for userId '(.*)'")]
         [Then("I use the client to send a management API request to get a User Preference for userId '(.*)'")]
         public async Task WhenIUseTheClientToSendAManagementAPIRequestToGetAUserPreferenceForUserId(string userId)

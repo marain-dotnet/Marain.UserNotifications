@@ -109,29 +109,29 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
                             "notificationType",
                             "smsTemplate"});
-                table27.AddRow(new string[] {
+                table28.AddRow(new string[] {
                             "marain.notifications.test.v1",
                             "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
 #line 7
- testRunner.Given("I have created and stored a notification template", ((string)(null)), table27, "Given ");
+ testRunner.Given("I have created and stored a notification template", ((string)(null)), table28, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration",
                             "eTag"});
-                table28.AddRow(new string[] {
+                table29.AddRow(new string[] {
                             "1",
                             "test@test.com",
                             "041532211",
                             "{\"marain.notifications.test.v1\": [\"email\", \"sms\"]}",
                             "null"});
 #line 10
- testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table28, "And ");
+ testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table29, "And ");
 #line hidden
 #line 13
  testRunner.When("I send the generate template API request", @"      {
