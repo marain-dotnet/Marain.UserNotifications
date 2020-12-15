@@ -73,15 +73,15 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // It also means that if we need to add another type, it will have to be done manually
             if (body is EmailTemplate emailTemplate)
             {
-                await store.StoreAsync<EmailTemplate>(body.NotificationType!, CommunicationType.Email, emailTemplate).ConfigureAwait(false);
+                await store.StoreAsync(body.NotificationType, CommunicationType.Email, emailTemplate.ETag, emailTemplate).ConfigureAwait(false);
             }
             else if (body is SmsTemplate smsTemplate)
             {
-                await store.StoreAsync<SmsTemplate>(body.NotificationType!, CommunicationType.Sms, smsTemplate).ConfigureAwait(false);
+                await store.StoreAsync(body.NotificationType, CommunicationType.Sms, smsTemplate.ETag, smsTemplate).ConfigureAwait(false);
             }
             else if (body is WebPushTemplate webPushTemplate)
             {
-                await store.StoreAsync<WebPushTemplate>(body.NotificationType!, CommunicationType.WebPush, webPushTemplate).ConfigureAwait(false);
+                await store.StoreAsync(body.NotificationType, CommunicationType.WebPush, webPushTemplate.ETag, webPushTemplate).ConfigureAwait(false);
             }
             else
             {

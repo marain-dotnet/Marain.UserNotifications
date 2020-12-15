@@ -20,26 +20,26 @@ Scenario: Create a web push notification template
 
 Scenario: Update a web push notification template
 	Given I have created and stored a web push notification template
-		| body | title | contentType                                                                      | image        | notificationType     |
-		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template |
+		| body | title | contentType                                                                      | image        | notificationType      |
+		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template1 |
 	When I send the user notification template API a request to update a new user notification template
 		"""
 		{
 			"body": "this is an updated test template2",
 			"title": "test",
 			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
-			"notificationType": "marain.test.template"
+			"notificationType": "marain.test.template1"
 		}
 		"""
 	Then the response status code should be 'OK'
 
 Scenario: Get a web push notification template
 	Given I have created and stored a web push notification template
-		| body                                    | title | contentType                                                                      | image        | notificationType     |
-		| A new lead was added by {{leadAddedBy}} | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template |
-	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template' and communicationType 'webPush'
+		| body                                    | title | contentType                                                                      | image        | notificationType      |
+		| A new lead was added by {{leadAddedBy}} | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template2 |
+	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template2' and communicationType 'webPush'
 	Then the response status code should be 'OK'
-	And the response content should have a string property called 'notificationType' with value 'marain.test.template'
+	And the response content should have a string property called 'notificationType' with value 'marain.test.template2'
 	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
 	And the response content should have a json property called 'title' with value 'test'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1'
@@ -64,8 +64,8 @@ Scenario: Create an email notification template
 
 Scenario: Update an email notification template
 	Given I have created and stored an email notification template
-		| body | subject | important | contentType                                                                    | image        | notificationType     |
-		| body | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template |
+		| body | subject | important | contentType                                                                    | image        | notificationType      |
+		| body | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template3 |
 	When I send the user notification template API a request to update a new user notification template
 		"""
 		{
@@ -73,18 +73,18 @@ Scenario: Update an email notification template
 			"subject": "not a real test",
 			"important": false,
 			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
-			"notificationType": "marain.test.template"
+			"notificationType": "marain.test.template3"
 		}
 		"""
 	Then the response status code should be 'OK'
 
 Scenario: Get an email notification template
 	Given I have created and stored an email notification template
-		| body | subject | important | contentType                                                                    | image        | notificationType     |
-		| body | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template |
-	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template' and communicationType 'email'
+		| body | subject | important | contentType                                                                    | image        | notificationType      |
+		| body | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template4 |
+	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template4' and communicationType 'email'
 	Then the response status code should be 'OK'
-	And the response content should have a string property called 'notificationType' with value 'marain.test.template'
+	And the response content should have a string property called 'notificationType' with value 'marain.test.template4'
 	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
 	And the response content should have a json property called 'subject' with value 'test'
 	And the response content should have a json property called 'important' with value 'true'
@@ -106,26 +106,26 @@ Scenario: Create a sms notification template
 	Then the response status code should be 'OK'
 
 Scenario: Update a sms notification template
-	Given I have created and stored a web push notification template
-		| body | title | contentType                                                                  | image        | notificationType         |
-		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | Base+64xddfa | marain.test.notification |
+	Given I have created and stored a sms notification template
+		| body | contentType                                                                  | notificationType          |
+		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
 	When I send the user notification template API a request to update a new user notification template
 		"""
 		{
 			"body": "this is an updated sms test template2",
 			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-			"notificationType": "marain.test.notification"
+			"notificationType": "marain.test.notification5"
 		}
 		"""
 	Then the response status code should be 'OK'
 
 Scenario: Get a sms notification template
 	Given I have created and stored a sms notification template
-		| body                                    | contentType                                                                  | notificationType         |
-		| A new lead was added by {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification |
-	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.notification' and communicationType 'sms'
+		| body                                    | contentType                                                                  | notificationType          |
+		| A new lead was added by {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification6 |
+	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.notification6' and communicationType 'sms'
 	Then the response status code should be 'OK'
-	And the response content should have a string property called 'notificationType' with value 'marain.test.notification'
+	And the response content should have a string property called 'notificationType' with value 'marain.test.notification6'
 	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1'
 	And the response content should have a property called '_links.self'

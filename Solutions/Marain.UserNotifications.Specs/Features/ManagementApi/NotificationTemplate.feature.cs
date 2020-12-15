@@ -160,7 +160,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "test",
                             "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
                             "Base+64xddfa",
-                            "marain.test.template"});
+                            "marain.test.template1"});
 #line 22
  testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table25, "Given ");
 #line hidden
@@ -168,7 +168,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("I send the user notification template API a request to update a new user notifica" +
                         "tion template", "{\r\n\t\"body\": \"this is an updated test template2\",\r\n\t\"title\": \"test\",\r\n\t\"contentTyp" +
                         "e\": \"application/vnd.marain.usernotifications.notificationtemplate.webpushtempla" +
-                        "te.v1\",\r\n\t\"notificationType\": \"marain.test.template\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+                        "te.v1\",\r\n\t\"notificationType\": \"marain.test.template1\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 34
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -215,20 +215,20 @@ this.ScenarioInitialize(scenarioInfo);
                             "test",
                             "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
                             "Base+64xddfa",
-                            "marain.test.template"});
+                            "marain.test.template2"});
 #line 37
  testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table26, "Given ");
 #line hidden
 #line 40
  testRunner.When("I send the notification template API a request to retreive a notification templat" +
-                        "e with notificationType \'marain.test.template\' and communicationType \'webPush\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+                        "e with notificationType \'marain.test.template2\' and communicationType \'webPush\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 41
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 42
  testRunner.And("the response content should have a string property called \'notificationType\' with" +
-                        " value \'marain.test.template\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        " value \'marain.test.template2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 43
  testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +
@@ -334,7 +334,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "true",
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
                             "Base+64xddfa",
-                            "marain.test.template"});
+                            "marain.test.template3"});
 #line 66
  testRunner.Given("I have created and stored an email notification template", ((string)(null)), table27, "Given ");
 #line hidden
@@ -343,7 +343,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "tion template", "{\r\n\t\"body\": \"this is a different test template\",\r\n\t\"subject\": \"not a real test\",\r" +
                         "\n\t\"important\": false,\r\n\t\"contentType\": \"application/vnd.marain.usernotifications" +
                         ".notificationtemplate.emailtemplate.v1\",\r\n\t\"notificationType\": \"marain.test.temp" +
-                        "late\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+                        "late3\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 79
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -392,20 +392,20 @@ this.ScenarioInitialize(scenarioInfo);
                             "true",
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
                             "Base+64xddfa",
-                            "marain.test.template"});
+                            "marain.test.template4"});
 #line 82
  testRunner.Given("I have created and stored an email notification template", ((string)(null)), table28, "Given ");
 #line hidden
 #line 85
  testRunner.When("I send the notification template API a request to retreive a notification templat" +
-                        "e with notificationType \'marain.test.template\' and communicationType \'email\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+                        "e with notificationType \'marain.test.template4\' and communicationType \'email\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 86
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 87
  testRunner.And("the response content should have a string property called \'notificationType\' with" +
-                        " value \'marain.test.template\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        " value \'marain.test.template4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 88
  testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +
@@ -500,24 +500,20 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
                 TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
-                            "title",
                             "contentType",
-                            "image",
                             "notificationType"});
                 table29.AddRow(new string[] {
                             "body",
-                            "test",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "Base+64xddfa",
-                            "marain.test.notification"});
+                            "marain.test.notification5"});
 #line 109
- testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table29, "Given ");
+ testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table29, "Given ");
 #line hidden
 #line 112
  testRunner.When("I send the user notification template API a request to update a new user notifica" +
                         "tion template", "{\r\n\t\"body\": \"this is an updated sms test template2\",\r\n\t\"contentType\": \"applicatio" +
                         "n/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1\",\r\n\t\"notifica" +
-                        "tionType\": \"marain.test.notification\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+                        "tionType\": \"marain.test.notification5\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 120
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -560,20 +556,20 @@ this.ScenarioInitialize(scenarioInfo);
                 table30.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}}",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "marain.test.notification"});
+                            "marain.test.notification6"});
 #line 123
  testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table30, "Given ");
 #line hidden
 #line 126
  testRunner.When("I send the notification template API a request to retreive a notification templat" +
-                        "e with notificationType \'marain.test.notification\' and communicationType \'sms\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+                        "e with notificationType \'marain.test.notification6\' and communicationType \'sms\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 127
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 128
  testRunner.And("the response content should have a string property called \'notificationType\' with" +
-                        " value \'marain.test.notification\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        " value \'marain.test.notification6\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 129
  testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +

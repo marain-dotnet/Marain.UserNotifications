@@ -9,6 +9,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
     using Corvus.Extensions.Json;
     using Marain.NotificationTemplates;
     using Marain.UserPreferences;
+    using Microsoft.Azure.Storage;
     using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
@@ -42,24 +43,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         }
 
         /// <inheritdoc/>
-        public async Task<T> StoreAsync<T>(string notificationType, CommunicationType communicationType, T template)
-        {
-            this.logger.LogDebug("Storing template for notification type ", notificationType);
-
-            // Gets the blob reference by the NotificationType
-            CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(this.GetBlockBlobName(notificationType, communicationType));
-
-            // Serialise the TemplateWrapper object
-            string templateBlob = JsonConvert.SerializeObject(template, this.serializerSettingsProvider.Instance);
-
-            // Save the TemplateWrapper to the blob storage
-            await blockBlob.UploadTextAsync(templateBlob).ConfigureAwait(false);
-
-            return template;
-        }
-
-        /// <inheritdoc/>
-        public async Task<T?> GetAsync<T>(string notificationType, CommunicationType communicationType)
+        public async Task<(T, string?)> GetAsync<T>(string notificationType, CommunicationType communicationType)
         {
             // Gets the blob reference by the notificationType
             CloudBlockBlob blob = this.blobContainer.GetBlockBlobReference(this.GetBlockBlobName(notificationType, communicationType));
@@ -69,17 +53,44 @@ namespace Marain.UserNotifications.Storage.AzureBlob
 
             if (!exists)
             {
-                return default(T);
+                // return (default(T), default(string));
             }
+
+            string? etag = blob.Properties.ETag;
 
             // Download and convert the blob text into TemplateWrapper object
             string json = await blob.DownloadTextAsync().ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance);
+            T? dynamicObject = JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance);
+            return (dynamicObject, etag);
+        }
+
+        /// <inheritdoc/>
+        public async Task<T> StoreAsync<T>(string notificationType, CommunicationType communicationType, string? eTag, T template)
+        {
+            this.logger.LogDebug("Storing template for notification type ", notificationType);
+
+            // Gets the blob reference by the NotificationType
+            CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(this.GetBlockBlobName(notificationType, communicationType));
+
+            bool exists = await blockBlob.ExistsAsync().ConfigureAwait(false);
+
+            // Check if the blob exists and it has the same etag
+            if (exists && string.IsNullOrWhiteSpace(eTag))
+            {
+                throw new StorageException("ETag was not present in the template object.");
+            }
+
+            // Serialise the TemplateWrapper object
+            string templateBlob = JsonConvert.SerializeObject(template, this.serializerSettingsProvider.Instance);
+
+            // Save the TemplateWrapper to the blob storage
+            await blockBlob.UploadTextAsync(templateBlob, null, AccessCondition.GenerateIfMatchCondition(eTag), null, null).ConfigureAwait(false);
+            return template;
         }
 
         private string GetBlockBlobName(string notificationType, CommunicationType communicationType)
         {
-            return $"{notificationType}:{communicationType.ToString()}";
+            return $"{notificationType}:{communicationType}";
         }
     }
 }

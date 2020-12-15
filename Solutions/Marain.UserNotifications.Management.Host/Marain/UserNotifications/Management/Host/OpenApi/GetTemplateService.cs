@@ -77,18 +77,40 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             switch (communicationType)
             {
                 case CommunicationType.Email:
-                    EmailTemplate emailTemplate = await this.GetTemplateAsync<EmailTemplate>(store, context, notificationType, communicationType).ConfigureAwait(false);
-                    response = await this.emailTemplateMapper.MapAsync(emailTemplate, context).ConfigureAwait(false);
+                    (EmailTemplate, string?) emailTemplateWrapper = await store.GetAsync<EmailTemplate>(notificationType, communicationType).ConfigureAwait(false);
+
+                    if (emailTemplateWrapper.Item1 is null)
+                    {
+                        throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType.ToString()} was not found.");
+                    }
+
+                    // Add etag to the EmailTemplate
+                    emailTemplateWrapper.Item1.ETag = emailTemplateWrapper.Item2;
+                    response = await this.emailTemplateMapper.MapAsync(emailTemplateWrapper.Item1, context).ConfigureAwait(false);
                     break;
+
                 case CommunicationType.Sms:
-                    SmsTemplate smsTemplate = await this.GetTemplateAsync<SmsTemplate>(store, context, notificationType, communicationType).ConfigureAwait(false);
-                    response = await this.smsTemplateMapper.MapAsync(smsTemplate, context).ConfigureAwait(false);
+                    (SmsTemplate, string?) smsTemplateWrapper = await store.GetAsync<SmsTemplate>(notificationType, communicationType).ConfigureAwait(false);
+                    if (smsTemplateWrapper.Item1 is null)
+                    {
+                        throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType.ToString()} was not found.");
+                    }
+
+                    // Add etag to the SmsTemplate
+                    smsTemplateWrapper.Item1.ETag = smsTemplateWrapper.Item2;
+                    response = await this.smsTemplateMapper.MapAsync(smsTemplateWrapper.Item1, context).ConfigureAwait(false);
                     break;
+
                 case CommunicationType.WebPush:
-                    WebPushTemplate webpush = await this.GetTemplateAsync<WebPushTemplate>(store, context, notificationType, communicationType).ConfigureAwait(false);
-                    response = await this.webPushTemplateMapper.MapAsync(webpush, context).ConfigureAwait(false);
-                    break;
-                default:
+                    (WebPushTemplate, string?) webpushWrapper = await store.GetAsync<WebPushTemplate>(notificationType, communicationType).ConfigureAwait(false);
+                    if (webpushWrapper.Item1 is null)
+                    {
+                        throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType.ToString()} was not found.");
+                    }
+
+                    // Add etag to the WebPushTemplate
+                    webpushWrapper.Item1.ETag = webpushWrapper.Item2;
+                    response = await this.webPushTemplateMapper.MapAsync(webpushWrapper.Item1, context).ConfigureAwait(false);
                     break;
             }
 
@@ -98,22 +120,6 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             }
 
             return this.OkResult(response);
-        }
-
-        private async Task<T> GetTemplateAsync<T>(
-            INotificationTemplateStore store,
-            IOpenApiContext context,
-            string notificationType,
-            CommunicationType communicationType)
-        {
-            T? genericTemplate = await store.GetAsync<T>(notificationType, communicationType).ConfigureAwait(false);
-
-            if (genericTemplate is null)
-            {
-                throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType.ToString()} was not found.");
-            }
-
-            return genericTemplate!;
         }
     }
 }

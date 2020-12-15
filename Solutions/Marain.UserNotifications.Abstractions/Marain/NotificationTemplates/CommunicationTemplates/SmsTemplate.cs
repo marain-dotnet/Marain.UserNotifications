@@ -17,6 +17,9 @@ namespace Marain.NotificationTemplates.CommunicationTemplates
         /// <inheritdoc/>
         public string? NotificationType { get; set; }
 
+        /// <inheritdoc/>
+        public string? ETag { get; set; }
+
         /// <summary>
         /// Gets or sets the body of the Sms object.
         /// </summary>

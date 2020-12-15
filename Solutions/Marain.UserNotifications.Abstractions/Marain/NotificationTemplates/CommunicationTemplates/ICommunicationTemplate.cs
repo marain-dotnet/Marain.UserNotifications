@@ -20,5 +20,10 @@ namespace Marain.NotificationTemplates.CommunicationTemplates
         /// Gets or sets the notification type of the communication template.
         /// </summary>
         string? NotificationType { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the notification's etag.
+        /// </summary>
+        public string? ETag { get; set; }
     }
 }

@@ -489,6 +489,10 @@ components:
           description: The inner templated body for the sms object.
           nullable: false
           type: string
+        eTag: 
+          description: Etag for the sms template object.
+          nullable: true
+          type: string
           
     SmsTemplateResource:
       description: The sms template object
@@ -505,6 +509,10 @@ components:
             body:
               description: The inner templated body for the sms object.
               nullable: false
+              type: string
+            eTag: 
+              description: Etag for the sms template resource object.
+              nullable: true
               type: string
             _links:
               type: object
@@ -535,6 +543,10 @@ components:
           description: Mark is the email is important.
           nullable: true
           type: string
+        eTag: 
+          description: Etag for the email template object.
+          nullable: true
+          type: string
           
     EmailTemplateResource:
       description: The email resource object.
@@ -558,6 +570,10 @@ components:
               type: string
             important:
               description: Mark is the email is important.
+              nullable: true
+              type: string
+            eTag: 
+              description: Etag for the email template resource object.
               nullable: true
               type: string
             _links:
@@ -589,6 +605,10 @@ components:
           description: The Base64 image of webpush notification.
           nullable: true
           type: string
+        eTag: 
+          description: Etag for the web push template object.
+          nullable: true
+          type: string
           
     WebPushTemplateResource:
       description: The webpush object.
@@ -604,6 +624,8 @@ components:
               description: The notification type for the template.
               nullable: false
               type: string
+            communicationType:
+              $ref: '#/components/schemas/CommunicationType'
             body:
               description: The inner templated body for the email object.
               nullable: false
@@ -616,8 +638,10 @@ components:
               description: The Base64 image of webpush notification.
               nullable: true
               type: string
-            communicationType:
-              $ref: '#/components/schemas/CommunicationType'
+            eTag: 
+              description: Etag for the web push template resource object.
+              nullable: true
+              type: string
             _links:
               type: object
               properties:

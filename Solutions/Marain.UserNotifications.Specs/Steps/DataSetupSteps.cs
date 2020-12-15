@@ -210,7 +210,7 @@ namespace Marain.UserNotifications.Specs.Steps
             NotificationTemplate notificationTemplate = BuildNotificationTemplateFrom(table.Rows[0], serializerSettingsProvider.Instance);
 
             INotificationTemplateStore store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            EmailTemplate? result = await store.StoreAsync<EmailTemplate>("testshouldbreak", CommunicationType.Email, notificationTemplate.EmailTemplate!).ConfigureAwait(false);
+            EmailTemplate? result = await store.StoreAsync("testshouldbreak", CommunicationType.Email, null, notificationTemplate.EmailTemplate!).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }
@@ -222,7 +222,7 @@ namespace Marain.UserNotifications.Specs.Steps
             WebPushTemplate notificationTemplate = BuildWebPushNotificationTemplateFrom(table.Rows[0]);
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            WebPushTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.WebPush, notificationTemplate).ConfigureAwait(false);
+            WebPushTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.WebPush, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }
@@ -234,7 +234,7 @@ namespace Marain.UserNotifications.Specs.Steps
             EmailTemplate notificationTemplate = BuildEmailNotificationTemplateFrom(table.Rows[0]);
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            EmailTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Email, notificationTemplate).ConfigureAwait(false);
+            EmailTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Email, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }
@@ -246,7 +246,7 @@ namespace Marain.UserNotifications.Specs.Steps
             SmsTemplate notificationTemplate = BuildSmsNotificationTemplateFrom(table.Rows[0]);
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            SmsTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate).ConfigureAwait(false);
+            SmsTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }

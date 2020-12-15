@@ -102,9 +102,9 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 switch (channel)
                 {
                     case CommunicationType.Email:
-                        EmailTemplate? emailRawTemplate = await templateStore.GetAsync<EmailTemplate>(body.NotificationType, CommunicationType.Email).ConfigureAwait(false);
-                        string? emailBody = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Body, existingProperties).ConfigureAwait(false);
-                        string? emailSubject = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Subject, existingProperties).ConfigureAwait(false);
+                        (EmailTemplate, string?) emailRawTemplate = await templateStore.GetAsync<EmailTemplate>(body.NotificationType, CommunicationType.Email).ConfigureAwait(false);
+                        string? emailBody = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
+                        string? emailSubject = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Subject, existingProperties).ConfigureAwait(false);
 
                         emailTemplate = new EmailTemplate()
                         {
@@ -114,17 +114,19 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                             Important = false,
                         };
                         break;
+
                     case CommunicationType.Sms:
-                        SmsTemplate? smsRawTemplate = await templateStore.GetAsync<SmsTemplate>(body.NotificationType, CommunicationType.Sms).ConfigureAwait(false);
-                        string? smsBody = await this.GenerateTemplateForFieldAsync(smsRawTemplate.Body!, existingProperties).ConfigureAwait(false);
+                        (SmsTemplate, string?) smsRawTemplate = await templateStore.GetAsync<SmsTemplate>(body.NotificationType, CommunicationType.Sms).ConfigureAwait(false);
+                        string? smsBody = await this.GenerateTemplateForFieldAsync(smsRawTemplate.Item1.Body!, existingProperties).ConfigureAwait(false);
 
                         smsTemplate = new SmsTemplate() { NotificationType = body.NotificationType, Body = smsBody };
                         break;
+
                     case CommunicationType.WebPush:
-                        WebPushTemplate? webPushRawTemplate = await templateStore.GetAsync<WebPushTemplate>(body.NotificationType, CommunicationType.WebPush).ConfigureAwait(false);
-                        string? webPushTitle = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Title, existingProperties).ConfigureAwait(false);
-                        string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Body, existingProperties).ConfigureAwait(false);
-                        string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Image, existingProperties).ConfigureAwait(false);
+                        (WebPushTemplate, string?) webPushRawTemplate = await templateStore.GetAsync<WebPushTemplate>(body.NotificationType, CommunicationType.WebPush).ConfigureAwait(false);
+                        string? webPushTitle = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Title, existingProperties).ConfigureAwait(false);
+                        string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
+                        string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Image, existingProperties).ConfigureAwait(false);
 
                         webPushTemplate = new WebPushTemplate()
                         {
@@ -133,7 +135,6 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                             Title = webPushTitle,
                             Image = webPushImage,
                         };
-
                         break;
                 }
             }
