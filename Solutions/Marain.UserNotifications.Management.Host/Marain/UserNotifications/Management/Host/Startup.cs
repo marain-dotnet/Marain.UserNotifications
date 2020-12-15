@@ -50,6 +50,7 @@ namespace Marain.UserNotifications.Management.Host
             services.AddHalDocumentMapper<UserPreference, IOpenApiContext, UserPreferenceMapper>();
             services.AddHalDocumentMapper<WebPushTemplate, IOpenApiContext, WebPushTemplateMapper>();
             services.AddHalDocumentMapper<EmailTemplate, IOpenApiContext, EmailTemplateMapper>();
+            services.AddHalDocumentMapper<SmsTemplate, IOpenApiContext, SmsTemplateMapper>();
 
             services.AddSingleton<IOpenApiService, CreateNotificationsService>();
             services.AddSingleton<IOpenApiService, GetNotificationsService>();

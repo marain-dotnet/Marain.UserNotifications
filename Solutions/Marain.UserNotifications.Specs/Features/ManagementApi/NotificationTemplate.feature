@@ -90,3 +90,42 @@ Scenario: Get an email notification template
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
 	And the response content should have a json property called 'image' with value 'Base+64xddfa'
 	And the response content should have a property called '_links.self'
+
+########################################
+# Sms notification template tests	   #
+########################################
+Scenario: Create a sms notification template
+	When I send the user notification template API a request to create a new user notification template
+		"""
+		{
+			"body": "this is a sms test template",
+			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+			"notificationType": "marain.test.notification"
+		}
+		"""
+	Then the response status code should be 'OK'
+
+Scenario: Update a sms notification template
+	Given I have created and stored a web push notification template
+		| body | title | contentType                                                                  | image        | notificationType     |
+		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | Base+64xddfa | marain.test.notification |
+	When I send the user notification template API a request to update a new user notification template
+		"""
+		{
+			"body": "this is an updated sms test template2",
+			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+			"notificationType": "marain.test.notification"
+		}
+		"""
+	Then the response status code should be 'OK'
+
+Scenario: Get a sms notification template
+	Given I have created and stored a sms notification template
+		| body                                    | contentType                                                                  | notificationType         |
+		| A new lead was added by {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification |
+	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.notification' and communicationType 'sms'
+	Then the response status code should be 'OK'
+	And the response content should have a string property called 'notificationType' with value 'marain.test.notification'
+	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
+	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1'
+	And the response content should have a property called '_links.self'

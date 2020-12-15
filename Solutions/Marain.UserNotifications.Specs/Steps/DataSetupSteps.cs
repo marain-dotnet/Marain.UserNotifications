@@ -77,6 +77,15 @@ namespace Marain.UserNotifications.Specs.Steps
             };
         }
 
+        public static SmsTemplate BuildSmsNotificationTemplateFrom(TableRow tableRow)
+        {
+            return new SmsTemplate()
+            {
+                Body = tableRow["body"],
+                NotificationType = tableRow["notificationType"],
+            };
+        }
+
         public static UserPreference BuildUserPreferenceFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             Dictionary<string, List<CommunicationType>> communicationChannelsPerNotificationConfiguration
@@ -230,6 +239,18 @@ namespace Marain.UserNotifications.Specs.Steps
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
             EmailTemplate? result = await store.StoreAsync<EmailTemplate>(notificationTemplate.NotificationType!, CommunicationType.Email, notificationTemplate).ConfigureAwait(false);
+
+            this.scenarioContext.Set(result);
+        }
+
+        [Given("I have created and stored a sms notification template")]
+        public async Task GivenIHaveCreatedAndStoredASmsNotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            SmsTemplate notificationTemplate = BuildSmsNotificationTemplateFrom(table.Rows[0]);
+
+            INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            SmsTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }

@@ -430,6 +430,165 @@ this.ScenarioInitialize(scenarioInfo);
             }
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Create a sms notification template")]
+        public virtual void CreateASmsNotificationTemplate()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a sms notification template", null, tagsOfScenario, argumentsOfScenario);
+#line 97
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 98
+ testRunner.When("I send the user notification template API a request to create a new user notifica" +
+                        "tion template", "{\r\n\t\"body\": \"this is a sms test template\",\r\n\t\"contentType\": \"application/vnd.mara" +
+                        "in.usernotifications.notificationtemplate.smstemplate.v1\",\r\n\t\"notificationType\":" +
+                        " \"marain.test.notification\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 106
+ testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Update a sms notification template")]
+        public virtual void UpdateASmsNotificationTemplate()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a sms notification template", null, tagsOfScenario, argumentsOfScenario);
+#line 108
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "title",
+                            "contentType",
+                            "image",
+                            "notificationType"});
+                table29.AddRow(new string[] {
+                            "body",
+                            "test",
+                            "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+                            "Base+64xddfa",
+                            "marain.test.notification"});
+#line 109
+ testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table29, "Given ");
+#line hidden
+#line 112
+ testRunner.When("I send the user notification template API a request to update a new user notifica" +
+                        "tion template", "{\r\n\t\"body\": \"this is an updated sms test template2\",\r\n\t\"contentType\": \"applicatio" +
+                        "n/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1\",\r\n\t\"notifica" +
+                        "tionType\": \"marain.test.notification\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 120
+ testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Get a sms notification template")]
+        public virtual void GetASmsNotificationTemplate()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a sms notification template", null, tagsOfScenario, argumentsOfScenario);
+#line 122
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table30 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "contentType",
+                            "notificationType"});
+                table30.AddRow(new string[] {
+                            "A new lead was added by {{leadAddedBy}}",
+                            "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+                            "marain.test.notification"});
+#line 123
+ testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table30, "Given ");
+#line hidden
+#line 126
+ testRunner.When("I send the notification template API a request to retreive a notification templat" +
+                        "e with notificationType \'marain.test.notification\' and communicationType \'sms\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 127
+ testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 128
+ testRunner.And("the response content should have a string property called \'notificationType\' with" +
+                        " value \'marain.test.notification\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 129
+ testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +
+                        "\": \"A new lead was added by {{leadAddedBy}}\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 130
+ testRunner.And("the response content should have a json property called \'contentType\' with value " +
+                        "\'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 131
+ testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
