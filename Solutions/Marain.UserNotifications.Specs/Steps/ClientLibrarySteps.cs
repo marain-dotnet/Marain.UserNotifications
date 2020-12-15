@@ -197,7 +197,7 @@ namespace Marain.UserNotifications.Specs.Steps
         }
 
         [When("I use the client to send the notification template API a request to create a new web push notification template")]
-        [When(@"I use the client to send the notification template API a request to update a web push notification template")]
+        [When("I use the client to send the notification template API a request to update a web push notification template")]
         public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewNotificationTemplate(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -219,8 +219,8 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When(@"I use the client to send the notification template API a request to create a new email notification template")]
-        [When(@"I use the client to send the notification template API a request to update an email notification template")]
+        [When("I use the client to send the notification template API a request to create a new email notification template")]
+        [When("I use the client to send the notification template API a request to update an email notification template")]
         public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewEmailNotificationTemplate(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -242,8 +242,8 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        [When(@"I use the client to send the notification template API a request to create a new sms notification template")]
-        [When(@"I use the client to send the notification template API a request to update an sms notification template")]
+        [When("I use the client to send the notification template API a request to create a new sms notification template")]
+        [When("I use the client to send the notification template API a request to update an sms notification template")]
         public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewSmsNotificationTemplate(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -583,7 +583,7 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.IsNull(actualValue);
         }
 
-        [Then(@"the web push template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
+        [Then("the web push template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
         public void ThenTheWebPushTemplateInTheUserManagementAPIResponseShouldHaveAWithValue(string propertyName, string expectedValue)
         {
             WebPushTemplateResource response = this.GetApiResponseBody<WebPushTemplateResource>();
@@ -591,7 +591,7 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.IsNull(actualValue);
         }
 
-        [Then(@"the email template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
+        [Then("the email template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
         public void ThenTheEmailTemplateInTheUserManagementAPIResponseShouldHaveAWithValue(string propertyName, string expectedValue)
         {
             EmailTemplateResource response = this.GetApiResponseBody<EmailTemplateResource>();
@@ -599,7 +599,7 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.IsNull(actualValue);
         }
 
-        [Then(@"the sms template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
+        [Then("the sms template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
         public void ThenTheSmsTemplateInTheUserManagementAPIResponseShouldHaveAWithValue(string propertyName, string expectedValue)
         {
             SmsTemplateResource response = this.GetApiResponseBody<SmsTemplateResource>();
