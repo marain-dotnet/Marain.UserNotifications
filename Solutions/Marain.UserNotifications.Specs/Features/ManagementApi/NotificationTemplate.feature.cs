@@ -241,8 +241,8 @@ this.ScenarioInitialize(scenarioInfo);
                         " value \'marain.test.template2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 37
- testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +
-                        "\": \"A new lead was added by {{leadAddedBy}}\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the response content should have a json property called \'body\' with value \'A new " +
+                        "lead was added by {{leadAddedBy}}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 38
  testRunner.And("the response content should have a json property called \'title\' with value \'test\'" +
@@ -407,8 +407,8 @@ this.ScenarioInitialize(scenarioInfo);
                             "contentType",
                             "image",
                             "notificationType"});
-                table34.AddRow(new string[] {
-                            "body",
+                table35.AddRow(new string[] {
+                            "A new lead was added by {{leadAddedBy}}",
                             "test",
                             "true",
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
@@ -429,15 +429,15 @@ this.ScenarioInitialize(scenarioInfo);
                         " value \'marain.test.template4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 75
- testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +
-                        "\": \"A new lead was added by {{leadAddedBy}}\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the response content should have a json property called \'body\' with value \'A new " +
+                        "lead was added by {{leadAddedBy}}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 76
  testRunner.And("the response content should have a json property called \'subject\' with value \'tes" +
                         "t\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 77
- testRunner.And("the response content should have a json property called \'important\' with value \'t" +
+ testRunner.And("the response content should have a json property called \'important\' with value \'T" +
                         "rue\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 78
@@ -599,8 +599,8 @@ this.ScenarioInitialize(scenarioInfo);
                         " value \'marain.test.notification6\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 111
- testRunner.And("the response content should have a json property called \'body\' with value \'{\"body" +
-                        "\": \"A new lead was added by {{leadAddedBy}}\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the response content should have a json property called \'body\' with value \'A new " +
+                        "lead was added by {{leadAddedBy}}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 112
  testRunner.And("the response content should have a json property called \'contentType\' with value " +
@@ -647,7 +647,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table38.AddRow(new string[] {
                             "body",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "marain.test.notification5"});
+                            "marain.test.notification7"});
 #line 116
  testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table38, "Given ");
 #line hidden
@@ -658,7 +658,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table39.AddRow(new string[] {
                             "this is an updated sms test template2",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "marain.test.notification5"});
+                            "marain.test.notification7"});
 #line 119
  testRunner.When("I send the user notification template API a request to update an existing sms not" +
                         "ification template without an eTag", ((string)(null)), table39, "When ");
@@ -704,7 +704,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table40.AddRow(new string[] {
                             "body",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "marain.test.notification5"});
+                            "marain.test.notification8"});
 #line 125
  testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table40, "Given ");
 #line hidden
@@ -716,7 +716,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table41.AddRow(new string[] {
                             "this is an updated sms test template2",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
-                            "marain.test.notification5",
+                            "marain.test.notification8",
                             "\"\\\"0x8D89CF9D612C7F1\\\"\""});
 #line 128
  testRunner.When("I send the user notification template API a request to update an existing sms not" +

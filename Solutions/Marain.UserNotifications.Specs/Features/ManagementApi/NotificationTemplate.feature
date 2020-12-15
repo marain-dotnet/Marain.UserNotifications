@@ -34,7 +34,7 @@ Scenario: Get a web push notification template
 	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template2' and communicationType 'webPush'
 	Then the response status code should be 'OK'
 	And the response content should have a string property called 'notificationType' with value 'marain.test.template2'
-	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
+	And the response content should have a json property called 'body' with value 'A new lead was added by {{leadAddedBy}}'
 	And the response content should have a json property called 'title' with value 'test'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1'
 	And the response content should have a json property called 'image' with value 'Base+64xddfa'
@@ -67,14 +67,14 @@ Scenario: Update an email notification template
 
 Scenario: Get an email notification template
 	Given I have created and stored an email notification template
-		| body | subject | important | contentType                                                                    | image        | notificationType      |
-		| body | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template4 |
+		| body                                    | subject | important | contentType                                                                    | image        | notificationType      |
+		| A new lead was added by {{leadAddedBy}} | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template4 |
 	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template4' and communicationType 'email'
 	Then the response status code should be 'OK'
 	And the response content should have a string property called 'notificationType' with value 'marain.test.template4'
-	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
+	And the response content should have a json property called 'body' with value 'A new lead was added by {{leadAddedBy}}'
 	And the response content should have a json property called 'subject' with value 'test'
-	And the response content should have a json property called 'important' with value 'true'
+	And the response content should have a json property called 'important' with value 'True'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
 	And the response content should have a property called '_links.self'
 
@@ -108,24 +108,24 @@ Scenario: Get a sms notification template
 	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.notification6' and communicationType 'sms'
 	Then the response status code should be 'OK'
 	And the response content should have a string property called 'notificationType' with value 'marain.test.notification6'
-	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
+	And the response content should have a json property called 'body' with value 'A new lead was added by {{leadAddedBy}}'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1'
 	And the response content should have a property called '_links.self'
 
 Scenario: Update a sms notification template without an eTag
 	Given I have created and stored a sms notification template
 		| body | contentType                                                                  | notificationType          |
-		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
+		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification7 |
 	When I send the user notification template API a request to update an existing sms notification template without an eTag
 		| body                                  | contentType                                                                  | notificationType          |
-		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
+		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification7 |
 	Then the response status code should be 'InternalServerError'
 
 Scenario: Update a sms notification template without an invalid eTag
 	Given I have created and stored a sms notification template
 		| body | contentType                                                                  | notificationType          |
-		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
+		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification8 |
 	When I send the user notification template API a request to update an existing sms notification template with an invalid eTag
 		| body                                  | contentType                                                                  | notificationType          | eTag                    |
-		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 | "\"0x8D89CF9D612C7F1\"" |
+		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification8 | "\"0x8D89CF9D612C7F1\"" |
 	Then the response status code should be 'BadRequest'
