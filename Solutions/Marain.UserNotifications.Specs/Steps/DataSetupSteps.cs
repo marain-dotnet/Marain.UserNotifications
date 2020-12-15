@@ -65,17 +65,14 @@ namespace Marain.UserNotifications.Specs.Steps
 
         public static EmailTemplate BuildEmailNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
-            bool? important = null;
-            if (bool.TryParse(tableRow["important"], out import))
-            {
-                important = my
-            }
+            bool important;
+            bool.TryParse(tableRow["important"], out important);
 
             return new EmailTemplate()
             {
                 Body = tableRow["body"],
                 Subject = tableRow["subject"],
-                Important = tableRow["important"],
+                Important = important,
                 NotificationType = tableRow["notificationType"],
             };
         }
@@ -236,6 +233,5 @@ namespace Marain.UserNotifications.Specs.Steps
 
             this.scenarioContext.Set(result);
         }
-
     }
 }
