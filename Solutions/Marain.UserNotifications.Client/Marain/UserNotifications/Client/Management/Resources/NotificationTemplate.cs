@@ -5,6 +5,7 @@
 namespace Marain.UserNotifications.Client.Management.Resources
 {
     using System;
+    using Marain.UserNotifications.Client.Management.Resources.CommunicationTemplates;
 
     /// <summary>
     /// The Notification Template structure.

@@ -149,18 +149,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table31 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table35 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table31.AddRow(new string[] {
+                table35.AddRow(new string[] {
                             "2",
                             "test@test.com",
                             "041532211",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
 #line 23
- testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table31, "Given ");
+ testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table35, "Given ");
 #line hidden
 #line 26
  testRunner.When("I send a user preference API request to retreive a user preference", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -216,32 +216,32 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table32 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table36 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table32.AddRow(new string[] {
+                table36.AddRow(new string[] {
                             "3",
                             "test@test.com",
                             "041532211",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
 #line 34
- testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table32, "Given ");
+ testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table36, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table33 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table37 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table33.AddRow(new string[] {
+                table37.AddRow(new string[] {
                             "3",
                             "testing@test.com",
                             "0987654321",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
 #line 37
  testRunner.When("I send a user preference API request to update a previously saved user preference" +
-                        "", ((string)(null)), table33, "When ");
+                        "", ((string)(null)), table37, "When ");
 #line hidden
 #line 40
  testRunner.And("I send a user preference API request to retreive a user preference", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -297,26 +297,26 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table34 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table38 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table34.AddRow(new string[] {
+                table38.AddRow(new string[] {
                             "4",
                             "test@test.com",
                             "041532211",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
 #line 48
- testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table34, "Given ");
+ testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table38, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table35 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table39 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration",
                             "eTag"});
-                table35.AddRow(new string[] {
+                table39.AddRow(new string[] {
                             "4",
                             "testing@test.com",
                             "0987654321",
@@ -324,7 +324,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "\"\\\"0x8D89CF9D612C7F1\\\"\""});
 #line 51
  testRunner.When("I send a user preference API request to update a previously saved user preference" +
-                        " that has an invalid etag in the request body", ((string)(null)), table35, "When ");
+                        " that has an invalid etag in the request body", ((string)(null)), table39, "When ");
 #line hidden
 #line 54
  testRunner.Then("the response status code should be \'BadRequest\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -362,32 +362,32 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table36 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table40 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table36.AddRow(new string[] {
+                table40.AddRow(new string[] {
                             "5",
                             "test@test.com",
                             "041532211",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
 #line 57
- testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table36, "Given ");
+ testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table40, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table37 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table41 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table37.AddRow(new string[] {
+                table41.AddRow(new string[] {
                             "5",
                             "testing@test.com",
                             "0987654321",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
 #line 60
  testRunner.When("I send a user preference API request to update a previously saved user preference" +
-                        " that has no etag in the request body", ((string)(null)), table37, "When ");
+                        " that has no etag in the request body", ((string)(null)), table41, "When ");
 #line hidden
 #line 63
  testRunner.Then("the response status code should be \'InternalServerError\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

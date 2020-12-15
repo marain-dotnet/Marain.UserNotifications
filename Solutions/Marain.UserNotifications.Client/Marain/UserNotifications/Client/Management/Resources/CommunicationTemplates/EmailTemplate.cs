@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.NotificationTemplates.CommunicationTemplates
+namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemplates
 {
     /// <summary>
     /// Email Object.
@@ -15,22 +15,22 @@ namespace Marain.NotificationTemplates.CommunicationTemplates
         public const string RegisteredContentType = "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1";
 
         /// <inheritdoc/>
-        public string? NotificationType { get; set; }
+        public string NotificationType { get; set; }
 
         /// <summary>
         /// Gets or sets the body of the email.
         /// </summary>
-        public string? Body { get; set; }
+        public string Body { get; set; }
 
         /// <summary>
         /// Gets or sets the subject of the email.
         /// </summary>
-        public string? Subject { get; set; }
+        public string Subject { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the email is important or not.
+        /// Gets or sets a value indicating whether the email is important or not.
         /// </summary>
-        public bool? Important { get; set; }
+        public bool Important { get; set; }
 
         /// <summary>
         /// Gets the registered content type used when this object is serialized/deserialized.

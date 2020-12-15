@@ -13,6 +13,7 @@ namespace Marain.UserNotifications.Client.Management
     using System.Threading.Tasks;
     using Marain.UserNotifications.Client.Management.Requests;
     using Marain.UserNotifications.Client.Management.Resources;
+    using Marain.UserNotifications.Client.Management.Resources.CommunicationTemplates;
 
     /// <summary>
     /// Client for the user notifications management service.
@@ -76,8 +77,8 @@ namespace Marain.UserNotifications.Client.Management
             return this.CallLongRunningOperationEndpointAsync(requestUri, HttpMethod.Put, body, cancellationToken);
         }
 
-        /// <inheritdoc />
-        public async Task<ApiResponse<NotificationTemplate>> GetNotificationTemplate(string tenantId, string notificationType, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ApiResponse<WebPushTemplateResource>> GetWebPushNotificationTemplate(string tenantId, string notificationType, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
@@ -89,36 +90,99 @@ namespace Marain.UserNotifications.Client.Management
                 throw new ArgumentNullException(nameof(notificationType));
             }
 
-            Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/templates?notificationType={notificationType}");
+            string communicationType = "webPush";
+
+            Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/templates?notificationType={notificationType}&communicationType={communicationType}");
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Get, requestUri);
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
             using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            NotificationTemplate result = await JsonSerializer.DeserializeAsync<NotificationTemplate>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
-            return new ApiResponse<NotificationTemplate>(
-                response.StatusCode,
-                result);
+            WebPushTemplateResource result = await JsonSerializer.DeserializeAsync<WebPushTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+
+            return new ApiResponse<WebPushTemplateResource>(
+               response.StatusCode,
+               result);
         }
 
-        /// <inheritdoc />
-        public async Task<ApiResponse> SetNotificationTemplate(string tenantId, NotificationTemplate notificationTemplate, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ApiResponse<EmailTemplateResource>> GetEmailNotificationTemplate(string tenantId, string notificationType, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(tenantId))
             {
                 throw new ArgumentNullException(nameof(tenantId));
             }
 
-            if (notificationTemplate == null)
+            if (string.IsNullOrEmpty(notificationType))
             {
-                throw new ArgumentNullException(nameof(notificationTemplate));
+                throw new ArgumentNullException(nameof(notificationType));
+            }
+
+            string communicationType = "email";
+
+            Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/templates?notificationType={notificationType}&communicationType={communicationType}");
+
+            HttpRequestMessage request = this.BuildRequest(HttpMethod.Get, requestUri);
+
+            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
+
+            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+
+            EmailTemplateResource result = await JsonSerializer.DeserializeAsync<EmailTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+
+            return new ApiResponse<EmailTemplateResource>(
+               response.StatusCode,
+               result);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ApiResponse<SmsTemplateResource>> GetSmsNotificationTemplate(string tenantId, string notificationType, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+
+            if (string.IsNullOrEmpty(notificationType))
+            {
+                throw new ArgumentNullException(nameof(notificationType));
+            }
+
+            string communicationType = "sms";
+
+            Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/templates?notificationType={notificationType}&communicationType={communicationType}");
+
+            HttpRequestMessage request = this.BuildRequest(HttpMethod.Get, requestUri);
+
+            HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
+
+            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+
+            SmsTemplateResource result = await JsonSerializer.DeserializeAsync<SmsTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+
+            return new ApiResponse<SmsTemplateResource>(
+               response.StatusCode,
+               result);
+        }
+
+        /// <inheritdoc />
+        public async Task<ApiResponse> SetNotificationTemplate(string tenantId, ICommunicationTemplate communicationTemplate, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+
+            if (communicationTemplate == null)
+            {
+                throw new ArgumentNullException(nameof(communicationTemplate));
             }
 
             Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/templates");
 
-            HttpRequestMessage request = this.BuildRequest(HttpMethod.Put, requestUri, notificationTemplate);
+            HttpRequestMessage request = this.BuildRequest(HttpMethod.Put, requestUri, communicationTemplate);
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 

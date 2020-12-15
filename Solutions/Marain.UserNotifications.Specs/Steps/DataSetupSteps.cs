@@ -239,6 +239,18 @@ namespace Marain.UserNotifications.Specs.Steps
             this.scenarioContext.Set(result);
         }
 
+        [Given(@"I have created and stored an sms notification template")]
+        public async Task GivenIHaveCreatedAndStoredAnSmsNotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            SmsTemplate notificationTemplate = BuildSmsNotificationTemplateFrom(table.Rows[0]);
+
+            INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            SmsTemplate? result = await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate).ConfigureAwait(false);
+
+            this.scenarioContext.Set(result);
+        }
+
         [Given("I have created and stored a sms notification template")]
         public async Task GivenIHaveCreatedAndStoredASmsNotificationTemplate(Table table)
         {

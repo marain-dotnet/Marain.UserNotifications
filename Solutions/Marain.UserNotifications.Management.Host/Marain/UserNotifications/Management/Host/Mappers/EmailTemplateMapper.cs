@@ -22,7 +22,7 @@ namespace Marain.UserNotifications.Management.Host.Mappers
         private readonly IOpenApiWebLinkResolver openApiWebLinkResolver;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WebPushTemplateMapper"/> class.
+        /// Initializes a new instance of the <see cref="EmailTemplateMapper"/> class.
         /// </summary>
         /// <param name="halDocumentFactory">The service provider to construct <see cref="HalDocument"/> instances.</param>
         /// <param name="openApiWebLinkResolver">The link resolver.</param>
