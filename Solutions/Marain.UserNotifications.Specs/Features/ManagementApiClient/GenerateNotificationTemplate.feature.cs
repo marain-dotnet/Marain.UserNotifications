@@ -110,13 +110,19 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
                 TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
-                            "notificationType",
-                            "smsTemplate"});
+                            "body",
+                            "title",
+                            "contentType",
+                            "image",
+                            "notificationType"});
                 table10.AddRow(new string[] {
-                            "marain.notifications.test.v1",
-                            "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
+                            "A new lead was added by {{leadAddedBy}}",
+                            "A new lead added: {{leadAddedBy}}",
+                            "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
+                            "Base+64xddfa",
+                            "marain.NewLeadv1"});
 #line 8
- testRunner.Given("I have created and stored a notification template", ((string)(null)), table10, "Given ");
+ testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table10, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
@@ -187,27 +193,17 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
                 TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
-                            "notificationType",
-                            "webPushTemplate"});
-                table12.AddRow(new string[] {
-                            "marain.notifications.test.v1",
-                            "{\"body\": \"A new lead was added by {{leadAddedBy}}\", \"title\": \"You have a {{mortga" +
-                                "geType}} case\", \"image\": \"\", \"userIdentifier\": \"\"}"});
-#line 33
-    testRunner.Given("I have created and stored a notification template", ((string)(null)), table12, "Given ");
-#line hidden
-                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table13.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "2",
                             "test@test.com",
                             "041532211",
                             "{\"marain.notifications.test.v1\": [\"webpush\", \"sms\"]}"});
 #line 36
- testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table13, "And ");
+ testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table12, "And ");
 #line hidden
 #line 39
  testRunner.When("I use the client to send a generate template API request", @"      {
@@ -273,27 +269,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
-                            "notificationType",
-                            "smsTemplate"});
-                table14.AddRow(new string[] {
-                            "marain.notifications.test.v1",
-                            "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
-#line 61
- testRunner.Given("I have created and stored a notification template", ((string)(null)), table14, "Given ");
-#line hidden
-                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table15.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "3",
                             "test@test.com",
                             "041532211",
                             "{\"marain.notifications.test.v1\": [\"webpush\"]}"});
 #line 64
- testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table15, "And ");
+ testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table13, "And ");
 #line hidden
 #line 67
  testRunner.When("I use the client to send a generate template API request", @"      {
@@ -350,15 +337,6 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
-                            "notificationType",
-                            "smsTemplate"});
-                table16.AddRow(new string[] {
-                            "marain.notifications.test.v1",
-                            "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
-#line 86
-    testRunner.Given("I have created and stored a notification template", ((string)(null)), table16, "Given ");
-#line hidden
 #line 89
  testRunner.When("I use the client to send a generate template API request", @"      {
           ""notificationType"": ""marain.notifications.test.v1"",
@@ -406,18 +384,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
                             "communicationChannelsPerNotificationConfiguration"});
-                table17.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "4",
                             "test@test.com",
                             "041532211",
                             "{\"marain.notifications.test.v2\": [\"webpush\"]}"});
 #line 106
-   testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table17, "Given ");
+   testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table14, "Given ");
 #line hidden
 #line 109
  testRunner.When("I use the client to send a generate template API request", @"      {

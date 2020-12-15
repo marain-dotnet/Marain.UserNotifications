@@ -1,13 +1,12 @@
 ﻿@perFeatureContainer
 @useApis
 @useTransientTenant
-
 Feature: Generate Notification Template via the client library
 
 Scenario: Generate a Notification Template
-	Given I have created and stored a notification template
-		| notificationType             | smsTemplate                                         |
-		| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
+	Given I have created and stored a web push notification template
+		| body                                    | title                             | contentType                                                                      | image        | notificationType |
+		| A new lead was added by {{leadAddedBy}} | A new lead added: {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.NewLeadv1 |
 	And I have created and stored a user preference for a user
 		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration    |
 		| 1      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush", "sms"]} |
@@ -26,15 +25,15 @@ Scenario: Generate a Notification Template
         }
 		"""
 	Then the client response status code should be 'OK'
-    And the client response for the notification template property 'SmsTemplate' should not be null
-    And the client response for the object 'SmsTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123'
+	And the client response for the notification template property 'SmsTemplate' should not be null
+	And the client response for the object 'SmsTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123'
 
 Scenario: Generate a WebPush Notification Template
-    Given I have created and stored a notification template
-		| notificationType             | webPushTemplate                                                                                           |
-		| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}", "title": "You have a {{mortgageType}} case", "image": "", "userIdentifier": ""} |
+	#Given I have created and stored a notification template
+	#	| notificationType             | webPushTemplate                                                                                           |
+	#	| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}", "title": "You have a {{mortgageType}} case", "image": "", "userIdentifier": ""} |
 	And I have created and stored a user preference for a user
-		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration  |
+		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration    |
 		| 2      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush", "sms"]} |
 	When I use the client to send a generate template API request
 		"""
@@ -52,15 +51,15 @@ Scenario: Generate a WebPush Notification Template
         }
 		"""
 	Then the client response status code should be 'OK'
-    And the client response for the notification template property 'WebPushTemplate' should not be null
-    And the client response for the object 'WebPushTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123'
-    And the client response for the object 'WebPushTemplate' with property 'Title' should have a value of 'You have a First time buyer case'
-    And the client response for the object 'WebPushTemplate' with property 'Image' should have a value of ''
+	And the client response for the notification template property 'WebPushTemplate' should not be null
+	And the client response for the object 'WebPushTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123'
+	And the client response for the object 'WebPushTemplate' with property 'Title' should have a value of 'You have a First time buyer case'
+	And the client response for the object 'WebPushTemplate' with property 'Image' should have a value of ''
 
 Scenario: Generation of a Notification Template is UnSuccessful
-	Given I have created and stored a notification template
-		| notificationType             | smsTemplate                                         |
-		| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
+	#Given I have created and stored a notification template
+	#	| notificationType             | smsTemplate                                         |
+	#	| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	And I have created and stored a user preference for a user
 		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration |
 		| 3      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush"]}     |
@@ -79,13 +78,13 @@ Scenario: Generation of a Notification Template is UnSuccessful
         }
 		"""
 	Then the client response status code should be 'OK'
-    And the client response for the notification template property 'WebPushTemplate' should be null
-    And the client response for the notification template property 'SmsTemplate' should be null
+	And the client response for the notification template property 'WebPushTemplate' should be null
+	And the client response for the notification template property 'SmsTemplate' should be null
 
 Scenario: Generate a notification template for unconfigured user
-    Given I have created and stored a notification template
-		| notificationType             | smsTemplate                                         |
-		| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
+	#Given I have created and stored a notification template
+	#	| notificationType             | smsTemplate                                         |
+	#	| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	When I use the client to send a generate template API request
 		"""
         {
@@ -103,7 +102,7 @@ Scenario: Generate a notification template for unconfigured user
 	Then a 'UserNotificationsApiException' should be thrown
 
 Scenario: Generate a notification template for unconfigured communication channel
-   Given I have created and stored a user preference for a user
+	Given I have created and stored a user preference for a user
 		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration |
 		| 4      | test@test.com | 041532211   | {"marain.notifications.test.v2": ["webpush"]}     |
 	When I use the client to send a generate template API request

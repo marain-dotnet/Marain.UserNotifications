@@ -109,33 +109,65 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
-                            "notificationType",
-                            "smsTemplate"});
-                table28.AddRow(new string[] {
-                            "marain.notifications.test.v1",
-                            "{\"body\": \"A new lead was added by {{leadAddedBy}}\"}"});
+                TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "subject",
+                            "important",
+                            "contentType",
+                            "image",
+                            "notificationType"});
+                table25.AddRow(new string[] {
+                            "A new lead was added by {{leadAddedBy}}",
+                            "A new lead added: {{leadAddedBy}}",
+                            "true",
+                            "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
+                            "Base+64xddfa",
+                            "marain.NewLeadv1"});
 #line 7
- testRunner.Given("I have created and stored a notification template", ((string)(null)), table28, "Given ");
+ testRunner.Given("I have created and stored an email notification template", ((string)(null)), table25, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "contentType",
+                            "notificationType"});
+                table26.AddRow(new string[] {
+                            "New lead added by {{leadAddedBy}}",
+                            "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+                            "marain.NewLeadv1"});
+#line 10
+ testRunner.And("I have created and stored a sms notification template", ((string)(null)), table26, "And ");
+#line hidden
+                TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "title",
+                            "contentType",
+                            "image",
+                            "notificationType"});
+                table27.AddRow(new string[] {
+                            "A new lead was added by {{leadAddedBy}}",
+                            "A new lead added: {{leadAddedBy}}",
+                            "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
+                            "Base+64xddfa",
+                            "marain.NewLeadv1"});
+#line 13
+ testRunner.And("I have created and stored a web push notification template", ((string)(null)), table27, "And ");
+#line hidden
+                TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
                             "userId",
                             "email",
                             "phoneNumber",
-                            "communicationChannelsPerNotificationConfiguration",
-                            "eTag"});
-                table29.AddRow(new string[] {
+                            "communicationChannelsPerNotificationConfiguration"});
+                table28.AddRow(new string[] {
                             "1",
                             "test@test.com",
                             "041532211",
-                            "{\"marain.notifications.test.v1\": [\"email\", \"sms\"]}",
-                            "null"});
-#line 10
- testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table29, "And ");
+                            "{\"marain.NewLeadv1\": [\"email\", \"sms\"]}"});
+#line 16
+ testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table28, "And ");
 #line hidden
-#line 13
+#line 19
  testRunner.When("I send the generate template API request", @"      {
-          ""notificationType"": ""marain.notifications.test.v1"",
+          ""notificationType"": ""marain.NewLeadv1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
           ""userIds"": [
               ""1""
@@ -146,16 +178,18 @@ this.ScenarioInitialize(scenarioInfo);
           }
       }", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 27
+#line 33
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 28
+#line 34
  testRunner.And("the response content should have a string property called \'notificationType\' with" +
-                        " value \'marain.notifications.test.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        " value \'marain.NewLeadv1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 29
- testRunner.And("the response content should have a json property called \'smsTemplate\' with value " +
-                        "\'{\"body\": \"A new lead was added by TestUser123\"}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 35
+ testRunner.And(@"the response content should have a json property called 'smsTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""New lead added by TestUser123"", ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1""}'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 36
+ testRunner.And(@"the response content should have a json property called 'emailTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""A new lead was added by TestUser123"", ""subject"": ""A new lead added: TestUser123"", ""important"": false, ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1""}'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
