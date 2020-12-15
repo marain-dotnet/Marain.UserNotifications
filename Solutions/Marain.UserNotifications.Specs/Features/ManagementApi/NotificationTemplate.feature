@@ -87,6 +87,6 @@ Scenario: Get an email notification template
 	And the response content should have a string property called 'notificationType' with value 'marain.test.template'
 	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
 	And the response content should have a json property called 'subject' with value 'test'
+	And the response content should have a json property called 'important' with value 'true'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
-	And the response content should have a json property called 'image' with value 'Base+64xddfa'
 	And the response content should have a property called '_links.self'
