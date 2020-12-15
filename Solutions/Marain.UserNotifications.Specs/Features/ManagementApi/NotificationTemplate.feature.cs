@@ -416,13 +416,13 @@ this.ScenarioInitialize(scenarioInfo);
                         "t\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 90
+ testRunner.And("the response content should have a json property called \'important\' with value \'t" +
+                        "rue\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 91
  testRunner.And("the response content should have a json property called \'contentType\' with value " +
                         "\'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1\'" +
                         "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 91
- testRunner.And("the response content should have a json property called \'image\' with value \'Base+" +
-                        "64xddfa\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 92
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

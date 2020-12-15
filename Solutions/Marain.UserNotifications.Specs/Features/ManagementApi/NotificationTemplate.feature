@@ -87,8 +87,8 @@ Scenario: Get an email notification template
 	And the response content should have a string property called 'notificationType' with value 'marain.test.template'
 	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
 	And the response content should have a json property called 'subject' with value 'test'
+	And the response content should have a json property called 'important' with value 'true'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
-	And the response content should have a json property called 'image' with value 'Base+64xddfa'
 	And the response content should have a property called '_links.self'
 
 ########################################
@@ -107,7 +107,7 @@ Scenario: Create a sms notification template
 
 Scenario: Update a sms notification template
 	Given I have created and stored a web push notification template
-		| body | title | contentType                                                                  | image        | notificationType     |
+		| body | title | contentType                                                                  | image        | notificationType         |
 		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | Base+64xddfa | marain.test.notification |
 	When I send the user notification template API a request to update a new user notification template
 		"""
