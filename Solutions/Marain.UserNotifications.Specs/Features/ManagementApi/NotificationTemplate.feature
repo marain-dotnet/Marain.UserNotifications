@@ -111,3 +111,21 @@ Scenario: Get a sms notification template
 	And the response content should have a json property called 'body' with value '{"body": "A new lead was added by {{leadAddedBy}}"}'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1'
 	And the response content should have a property called '_links.self'
+
+Scenario: Update a sms notification template without an eTag
+	Given I have created and stored a sms notification template
+		| body | contentType                                                                  | notificationType          |
+		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
+	When I send the user notification template API a request to update an existing sms notification template without an eTag
+		| body                                  | contentType                                                                  | notificationType          |
+		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
+	Then the response status code should be 'InternalServerError'
+
+Scenario: Update a sms notification template without an invalid eTag
+	Given I have created and stored a sms notification template
+		| body | contentType                                                                  | notificationType          |
+		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 |
+	When I send the user notification template API a request to update an existing sms notification template with an invalid eTag
+		| body                                  | contentType                                                                  | notificationType          | eTag                    |
+		| this is an updated sms test template2 | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification5 | "\"0x8D89CF9D612C7F1\"" |
+	Then the response status code should be 'BadRequest'

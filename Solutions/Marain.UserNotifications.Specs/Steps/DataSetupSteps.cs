@@ -85,7 +85,7 @@ namespace Marain.UserNotifications.Specs.Steps
             {
                 Body = tableRow["body"],
                 NotificationType = tableRow["notificationType"],
-                ETag = eTag,
+                ETag = tableRow.ContainsKey("eTag") ? tableRow["eTag"] : eTag,
             };
         }
 

@@ -612,6 +612,122 @@ this.ScenarioInitialize(scenarioInfo);
             }
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Update a sms notification template without an eTag")]
+        public virtual void UpdateASmsNotificationTemplateWithoutAnETag()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a sms notification template without an eTag", null, tagsOfScenario, argumentsOfScenario);
+#line 115
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table38 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "contentType",
+                            "notificationType"});
+                table38.AddRow(new string[] {
+                            "body",
+                            "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+                            "marain.test.notification5"});
+#line 116
+ testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table38, "Given ");
+#line hidden
+                TechTalk.SpecFlow.Table table39 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "contentType",
+                            "notificationType"});
+                table39.AddRow(new string[] {
+                            "this is an updated sms test template2",
+                            "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+                            "marain.test.notification5"});
+#line 119
+ testRunner.When("I send the user notification template API a request to update an existing sms not" +
+                        "ification template without an eTag", ((string)(null)), table39, "When ");
+#line hidden
+#line 122
+ testRunner.Then("the response status code should be \'InternalServerError\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Update a sms notification template without an invalid eTag")]
+        public virtual void UpdateASmsNotificationTemplateWithoutAnInvalidETag()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a sms notification template without an invalid eTag", null, tagsOfScenario, argumentsOfScenario);
+#line 124
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table40 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "contentType",
+                            "notificationType"});
+                table40.AddRow(new string[] {
+                            "body",
+                            "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+                            "marain.test.notification5"});
+#line 125
+ testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table40, "Given ");
+#line hidden
+                TechTalk.SpecFlow.Table table41 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "contentType",
+                            "notificationType",
+                            "eTag"});
+                table41.AddRow(new string[] {
+                            "this is an updated sms test template2",
+                            "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+                            "marain.test.notification5",
+                            "\"\\\"0x8D89CF9D612C7F1\\\"\""});
+#line 128
+ testRunner.When("I send the user notification template API a request to update an existing sms not" +
+                        "ification template with an invalid eTag", ((string)(null)), table41, "When ");
+#line hidden
+#line 131
+ testRunner.Then("the response status code should be \'BadRequest\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

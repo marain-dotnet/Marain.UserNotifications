@@ -13,6 +13,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Marain.UserPreferences;
     using Menes;
     using Menes.Exceptions;
+    using Microsoft.Azure.Storage;
 
     /// <summary>
     /// Implements the create template endpoint for the management API.
@@ -69,24 +70,34 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // Gets the AzureBlobTemplateStore
             INotificationTemplateStore store = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
 
-            // I don't like this
-            // It also means that if we need to add another type, it will have to be done manually
-            if (body is EmailTemplate emailTemplate)
+            try
             {
-                await store.StoreAsync(body.NotificationType, CommunicationType.Email, emailTemplate.ETag, emailTemplate).ConfigureAwait(false);
+                if (body is EmailTemplate emailTemplate)
+                {
+                    await store.StoreAsync(body.NotificationType, CommunicationType.Email, emailTemplate.ETag, emailTemplate).ConfigureAwait(false);
+                }
+                else if (body is SmsTemplate smsTemplate)
+                {
+                    await store.StoreAsync(body.NotificationType, CommunicationType.Sms, smsTemplate.ETag, smsTemplate).ConfigureAwait(false);
+                }
+                else if (body is WebPushTemplate webPushTemplate)
+                {
+                    await store.StoreAsync(body.NotificationType, CommunicationType.WebPush, webPushTemplate.ETag, webPushTemplate).ConfigureAwait(false);
+                }
+                else
+                {
+                    // this should be removed in future updates
+                    throw new OpenApiNotFoundException($"The template for ContentType: {body.ContentType} is not a valid content type");
+                }
             }
-            else if (body is SmsTemplate smsTemplate)
+            catch (StorageException e)
             {
-                await store.StoreAsync(body.NotificationType, CommunicationType.Sms, smsTemplate.ETag, smsTemplate).ConfigureAwait(false);
-            }
-            else if (body is WebPushTemplate webPushTemplate)
-            {
-                await store.StoreAsync(body.NotificationType, CommunicationType.WebPush, webPushTemplate.ETag, webPushTemplate).ConfigureAwait(false);
-            }
-            else
-            {
-                // this should be removed in future updates
-                throw new OpenApiNotFoundException($"The template for ContentType: {body.ContentType} is not a valid content type");
+                if (e?.RequestInformation?.HttpStatusCode == (int)System.Net.HttpStatusCode.PreconditionFailed)
+                {
+                    throw new OpenApiBadRequestException("Precondition failure. Blob's ETag does not match ETag provided.");
+                }
+
+                throw;
             }
 
             return this.OkResult();

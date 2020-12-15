@@ -353,6 +353,21 @@ namespace Marain.UserNotifications.Specs.Steps
             await this.SendPutRequest(requestContent, path.ToString()).ConfigureAwait(false);
         }
 
+        [When("I send the user notification template API a request to update an existing sms notification template with an invalid eTag")]
+        [When("I send the user notification template API a request to update an existing sms notification template without an eTag")]
+        public async Task WhenISendTheUserNotificationTemplateAPIARequestToUpdateAnExistingSmsNotificationTemplateWithoutAnETag(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+
+            SmsTemplate notificationTemplate = DataSetupSteps.BuildSmsNotificationTemplateFrom(table.Rows[0]);
+            string? requestJson = JsonConvert.SerializeObject(notificationTemplate, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            var path = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates");
+            await this.SendPutRequest(requestContent, path.ToString()).ConfigureAwait(false);
+        }
+
         [When("I send the user notification template API a request to update an existing sms notification template")]
         public async Task WhenISendTheUserNotificationTemplateAPIARequestToUpdateAnExistingSmsNotificationTemplate(Table table)
         {
