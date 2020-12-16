@@ -15,6 +15,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Menes;
     using Menes.Exceptions;
     using Microsoft.Azure.Storage;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Implements the create user preferences endpoint for the management API.
