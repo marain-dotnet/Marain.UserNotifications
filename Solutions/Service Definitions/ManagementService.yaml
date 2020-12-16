@@ -216,9 +216,10 @@ paths:
 
     put:
       summary: Create or update a new user preference for the users
-      operationId: createUserPreference
+      operationId: createOrUpdateUserPreference
       parameters:
         - $ref: '#/components/parameters/tenantId'
+        - $ref: '#/components/parameters/ifNoneMatch'
       requestBody:
         required: true
         content:
@@ -995,3 +996,11 @@ components:
       schema:
         type: string
         enum: ['email', 'sms', 'webPush']
+    ifNoneMatch:
+      name: If-None-Match
+      in: header
+      x-ms-parameter-location: method
+      description: The ETag of the last known version.
+      required: false
+      schema:
+        type: string

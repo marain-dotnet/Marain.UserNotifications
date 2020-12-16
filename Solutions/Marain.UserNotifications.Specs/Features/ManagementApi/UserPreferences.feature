@@ -26,6 +26,7 @@ Scenario: Get a user preference for a certain user
 	When I send a user preference API request to retreive a user preference
 	Then the response status code should be 'OK'
 	And the response content should have a property called '_links.self'
+	And the response content should have a property called 'eTag'
 	And the response content should have a string property called 'userId' with value '2'
 	And the response content should have a string property called 'email' with value 'test@test.com'
 	And the response content should have a string property called 'phoneNumber' with value '041532211'
@@ -40,6 +41,7 @@ Scenario: Update a user preference for a user by multiple requests handling conc
 	And I send a user preference API request to retreive a user preference
 	Then the response status code should be 'OK'
 	And the response content should have a property called '_links.self'
+	And the response content should have a property called 'eTag'
 	And the response content should have a string property called 'userId' with value '3'
 	And the response content should have a string property called 'email' with value 'testing@test.com'
 	And the response content should have a string property called 'phoneNumber' with value '0987654321'

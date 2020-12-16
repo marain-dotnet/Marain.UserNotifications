@@ -74,9 +74,13 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 throw new OpenApiNotFoundException($"The user preference for userId: {userId} was not found.");
             }
 
-            HalDocument response = await this.userPreferenceMapper.MapAsync(userObject, context).ConfigureAwait(false);
+            OpenApiResult okResult = this.OkResult(await this.userPreferenceMapper.MapAsync(userObject, context).ConfigureAwait(false), "application/json");
+            if (!string.IsNullOrEmpty(userObject.ETag))
+            {
+                okResult.Results.Add("ETag", userObject.ETag!);
+            }
 
-            return this.OkResult(response);
+            return okResult;
         }
     }
 }

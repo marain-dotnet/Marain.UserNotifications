@@ -45,6 +45,8 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         /// <inheritdoc/>
         public async Task<UserPreference?> GetAsync(string userId)
         {
+            this.logger.LogDebug("GetAsync UserPreference called for user ", userId);
+
             // Gets the blob reference by the userId
             CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(userId);
 
@@ -63,9 +65,9 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         }
 
         /// <inheritdoc/>
-        public async Task<UserPreference> StoreAsync(UserPreference userPreference)
+        public async Task<UserPreference> CreateOrUpdate(UserPreference userPreference)
         {
-            this.logger.LogDebug("Storing UserPreference for user ", userPreference.UserId);
+            this.logger.LogDebug("CreateOrUpdate UserPreference called for user ", userPreference.UserId);
 
             // Gets the blob reference by the userId
             CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(userPreference.UserId);
@@ -73,16 +75,26 @@ namespace Marain.UserNotifications.Storage.AzureBlob
             // Check if the blob exists
             bool exists = await blockBlob.ExistsAsync().ConfigureAwait(false);
 
+            // Serialise the userPreference object
+            string userPreferenceBlob = JsonConvert.SerializeObject(userPreference, this.serializerSettingsProvider.Instance);
+
             if (exists && string.IsNullOrWhiteSpace(userPreference.ETag))
             {
                 throw new StorageException("ETag was not present in the UserPreference object.");
             }
 
-            // Serialise the userPreference object
-            string userPreferenceBlob = JsonConvert.SerializeObject(userPreference, this.serializerSettingsProvider.Instance);
-
-            // Save the user preferences to the blob storage
-            await blockBlob.UploadTextAsync(userPreferenceBlob, null, accessCondition: AccessCondition.GenerateIfMatchCondition(userPreference.ETag), null, null).ConfigureAwait(false);
+            if (exists)
+            {
+                // Update the user preference
+                await blockBlob.UploadTextAsync(userPreferenceBlob, null, accessCondition: AccessCondition.GenerateIfMatchCondition(userPreference.ETag), null, null).ConfigureAwait(false);
+                this.logger.LogDebug("CreateOrUpdate: User preference updated successfully ", userPreference.UserId);
+            }
+            else
+            {
+                // Create the user preference
+                await blockBlob.UploadTextAsync(userPreferenceBlob, null, accessCondition: AccessCondition.GenerateIfNotExistsCondition(), null, null).ConfigureAwait(false);
+                this.logger.LogDebug("CreateOrUpdate: User preference created successfully ", userPreference.UserId);
+            }
 
             UserPreference? fetchStoredUserPreference = await this.GetAsync(userPreference.UserId).ConfigureAwait(false);
             return fetchStoredUserPreference!;

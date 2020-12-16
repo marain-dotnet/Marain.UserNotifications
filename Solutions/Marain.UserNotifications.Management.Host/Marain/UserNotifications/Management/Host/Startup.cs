@@ -57,7 +57,7 @@ namespace Marain.UserNotifications.Management.Host
             services.AddSingleton<IOpenApiService, GetNotificationStatusService>();
             services.AddSingleton<IOpenApiService, BatchDeliveryStatusUpdateService>();
             services.AddSingleton<IOpenApiService, BatchReadStatusUpdateService>();
-            services.AddSingleton<IOpenApiService, CreateUserPreferenceService>();
+            services.AddSingleton<IOpenApiService, CreateOrUpdateUserPreferenceService>();
             services.AddSingleton<IOpenApiService, GetUserPreferenceService>();
             services.AddSingleton<IOpenApiService, GetTemplateService>();
             services.AddSingleton<IOpenApiService, CreateTemplateService>();

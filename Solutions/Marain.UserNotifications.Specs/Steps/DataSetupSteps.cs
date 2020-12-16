@@ -199,7 +199,7 @@ namespace Marain.UserNotifications.Specs.Steps
             UserPreference preference = BuildUserPreferenceFrom(table.Rows[0], serializerSettingsProvider.Instance);
 
             IUserPreferencesStore store = await storeFactory.GetUserPreferencesStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            UserPreference result = await store.StoreAsync(preference).ConfigureAwait(false);
+            UserPreference result = await store.CreateOrUpdate(preference).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }

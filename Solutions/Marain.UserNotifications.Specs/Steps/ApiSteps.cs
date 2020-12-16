@@ -270,7 +270,15 @@ namespace Marain.UserNotifications.Specs.Steps
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             string transientTenantId = this.featureContext.GetTransientTenantId();
 
-            await this.SendPutRequest(requestContent, $"/{transientTenantId}/marain/usernotifications/userpreference").ConfigureAwait(false);
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference"),
+                Method = HttpMethod.Put,
+                Content = requestContent,
+            };
+            request.Headers.Add("If-None-Match", preference.ETag);
+
+            await this.SendRequest(request).ConfigureAwait(false);
         }
 
         [When("I send a user preference API request to update a previously saved user preference that has no etag in the request body")]
@@ -285,7 +293,15 @@ namespace Marain.UserNotifications.Specs.Steps
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             string transientTenantId = this.featureContext.GetTransientTenantId();
 
-            await this.SendPutRequest(requestContent, $"/{transientTenantId}/marain/usernotifications/userpreference").ConfigureAwait(false);
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference"),
+                Method = HttpMethod.Put,
+                Content = requestContent,
+            };
+            request.Headers.Add("If-None-Match", preference.ETag);
+
+            await this.SendRequest(request).ConfigureAwait(false);
         }
 
         [When("I send a user preference API request to retreive a user preference")]
@@ -481,6 +497,19 @@ namespace Marain.UserNotifications.Specs.Steps
 
             HttpResponseMessage response = await HttpClient.PostAsync(new Uri(baseUri, path), content).ConfigureAwait(false);
 
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(ResponseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
+            }
+        }
+
+        private async Task SendRequest(HttpRequestMessage httpRequestMessage)
+        {
+            HttpResponseMessage response = await HttpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
             this.scenarioContext.Set(response);
 
             string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

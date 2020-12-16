@@ -74,7 +74,7 @@ namespace Marain.UserPreferences
         /// <param name="userPreference">The <see cref="UserPreference"/> object.</param>
         /// <param name="eTag">Etag from the CloudBlockBlob Properties.</param>
         /// <returns><see cref="UserPreference"/> object.</returns>
-        public UserPreference AddETag(UserPreference userPreference, string? eTag)
+        public UserPreference AddETag(in UserPreference userPreference, string? eTag)
         {
             return new UserPreference(
                 userPreference.UserId,

@@ -407,7 +407,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "contentType",
                             "image",
                             "notificationType"});
-                table35.AddRow(new string[] {
+                table34.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}}",
                             "test",
                             "true",

@@ -1,4 +1,4 @@
-﻿// <copyright file="CreateUserPreferenceService.cs" company="Endjin Limited">
+﻿// <copyright file="CreateOrUpdateUserPreferenceService.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -19,22 +19,22 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     /// <summary>
     /// Implements the create user preferences endpoint for the management API.
     /// </summary>
-    public class CreateUserPreferenceService : IOpenApiService
+    public class CreateOrUpdateUserPreferenceService : IOpenApiService
     {
         /// <summary>
         /// The operation Id for the endpoint.
         /// </summary>
-        public const string CreateUserPreferenceOperationId = "createUserPreference";
+        public const string CreateOrUpdateUserPreferenceOperationId = "createOrUpdateUserPreference";
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="CreateUserPreferenceService"/> class.
+        /// Initializes a new instance of <see cref="CreateOrUpdateUserPreferenceService"/> class.
         /// </summary>
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="tenantedUserPreferencesStoreFactory">User preferences store factory.</param>
-        public CreateUserPreferenceService(
+        public CreateOrUpdateUserPreferenceService(
             IMarainServicesTenancy marainServicesTenancy,
             ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory)
         {
@@ -47,11 +47,14 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// </summary>
         /// <param name="context">The current OpenApi context.</param>
         /// <param name="body">The request body.</param>
+        /// <param name="etag">The ETag.</param>
         /// <returns>Confirms that the create / update operation request is successful.</returns>
-        [OperationId(CreateUserPreferenceOperationId)]
-        public async Task<OpenApiResult> CreateUserPreferenceAsync(
+        [OperationId(CreateOrUpdateUserPreferenceOperationId)]
+        public async Task<OpenApiResult> CreateOrUpdateUserPreferenceAsync(
             IOpenApiContext context,
-            UserPreference body)
+            UserPreference body,
+            [OpenApiParameter("If-None-Match")]
+            string etag)
         {
             // We can guarantee tenant Id is available because it's part of the Uri.
             ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId!).ConfigureAwait(false);
@@ -61,8 +64,11 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
             try
             {
+                // Add the etag to user preference object
+                UserPreference? updatedUserPreference = body.AddETag(body, etag);
+
                 // Save the UserPreference object in the blob
-                await store.StoreAsync(body).ConfigureAwait(false);
+                await store.CreateOrUpdate(updatedUserPreference).ConfigureAwait(false);
             }
             catch (StorageException e)
             {

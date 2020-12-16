@@ -172,14 +172,17 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 29
+ testRunner.And("the response content should have a property called \'eTag\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 30
  testRunner.And("the response content should have a string property called \'userId\' with value \'2\'" +
                         "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 30
+#line 31
  testRunner.And("the response content should have a string property called \'email\' with value \'tes" +
                         "t@test.com\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 31
+#line 32
  testRunner.And("the response content should have a string property called \'phoneNumber\' with valu" +
                         "e \'041532211\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
@@ -196,7 +199,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a user preference for a user by multiple requests handling concurency issu" +
                     "es", null, tagsOfScenario, argumentsOfScenario);
-#line 33
+#line 34
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -226,7 +229,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "test@test.com",
                             "041532211",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
-#line 34
+#line 35
  testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table43, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table44 = new TechTalk.SpecFlow.Table(new string[] {
@@ -239,28 +242,31 @@ this.ScenarioInitialize(scenarioInfo);
                             "testing@test.com",
                             "0987654321",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
-#line 37
+#line 38
  testRunner.When("I send a user preference API request to update a previously saved user preference" +
                         "", ((string)(null)), table44, "When ");
 #line hidden
-#line 40
+#line 41
  testRunner.And("I send a user preference API request to retreive a user preference", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 41
+#line 42
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 42
+#line 43
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 43
+#line 44
+ testRunner.And("the response content should have a property called \'eTag\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 45
  testRunner.And("the response content should have a string property called \'userId\' with value \'3\'" +
                         "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 44
+#line 46
  testRunner.And("the response content should have a string property called \'email\' with value \'tes" +
                         "ting@test.com\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 45
+#line 47
  testRunner.And("the response content should have a string property called \'phoneNumber\' with valu" +
                         "e \'0987654321\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
@@ -277,7 +283,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a user preference for a user by multiple requests handling concurency issu" +
                     "es having invalid etag", null, tagsOfScenario, argumentsOfScenario);
-#line 47
+#line 49
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -307,7 +313,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "test@test.com",
                             "041532211",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
-#line 48
+#line 50
  testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table45, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table46 = new TechTalk.SpecFlow.Table(new string[] {
@@ -322,11 +328,11 @@ this.ScenarioInitialize(scenarioInfo);
                             "0987654321",
                             "{\"notificationType1\": [\"email\", \"sms\"]}",
                             "\"\\\"0x8D89CF9D612C7F1\\\"\""});
-#line 51
+#line 53
  testRunner.When("I send a user preference API request to update a previously saved user preference" +
                         " that has an invalid etag in the request body", ((string)(null)), table46, "When ");
 #line hidden
-#line 54
+#line 56
  testRunner.Then("the response status code should be \'BadRequest\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -342,7 +348,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a user preference for a user by multiple requests handling concurency issu" +
                     "es having no etag", null, tagsOfScenario, argumentsOfScenario);
-#line 56
+#line 58
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -372,7 +378,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "test@test.com",
                             "041532211",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
-#line 57
+#line 59
  testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table47, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table48 = new TechTalk.SpecFlow.Table(new string[] {
@@ -385,11 +391,11 @@ this.ScenarioInitialize(scenarioInfo);
                             "testing@test.com",
                             "0987654321",
                             "{\"notificationType1\": [\"email\", \"sms\"]}"});
-#line 60
+#line 62
  testRunner.When("I send a user preference API request to update a previously saved user preference" +
                         " that has no etag in the request body", ((string)(null)), table48, "When ");
 #line hidden
-#line 63
+#line 65
  testRunner.Then("the response status code should be \'InternalServerError\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
