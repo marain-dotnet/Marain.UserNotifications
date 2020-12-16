@@ -219,6 +219,7 @@ namespace Marain.UserNotifications.Client.Management
             Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/templates");
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Put, requestUri, communicationTemplate);
+            request = this.AddETagToNotificationTemplateHeaders(communicationTemplate, request);
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
@@ -282,6 +283,7 @@ namespace Marain.UserNotifications.Client.Management
             Uri requestUri = this.ConstructUri($"{tenantId}/marain/usernotifications/userpreference");
 
             HttpRequestMessage request = this.BuildRequest(HttpMethod.Put, requestUri, userPreference);
+            request = this.AddETagToHeader(request, userPreference.ETag);
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
@@ -316,6 +318,34 @@ namespace Marain.UserNotifications.Client.Management
             return new ApiResponse<NotificationTemplate>(
                 response.StatusCode,
                 result);
+        }
+
+        private HttpRequestMessage AddETagToHeader(HttpRequestMessage httpRequestMessage, string eTag)
+        {
+            if (!string.IsNullOrWhiteSpace(eTag))
+            {
+                httpRequestMessage.Headers.Add("If-None-Match", eTag);
+            }
+
+            return httpRequestMessage;
+        }
+
+        private HttpRequestMessage AddETagToNotificationTemplateHeaders(ICommunicationTemplate communicationTemplate, HttpRequestMessage httpRequestMessage)
+        {
+            if (communicationTemplate is EmailTemplate emailTemplate)
+            {
+                return this.AddETagToHeader(httpRequestMessage, emailTemplate.ETag);
+            }
+            else if (communicationTemplate is SmsTemplate smsTemplate)
+            {
+                return this.AddETagToHeader(httpRequestMessage, smsTemplate.ETag);
+            }
+            else if (communicationTemplate is WebPushTemplate webPushTemplate)
+            {
+                return this.AddETagToHeader(httpRequestMessage, webPushTemplate.ETag);
+            }
+
+            return null;
         }
     }
 }

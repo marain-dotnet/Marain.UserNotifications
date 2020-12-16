@@ -72,6 +72,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             INotificationTemplateStore store = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
 
             HalDocument? response = null;
+            string? eTag = null;
 
             // Gets the template by notificationType
             switch (communicationType)
@@ -85,6 +86,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                     }
 
                     // Add etag to the EmailTemplate
+                    eTag = emailTemplateWrapper.Item2;
                     emailTemplateWrapper.Item1.ETag = emailTemplateWrapper.Item2;
                     response = await this.emailTemplateMapper.MapAsync(emailTemplateWrapper.Item1, context).ConfigureAwait(false);
                     break;
@@ -97,6 +99,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                     }
 
                     // Add etag to the SmsTemplate
+                    eTag = smsTemplateWrapper.Item2;
                     smsTemplateWrapper.Item1.ETag = smsTemplateWrapper.Item2;
                     response = await this.smsTemplateMapper.MapAsync(smsTemplateWrapper.Item1, context).ConfigureAwait(false);
                     break;
@@ -109,6 +112,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                     }
 
                     // Add etag to the WebPushTemplate
+                    eTag = webpushWrapper.Item2;
                     webpushWrapper.Item1.ETag = webpushWrapper.Item2;
                     response = await this.webPushTemplateMapper.MapAsync(webpushWrapper.Item1, context).ConfigureAwait(false);
                     break;
@@ -119,7 +123,13 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType.ToString()} was not found.");
             }
 
-            return this.OkResult(response);
+            OpenApiResult okResult = this.OkResult(response, "application/json");
+            if (!string.IsNullOrEmpty(eTag))
+            {
+                okResult.Results.Add("ETag", eTag);
+            }
+
+            return okResult;
         }
     }
 }

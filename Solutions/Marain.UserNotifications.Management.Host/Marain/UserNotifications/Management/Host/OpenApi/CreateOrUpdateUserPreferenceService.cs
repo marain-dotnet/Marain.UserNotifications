@@ -4,12 +4,8 @@
 
 namespace Marain.UserNotifications.Management.Host.OpenApi
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
-    using Marain.Operations.Client.OperationsControl;
     using Marain.Services.Tenancy;
     using Marain.UserPreferences;
     using Menes;
@@ -18,7 +14,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Implements the create user preferences endpoint for the management API.
+    /// Implements the create or update user preferences endpoint for the management API.
     /// </summary>
     public class CreateOrUpdateUserPreferenceService : IOpenApiService
     {

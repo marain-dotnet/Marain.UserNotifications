@@ -13,6 +13,15 @@ namespace Marain.NotificationTemplates
     public interface INotificationTemplateStore
     {
         /// <summary>
+        /// Retrieves template for the specified notification type.
+        /// </summary>
+        /// <typeparam name="T">The Notification template. </typeparam>
+        /// <param name="notificationType">The notification type.</param>
+        /// <param name="communicationType">The communication type.</param>
+        /// <returns>The template.</returns>
+        Task<(T, string?)> GetAsync<T>(string notificationType, CommunicationType communicationType);
+
+        /// <summary>
         /// Stores the given template.
         /// </summary>
         /// <typeparam name="T">The Notification template object. </typeparam>
@@ -21,15 +30,6 @@ namespace Marain.NotificationTemplates
         /// <param name="eTag">The Etag associated to the last updated blob.</param>
         /// <param name="template">The template to save.</param>
         /// <returns>The stored notification.</returns>
-        Task<T> StoreAsync<T>(string notificationType, CommunicationType communicationType, string? eTag, T template);
-
-        /// <summary>
-        /// Retrieves template for the specified notification type.
-        /// </summary>
-        /// <typeparam name="T">The Notification template. </typeparam>
-        /// <param name="notificationType">The notification type.</param>
-        /// <param name="communicationType">The communication type.</param>
-        /// <returns>The template.</returns>
-        Task<(T, string?)> GetAsync<T>(string notificationType, CommunicationType communicationType);
+        Task<T> CreateOrUpdate<T>(string notificationType, CommunicationType communicationType, string? eTag, T template);
     }
 }

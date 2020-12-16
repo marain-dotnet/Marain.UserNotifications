@@ -282,9 +282,10 @@ paths:
 
     put:
       summary: Create or update a new template for different notification types
-      operationId: createTemplate
+      operationId: createOrUpdateTemplate
       parameters:
         - $ref: '#/components/parameters/tenantId'
+        - $ref: '#/components/parameters/ifNoneMatch'
       requestBody:
         required: true
         content:

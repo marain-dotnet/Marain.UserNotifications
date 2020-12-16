@@ -1,4 +1,4 @@
-﻿// <copyright file="CreateTemplateService.cs" company="Endjin Limited">
+﻿// <copyright file="CreateOrUpdateTemplateService.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -16,24 +16,24 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Microsoft.Azure.Storage;
 
     /// <summary>
-    /// Implements the create template endpoint for the management API.
+    /// Implements the create or update template endpoint for the management API.
     /// </summary>
-    public class CreateTemplateService : IOpenApiService
+    public class CreateOrUpdateTemplateService : IOpenApiService
     {
         /// <summary>
         /// The operation Id for the endpoint.
         /// </summary>
-        public const string CreateTemplateOperationId = "createTemplate";
+        public const string CreateOrUpdateTemplateOperationId = "createOrUpdateTemplate";
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="CreateTemplateService"/> class.
+        /// Initializes a new instance of <see cref="CreateOrUpdateTemplateService"/> class.
         /// </summary>
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="tenantedTemplateStoreFactory">Template store factory.</param>
-        public CreateTemplateService(
+        public CreateOrUpdateTemplateService(
             IMarainServicesTenancy marainServicesTenancy,
             ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory)
         {
@@ -48,11 +48,14 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// </summary>
         /// <param name="context">The current OpenApi context.</param>
         /// <param name="body">The request body.</param>
+        /// <param name="etag">The ETag.</param>
         /// <returns>Confirms that the create / update operation request is successful.</returns>
-        [OperationId(CreateTemplateOperationId)]
+        [OperationId(CreateOrUpdateTemplateOperationId)]
         public async Task<OpenApiResult> CreateTemplateAsync(
             IOpenApiContext context,
-            ICommunicationTemplate body)
+            ICommunicationTemplate body,
+            [OpenApiParameter("If-None-Match")]
+            string etag)
         {
             if (string.IsNullOrWhiteSpace(body.NotificationType))
             {
@@ -74,15 +77,18 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             {
                 if (body is EmailTemplate emailTemplate)
                 {
-                    await store.StoreAsync(body.NotificationType, CommunicationType.Email, emailTemplate.ETag, emailTemplate).ConfigureAwait(false);
+                    emailTemplate.ETag = etag;
+                    await store.CreateOrUpdate(body.NotificationType, CommunicationType.Email, emailTemplate.ETag, emailTemplate).ConfigureAwait(false);
                 }
                 else if (body is SmsTemplate smsTemplate)
                 {
-                    await store.StoreAsync(body.NotificationType, CommunicationType.Sms, smsTemplate.ETag, smsTemplate).ConfigureAwait(false);
+                    smsTemplate.ETag = etag;
+                    await store.CreateOrUpdate(body.NotificationType, CommunicationType.Sms, smsTemplate.ETag, smsTemplate).ConfigureAwait(false);
                 }
                 else if (body is WebPushTemplate webPushTemplate)
                 {
-                    await store.StoreAsync(body.NotificationType, CommunicationType.WebPush, webPushTemplate.ETag, webPushTemplate).ConfigureAwait(false);
+                    webPushTemplate.ETag = etag;
+                    await store.CreateOrUpdate(body.NotificationType, CommunicationType.WebPush, webPushTemplate.ETag, webPushTemplate).ConfigureAwait(false);
                 }
                 else
                 {

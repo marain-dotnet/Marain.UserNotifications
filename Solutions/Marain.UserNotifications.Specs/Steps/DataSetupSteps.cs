@@ -213,7 +213,7 @@ namespace Marain.UserNotifications.Specs.Steps
             NotificationTemplate notificationTemplate = BuildNotificationTemplateFrom(table.Rows[0], serializerSettingsProvider.Instance);
 
             INotificationTemplateStore store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            EmailTemplate? result = await store.StoreAsync("testshouldbreak", CommunicationType.Email, null, notificationTemplate.EmailTemplate!).ConfigureAwait(false);
+            EmailTemplate? result = await store.CreateOrUpdate("testshouldbreak", CommunicationType.Email, null, notificationTemplate.EmailTemplate!).ConfigureAwait(false);
 
             this.scenarioContext.Set(result);
         }
@@ -225,7 +225,7 @@ namespace Marain.UserNotifications.Specs.Steps
             WebPushTemplate notificationTemplate = BuildWebPushNotificationTemplateFrom(table.Rows[0]);
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.WebPush, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
+            await store.CreateOrUpdate(notificationTemplate.NotificationType!, CommunicationType.WebPush, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
             (WebPushTemplate, string?) webPushTemplate = await store.GetAsync<WebPushTemplate>(notificationTemplate.NotificationType!, CommunicationType.WebPush).ConfigureAwait(false);
             webPushTemplate.Item1.ETag = webPushTemplate.Item2;
             this.scenarioContext.Set(webPushTemplate.Item1);
@@ -238,7 +238,7 @@ namespace Marain.UserNotifications.Specs.Steps
             EmailTemplate notificationTemplate = BuildEmailNotificationTemplateFrom(table.Rows[0]);
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Email, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
+            await store.CreateOrUpdate(notificationTemplate.NotificationType!, CommunicationType.Email, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
             (EmailTemplate, string?) emailTemplate = await store.GetAsync<EmailTemplate>(notificationTemplate.NotificationType!, CommunicationType.Email).ConfigureAwait(false);
             emailTemplate.Item1.ETag = emailTemplate.Item2;
             this.scenarioContext.Set(emailTemplate.Item1);
@@ -251,7 +251,7 @@ namespace Marain.UserNotifications.Specs.Steps
             SmsTemplate notificationTemplate = BuildSmsNotificationTemplateFrom(table.Rows[0]);
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
+            await store.CreateOrUpdate(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
             (SmsTemplate, string?) smsTemplate = await store.GetAsync<SmsTemplate>(notificationTemplate.NotificationType!, CommunicationType.Sms).ConfigureAwait(false);
             smsTemplate.Item1.ETag = smsTemplate.Item2;
             this.scenarioContext.Set(smsTemplate.Item1);
@@ -264,7 +264,7 @@ namespace Marain.UserNotifications.Specs.Steps
             SmsTemplate notificationTemplate = BuildSmsNotificationTemplateFrom(table.Rows[0]);
 
             INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            await store.StoreAsync(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
+            await store.CreateOrUpdate(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
             (SmsTemplate, string?) smsTemplate = await store.GetAsync<SmsTemplate>(notificationTemplate.NotificationType!, CommunicationType.Sms).ConfigureAwait(false);
             smsTemplate.Item1.ETag = smsTemplate.Item2;
             this.scenarioContext.Set(smsTemplate.Item1);

@@ -75,13 +75,13 @@ namespace Marain.UserNotifications.Storage.AzureBlob
             // Check if the blob exists
             bool exists = await blockBlob.ExistsAsync().ConfigureAwait(false);
 
-            // Serialise the userPreference object
-            string userPreferenceBlob = JsonConvert.SerializeObject(userPreference, this.serializerSettingsProvider.Instance);
-
             if (exists && string.IsNullOrWhiteSpace(userPreference.ETag))
             {
                 throw new StorageException("ETag was not present in the UserPreference object.");
             }
+
+            // Serialise the userPreference object
+            string userPreferenceBlob = JsonConvert.SerializeObject(userPreference, this.serializerSettingsProvider.Instance);
 
             if (exists)
             {

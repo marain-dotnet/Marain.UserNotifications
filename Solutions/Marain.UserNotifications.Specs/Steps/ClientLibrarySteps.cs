@@ -205,6 +205,14 @@ namespace Marain.UserNotifications.Specs.Steps
 
             WebPushTemplate notificationTemplate = JsonConvert.DeserializeObject<WebPushTemplate>(request);
 
+            // Try get the stored WebPushTemplate object and retrieve eTag value if exists.
+            Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate response =
+                this.scenarioContext.Get<Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate>();
+            if (response is not null)
+            {
+                notificationTemplate.ETag = response.ETag;
+            }
+
             try
             {
                 ApiResponse result = await client.SetNotificationTemplate(
@@ -228,6 +236,14 @@ namespace Marain.UserNotifications.Specs.Steps
 
             EmailTemplate emailTemplate = JsonConvert.DeserializeObject<EmailTemplate>(request);
 
+            // Try get the stored EmailTemplate object and retrieve eTag value if exists.
+            Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate response =
+                this.scenarioContext.Get<Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate>();
+            if (response is not null)
+            {
+                emailTemplate.ETag = response.ETag;
+            }
+
             try
             {
                 ApiResponse result = await client.SetNotificationTemplate(
@@ -250,6 +266,14 @@ namespace Marain.UserNotifications.Specs.Steps
             IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
 
             SmsTemplate smsTemplate = JsonConvert.DeserializeObject<SmsTemplate>(request);
+
+            // Try get the stored SmsTemplate object and retrieve eTag value if exists.
+            Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate response =
+                this.scenarioContext.Get<Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate>();
+            if (response is not null)
+            {
+                smsTemplate.ETag = response.ETag;
+            }
 
             try
             {

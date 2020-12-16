@@ -14,6 +14,11 @@ namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemp
         /// </summary>
         public const string RegisteredContentType = "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1";
 
+        /// <summary>
+        /// Gets or Sets the notification's etag.
+        /// </summary>
+        public string ETag { get; set; }
+
         /// <inheritdoc/>
         public string NotificationType { get; set; }
 

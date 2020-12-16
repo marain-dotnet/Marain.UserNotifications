@@ -65,9 +65,9 @@ namespace Marain.UserNotifications.Storage.AzureBlob
         }
 
         /// <inheritdoc/>
-        public async Task<T> StoreAsync<T>(string notificationType, CommunicationType communicationType, string? eTag, T template)
+        public async Task<T> CreateOrUpdate<T>(string notificationType, CommunicationType communicationType, string? eTag, T template)
         {
-            this.logger.LogDebug("Storing template for notification type ", notificationType);
+            this.logger.LogDebug("CreateOrUpdate: Storing template for notification type ", notificationType);
 
             // Gets the blob reference by the NotificationType
             CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(this.GetBlockBlobName(notificationType, communicationType));
@@ -83,8 +83,19 @@ namespace Marain.UserNotifications.Storage.AzureBlob
             // Serialise the TemplateWrapper object
             string templateBlob = JsonConvert.SerializeObject(template, this.serializerSettingsProvider.Instance);
 
-            // Save the TemplateWrapper to the blob storage
-            await blockBlob.UploadTextAsync(templateBlob, null, AccessCondition.GenerateIfMatchCondition(eTag), null, null).ConfigureAwait(false);
+            if (exists)
+            {
+                // Update the notification template
+                await blockBlob.UploadTextAsync(templateBlob, null, AccessCondition.GenerateIfMatchCondition(eTag), null, null).ConfigureAwait(false);
+                this.logger.LogDebug("CreateOrUpdate: Notification template updated successfully ", notificationType);
+            }
+            else
+            {
+                // Create the notification template
+                await blockBlob.UploadTextAsync(templateBlob, null, AccessCondition.GenerateIfNotExistsCondition(), null, null).ConfigureAwait(false);
+                this.logger.LogDebug("CreateOrUpdate: Notification template updated successfully ", notificationType);
+            }
+
             return template;
         }
 
