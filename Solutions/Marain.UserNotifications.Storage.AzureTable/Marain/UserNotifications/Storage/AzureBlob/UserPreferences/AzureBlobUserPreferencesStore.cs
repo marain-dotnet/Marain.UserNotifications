@@ -34,12 +34,12 @@ namespace Marain.UserNotifications.Storage.AzureBlob
             IJsonSerializerSettingsProvider serializerSettingsProvider,
             ILogger logger)
         {
-            this.logger = logger
-                ?? throw new ArgumentNullException(nameof(logger));
-            this.serializerSettingsProvider = serializerSettingsProvider
-                ?? throw new ArgumentNullException(nameof(serializerSettingsProvider));
             this.blobContainer = blobContainer
                 ?? throw new ArgumentNullException(nameof(blobContainer));
+            this.serializerSettingsProvider = serializerSettingsProvider
+                ?? throw new ArgumentNullException(nameof(serializerSettingsProvider));
+            this.logger = logger
+               ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <inheritdoc/>

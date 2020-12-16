@@ -15,6 +15,8 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Marain.Services.Tenancy;
     using Marain.UserPreferences;
     using Menes;
+    using Menes.Exceptions;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Implements the generate template endpoint for the management API.
@@ -84,6 +86,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
             List<CommunicationType>? registeredCommunicationChannels = userPreference.CommunicationChannelsPerNotificationConfiguration[body.NotificationType];
 
+            // TODO: In the future, check if these registeredCommunicationChannels are actually usable for the current Tenant.
             if (registeredCommunicationChannels is null || registeredCommunicationChannels.Count == 0)
             {
                 throw new Exception($"There are no communication channel set up for the user {body.UserIds[0]} for notification type {body.NotificationType} for tenant {tenant.Id}");
@@ -102,39 +105,61 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 switch (channel)
                 {
                     case CommunicationType.Email:
-                        (EmailTemplate, string?) emailRawTemplate = await templateStore.GetAsync<EmailTemplate>(body.NotificationType, CommunicationType.Email).ConfigureAwait(false);
-                        string? emailBody = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
-                        string? emailSubject = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Subject, existingProperties).ConfigureAwait(false);
-
-                        emailTemplate = new EmailTemplate()
+                        try
                         {
-                            NotificationType = body.NotificationType,
-                            Body = emailBody,
-                            Subject = emailSubject,
-                            Important = false,
-                        };
-                        break;
+                            (EmailTemplate, string?) emailRawTemplate = await templateStore.GetAsync<EmailTemplate>(body.NotificationType, CommunicationType.Email).ConfigureAwait(false);
+                            string? emailBody = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
+                            string? emailSubject = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Subject, existingProperties).ConfigureAwait(false);
 
+                            emailTemplate = new EmailTemplate()
+                            {
+                                NotificationType = body.NotificationType,
+                                Body = emailBody,
+                                Subject = emailSubject,
+                                Important = false,
+                            };
+                        }
+                        catch (Exception)
+                        {
+                            // logger.LogError("The template for the communication type Email doesn't exist");
+                        }
+
+                        break;
                     case CommunicationType.Sms:
-                        (SmsTemplate, string?) smsRawTemplate = await templateStore.GetAsync<SmsTemplate>(body.NotificationType, CommunicationType.Sms).ConfigureAwait(false);
-                        string? smsBody = await this.GenerateTemplateForFieldAsync(smsRawTemplate.Item1.Body!, existingProperties).ConfigureAwait(false);
-
-                        smsTemplate = new SmsTemplate() { NotificationType = body.NotificationType, Body = smsBody };
-                        break;
-
-                    case CommunicationType.WebPush:
-                        (WebPushTemplate, string?) webPushRawTemplate = await templateStore.GetAsync<WebPushTemplate>(body.NotificationType, CommunicationType.WebPush).ConfigureAwait(false);
-                        string? webPushTitle = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Title, existingProperties).ConfigureAwait(false);
-                        string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
-                        string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Image, existingProperties).ConfigureAwait(false);
-
-                        webPushTemplate = new WebPushTemplate()
+                        try
                         {
-                            NotificationType = body.NotificationType,
-                            Body = webPushBody,
-                            Title = webPushTitle,
-                            Image = webPushImage,
-                        };
+                            (SmsTemplate, string?) smsRawTemplate = await templateStore.GetAsync<SmsTemplate>(body.NotificationType, CommunicationType.Sms).ConfigureAwait(false);
+                            string? smsBody = await this.GenerateTemplateForFieldAsync(smsRawTemplate.Item1.Body!, existingProperties).ConfigureAwait(false);
+
+                            smsTemplate = new SmsTemplate() { NotificationType = body.NotificationType, Body = smsBody };
+                        }
+                        catch (Exception)
+                        {
+                            // logger.LogError("The template for the communication type Sms doesn't exist");
+                        }
+
+                        break;
+                    case CommunicationType.WebPush:
+                        try
+                        {
+                            (WebPushTemplate, string?) webPushRawTemplate = await templateStore.GetAsync<WebPushTemplate>(body.NotificationType, CommunicationType.WebPush).ConfigureAwait(false);
+                            string? webPushTitle = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Title, existingProperties).ConfigureAwait(false);
+                            string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
+                            string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Image, existingProperties).ConfigureAwait(false);
+
+                            webPushTemplate = new WebPushTemplate()
+                            {
+                                NotificationType = body.NotificationType,
+                                Body = webPushBody,
+                                Title = webPushTitle,
+                                Image = webPushImage,
+                            };
+                        }
+                        catch (Exception)
+                        {
+                            // logger.LogError("The template for the communication type WebPush doesn't exist");
+                        }
+
                         break;
                 }
             }
