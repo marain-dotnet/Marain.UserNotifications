@@ -25,6 +25,7 @@ Scenario: Get a user preference for a certain user
 		| 2      | test@test.com | 041532211   | {"notificationType1": ["email", "sms"]}           |
 	When I send a user preference API request to retreive a user preference
 	Then the response status code should be 'OK'
+	And the response header should have a property called eTag that should not be null
 	And the response content should have a property called '_links.self'
 	And the response content should have a property called 'eTag'
 	And the response content should have a string property called 'userId' with value '2'
@@ -40,6 +41,7 @@ Scenario: Update a user preference for a user by multiple requests handling conc
 		| 3      | testing@test.com | 0987654321  | {"notificationType1": ["email", "sms"]}           |
 	And I send a user preference API request to retreive a user preference
 	Then the response status code should be 'OK'
+	And the response header should have a property called eTag that should not be null
 	And the response content should have a property called '_links.self'
 	And the response content should have a property called 'eTag'
 	And the response content should have a string property called 'userId' with value '3'

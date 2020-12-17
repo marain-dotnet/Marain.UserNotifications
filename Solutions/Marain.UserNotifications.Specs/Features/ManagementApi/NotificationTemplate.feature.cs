@@ -237,27 +237,30 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 36
+ testRunner.And("the response header should have a property called eTag that should not be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 37
  testRunner.And("the response content should have a string property called \'notificationType\' with" +
                         " value \'marain.test.template2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 37
+#line 38
  testRunner.And("the response content should have a json property called \'body\' with value \'A new " +
                         "lead was added by {{leadAddedBy}}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 38
+#line 39
  testRunner.And("the response content should have a json property called \'title\' with value \'test\'" +
                         "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 39
+#line 40
  testRunner.And("the response content should have a json property called \'contentType\' with value " +
                         "\'application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v" +
                         "1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 40
+#line 41
  testRunner.And("the response content should have a json property called \'image\' with value \'Base+" +
                         "64xddfa\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 41
+#line 42
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -271,7 +274,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create an email notification template", null, tagsOfScenario, argumentsOfScenario);
-#line 46
+#line 47
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -291,13 +294,13 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 47
+#line 48
  testRunner.When("I send the user notification template API a request to create a new user notifica" +
                         "tion template", "{\r\n\t\"body\": \"this is a test template\",\r\n\t\"subject\": \"test\",\r\n\t\"important\": true,\r" +
                         "\n\t\"contentType\": \"application/vnd.marain.usernotifications.notificationtemplate." +
                         "emailtemplate.v1\",\r\n\t\"notificationType\": \"marain.test.template\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 57
+#line 58
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -311,7 +314,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update an email notification template", null, tagsOfScenario, argumentsOfScenario);
-#line 59
+#line 60
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -345,7 +348,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
                             "Base+64xddfa",
                             "marain.test.template3"});
-#line 60
+#line 61
  testRunner.Given("I have created and stored an email notification template", ((string)(null)), table36, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table37 = new TechTalk.SpecFlow.Table(new string[] {
@@ -362,11 +365,11 @@ this.ScenarioInitialize(scenarioInfo);
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
                             "Base+64xddfa",
                             "marain.test.template3"});
-#line 63
+#line 64
  testRunner.When("I send the user notification template API a request to update an existing email n" +
                         "otification template", ((string)(null)), table37, "When ");
 #line hidden
-#line 66
+#line 67
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -380,7 +383,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get an email notification template", null, tagsOfScenario, argumentsOfScenario);
-#line 68
+#line 69
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -414,38 +417,41 @@ this.ScenarioInitialize(scenarioInfo);
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
                             "Base+64xddfa",
                             "marain.test.template4"});
-#line 69
+#line 70
  testRunner.Given("I have created and stored an email notification template", ((string)(null)), table38, "Given ");
 #line hidden
-#line 72
+#line 73
  testRunner.When("I send the notification template API a request to retreive a notification templat" +
                         "e with notificationType \'marain.test.template4\' and communicationType \'email\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 73
+#line 74
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 74
+#line 75
+ testRunner.And("the response header should have a property called eTag that should not be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 76
  testRunner.And("the response content should have a string property called \'notificationType\' with" +
                         " value \'marain.test.template4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 75
+#line 77
  testRunner.And("the response content should have a json property called \'body\' with value \'A new " +
                         "lead was added by {{leadAddedBy}}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 76
+#line 78
  testRunner.And("the response content should have a json property called \'subject\' with value \'tes" +
                         "t\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 77
+#line 79
  testRunner.And("the response content should have a json property called \'important\' with value \'T" +
                         "rue\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 78
+#line 80
  testRunner.And("the response content should have a json property called \'contentType\' with value " +
                         "\'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1\'" +
                         "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 79
+#line 81
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -459,7 +465,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a sms notification template", null, tagsOfScenario, argumentsOfScenario);
-#line 84
+#line 86
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -479,13 +485,13 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 85
+#line 87
  testRunner.When("I send the user notification template API a request to create a new user notifica" +
                         "tion template", "{\r\n\t\"body\": \"this is a sms test template\",\r\n\t\"contentType\": \"application/vnd.mara" +
                         "in.usernotifications.notificationtemplate.smstemplate.v1\",\r\n\t\"notificationType\":" +
                         " \"marain.test.notification\"\r\n}", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 93
+#line 95
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -499,7 +505,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a sms notification template", null, tagsOfScenario, argumentsOfScenario);
-#line 95
+#line 97
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -527,7 +533,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "body",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
                             "marain.test.notification5"});
-#line 96
+#line 98
  testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table39, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table40 = new TechTalk.SpecFlow.Table(new string[] {
@@ -538,11 +544,11 @@ this.ScenarioInitialize(scenarioInfo);
                             "this is an updated sms test template2",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
                             "marain.test.notification5"});
-#line 99
+#line 101
  testRunner.When("I send the user notification template API a request to update an existing sms not" +
                         "ification template", ((string)(null)), table40, "When ");
 #line hidden
-#line 102
+#line 104
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -556,7 +562,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a sms notification template", null, tagsOfScenario, argumentsOfScenario);
-#line 104
+#line 106
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -584,29 +590,32 @@ this.ScenarioInitialize(scenarioInfo);
                             "A new lead was added by {{leadAddedBy}}",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
                             "marain.test.notification6"});
-#line 105
+#line 107
  testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table41, "Given ");
 #line hidden
-#line 108
+#line 110
  testRunner.When("I send the notification template API a request to retreive a notification templat" +
                         "e with notificationType \'marain.test.notification6\' and communicationType \'sms\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 109
+#line 111
  testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 110
+#line 112
+ testRunner.And("the response header should have a property called eTag that should not be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 113
  testRunner.And("the response content should have a string property called \'notificationType\' with" +
                         " value \'marain.test.notification6\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 111
+#line 114
  testRunner.And("the response content should have a json property called \'body\' with value \'A new " +
                         "lead was added by {{leadAddedBy}}\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 112
+#line 115
  testRunner.And("the response content should have a json property called \'contentType\' with value " +
                         "\'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 113
+#line 116
  testRunner.And("the response content should have a property called \'_links.self\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -620,7 +629,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a sms notification template without an eTag", null, tagsOfScenario, argumentsOfScenario);
-#line 115
+#line 118
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -648,7 +657,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "body",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
                             "marain.test.notification7"});
-#line 116
+#line 119
  testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table42, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table43 = new TechTalk.SpecFlow.Table(new string[] {
@@ -659,11 +668,11 @@ this.ScenarioInitialize(scenarioInfo);
                             "this is an updated sms test template2",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
                             "marain.test.notification7"});
-#line 119
+#line 122
  testRunner.When("I send the user notification template API a request to update an existing sms not" +
                         "ification template without an eTag", ((string)(null)), table43, "When ");
 #line hidden
-#line 122
+#line 125
  testRunner.Then("the response status code should be \'InternalServerError\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -677,7 +686,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a sms notification template without an invalid eTag", null, tagsOfScenario, argumentsOfScenario);
-#line 124
+#line 127
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -705,7 +714,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "body",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
                             "marain.test.notification8"});
-#line 125
+#line 128
  testRunner.Given("I have created and stored a sms notification template", ((string)(null)), table44, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table45 = new TechTalk.SpecFlow.Table(new string[] {
@@ -718,11 +727,11 @@ this.ScenarioInitialize(scenarioInfo);
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
                             "marain.test.notification8",
                             "\"\\\"0x8D89CF9D612C7F1\\\"\""});
-#line 128
+#line 131
  testRunner.When("I send the user notification template API a request to update an existing sms not" +
                         "ification template with an invalid eTag", ((string)(null)), table45, "When ");
 #line hidden
-#line 131
+#line 134
  testRunner.Then("the response status code should be \'BadRequest\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

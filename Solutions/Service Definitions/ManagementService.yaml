@@ -195,6 +195,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPreferenceResource'
+          headers:
+            ETag:
+              description: The etag for the updated tenant
+              schema:
+                type: string
         '400':
           description: Bad request
           content:
@@ -261,6 +266,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotificationTemplateResponse'
+          headers:
+            ETag:
+              description: The etag for the updated tenant
+              schema:
+                type: string
         '400':
           description: Bad request
           content:

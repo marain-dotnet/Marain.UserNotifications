@@ -32,6 +32,7 @@ namespace Marain.UserNotifications.Specs.Steps
     public class ApiSteps
     {
         private const string ResponseContent = "ApiSteps:ResponseContent";
+        private const string ResponseETag = "ApiSteps:ResponseETag";
 
         private static readonly HttpClient HttpClient = HttpClientFactory.Create();
 
@@ -416,6 +417,13 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [Then("the response header should have a property called eTag that should not be null")]
+        public void ThenTheResponseHeaderShouldHaveAPropertyCalledETagThatShouldNotBeNull()
+        {
+            string? eTag = this.scenarioContext.Get<string?>(ResponseETag);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(eTag));
+        }
+
         private Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)
         {
             var tokenSource = new CancellationTokenSource();
@@ -451,6 +459,11 @@ namespace Marain.UserNotifications.Specs.Steps
             {
                 var parsedResponse = JObject.Parse(content);
                 this.scenarioContext.Set(parsedResponse);
+            }
+
+            if (!string.IsNullOrWhiteSpace(response.Headers?.ETag?.ToString()))
+            {
+                this.scenarioContext.Set(response.Headers?.ETag?.ToString(), ResponseETag);
             }
         }
 
@@ -493,19 +506,6 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        private async Task SendRequest(HttpRequestMessage httpRequestMessage)
-        {
-            HttpResponseMessage response = await HttpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
-            this.scenarioContext.Set(response);
-
-            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (!string.IsNullOrEmpty(ResponseContent))
-            {
-                this.scenarioContext.Set(responseContent, ResponseContent);
-            }
-        }
-
         private async Task SendRequest(Uri uri, HttpMethod httpMethod, StringContent requestContent, string? etag = null)
         {
             var request = new HttpRequestMessage()
@@ -528,6 +528,11 @@ namespace Marain.UserNotifications.Specs.Steps
             if (!string.IsNullOrEmpty(ResponseContent))
             {
                 this.scenarioContext.Set(responseContent, ResponseContent);
+            }
+
+            if (!string.IsNullOrWhiteSpace(response.Headers?.ETag?.ToString()))
+            {
+                this.scenarioContext.Set(response.Headers?.ETag?.ToString(), ResponseETag);
             }
         }
     }

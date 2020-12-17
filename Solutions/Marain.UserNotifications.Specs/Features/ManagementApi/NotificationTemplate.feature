@@ -33,6 +33,7 @@ Scenario: Get a web push notification template
 		| A new lead was added by {{leadAddedBy}} | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template2 |
 	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template2' and communicationType 'webPush'
 	Then the response status code should be 'OK'
+	And the response header should have a property called eTag that should not be null
 	And the response content should have a string property called 'notificationType' with value 'marain.test.template2'
 	And the response content should have a json property called 'body' with value 'A new lead was added by {{leadAddedBy}}'
 	And the response content should have a json property called 'title' with value 'test'
@@ -71,6 +72,7 @@ Scenario: Get an email notification template
 		| A new lead was added by {{leadAddedBy}} | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template4 |
 	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template4' and communicationType 'email'
 	Then the response status code should be 'OK'
+	And the response header should have a property called eTag that should not be null
 	And the response content should have a string property called 'notificationType' with value 'marain.test.template4'
 	And the response content should have a json property called 'body' with value 'A new lead was added by {{leadAddedBy}}'
 	And the response content should have a json property called 'subject' with value 'test'
@@ -107,6 +109,7 @@ Scenario: Get a sms notification template
 		| A new lead was added by {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.notification6 |
 	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.notification6' and communicationType 'sms'
 	Then the response status code should be 'OK'
+	And the response header should have a property called eTag that should not be null
 	And the response content should have a string property called 'notificationType' with value 'marain.test.notification6'
 	And the response content should have a json property called 'body' with value 'A new lead was added by {{leadAddedBy}}'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1'
