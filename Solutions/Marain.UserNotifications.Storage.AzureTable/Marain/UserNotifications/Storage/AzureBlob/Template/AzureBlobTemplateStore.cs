@@ -60,7 +60,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
 
             // Download and convert the blob text into TemplateWrapper object
             string json = await blob.DownloadTextAsync().ConfigureAwait(false);
-            T? dynamicObject = JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance);
+            T dynamicObject = JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance);
             return (dynamicObject, etag);
         }
 
