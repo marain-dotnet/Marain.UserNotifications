@@ -101,7 +101,10 @@ namespace Marain.UserNotifications.Specs
         public void ThenTheResponseContentShouldHaveAJsonPropertyCalledWithValue(string propertyPath, string storeAsJson)
         {
             JToken token = this.GetRequiredTokenFromResponseObject(propertyPath);
-            string valueAsString = token.ToString().Replace("\r\n ", string.Empty);
+            string valueAsString = token.ToString()
+                .Replace("\r\n ", string.Empty)
+                .Replace("\r\n", " ");
+
             Assert.AreEqual(storeAsJson, valueAsString);
         }
 

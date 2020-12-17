@@ -15,7 +15,6 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Marain.Services.Tenancy;
     using Marain.UserPreferences;
     using Menes;
-    using Menes.Exceptions;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -31,6 +30,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
         private readonly ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory;
+        private readonly ILogger<GenerateTemplateService> logger;
 
         /// <summary>
         /// Initializes a new instance of <see cref="GenerateTemplateService"/> class.
@@ -38,14 +38,17 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="tenantedTemplateStoreFactory">Template store factory.</param>
         /// <param name="tenantedUserPreferencesStoreFactory">User Preference store factory.</param>
+        /// <param name="logger">The logger for GenerateTemplateService.</param>
         public GenerateTemplateService(
             IMarainServicesTenancy marainServicesTenancy,
             ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory,
-            ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory)
+            ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory,
+            ILogger<GenerateTemplateService> logger)
         {
             this.marainServicesTenancy = marainServicesTenancy;
             this.tenantedTemplateStoreFactory = tenantedTemplateStoreFactory;
             this.tenantedUserPreferencesStoreFactory = tenantedUserPreferencesStoreFactory;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -121,7 +124,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                         }
                         catch (Exception)
                         {
-                            // logger.LogError("The template for the communication type Email doesn't exist");
+                            this.logger.LogError("The template for the communication type Email doesn't exist");
                         }
 
                         break;
@@ -135,7 +138,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                         }
                         catch (Exception)
                         {
-                            // logger.LogError("The template for the communication type Sms doesn't exist");
+                            this.logger.LogError("The template for the communication type Sms doesn't exist");
                         }
 
                         break;
@@ -157,7 +160,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                         }
                         catch (Exception)
                         {
-                            // logger.LogError("The template for the communication type WebPush doesn't exist");
+                            this.logger.LogError("The template for the communication type WebPush doesn't exist");
                         }
 
                         break;

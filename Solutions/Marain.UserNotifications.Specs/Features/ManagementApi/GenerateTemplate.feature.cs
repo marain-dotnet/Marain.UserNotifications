@@ -186,10 +186,10 @@ this.ScenarioInitialize(scenarioInfo);
                         " value \'marain.NewLeadv1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 35
- testRunner.And(@"the response content should have a json property called 'smsTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""New lead added by TestUser123"", ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1""}'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(@"the response content should have a json property called 'smsTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""New lead added by TestUser123"", ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1"" }'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 36
- testRunner.And(@"the response content should have a json property called 'emailTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""A new lead was added by TestUser123"", ""subject"": ""A new lead added: TestUser123"", ""important"": false, ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1""}'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(@"the response content should have a json property called 'emailTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""A new lead was added by TestUser123"", ""subject"": ""A new lead added: TestUser123"", ""important"": false, ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1"" }'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

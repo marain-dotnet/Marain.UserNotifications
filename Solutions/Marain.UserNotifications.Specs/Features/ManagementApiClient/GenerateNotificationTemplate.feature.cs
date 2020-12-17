@@ -420,7 +420,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "A new lead added: {{leadAddedBy}}",
                             "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
                             "Base+64xddfa",
-                            "marain.NewLeadv1"});
+                            "marain.NewLeadv3"});
 #line 98
  testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table17, "Given ");
 #line hidden

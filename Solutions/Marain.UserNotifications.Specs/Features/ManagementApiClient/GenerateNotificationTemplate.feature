@@ -97,7 +97,7 @@ Scenario: Generation of a Notification Template is UnSuccessful
 Scenario: Generate a notification template for unconfigured user
 	Given I have created and stored a web push notification template
 		| body                                    | title                             | contentType                                                                      | image        | notificationType |
-		| A new lead was added by {{leadAddedBy}} | A new lead added: {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.NewLeadv1 |
+		| A new lead was added by {{leadAddedBy}} | A new lead added: {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.NewLeadv3 |
 	When I use the client to send a generate template API request
 		"""
         {
