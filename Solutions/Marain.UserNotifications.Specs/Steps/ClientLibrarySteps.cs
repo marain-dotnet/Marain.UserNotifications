@@ -206,8 +206,8 @@ namespace Marain.UserNotifications.Specs.Steps
             WebPushTemplate notificationTemplate = JsonConvert.DeserializeObject<WebPushTemplate>(request);
 
             // Try get the stored WebPushTemplate object and retrieve eTag value if exists.
-            Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate response =
-                this.scenarioContext.Get<Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate>();
+            this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate response);
+
             if (response is not null)
             {
                 notificationTemplate.ETag = response.ETag;
@@ -237,8 +237,8 @@ namespace Marain.UserNotifications.Specs.Steps
             EmailTemplate emailTemplate = JsonConvert.DeserializeObject<EmailTemplate>(request);
 
             // Try get the stored EmailTemplate object and retrieve eTag value if exists.
-            Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate response =
-                this.scenarioContext.Get<Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate>();
+            this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate response);
+
             if (response is not null)
             {
                 emailTemplate.ETag = response.ETag;
@@ -268,8 +268,8 @@ namespace Marain.UserNotifications.Specs.Steps
             SmsTemplate smsTemplate = JsonConvert.DeserializeObject<SmsTemplate>(request);
 
             // Try get the stored SmsTemplate object and retrieve eTag value if exists.
-            Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate response =
-                this.scenarioContext.Get<Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate>();
+            this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate response);
+
             if (response is not null)
             {
                 smsTemplate.ETag = response.ETag;
