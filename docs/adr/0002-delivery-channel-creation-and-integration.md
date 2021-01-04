@@ -1,5 +1,13 @@
 # New delivery channel creation and integration
 
+## Table of definitions
+
+| Word     | Definition                                                                                                                            |
+|----------|---------------------------------------------------------------------------------------------------------------------------------------|
+| Consumer | A service that uses the Marain.UserNotifications service                                                                              |
+| User     | The individual who is using an application that consumes the Marain.UserNotifications service                                         |
+| Service  | A software functionality or a set of software functionalities with a purpose that different clients can reuse for different purposes. |
+
 ## Status
 
 Proposed
