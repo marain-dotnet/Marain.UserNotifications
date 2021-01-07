@@ -93,28 +93,6 @@ There also needs to be an association between the used conmunication channels an
 ```
 This configuration will be stored on a per tenant basis.
 
-### Management Api and usable Delivery Channels
-
-The management API will host configuration per tenant for what communication types can be sent through which delivery channels in the following format:
-
-```json
-[
-  {
-    "id": "dc1",
-    "displayName": "Airship",
-    "communicationTypes": ["email", "sms", "web-push"]
-  },
-  {
-    "id": "dc2",
-    "displayName": "Twilio",
-    "communicationTypes": ["sms"]
-  }
-]
-```
-where 'communicationTypes' specifies what communication types are supported in this Delivery Channel. This allows for consumers of Marain.UserNotifications to specify if they want to only use one kind communication type from a certain Delivery Channel that supports multiple communication types, eg: an organisation using `Marain.UserNotifications` can specify that they want to use sms's from twilio and only communication types from that delivery channel.
-
-A delivery channel will have a generic api that can be consumed by the Management Api and be able to transform data provided in the Notification into a format that is specific to that communication type (this will be discussed in a sequential adr). The result of this call will be a callback uri/null depending on how the delivery channel has been implemented.
-
 ### Delivery Channel usage
 
 The delivery channel will need to transform an object into the equivalent api model used to send a message by the chosen platform (twilio, airship, send grid etc). Some notifications will have different headings, bodies, generic templates that will have to be transformed into a format that is suitable and also might have different ways of targetting certain users depending on how the users are registered with the platforms. (eg. twilio this will be a number, for web push this could be a mixture of business id and email, etc).
