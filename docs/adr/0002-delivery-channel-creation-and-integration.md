@@ -13,7 +13,7 @@ Proposed
 
 ## Context
 
-Delivering notifications through different communication types (email, sms, web push notifications etc) is necessary in an extendable notifications service. Organizations should be able to choose which delivery channels (twilio, sendgrid, airship etc) they want to use for the associated communication type(s) as these said platforms could have different features or costs. Sometimes using different communication types through multiple delivery channels could save costs rather than having multiple communication types through a single delivery channel.
+Delivering notifications through different communication types (email, sms, web push notifications etc) is necessary in an extendable notifications service. Organizations should be able to choose which delivery channels (twilio, sendgrid, airship etc) they want to use for the associated communication type(s) as these said platforms could have different features or costs. This allows a consumer of `Marain.UserNotificaitons` to optimise their costs by selecting a specific platform for a certain commuincation type.
 
 ## Decision
 
@@ -118,6 +118,6 @@ This configuration will be stored on a per tenant basis.
 
 ### Delivery Channel usage
 
-The delivery channel will need to transform an object into the equivalent api model used to send a message by the chosen platform (twilio, airship, send grid etc). Some notifications will have different headings, bodys, generic templates that will have to be transformed into a format that is suitable and also might have different ways of targetting certain users depending on how the users are registered with the platforms. (eg. twilio this will be a number, for web push this could be a mixture of business id and email, etc).
+The delivery channel will need to transform an object into the equivalent api model used to send a message by the chosen platform (twilio, airship, send grid etc). Some notifications will have different headings, bodies, generic templates that will have to be transformed into a format that is suitable and also might have different ways of targetting certain users depending on how the users are registered with the platforms. (eg. twilio this will be a number, for web push this could be a mixture of business id and email, etc).
 
 A solution to this would be to create a generic type object for each commucication type (eg. smsobject, emailobject, webpushobject) that is provided by the management api to the delivery channel, and then the delivery channel can map a generic communication type object into the required api model. This will prove to be simpler when integrating new delivery channels in the future as most of the information will already be there.
