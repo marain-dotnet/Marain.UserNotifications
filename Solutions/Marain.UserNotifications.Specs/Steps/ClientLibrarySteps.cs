@@ -208,7 +208,7 @@ namespace Marain.UserNotifications.Specs.Steps
             // Try get the stored WebPushTemplate object and retrieve eTag value if exists.
             this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate response);
 
-            if (response is not null)
+            if (response != null)
             {
                 notificationTemplate.ETag = response.ETag;
             }
@@ -239,7 +239,7 @@ namespace Marain.UserNotifications.Specs.Steps
             // Try get the stored EmailTemplate object and retrieve eTag value if exists.
             this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate response);
 
-            if (response is not null)
+            if (response != null)
             {
                 emailTemplate.ETag = response.ETag;
             }
@@ -270,7 +270,7 @@ namespace Marain.UserNotifications.Specs.Steps
             // Try get the stored SmsTemplate object and retrieve eTag value if exists.
             this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate response);
 
-            if (response is not null)
+            if (response != null)
             {
                 smsTemplate.ETag = response.ETag;
             }
@@ -463,7 +463,7 @@ namespace Marain.UserNotifications.Specs.Steps
 
             // Try get the stored UserPreferenceResource object and retrieve eTag value if exists.
             UserPreferenceResource response = this.GetApiResponseBody<UserPreferenceResource>();
-            if (response is not null)
+            if (response != null)
             {
                 userPreference.ETag = response.ETag;
             }
