@@ -19,15 +19,16 @@
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ApiDeliveryChannelClient\MarkNotificationAsRead.feature.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.0.0" />
+    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.1.0" />
     <PackageReference Include="Corvus.Extensions.Newtonsoft.Json" Version="1.1.0" />
-    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.0.2" />
+    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.1.1" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="1.1.0" />
-    <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="1.1.0" />
+    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="2.0.0" />
+    <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="1.1.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marain.UserNotifications.ApiDeliveryChannel.Host\Marain.UserNotifications.ApiDeliveryChannel.Host.csproj" />
