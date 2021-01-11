@@ -11,6 +11,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Extensions.Json;
     using Corvus.Json;
     using Corvus.Testing.SpecFlow;
+    using Marain.Models;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Specs.Bindings;

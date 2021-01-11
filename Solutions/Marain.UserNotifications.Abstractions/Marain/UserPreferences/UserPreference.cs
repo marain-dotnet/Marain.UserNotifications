@@ -6,6 +6,7 @@ namespace Marain.UserPreferences
 {
     using System;
     using System.Collections.Generic;
+    using Marain.Models;
 
     /// <summary>
     /// The user preference structure.

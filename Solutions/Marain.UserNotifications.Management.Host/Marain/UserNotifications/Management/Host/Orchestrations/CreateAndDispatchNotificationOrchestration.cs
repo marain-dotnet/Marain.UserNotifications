@@ -41,6 +41,8 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
             replaySafeLogger.LogDebug("Deserialized CreateNotificationsRequest for user Id '{userId}'", request.Payload.UserId);
 
             await orchestrationContext.CallActivityAsync(nameof(CreateNotificationActivity), request);
+
+            await orchestrationContext.CallActivityAsync(nameof(DispatchNotificationActivity), request);
         }
     }
 }

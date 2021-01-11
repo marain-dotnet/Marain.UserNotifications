@@ -6,11 +6,11 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 {
     using System.Threading.Tasks;
     using Corvus.Tenancy;
+    using Marain.Models;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.Services.Tenancy;
     using Marain.UserNotifications.Management.Host.Mappers;
-    using Marain.UserPreferences;
     using Menes;
     using Menes.Exceptions;
     using Menes.Hal;

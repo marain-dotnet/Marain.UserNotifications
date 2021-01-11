@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserPreferences
+namespace Marain.Models
 {
     /// <summary>
     /// Values for the communication types a delivery channel could use.

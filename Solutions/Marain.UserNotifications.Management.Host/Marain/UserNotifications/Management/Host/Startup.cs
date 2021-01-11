@@ -6,11 +6,14 @@
 
 namespace Marain.UserNotifications.Management.Host
 {
+    using System.Net.Http;
     using Marain.Extensions.DependancyInjection;
     using Marain.NotificationTemplates.CommunicationTemplates;
+    using Marain.UserNotifications.Management.Host.Composer;
     using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.Management.Host.Mappers;
     using Marain.UserNotifications.Management.Host.OpenApi;
+    using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship;
     using Marain.UserPreferences;
     using Menes;
     using Microsoft.Azure.Functions.Extensions.DependencyInjection;
@@ -62,6 +65,12 @@ namespace Marain.UserNotifications.Management.Host
             services.AddSingleton<IOpenApiService, GetTemplateService>();
             services.AddSingleton<IOpenApiService, CreateOrUpdateTemplateService>();
             services.AddSingleton<IOpenApiService, GenerateTemplateService>();
+            services.AddSingleton<IOpenApiService, GetDeliveryChannelConfigurationService>();
+            services.AddSingleton<IOpenApiService, CreateOrUpdateDeliveryChannelConfigurationService>();
+
+            services.AddHttpClient();
+            services.AddSingleton<IAirshipClientFactory, AirshipClientFactory>();
+            services.AddSingleton<IGenerateTemplateComposer, GenerateTemplateComposer>();
 
             services.AddOpenApiHttpRequestHosting<DurableFunctionsOpenApiContext>(
                 hostConfig =>

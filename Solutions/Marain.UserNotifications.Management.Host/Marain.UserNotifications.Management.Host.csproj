@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Marain.UserNotifications.Abstractions\Marain.UserNotifications.Abstractions.csproj" />
     <ProjectReference Include="..\Marain.UserNotifications.Hosting.AspNetCore\Marain.UserNotifications.Hosting.AspNetCore.csproj" />
+    <ProjectReference Include="..\Marain.UserNotifications.ThirdParty.DeliveryChannels\Marain.UserNotifications.ThirdParty.DeliveryChannels.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

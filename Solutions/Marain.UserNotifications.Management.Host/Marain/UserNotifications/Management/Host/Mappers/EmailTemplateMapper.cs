@@ -6,9 +6,9 @@ namespace Marain.UserNotifications.Management.Host.Mappers
 {
     using System;
     using System.Threading.Tasks;
+    using Marain.Models;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.OpenApi;
-    using Marain.UserPreferences;
     using Menes;
     using Menes.Hal;
     using Menes.Links;

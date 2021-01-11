@@ -7,10 +7,10 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using System;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
+    using Marain.Models;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.Services.Tenancy;
-    using Marain.UserPreferences;
     using Menes;
     using Menes.Exceptions;
     using Microsoft.Azure.Storage;

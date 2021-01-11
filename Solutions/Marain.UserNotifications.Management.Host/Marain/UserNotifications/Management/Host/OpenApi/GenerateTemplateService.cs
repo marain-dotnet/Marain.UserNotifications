@@ -10,9 +10,11 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Corvus.Tenancy;
     using DotLiquid;
     using Marain.Helper;
+    using Marain.Models;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.Services.Tenancy;
+    using Marain.UserNotifications.Management.Host.Composer;
     using Marain.UserPreferences;
     using Menes;
     using Microsoft.Extensions.Logging;
@@ -31,6 +33,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
         private readonly ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory;
         private readonly ILogger<GenerateTemplateService> logger;
+        private readonly IGenerateTemplateComposer generateTemplateComposer;
 
         /// <summary>
         /// Initializes a new instance of <see cref="GenerateTemplateService"/> class.
@@ -38,17 +41,20 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="tenantedTemplateStoreFactory">Template store factory.</param>
         /// <param name="tenantedUserPreferencesStoreFactory">User Preference store factory.</param>
+        /// <param name="generateTemplateComposer">The composer to generate the templated notification per communication channel.</param>
         /// <param name="logger">The logger for GenerateTemplateService.</param>
         public GenerateTemplateService(
             IMarainServicesTenancy marainServicesTenancy,
             ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory,
             ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory,
+            IGenerateTemplateComposer generateTemplateComposer,
             ILogger<GenerateTemplateService> logger)
         {
             this.marainServicesTenancy = marainServicesTenancy;
             this.tenantedTemplateStoreFactory = tenantedTemplateStoreFactory;
             this.tenantedUserPreferencesStoreFactory = tenantedUserPreferencesStoreFactory;
             this.logger = logger;
+            this.generateTemplateComposer = generateTemplateComposer;
         }
 
         /// <summary>
@@ -98,100 +104,8 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
             // Gets the AzureBlobTemplateStore
             INotificationTemplateStore templateStore = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
 
-            EmailTemplate? emailTemplate = null;
-            SmsTemplate? smsTemplate = null;
-            WebPushTemplate? webPushTemplate = null;
-            Dictionary<string, object> existingProperties = PropertyBagHelpers.GetDictionaryFromPropertyBag(body.Properties);
-
-            foreach (CommunicationType channel in registeredCommunicationChannels)
-            {
-                switch (channel)
-                {
-                    case CommunicationType.Email:
-                        try
-                        {
-                            (EmailTemplate, string?) emailRawTemplate = await templateStore.GetAsync<EmailTemplate>(body.NotificationType, CommunicationType.Email).ConfigureAwait(false);
-                            string? emailBody = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
-                            string? emailSubject = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Subject, existingProperties).ConfigureAwait(false);
-
-                            emailTemplate = new EmailTemplate()
-                            {
-                                NotificationType = body.NotificationType,
-                                Body = emailBody,
-                                Subject = emailSubject,
-                                Important = false,
-                            };
-                        }
-                        catch (Exception)
-                        {
-                            this.logger.LogError("The template for the communication type Email doesn't exist");
-                        }
-
-                        break;
-                    case CommunicationType.Sms:
-                        try
-                        {
-                            (SmsTemplate, string?) smsRawTemplate = await templateStore.GetAsync<SmsTemplate>(body.NotificationType, CommunicationType.Sms).ConfigureAwait(false);
-                            string? smsBody = await this.GenerateTemplateForFieldAsync(smsRawTemplate.Item1.Body!, existingProperties).ConfigureAwait(false);
-
-                            smsTemplate = new SmsTemplate() { NotificationType = body.NotificationType, Body = smsBody };
-                        }
-                        catch (Exception)
-                        {
-                            this.logger.LogError("The template for the communication type Sms doesn't exist");
-                        }
-
-                        break;
-                    case CommunicationType.WebPush:
-                        try
-                        {
-                            (WebPushTemplate, string?) webPushRawTemplate = await templateStore.GetAsync<WebPushTemplate>(body.NotificationType, CommunicationType.WebPush).ConfigureAwait(false);
-                            string? webPushTitle = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Title, existingProperties).ConfigureAwait(false);
-                            string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
-                            string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Image, existingProperties).ConfigureAwait(false);
-
-                            webPushTemplate = new WebPushTemplate()
-                            {
-                                NotificationType = body.NotificationType,
-                                Body = webPushBody,
-                                Title = webPushTitle,
-                                Image = webPushImage,
-                            };
-                        }
-                        catch (Exception)
-                        {
-                            this.logger.LogError("The template for the communication type WebPush doesn't exist");
-                        }
-
-                        break;
-                }
-            }
-
-            var responseTemplate = new NotificationTemplate(
-                body.NotificationType,
-                smsTemplate: smsTemplate,
-                emailTemplate: emailTemplate,
-                webPushTemplate: webPushTemplate);
-
-            // and replace with the tags inside the template with the ones received from the property bag in the CreateNotificationsRequest
+            NotificationTemplate? responseTemplate = await this.generateTemplateComposer.GenerateTemplateAsync(templateStore, body.Properties, registeredCommunicationChannels, body.NotificationType).ConfigureAwait(false);
             return this.OkResult(responseTemplate);
-        }
-
-        /// <summary>
-        /// Generate a template for a single field.
-        /// </summary>
-        /// <param name="templateBody">A string with handlebars. </param>
-        /// <param name="properties">A dictionary of all properties that can be used to render the templateBody string. </param>
-        /// <returns>A rendered string. </returns>
-        private async Task<string?> GenerateTemplateForFieldAsync(string? templateBody, Dictionary<string, object> properties)
-        {
-            if (string.IsNullOrEmpty(templateBody))
-            {
-                return null;
-            }
-
-            var template = Template.Parse(templateBody);
-            return await template.RenderAsync(Hash.FromDictionary(properties)).ConfigureAwait(false);
         }
     }
 }

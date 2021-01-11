@@ -5,7 +5,7 @@
 namespace Marain.NotificationTemplates
 {
     using System.Threading.Tasks;
-    using Marain.UserPreferences;
+    using Marain.Models;
 
     /// <summary>
     /// Interface for a service that can store and retrieve templates.
