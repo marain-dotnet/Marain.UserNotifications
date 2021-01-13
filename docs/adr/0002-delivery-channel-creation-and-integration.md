@@ -2,10 +2,11 @@
 
 ## Table of definitions
 
-| Word     | Definition                                                                                    |
-| -------- | --------------------------------------------------------------------------------------------- |
-| Consumer | A service that uses the Marain.UserNotifications service                                      |
-| User     | The individual who is using an application that consumes the Marain.UserNotifications service |
+| Word             | Definition                                                                                    |
+| ---------------- | --------------------------------------------------------------------------------------------- |
+| Consumer         | A service that uses the Marain.UserNotifications service                                      |
+| User             | The individual who is using an application that consumes the Marain.UserNotifications service |
+| Delivery Channel | A third party service used to create a notification. Eg. Twilio, Airship, Sendgrid etc.       |
 
 ## Status
 
@@ -13,9 +14,13 @@ Proposed
 
 ## Context
 
-Delivering notifications through different communication types (email, sms, web push notifications etc) is necessary in an extendable notifications service. Organizations should be able to choose which delivery channels (twilio, sendgrid, airship etc) they want to use for the associated communication type(s) as these said platforms could have different features or costs. This allows a consumer of `Marain.UserNotificaitons` to optimise their costs by selecting a specific platform for a certain commuincation type.
+Delivering notifications through different communication types (email, sms, web push notifications etc) is necessary in an extendable notifications service. Organizations should be able to choose which delivery channels (twilio, sendgrid, airship etc) they want to use for the associated communication type(s) as these said delivery channel could have different features or costs. This allows a consumer of `Marain.UserNotifications` to optimise their costs by determining the specific delivery channel for each communication type.
 
 ## Decision
+
+Currently the `Marain.UserNotifications` service does not have any notification delivery functionality and is only used as a repository for notifications. This proposal will see the addition of delivery channel infrastructure to intergrate with third parties including but not limited to Airship, Twilio, SendGrid. Existing functionality will not be removed.
+
+This will see a new api method being added to this service which will handle the delivery of a notification via predefined delivery channels.
 
 ```
                  +------------+
@@ -40,28 +45,16 @@ Delivering notifications through different communication types (email, sms, web 
 +----------+      +----------+           +----------+
 ```
 
-The management api should have knowledge of what delivery channels are available and where certain notification types should be sent.
+The management api should have knowledge of what delivery channels are available and which communication types each channel supports.
 
-When a new notification for a user is sent to the management api, the management api will read the user preference for the said notification type and see which communication types the user has 'subscribed' to. Following this, the notification delivered through the appropriate delivery channel.
-
-### User notifications and user settings
-
-A user should be able to choose what kind of communication types they receive based on the notification type. There are two ways of approaching this, either:
-
-1. Send different types of notifications through all channels that are provided by the consumer of this service, and leave the communication type and user configuration for the consumer of the Marain.UserNotifications service. (ie, the consumer of the Marain.UserNotifications service should specify which delivery channels they want to send notifications via an api call when a notification is created)
-2. Store user preferences somewhere that is accessible to the management api, then when a new notification with a certain notification type comes through, check what type of communication types the user has 'subscribed' to and then send a message through the delivery channel.
-
-The latter option was chosen as it provides a user the ability to choose what notifications they want out of the box, if the former is chosen, all users/businesses integrating with this service will then need to write their own notifications user management service.
-
-Settings for which communication channel a user can receive a notification through will be stored inside a User Notifications Settings table which will be accessed by the Management Api. Configuration in this table will include the Notification Type and the appropriate communication types associated to that notification type. This table will have an associated crud api that will allow a consumer of `Marain.UserNotifications` to view/change the stored settings.
+Configuration (api keys) for each delivery channel will be managed inside `Marain.UserNotifications`. All user settings and logic determining the communication types, delivery channel etc. for each notification will be handled by the consuming service.
 
 ### Delivery Channel configuration
 
-A delivery channel will need some configuration of the underlying platform (Airship, Twilio etc) to be stored somewhere for a certain tenant. This configuration will be used for api keys, secrets, certificates etc as well as storing which delivery channels the current tenant will use for specific communication types. 
+A delivery channel will need some configuration of the underlying platform (Airship, Twilio etc) to be stored. This configuration will be used for api keys, secrets, certificates etc.
 
-Api Keys/secrets for a platform in a delivery channel will be stored as a JSON in an Azure Keyvault for a single tenant.
+Below is an example of the configuration keys for [Airship](https://docs.airship.com/reference/security/app-keys-secrets/) that would be stored in the Keyvault.
 
-Below is an example of the configuration keys for [Airship](https://docs.airship.com/reference/security/app-keys-secrets/) would be stored as a json in the keyvault.
 ```json
 {
   "ApplicationKey": "notSoRandomApplicationKey1",
@@ -69,32 +62,9 @@ Below is an example of the configuration keys for [Airship](https://docs.airship
   "MasterSecret": "notSoRandomMasterSecret"
 }
 ```
-This object will be stored in a keyvault that is owned by the consumer of Marain.UserNotiificiations.
 
-There also needs to be an association between the used conmunication channels and the configured delivery channels. An example of an object that would do this is shown below. The information stored in the `DeliveryChannels` array will only provide a link to the azure keyvault where the secrets/keys for the delivery channel are stored (this is a link to where the above object is stored).
-```json
-{
-  "DeliveryChannels": [
-    {
-      "Airship": {
-        "keyvaultEndpoint": "https://anexample.vault.azure.net/secrets/XDeliveryChannelConfig"
-      },
-      "Twilio": {
-        "keyvaultEndpoint": "https://anexample.vault.azure.net/secrets/XDeliveryChannelConfig"
-      }
-    }
-  ],
-  "CommunicationChannel": {
-    "Email": { "DeliveryChannel": "Twilio" },
-    "Sms": { "DeliveryChannel": "Twilio" },
-    "WebPush": { "DeliveryChannel": "Airship" }
-  }
-}
-```
-This configuration will be stored on a per tenant basis.
+The Keyvault is owned and managed by the consumer of `Marain.UserNotifications`.
 
 ### Delivery Channel usage
 
-The delivery channel will need to transform an object into the equivalent api model used to send a message by the chosen platform (twilio, airship, send grid etc). Some notifications will have different headings, bodies, generic templates that will have to be transformed into a format that is suitable and also might have different ways of targetting certain users depending on how the users are registered with the platforms. (eg. twilio this will be a number, for web push this could be a mixture of business id and email, etc).
-
-A solution to this would be to create a generic type object for each commucication type (eg. smsobject, emailobject, webpushobject) that is provided by the management api to the delivery channel, and then the delivery channel can map a generic communication type object into the required api model. This will prove to be simpler when integrating new delivery channels in the future as most of the information will already be there.
+The `Marain.UserNotifications` service will use the routing information passed in to identify which delivery channel and communication type should be used and then extract information from the property bag to populate the appropriate template. Templates would be created for each communication type, eg, an Email Template.
