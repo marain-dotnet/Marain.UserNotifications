@@ -1,12 +1,13 @@
-# New delivery channel creation and integration
+# Tenant Configuration and Routing of Notifications in the Marain.UserNotifications service
 
 ## Table of definitions
 
-| Word             | Definition                                                                                    |
-| ---------------- | --------------------------------------------------------------------------------------------- |
-| Consumer         | A service that uses the Marain.UserNotifications service                                      |
-| User             | The individual who is using an application that consumes the Marain.UserNotifications service |
-| Delivery Channel | A third party service used to create a notification. Eg. Twilio, Airship, Sendgrid etc.       |
+| Word               | Definition                                                                                    |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| Consumer           | A service that uses the Marain.UserNotifications service                                      |
+| User               | The individual who is using an application that consumes the Marain.UserNotifications service |
+| Delivery Channel   | A third party service used to send a notification. Eg. Twilio, Airship, Sendgrid etc.         |
+| Communication Type | The mechanism of the delivery of a notification eg. Sms, Email, WebPush                       |
 
 ## Status
 
@@ -47,7 +48,7 @@ This will see a new api method being added to this service which will handle the
 
 The management api should have knowledge of what delivery channels are available and which communication types each channel supports.
 
-Configuration (api keys) for each delivery channel will be managed inside `Marain.UserNotifications`. All user settings and logic determining the communication types, delivery channel etc. for each notification will be handled by the consuming service.
+Configuration (api keys) for each delivery channel will be stored against the calling tenant in the property bag associated with that tenant inside the Marain Tenancy Service. All user settings and logic determining the communication types, delivery channel etc. for each notification will be handled by the consuming service.
 
 ### Delivery Channel configuration
 
