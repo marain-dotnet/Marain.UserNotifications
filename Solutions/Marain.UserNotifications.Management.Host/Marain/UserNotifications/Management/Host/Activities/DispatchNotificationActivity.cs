@@ -32,7 +32,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
         private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
         private readonly IGenerateTemplateComposer generateTemplateComposer;
         private readonly IAirshipClientFactory airshipClientFactory;
-        private readonly ITenantedDeliveryChannelConfigurationStoreFactory tenantedDeliveryChannelConfigurationStoreFactory;
         private readonly IConfiguration configuration;
 
         /// <summary>
@@ -41,7 +40,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
         /// <param name="tenantProvider">The tenant provider.</param>
         /// <param name="notificationStoreFactory">The factory for the notification store.</param>
         /// <param name="tenantedTemplateStoreFactory">The factory for the templated store.</param>
-        /// <param name="tenantedDeliveryChannelConfigurationStoreFactory">The factory for delivery channel configuration store.</param>
         /// <param name="generateTemplateComposer">The composer to generate the templated notification per communication channel.</param>
         /// <param name="airshipClientFactory">The Airship Factory.</param>
         /// <param name="configuration">IConfiguration.</param>
@@ -49,7 +47,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
             ITenantProvider tenantProvider,
             ITenantedUserNotificationStoreFactory notificationStoreFactory,
             ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory,
-            ITenantedDeliveryChannelConfigurationStoreFactory tenantedDeliveryChannelConfigurationStoreFactory,
             IGenerateTemplateComposer generateTemplateComposer,
             IAirshipClientFactory airshipClientFactory,
             IConfiguration configuration)
@@ -64,8 +61,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 ?? throw new ArgumentNullException(nameof(generateTemplateComposer));
             this.airshipClientFactory = airshipClientFactory
                 ?? throw new ArgumentNullException(nameof(airshipClientFactory));
-            this.tenantedDeliveryChannelConfigurationStoreFactory = tenantedDeliveryChannelConfigurationStoreFactory
-                ?? throw new ArgumentNullException(nameof(tenantedDeliveryChannelConfigurationStoreFactory));
             this.configuration = configuration
                 ?? throw new ArgumentNullException(nameof(configuration));
         }
@@ -100,19 +95,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
             // UserId will be a combination of tenantId and userId of that business.
             string airshipUserId = $"{tenant.Id}:{request.Payload.UserId}";
 
-            IDeliveryChannelConfigurationStore? deliveryChannelConfigurationStore = await this.tenantedDeliveryChannelConfigurationStoreFactory.GetDeliveryChannelConfigurationStoreForTenantAsync(tenant).ConfigureAwait(false);
-            DeliveryChannelConfiguration? deliveryChannelConfiguration = await deliveryChannelConfigurationStore.GetAsync(tenant.Id).ConfigureAwait(false);
-
-            if (deliveryChannelConfiguration is null)
-            {
-                throw new Exception($"There is no delivery channel configuration for tenant {tenant.Id}");
-            }
-
-            if (deliveryChannelConfiguration.DeliveryChannelConfiguredPerCommunicationType is null)
-            {
-                throw new Exception($"There is no delivery channel configuration per communication type setup for tenant {tenant.Id}");
-            }
-
             // TODO: THINK ABOUT THIS. SHOULD TAKE THIS FROM APPSETTING / BEING PASSED INTO THIS FROM THE NEW NOTIFICATION OBJECT.
             string sharedKeyVault = "https://smtlocalshared.vault.azure.net/secrets/SharedAirshipKeys/";
             string? airshipSecretsString = await KeyVaultHelper.GetDeliveryChannelSecretAsync(this.configuration, sharedKeyVault).ConfigureAwait(false);
@@ -122,7 +104,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 throw new Exception("There is no airship delivery channel configuration setup in the keyvault");
             }
 
-            // Convert secret
+            // Convert secret to airship secret model
             Airship airshipSecrets = JsonConvert.DeserializeObject<Airship>(airshipSecretsString);
 
             // TODO: get the delivery channel configuration for that tenant
