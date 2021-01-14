@@ -11,6 +11,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
     using Marain.DeliveryChannelConfiguration;
     using Marain.Models;
     using Marain.NotificationTemplates;
+    using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.Composer;
     using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship;
@@ -90,10 +91,23 @@ namespace Marain.UserNotifications.Management.Host.Activities
 
             // Gets the AzureBlobTemplateStore
             INotificationTemplateStore templateStore = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
-            NotificationTemplate? notificationTemplate = await this.generateTemplateComposer.GenerateTemplateAsync(templateStore, request.Payload.Properties, registeredCommunicationChannels, request.Payload.NotificationType).ConfigureAwait(false);
+            NotificationTemplate notificationTemplate = await this.generateTemplateComposer.GenerateTemplateAsync(templateStore, request.Payload.Properties, registeredCommunicationChannels, request.Payload.NotificationType).ConfigureAwait(false);
+
+            if (notificationTemplate != null && notificationTemplate.WebPushTemplate != null)
+            {
+                await this.SendWebPushNotificationAsync(request.Payload.UserId, request.Payload.NotificationType, tenant, notificationTemplate.WebPushTemplate).ConfigureAwait(false);
+            }
+        }
+
+        private async Task SendWebPushNotificationAsync(string userId, string notificationType, ITenant tenant, WebPushTemplate webPushTemplate)
+        {
+            if (webPushTemplate is null)
+            {
+                throw new Exception($"There is no WebPushTemplate defined for tenant: {tenant.Id} and notification type: {notificationType}");
+            }
 
             // UserId will be a combination of tenantId and userId of that business.
-            string airshipUserId = $"{tenant.Id}:{request.Payload.UserId}";
+            string airshipUserId = $"{tenant.Id}:{userId}";
 
             // TODO: THINK ABOUT THIS. SHOULD TAKE THIS FROM APPSETTING / BEING PASSED INTO THIS FROM THE NEW NOTIFICATION OBJECT.
             string sharedKeyVault = "https://smtlocalshared.vault.azure.net/secrets/SharedAirshipKeys/";
@@ -110,54 +124,23 @@ namespace Marain.UserNotifications.Management.Host.Activities
             // TODO: get the delivery channel configuration for that tenant
             // Need to also set the delivery channel configuration before we try to get it for that tenant
             AirshipClient? airshipClient = this.airshipClientFactory.GetAirshipClient(airshipSecrets.ApplicationKey!, airshipSecrets.MasterSecret!);
+
             var newNotification = new Notification()
             {
-                Alert = "Is this needed",
+                Alert = webPushTemplate.Title,
                 Web = new WebAlert()
                 {
-                    Alert = "Client wrapper body",
-                    Title = "Client wrapper title",
-                    Image = new Image()
-                    {
-                        Url = "https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg",
-                    },
-                    Buttons = new List<Button>()
-                                {
-                                    new Button()
-                                    {
-                                        Label = "Button One",
-                                        Id = "button-one",
-                                        Actions = new Actions()
-                                        {
-                                            Open = new OpenUrlAction()
-                                            {
-                                                Content = "https://www.google.com",
-                                                Type = "url",
-                                            },
-                                        },
-                                    },
-                                    new Button()
-                                    {
-                                        Label = "Button Two",
-                                        Id = "button-two",
-                                        Actions = new Actions()
-                                        {
-                                            Open = new OpenUrlAction()
-                                            {
-                                                Content = "https://www.yahoo.com",
-                                                Type = "url",
-                                            },
-                                        },
-                                    },
-                                },
+                    Alert = webPushTemplate.Body,
+                    Title = webPushTemplate.Title,
                 },
                 Actions = new Actions()
                 {
+                    // TODO: Need to pass in the URL where it need to be directed.
                     Open = new OpenUrlAction { Type = "url", Content = "https://www.google.com" },
                 },
             };
 
-            System.Net.Http.HttpResponseMessage httpResponseMessage = await airshipClient.SendWebPushNotification(airshipUserId, newNotification).ConfigureAwait(false);
+            string? httpResponseContent = await airshipClient.SendWebPushNotification(airshipUserId, newNotification).ConfigureAwait(false);
         }
     }
 }
