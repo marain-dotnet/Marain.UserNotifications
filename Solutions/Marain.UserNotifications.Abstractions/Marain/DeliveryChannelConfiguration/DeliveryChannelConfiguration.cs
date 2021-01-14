@@ -6,7 +6,6 @@ namespace Marain.DeliveryChannelConfiguration
 {
     using System.Collections.Generic;
     using Marain.Models;
-    using Marain.UserPreferences;
 
     /// <summary>
     /// Delivery channel configuration structure.

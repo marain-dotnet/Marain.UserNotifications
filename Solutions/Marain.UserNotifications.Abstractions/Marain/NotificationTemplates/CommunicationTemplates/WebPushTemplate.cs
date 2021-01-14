@@ -4,8 +4,6 @@
 
 namespace Marain.NotificationTemplates.CommunicationTemplates
 {
-    using Marain.UserPreferences;
-
     /// <summary>
     /// Webpush Object.
     /// </summary>

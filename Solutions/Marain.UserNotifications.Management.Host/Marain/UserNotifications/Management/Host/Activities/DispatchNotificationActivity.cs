@@ -16,8 +16,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship.Models;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.KeyVaultSecretModels;
-    using Marain.UserPreferences;
-    using Microsoft.Azure.KeyVault;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
     using Microsoft.Extensions.Configuration;
@@ -31,7 +29,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
     {
         private readonly ITenantProvider tenantProvider;
         private readonly ITenantedUserNotificationStoreFactory notificationStoreFactory;
-        private readonly ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory;
         private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
         private readonly IGenerateTemplateComposer generateTemplateComposer;
         private readonly IAirshipClientFactory airshipClientFactory;
@@ -43,7 +40,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
         /// </summary>
         /// <param name="tenantProvider">The tenant provider.</param>
         /// <param name="notificationStoreFactory">The factory for the notification store.</param>
-        /// <param name="tenantedUserPreferencesStoreFactory">The factory for the user preference store.</param>
         /// <param name="tenantedTemplateStoreFactory">The factory for the templated store.</param>
         /// <param name="tenantedDeliveryChannelConfigurationStoreFactory">The factory for delivery channel configuration store.</param>
         /// <param name="generateTemplateComposer">The composer to generate the templated notification per communication channel.</param>
@@ -52,7 +48,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
         public DispatchNotificationActivity(
             ITenantProvider tenantProvider,
             ITenantedUserNotificationStoreFactory notificationStoreFactory,
-            ITenantedUserPreferencesStoreFactory tenantedUserPreferencesStoreFactory,
             ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory,
             ITenantedDeliveryChannelConfigurationStoreFactory tenantedDeliveryChannelConfigurationStoreFactory,
             IGenerateTemplateComposer generateTemplateComposer,
@@ -63,8 +58,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 ?? throw new ArgumentNullException(nameof(tenantProvider));
             this.notificationStoreFactory = notificationStoreFactory
                 ?? throw new ArgumentNullException(nameof(notificationStoreFactory));
-            this.tenantedUserPreferencesStoreFactory = tenantedUserPreferencesStoreFactory
-                ?? throw new ArgumentNullException(nameof(tenantedUserPreferencesStoreFactory));
             this.tenantedTemplateStoreFactory = tenantedTemplateStoreFactory
                 ?? throw new ArgumentNullException(nameof(tenantedTemplateStoreFactory));
             this.generateTemplateComposer = generateTemplateComposer
@@ -97,43 +90,14 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 request.Payload.NotificationType,
                 request.Payload.UserId);
 
-            // Get the UserPreferencesStore for the tenant
-            IUserPreferencesStore userPreferencesStore = await this.tenantedUserPreferencesStoreFactory.GetUserPreferencesStoreForTenantAsync(tenant).ConfigureAwait(false);
-
-            // Get the user preference for the userId
-            UserPreference? userPreference = await userPreferencesStore.GetAsync(request.Payload.UserId).ConfigureAwait(false);
-
-            // Check if the user has set the communication channels for the incoming notification type
-            if (userPreference is null)
-            {
-                logger.LogError($"There is no user preference set up for this user {request.Payload.UserId} for tenant {tenant.Id}");
-                return;
-            }
-
-            if (userPreference.CommunicationChannelsPerNotificationConfiguration is null)
-            {
-                logger.LogError($"There are no communication channel set up for the user {request.Payload.UserId} for tenant {tenant.Id}");
-                return;
-            }
-
-            if (!userPreference.CommunicationChannelsPerNotificationConfiguration.ContainsKey(request.Payload.NotificationType))
-            {
-                logger.LogError($"There is no communication channel set up for the user {request.Payload.UserId} for notification type {request.Payload.NotificationType} for tenant {tenant.Id}");
-            }
-
-            List<CommunicationType>? registeredCommunicationChannels = userPreference.CommunicationChannelsPerNotificationConfiguration[request.Payload.NotificationType];
-
-            if (registeredCommunicationChannels is null || registeredCommunicationChannels.Count == 0)
-            {
-                throw new Exception($"There are no communication channel set up for the user {request.Payload.UserId} for notification type {request.Payload.NotificationType} for tenant {tenant.Id}");
-            }
+            // This is the current notification we want to send
+            var registeredCommunicationChannels = new List<CommunicationType>() { CommunicationType.WebPush };
 
             // Gets the AzureBlobTemplateStore
             INotificationTemplateStore templateStore = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
             NotificationTemplate? notificationTemplate = await this.generateTemplateComposer.GenerateTemplateAsync(templateStore, request.Payload.Properties, registeredCommunicationChannels, request.Payload.NotificationType).ConfigureAwait(false);
 
             // UserId will be a combination of tenantId and userId of that business.
-            // TODO: We still need to think about this.
             string airshipUserId = $"{tenant.Id}:{request.Payload.UserId}";
 
             IDeliveryChannelConfigurationStore? deliveryChannelConfigurationStore = await this.tenantedDeliveryChannelConfigurationStoreFactory.GetDeliveryChannelConfigurationStoreForTenantAsync(tenant).ConfigureAwait(false);
@@ -149,12 +113,13 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 throw new Exception($"There is no delivery channel configuration per communication type setup for tenant {tenant.Id}");
             }
 
-            // TODO: THINK ABOUT THIS. SHOLD BE GENERIC AND HANDLE ALL THE MUMBO JUMBO CONFIG THAT THE USER MIGHT HAVE CONFIGURED.
-            string? airshipSecretsString = await KeyVaultHelper.GetDeliveryChannelSecretAsync(this.configuration, string.Empty).ConfigureAwait(false);
+            // TODO: THINK ABOUT THIS. SHOULD TAKE THIS FROM APPSETTING / BEING PASSED INTO THIS FROM THE NEW NOTIFICATION OBJECT.
+            string sharedKeyVault = "https://smtlocalshared.vault.azure.net/secrets/SharedAirshipKeys/";
+            string? airshipSecretsString = await KeyVaultHelper.GetDeliveryChannelSecretAsync(this.configuration, sharedKeyVault).ConfigureAwait(false);
 
             if (airshipSecretsString is null)
             {
-                throw new Exception($"There is no airship delivery channel configuration setup in the keyvault");
+                throw new Exception("There is no airship delivery channel configuration setup in the keyvault");
             }
 
             // Convert secret
