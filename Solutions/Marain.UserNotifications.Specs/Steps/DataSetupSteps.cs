@@ -15,7 +15,6 @@ namespace Marain.UserNotifications.Specs.Steps
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Specs.Bindings;
-    using Marain.UserPreferences;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -90,34 +89,6 @@ namespace Marain.UserNotifications.Specs.Steps
             };
         }
 
-        public static UserPreference BuildUserPreferenceFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
-        {
-            Dictionary<string, List<CommunicationType>> communicationChannelsPerNotificationConfiguration
-                = JsonConvert.DeserializeObject<Dictionary<string, List<CommunicationType>>>(tableRow["communicationChannelsPerNotificationConfiguration"], serializerSettings);
-
-            return new UserPreference(
-                tableRow["userId"],
-                tableRow["email"],
-                tableRow["phoneNumber"],
-                communicationChannelsPerNotificationConfiguration,
-                DateTimeOffset.Now,
-                tableRow.ContainsKey("eTag") ? tableRow["eTag"] : null);
-        }
-
-        public static UserPreference BuildUserPreferenceFrom(TableRow tableRow, string? etag, JsonSerializerSettings serializerSettings)
-        {
-            Dictionary<string, List<CommunicationType>> communicationChannelsPerNotificationConfiguration
-                = JsonConvert.DeserializeObject<Dictionary<string, List<CommunicationType>>>(tableRow["communicationChannelsPerNotificationConfiguration"], serializerSettings);
-
-            return new UserPreference(
-                tableRow["userId"],
-                tableRow["email"],
-                tableRow["phoneNumber"],
-                communicationChannelsPerNotificationConfiguration,
-                DateTimeOffset.Now,
-                etag);
-        }
-
         public static NotificationTemplate BuildNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             SmsTemplate? deserialisedSms = tableRow.ContainsKey("smsTemplate") ? JsonConvert.DeserializeObject<SmsTemplate>(tableRow["smsTemplate"], serializerSettings) : null;
@@ -189,20 +160,6 @@ namespace Marain.UserNotifications.Specs.Steps
             UserNotification result = await store.StoreAsync(notification).ConfigureAwait(false);
 
             this.scenarioContext.Set(result, resultName);
-        }
-
-        [Given("I have created and stored a user preference for a user")]
-        public async Task GivenIHaveCreatedAndStoredAUserPreferenceForAUser(Table table)
-        {
-            ITenantedUserPreferencesStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedUserPreferencesStoreFactory>();
-            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
-
-            UserPreference preference = BuildUserPreferenceFrom(table.Rows[0], serializerSettingsProvider.Instance);
-
-            IUserPreferencesStore store = await storeFactory.GetUserPreferencesStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
-            UserPreference result = await store.CreateOrUpdate(preference).ConfigureAwait(false);
-
-            this.scenarioContext.Set(result);
         }
 
         [Given("I have created and stored a notification template")]

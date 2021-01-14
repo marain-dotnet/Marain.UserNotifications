@@ -50,7 +50,6 @@ namespace Marain.UserNotifications.Management.Host
         /// <param name="services">The service collection.</param>
         private static void AddTenantedUserNotificationsManagementApi(IServiceCollection services)
         {
-            services.AddHalDocumentMapper<UserPreference, IOpenApiContext, UserPreferenceMapper>();
             services.AddHalDocumentMapper<WebPushTemplate, IOpenApiContext, WebPushTemplateMapper>();
             services.AddHalDocumentMapper<EmailTemplate, IOpenApiContext, EmailTemplateMapper>();
             services.AddHalDocumentMapper<SmsTemplate, IOpenApiContext, SmsTemplateMapper>();
@@ -60,8 +59,6 @@ namespace Marain.UserNotifications.Management.Host
             services.AddSingleton<IOpenApiService, GetNotificationStatusService>();
             services.AddSingleton<IOpenApiService, BatchDeliveryStatusUpdateService>();
             services.AddSingleton<IOpenApiService, BatchReadStatusUpdateService>();
-            services.AddSingleton<IOpenApiService, CreateOrUpdateUserPreferenceService>();
-            services.AddSingleton<IOpenApiService, GetUserPreferenceService>();
             services.AddSingleton<IOpenApiService, GetTemplateService>();
             services.AddSingleton<IOpenApiService, CreateOrUpdateTemplateService>();
             services.AddSingleton<IOpenApiService, GenerateTemplateService>();

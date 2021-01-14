@@ -41,26 +41,6 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Adds Azure blob-based implementation of <see cref="ITenantedUserPreferencesStoreFactory"/> to the service container.
-        /// </summary>
-        /// <param name="services">The collection.</param>
-        /// <param name="getTenantCloudBlobContainerFactoryOptions">A callback function that returns the <see cref="TenantCloudBlobContainerFactoryOptions"/>.</param>
-        /// <returns>The configured <see cref="IServiceCollection"/>.</returns>
-        public static IServiceCollection AddTenantedAzureBlobUserPreferencesStore(
-            this IServiceCollection services,
-            Func<IServiceProvider, TenantCloudBlobContainerFactoryOptions> getTenantCloudBlobContainerFactoryOptions)
-        {
-            if (services.Any(s => s.ServiceType is ITenantedUserPreferencesStoreFactory))
-            {
-                return services;
-            }
-
-            services.AddTenantCloudBlobContainerFactory(getTenantCloudBlobContainerFactoryOptions);
-            services.AddSingleton<ITenantedUserPreferencesStoreFactory, TenantedAzureBlobUserPreferencesStoreFactory>();
-            return services;
-        }
-
-        /// <summary>
         /// Adds Azure blob-based implementation of <see cref="ITenantedNotificationTemplateStoreFactory"/> to the service container.
         /// </summary>
         /// <param name="services">The collection.</param>

@@ -10,4 +10,8 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Marain.UserNotifications.Abstractions\Marain.UserNotifications.Abstractions.csproj" />
+  </ItemGroup>
 </Project>

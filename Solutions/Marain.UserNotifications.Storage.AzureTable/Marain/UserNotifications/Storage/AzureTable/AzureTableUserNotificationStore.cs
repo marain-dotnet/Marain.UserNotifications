@@ -54,7 +54,7 @@ namespace Marain.UserNotifications.Storage.AzureTable
                 afterRowKey = decodedId.RowKey;
             }
 
-            return this.GetInternalAsync(userId, null, afterRowKey, maxItems);
+            return this.GetInternalAsync(userId, null, null, afterRowKey, maxItems);
         }
 
         /// <inheritdoc/>
@@ -70,9 +70,25 @@ namespace Marain.UserNotifications.Storage.AzureTable
 
             return this.GetInternalAsync(
                 requestContinuationToken.UserId,
+                null,
                 requestContinuationToken.BeforeRowKey,
                 requestContinuationToken.AfterRowKey,
                 requestContinuationToken.MaxItems);
+        }
+
+        /// <inheritdoc/>
+        public Task<GetNotificationsResult> GetAsync(string userId, string? deliveryChannelId, string? sinceUserNotificationId, int maxItems)
+        {
+            string? afterRowKey = null;
+
+            if (!string.IsNullOrEmpty(sinceUserNotificationId))
+            {
+                var decodedId = NotificationId.FromString(sinceUserNotificationId, this.serializerSettingsProvider.Instance);
+
+                afterRowKey = decodedId.RowKey;
+            }
+
+            return this.GetInternalAsync(userId, deliveryChannelId, null, afterRowKey, maxItems);
         }
 
         /// <inheritdoc/>
@@ -159,6 +175,7 @@ namespace Marain.UserNotifications.Storage.AzureTable
 
         private async Task<GetNotificationsResult> GetInternalAsync(
             string userId,
+            string? deliveryChannelId,
             string? beforeRowKey,
             string? afterRowKey,
             int maxItems)
@@ -206,8 +223,15 @@ namespace Marain.UserNotifications.Storage.AzureTable
                 ? new ContinuationToken(userId, maxItems, results[^1].RowKey, afterRowKey)
                 : null;
 
+            var userNotifications = results.Take(maxItems).Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToList();
+
+            if (!string.IsNullOrEmpty(deliveryChannelId))
+            {
+                userNotifications = userNotifications.Where(x => x.ChannelStatuses.Select(y => y.DeliveryChannelId).Contains(deliveryChannelId!)).ToList();
+            }
+
             return new GetNotificationsResult(
-                results.Take(maxItems).Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToArray(),
+                userNotifications.ToArray(),
                 responseContinuationToken?.AsString(this.serializerSettingsProvider.Instance));
         }
     }

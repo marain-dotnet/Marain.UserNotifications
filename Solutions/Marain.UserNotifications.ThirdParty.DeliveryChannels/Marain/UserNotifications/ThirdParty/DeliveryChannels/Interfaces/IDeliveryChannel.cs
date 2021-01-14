@@ -4,6 +4,9 @@
 
 namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Interfaces
 {
+    using System.Collections.Generic;
+    using Marain.Models;
+
     /// <summary>
     /// Interface for the delivery channels to be implemented from.
     /// </summary>
@@ -13,5 +16,7 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Interfaces
         /// Gets the content type that will determine the version and type of the delivery channel
         /// </summary>
         string ContentType { get; }
+
+        IList<CommunicationType> SupportedCommunicationTypes { get; }
     }
 }

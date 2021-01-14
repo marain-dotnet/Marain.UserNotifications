@@ -47,40 +47,6 @@ namespace Marain.UserNotifications.Client.Management
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Gets the UserPreference for the provided tenantId and userId.
-        /// </summary>
-        /// <param name="tenantId">The tenant within which the request should operate.</param>
-        /// <param name="userId">The id of the user.</param>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>The UserPreference object.</returns>
-        Task<ApiResponse<UserPreferenceResource>> GetUserPreference(
-            string tenantId,
-            string userId,
-            CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Set the UserPrefence object for the provided tenantId and userId.
-        /// </summary>
-        /// <param name="tenantId">The tenant within which the request should operate.</param>
-        /// <param name="body">The user preference object.</param>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>The new user preference object.</returns>
-        Task<ApiResponse> SetUserPreference(
-            string tenantId,
-            UserPreference body,
-            CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Set the UserPrefence object for the provided link.
-        /// </summary>
-        /// <param name="link">The self link for the user preference.</param>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>The UserPreference object.</returns>
-        Task<ApiResponse<UserPreferenceResource>> GetUserPreferenceByLinkAsync(
-            string link,
-            CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Get the notification template for a Web Push notification.
         /// </summary>
         /// <param name="tenantId">The tenant within which the request should operate.</param>

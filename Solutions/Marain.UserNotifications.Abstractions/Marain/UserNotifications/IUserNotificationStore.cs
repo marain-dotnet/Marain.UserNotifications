@@ -31,6 +31,17 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Retrieves notifications for the specified user.
         /// </summary>
+        /// <param name="userId">The user to retrieve notifications for.</param>
+        /// <param name="deliveryChannelId">The deliveryChannelId which needs to be queried.</param>
+        /// <param name="sinceUserNotificationId">If supplied, only user notifications newer than that with the given
+        /// Id will be returned.</param>
+        /// <param name="maxItems">The maximum number of items to return.</param>
+        /// <returns>The user notifications.</returns>
+        Task<GetNotificationsResult> GetAsync(string userId, string? deliveryChannelId, string? sinceUserNotificationId, int maxItems);
+
+        /// <summary>
+        /// Retrieves notifications for the specified user.
+        /// </summary>
         /// <param name="userId">The Id of the user making the request.</param>
         /// <param name="continuationToken">A continuation token from a previous call to <see cref="GetAsync(string, string?, int)"/>.</param>
         /// <returns>The user notifications.</returns>

@@ -21,7 +21,6 @@ namespace Marain.UserNotifications.Specs.Steps
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications.Specs.Bindings;
-    using Marain.UserPreferences;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -246,61 +245,6 @@ namespace Marain.UserNotifications.Specs.Steps
             JObject previousResponse = this.scenarioContext.Get<JObject>();
             JToken url = JsonSteps.GetRequiredToken(previousResponse, path);
             return this.SendPostRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, url.Value<string>(), null);
-        }
-
-        [When("I send the user preference API a request to create a new user preference")]
-        public async Task WhenISendTheUserPreferenceAPIARequestToCreateANewUserPreference(string requestJson)
-        {
-            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
-            string transientTenantId = this.featureContext.GetTransientTenantId();
-
-            await this.SendPutRequest(requestContent, $"/{transientTenantId}/marain/usernotifications/userpreference").ConfigureAwait(false);
-        }
-
-        [When("I send a user preference API request to update a previously saved user preference")]
-        public async Task WhenISendAUserPreferenceAPIRequestToUpdateAUserPreference(Table table)
-        {
-            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
-
-            // get the stored user preference
-            UserPreference? savedUserPreference = this.scenarioContext.Get<UserPreference>();
-
-            UserPreference preference = DataSetupSteps.BuildUserPreferenceFrom(table.Rows[0], savedUserPreference.ETag, serializerSettingsProvider.Instance);
-
-            string? requestJson = JsonConvert.SerializeObject(preference, serializerSettingsProvider.Instance);
-            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
-            string transientTenantId = this.featureContext.GetTransientTenantId();
-
-            var uri = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference");
-            await this.SendRequest(uri, HttpMethod.Put, requestContent, preference.ETag).ConfigureAwait(false);
-        }
-
-        [When("I send a user preference API request to update a previously saved user preference that has no etag in the request body")]
-        [When("I send a user preference API request to update a previously saved user preference that has an invalid etag in the request body")]
-        public async Task WhenISendAUserPreferenceAPIRequestToUpdateAPreviouslySavedUserPreferenceThatHasAnInvalidEtag(Table table)
-        {
-            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
-
-            UserPreference preference = DataSetupSteps.BuildUserPreferenceFrom(table.Rows[0], serializerSettingsProvider.Instance);
-
-            string? requestJson = JsonConvert.SerializeObject(preference, serializerSettingsProvider.Instance);
-            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
-            string transientTenantId = this.featureContext.GetTransientTenantId();
-
-            var uri = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference");
-            await this.SendRequest(uri, HttpMethod.Put, requestContent, preference.ETag).ConfigureAwait(false);
-        }
-
-        [When("I send a user preference API request to retreive a user preference")]
-        [Then("I send a user preference API request to retreive a user preference")]
-        public Task WhenISendAUserPreferenceAPIRequestToRetreiveAUserPreference()
-        {
-            UserPreference userPreference = this.scenarioContext.Get<UserPreference>();
-
-            string userId = userPreference.UserId;
-            string transientTenantId = this.featureContext.GetTransientTenantId();
-
-            return this.SendGetRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/userpreference?userId={userId}");
         }
 
         [When("I send the user notification template API a request to create a new user notification template")]

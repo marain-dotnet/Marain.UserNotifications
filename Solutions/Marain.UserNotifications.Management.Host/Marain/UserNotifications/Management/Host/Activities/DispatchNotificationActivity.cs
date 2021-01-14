@@ -15,12 +15,14 @@ namespace Marain.UserNotifications.Management.Host.Activities
     using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship.Models;
+    using Marain.UserNotifications.ThirdParty.DeliveryChannels.KeyVaultSecretModels;
     using Marain.UserPreferences;
     using Microsoft.Azure.KeyVault;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Dispatches a notification with all the configured delivery channels for the incoming notification type.
@@ -148,28 +150,67 @@ namespace Marain.UserNotifications.Management.Host.Activities
             }
 
             // TODO: THINK ABOUT THIS. SHOLD BE GENERIC AND HANDLE ALL THE MUMBO JUMBO CONFIG THAT THE USER MIGHT HAVE CONFIGURED.
-            string? keyValue = await this.GetAccountKeyAsync().ConfigureAwait(false);
+            string? airshipSecretsString = await KeyVaultHelper.GetDeliveryChannelSecretAsync(this.configuration, string.Empty).ConfigureAwait(false);
 
-            // TODO: Get the below keys from the keyvault
-            const string? applicationKey = "";
-            const string? masterSecret = "";
+            if (airshipSecretsString is null)
+            {
+                throw new Exception($"There is no airship delivery channel configuration setup in the keyvault");
+            }
+
+            // Convert secret
+            Airship airshipSecrets = JsonConvert.DeserializeObject<Airship>(airshipSecretsString);
 
             // TODO: get the delivery channel configuration for that tenant
             // Need to also set the delivery channel configuration before we try to get it for that tenant
-            AirshipClient? airshipClient = this.airshipClientFactory.GetAirshipClient(applicationKey, masterSecret);
-            var newNotification = new Notification();
+            AirshipClient? airshipClient = this.airshipClientFactory.GetAirshipClient(airshipSecrets.ApplicationKey!, airshipSecrets.MasterSecret!);
+            var newNotification = new Notification()
+            {
+                Alert = "Is this needed",
+                Web = new WebAlert()
+                {
+                    Alert = "Client wrapper body",
+                    Title = "Client wrapper title",
+                    Image = new Image()
+                    {
+                        Url = "https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg",
+                    },
+                    Buttons = new List<Button>()
+                                {
+                                    new Button()
+                                    {
+                                        Label = "Button One",
+                                        Id = "button-one",
+                                        Actions = new Actions()
+                                        {
+                                            Open = new OpenUrlAction()
+                                            {
+                                                Content = "https://www.google.com",
+                                                Type = "url",
+                                            },
+                                        },
+                                    },
+                                    new Button()
+                                    {
+                                        Label = "Button Two",
+                                        Id = "button-two",
+                                        Actions = new Actions()
+                                        {
+                                            Open = new OpenUrlAction()
+                                            {
+                                                Content = "https://www.yahoo.com",
+                                                Type = "url",
+                                            },
+                                        },
+                                    },
+                                },
+                },
+                Actions = new Actions()
+                {
+                    Open = new OpenUrlAction { Type = "url", Content = "https://www.google.com" },
+                },
+            };
 
             string? test = await airshipClient.PushNotification(airshipUserId, newNotification).ConfigureAwait(false);
-        }
-
-        private async Task<string> GetAccountKeyAsync()
-        {
-            string? azureConnectionString = this.configuration.GetValue<string>("AzureServicesAuthConnectionString");
-            var azureServiceTokenProvider = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider(azureConnectionString);
-            using var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
-
-            Microsoft.Azure.KeyVault.Models.SecretBundle airshipKey = await keyVaultClient.GetSecretAsync($"https://smtlocalshared.vault.azure.net/secrets/SharedAirshipKeys").ConfigureAwait(false);
-            return airshipKey.Value;
         }
     }
 }

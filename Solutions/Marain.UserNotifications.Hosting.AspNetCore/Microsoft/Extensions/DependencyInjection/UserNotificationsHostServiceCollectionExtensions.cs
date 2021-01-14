@@ -82,13 +82,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
                 });
 
-            // User Preference Storage
-            services.AddTenantedAzureBlobUserPreferencesStore(
-                sp => new TenantCloudBlobContainerFactoryOptions
-                {
-                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                });
-
             // Template Store
             services.AddTenantedAzureBlobTemplateStore(
                 sp => new TenantCloudBlobContainerFactoryOptions
