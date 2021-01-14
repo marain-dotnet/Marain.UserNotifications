@@ -13,10 +13,13 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Interfaces
     public interface IDeliveryChannel
     {
         /// <summary>
-        /// Gets the content type that will determine the version and type of the delivery channel
+        /// Gets the content type that will determine the version and type of the delivery channel.
         /// </summary>
         string ContentType { get; }
 
+        /// <summary>
+        /// Gets list of supported communication types for implemented delivery channel.
+        /// </summary>
         IList<CommunicationType> SupportedCommunicationTypes { get; }
     }
 }

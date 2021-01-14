@@ -4,20 +4,30 @@
 
 namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship.Models
 {
-    using Newtonsoft.Json;
     using System.Collections.Generic;
+    using Newtonsoft.Json;
 
+    /// <summary>
+    /// PushObject Model.
+    /// </summary>
     public class PushObject
     {
+        /// <summary>
+        /// Gets or sets notification model.
+        /// </summary>
         [JsonProperty("notification")]
-        public Notification Notification { get; set; }
+        public Notification? Notification { get; set; }
 
+        /// <summary>
+        /// Gets or sets audience.
+        /// </summary>
         [JsonProperty("audience")]
-        public Audience Audience { get; set; }
+        public Audience? Audience { get; set; }
 
-        // web, android, ios
+        /// <summary>
+        /// Gets or sets web, android, ios.
+        /// </summary>
         [JsonProperty("device_types")]
-        public List<string> DeviceTypes { get; set; }
-
+        public List<string>? DeviceTypes { get; set; }
     }
 }

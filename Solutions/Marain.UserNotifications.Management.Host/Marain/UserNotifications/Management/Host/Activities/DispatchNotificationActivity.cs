@@ -175,7 +175,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 },
             };
 
-            string? test = await airshipClient.PushNotification(airshipUserId, newNotification).ConfigureAwait(false);
+            System.Net.Http.HttpResponseMessage httpResponseMessage = await airshipClient.SendWebPushNotification(airshipUserId, newNotification).ConfigureAwait(false);
         }
     }
 }

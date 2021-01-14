@@ -1,4 +1,8 @@
-﻿namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.KeyVaultSecretModels
+﻿// <copyright file="Airship.cs" company="Endjin Limited">
+// Copyright (c) Endjin Limited. All rights reserved.
+// </copyright>
+
+namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.KeyVaultSecretModels
 {
     /// <summary>
     /// Airship object for serialisation into concrete object.
