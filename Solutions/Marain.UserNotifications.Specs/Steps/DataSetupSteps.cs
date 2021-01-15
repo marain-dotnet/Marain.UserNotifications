@@ -60,6 +60,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 Title = tableRow["title"],
                 Image = tableRow["image"],
                 NotificationType = tableRow["notificationType"],
+                ActionUrl = tableRow["actionUrl"],
                 ETag = eTag,
             };
         }

@@ -11,11 +11,8 @@ Scenario: Generate populated template
 		| body                              | contentType                                                                  | notificationType |
 		| New lead added by {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.NewLeadv1 |
 	And I have created and stored a web push notification template
-		| body | title | contentType                                                                      | image        | notificationType |
-		| A new lead was added by {{leadAddedBy}} | A new lead added: {{leadAddedBy}}  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.NewLeadv1 |
-	And I have created and stored a user preference for a user
-		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration |
-		| 1      | test@test.com | 041532211   | {"marain.NewLeadv1": ["email", "sms"]}            |
+		| body                                    | title                             | contentType                                                                      | actionUrl                 | image        | notificationType |
+		| A new lead was added by {{leadAddedBy}} | A new lead added: {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.NewLeadv1 |
 	When I send the generate template API request
 		"""
         {
@@ -34,3 +31,4 @@ Scenario: Generate populated template
 	And the response content should have a string property called 'notificationType' with value 'marain.NewLeadv1'
 	And the response content should have a json property called 'smsTemplate' with value '{ "notificationType": "marain.NewLeadv1", "body": "New lead added by TestUser123", "contentType": "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1" }'
 	And the response content should have a json property called 'emailTemplate' with value '{ "notificationType": "marain.NewLeadv1", "body": "A new lead was added by TestUser123", "subject": "A new lead added: TestUser123", "important": false, "contentType": "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1" }'
+	And the response content should have a json property called 'webPushTemplate' with value '{ "notificationType": "marain.NewLeadv1", "body": "A new lead was added by TestUser123", "title": "A new lead added: TestUser123", "image": "Base+64xddfa", "actionUrl": "https://www.google.co.uk/", "contentType": "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1" }'
