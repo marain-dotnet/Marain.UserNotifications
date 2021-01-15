@@ -5,8 +5,8 @@ Feature: Generate Notification Template via the client library
 
 Scenario: Generate a web push Notification Template
 	Given I have created and stored a web push notification template
-		| body                                    | title                             | contentType                                                                      | image        | notificationType |
-		| A new lead was added by {{leadAddedBy}} | A new lead added: {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.NewLeadv1 |
+		| body                                    | title                             | contentType                                                                      | actionUrl                 | image        | notificationType |
+		| A new lead was added by {{leadAddedBy}} | A new lead added: {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.NewLeadv1 |
 	When I use the client to send a generate template API request
 		"""
         {
@@ -26,11 +26,12 @@ Scenario: Generate a web push Notification Template
 	And the client response for the notification template property 'WebPushTemplate' should not be null
 	And the client response for the object 'WebPushTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123'
 	And the client response for the object 'WebPushTemplate' with property 'Title' should have a value of 'A new lead added: TestUser123'
+	And the client response for the object 'WebPushTemplate' with property 'ActionUrl' should have a value of 'https://www.google.co.uk/'
 
 Scenario: Generate a web push, sms and email Notification Template
 	Given I have created and stored a web push notification template
-		| body                                    | title                             | contentType                                                                      | image        | notificationType |
-		| A new lead was added by {{leadAddedBy}} | You have a {{mortgageType}} case | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.NewLeadv2 |
+		| body                                    | title                            | contentType                                                                      | actionUrl                 | image        | notificationType |
+		| A new lead was added by {{leadAddedBy}} | You have a {{mortgageType}} case | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.NewLeadv2 |
 	And I have created and stored a sms notification template
 		| body                                    | contentType                                                                  | notificationType |
 		| A new lead was added by {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.NewLeadv2 |
@@ -59,14 +60,12 @@ Scenario: Generate a web push, sms and email Notification Template
 	And the client response for the object 'WebPushTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123'
 	And the client response for the object 'WebPushTemplate' with property 'Title' should have a value of 'You have a First time buyer case'
 	And the client response for the object 'WebPushTemplate' with property 'Image' should have a value of 'Base+64xddfa'
+	And the client response for the object 'WebPushTemplate' with property 'ActionUrl' should have a value of 'https://www.google.co.uk/'
 	And the client response for the object 'SmsTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123'
 	And the client response for the object 'EmailTemplate' with property 'Body' should have a value of 'A new lead was added by TestUser123 with Mortgage Type: First time buyer'
 	And the client response for the object 'EmailTemplate' with property 'Subject' should have a value of 'New lead TestUser123'
 
 Scenario: Generation of a Notification Template is UnSuccessful
-	#Given I have created and stored a notification template
-	#	| notificationType             | smsTemplate                                         |
-	#	| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
 	When I use the client to send a generate template API request
 		"""
         {
@@ -84,26 +83,6 @@ Scenario: Generation of a Notification Template is UnSuccessful
 	Then the client response status code should be 'OK'
 	And the client response for the notification template property 'WebPushTemplate' should be null
 	And the client response for the notification template property 'SmsTemplate' should be null
-
-Scenario: Generate a notification template for unconfigured user
-	Given I have created and stored a web push notification template
-		| body                                    | title                             | contentType                                                                      | image        | notificationType |
-		| A new lead was added by {{leadAddedBy}} | A new lead added: {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.NewLeadv3 |
-	When I use the client to send a generate template API request
-		"""
-        {
-            "notificationType": "marain.notifications.test.v1",
-            "timestamp": "2020-07-21T17:32:28Z",
-            "userIds": [
-                "3"
-            ],
-            "correlationIds": ["cid1", "cid2"],
-            "properties": {
-                "leadAddedBy": "TestUser123",
-            }
-        }
-		"""
-	Then a 'UserNotificationsApiException' should be thrown
 
 Scenario: Generate a notification template for unconfigured communication channel
 	When I use the client to send a generate template API request

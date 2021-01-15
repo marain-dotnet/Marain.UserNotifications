@@ -91,6 +91,23 @@ namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemp
             }
         }
 
+        /// <summary>
+        /// Gets navigation url on click of the notification.
+        /// </summary>
+        public string ActionUrl
+        {
+            get
+            {
+                if (this.HalDocument.TryGetProperty("actionUrl", out JsonElement actionUrl) &&
+                    actionUrl.ValueKind == JsonValueKind.String)
+                {
+                    return actionUrl.GetString();
+                }
+
+                throw new Exception("Schema violation - this value is required.");
+            }
+        }
+
         /// <inheritdoc/>
         public bool ContentTypeEquals(ReadOnlySpan<byte> utf8Text)
         {
