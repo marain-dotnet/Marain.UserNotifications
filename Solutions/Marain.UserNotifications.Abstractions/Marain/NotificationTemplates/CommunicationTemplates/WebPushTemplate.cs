@@ -36,6 +36,11 @@ namespace Marain.NotificationTemplates.CommunicationTemplates
         public string? Image { get; set; }
 
         /// <summary>
+        /// Gets or sets navigation url on click of the notification.
+        /// </summary>
+        public string? ActionUrl { get; set; }
+
+        /// <summary>
         /// Gets the registered content type used when this object is serialized/deserialized.
         /// </summary>
         public string ContentType => RegisteredContentType;

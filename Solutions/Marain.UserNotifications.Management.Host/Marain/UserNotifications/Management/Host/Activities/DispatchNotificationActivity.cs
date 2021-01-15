@@ -136,10 +136,11 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 Actions = new Actions()
                 {
                     // TODO: Need to pass in the URL where it need to be directed.
-                    Open = new OpenUrlAction { Type = "url", Content = "https://www.google.com" },
+                    Open = new OpenUrlAction { Type = "url", Content = webPushTemplate.ActionUrl },
                 },
             };
 
+            // TODO: Update the notification with the success or failure of the airship notificaton.
             string? httpResponseContent = await airshipClient.SendWebPushNotification(airshipUserId, newNotification).ConfigureAwait(false);
         }
     }

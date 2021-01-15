@@ -89,6 +89,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
                             string? webPushTitle = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Title, existingProperties).ConfigureAwait(false);
                             string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
                             string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Image, existingProperties).ConfigureAwait(false);
+                            string? actionUrl = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.ActionUrl, existingProperties).ConfigureAwait(false);
 
                             webPushTemplate = new WebPushTemplate()
                             {
@@ -96,6 +97,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
                                 Body = webPushBody,
                                 Title = webPushTitle,
                                 Image = webPushImage,
+                                ActionUrl = actionUrl,
                             };
                         }
                         catch (Exception)
