@@ -11,7 +11,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
     using Marain.NotificationTemplates;
 
     /// <summary>
-    /// This is responsible to generate a templated notification based on the user preference and notifaction type.
+    /// This is responsible to generate a templated notification based on the notifaction type.
     /// </summary>
     public interface IGenerateTemplateComposer
     {

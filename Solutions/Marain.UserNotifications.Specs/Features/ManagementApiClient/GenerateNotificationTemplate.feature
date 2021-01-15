@@ -7,9 +7,6 @@ Scenario: Generate a web push Notification Template
 	Given I have created and stored a web push notification template
 		| body                                    | title                             | contentType                                                                      | image        | notificationType |
 		| A new lead was added by {{leadAddedBy}} | A new lead added: {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.NewLeadv1 |
-	And I have created and stored a user preference for a user
-		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration |
-		| 1      | test@test.com | 041532211   | {"marain.NewLeadv1": ["webpush", "sms"]}          |
 	When I use the client to send a generate template API request
 		"""
         {
@@ -40,9 +37,6 @@ Scenario: Generate a web push, sms and email Notification Template
 	And I have created and stored an email notification template
 		| body                                                                         | subject                  | important | contentType                                                                    | image        | notificationType |
 		| A new lead was added by {{leadAddedBy}} with Mortgage Type: {{mortgageType}} | New lead {{leadAddedBy}} | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.NewLeadv2 |
-	And I have created and stored a user preference for a user
-		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration             |
-		| 2      | test@test.com | 041532211   | {"marain.NewLeadv2": ["webpush", "sms", "email"]} |
 	When I use the client to send a generate template API request
 		"""
         {
@@ -73,9 +67,6 @@ Scenario: Generation of a Notification Template is UnSuccessful
 	#Given I have created and stored a notification template
 	#	| notificationType             | smsTemplate                                         |
 	#	| marain.notifications.test.v1 | {"body": "A new lead was added by {{leadAddedBy}}"} |
-	And I have created and stored a user preference for a user
-		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration |
-		| 3      | test@test.com | 041532211   | {"marain.notifications.test.v1": ["webpush"]}     |
 	When I use the client to send a generate template API request
 		"""
         {
@@ -115,9 +106,6 @@ Scenario: Generate a notification template for unconfigured user
 	Then a 'UserNotificationsApiException' should be thrown
 
 Scenario: Generate a notification template for unconfigured communication channel
-	Given I have created and stored a user preference for a user
-		| userId | email         | phoneNumber | communicationChannelsPerNotificationConfiguration |
-		| 4      | test@test.com | 041532211   | {"marain.notifications.test.v2": ["webpush"]}     |
 	When I use the client to send a generate template API request
 		"""
         {

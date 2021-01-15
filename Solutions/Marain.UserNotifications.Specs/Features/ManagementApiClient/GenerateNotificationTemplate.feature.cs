@@ -124,20 +124,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
  testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table10, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
-                            "userId",
-                            "email",
-                            "phoneNumber",
-                            "communicationChannelsPerNotificationConfiguration"});
-                table11.AddRow(new string[] {
-                            "1",
-                            "test@test.com",
-                            "041532211",
-                            "{\"marain.NewLeadv1\": [\"webpush\", \"sms\"]}"});
 #line 10
- testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table11, "And ");
-#line hidden
-#line 13
  testRunner.When("I use the client to send a generate template API request", @"      {
           ""notificationType"": ""marain.NewLeadv1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
@@ -150,22 +137,22 @@ this.ScenarioInitialize(scenarioInfo);
           }
       }", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 27
+#line 24
  testRunner.Then("the client response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 28
+#line 25
  testRunner.And("the client response for the notification template property \'SmsTemplate\' should b" +
                         "e null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 29
+#line 26
  testRunner.And("the client response for the notification template property \'WebPushTemplate\' shou" +
                         "ld not be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 30
+#line 27
  testRunner.And("the client response for the object \'WebPushTemplate\' with property \'Body\' should " +
                         "have a value of \'A new lead was added by TestUser123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 31
+#line 28
  testRunner.And("the client response for the object \'WebPushTemplate\' with property \'Title\' should" +
                         " have a value of \'A new lead added: TestUser123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
@@ -180,7 +167,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generate a web push, sms and email Notification Template", null, tagsOfScenario, argumentsOfScenario);
-#line 33
+#line 30
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -200,63 +187,50 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
                             "title",
                             "contentType",
                             "image",
                             "notificationType"});
-                table12.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}}",
                             "You have a {{mortgageType}} case",
                             "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
                             "Base+64xddfa",
                             "marain.NewLeadv2"});
-#line 34
- testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table12, "Given ");
+#line 31
+ testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table11, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
                             "contentType",
                             "notificationType"});
-                table13.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}}",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
                             "marain.NewLeadv2"});
-#line 37
- testRunner.And("I have created and stored a sms notification template", ((string)(null)), table13, "And ");
+#line 34
+ testRunner.And("I have created and stored a sms notification template", ((string)(null)), table12, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
                             "subject",
                             "important",
                             "contentType",
                             "image",
                             "notificationType"});
-                table14.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}} with Mortgage Type: {{mortgageType}}",
                             "New lead {{leadAddedBy}}",
                             "true",
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
                             "Base+64xddfa",
                             "marain.NewLeadv2"});
+#line 37
+ testRunner.And("I have created and stored an email notification template", ((string)(null)), table13, "And ");
+#line hidden
 #line 40
- testRunner.And("I have created and stored an email notification template", ((string)(null)), table14, "And ");
-#line hidden
-                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
-                            "userId",
-                            "email",
-                            "phoneNumber",
-                            "communicationChannelsPerNotificationConfiguration"});
-                table15.AddRow(new string[] {
-                            "2",
-                            "test@test.com",
-                            "041532211",
-                            "{\"marain.NewLeadv2\": [\"webpush\", \"sms\", \"email\"]}"});
-#line 43
- testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table15, "And ");
-#line hidden
-#line 46
  testRunner.When("I use the client to send a generate template API request", @"      {
           ""notificationType"": ""marain.NewLeadv2"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
@@ -270,43 +244,43 @@ this.ScenarioInitialize(scenarioInfo);
           }
       }", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 61
+#line 55
  testRunner.Then("the client response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 62
+#line 56
  testRunner.And("the client response for the notification template property \'WebPushTemplate\' shou" +
                         "ld not be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 63
+#line 57
  testRunner.And("the client response for the notification template property \'SmsTemplate\' should n" +
                         "ot be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 64
+#line 58
  testRunner.And("the client response for the notification template property \'EmailTemplate\' should" +
                         " not be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 65
+#line 59
  testRunner.And("the client response for the object \'WebPushTemplate\' with property \'Body\' should " +
                         "have a value of \'A new lead was added by TestUser123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 66
+#line 60
  testRunner.And("the client response for the object \'WebPushTemplate\' with property \'Title\' should" +
                         " have a value of \'You have a First time buyer case\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 67
+#line 61
  testRunner.And("the client response for the object \'WebPushTemplate\' with property \'Image\' should" +
                         " have a value of \'Base+64xddfa\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 68
+#line 62
  testRunner.And("the client response for the object \'SmsTemplate\' with property \'Body\' should have" +
                         " a value of \'A new lead was added by TestUser123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 69
+#line 63
  testRunner.And("the client response for the object \'EmailTemplate\' with property \'Body\' should ha" +
                         "ve a value of \'A new lead was added by TestUser123 with Mortgage Type: First tim" +
                         "e buyer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 70
+#line 64
  testRunner.And("the client response for the object \'EmailTemplate\' with property \'Subject\' should" +
                         " have a value of \'New lead TestUser123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
@@ -321,7 +295,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generation of a Notification Template is UnSuccessful", null, tagsOfScenario, argumentsOfScenario);
-#line 72
+#line 66
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -341,20 +315,7 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
-                            "userId",
-                            "email",
-                            "phoneNumber",
-                            "communicationChannelsPerNotificationConfiguration"});
-                table16.AddRow(new string[] {
-                            "3",
-                            "test@test.com",
-                            "041532211",
-                            "{\"marain.notifications.test.v1\": [\"webpush\"]}"});
-#line 76
- testRunner.And("I have created and stored a user preference for a user", ((string)(null)), table16, "And ");
-#line hidden
-#line 79
+#line 70
  testRunner.When("I use the client to send a generate template API request", @"      {
           ""notificationType"": ""marain.notifications.test.v1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
@@ -367,14 +328,14 @@ this.ScenarioInitialize(scenarioInfo);
           }
       }", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 93
+#line 84
  testRunner.Then("the client response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 94
+#line 85
  testRunner.And("the client response for the notification template property \'WebPushTemplate\' shou" +
                         "ld be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 95
+#line 86
  testRunner.And("the client response for the notification template property \'SmsTemplate\' should b" +
                         "e null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
@@ -389,7 +350,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generate a notification template for unconfigured user", null, tagsOfScenario, argumentsOfScenario);
-#line 97
+#line 88
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -409,22 +370,22 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
                             "title",
                             "contentType",
                             "image",
                             "notificationType"});
-                table17.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}}",
                             "A new lead added: {{leadAddedBy}}",
                             "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
                             "Base+64xddfa",
                             "marain.NewLeadv3"});
-#line 98
- testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table17, "Given ");
+#line 89
+ testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table14, "Given ");
 #line hidden
-#line 101
+#line 92
  testRunner.When("I use the client to send a generate template API request", @"      {
           ""notificationType"": ""marain.notifications.test.v1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
@@ -437,7 +398,7 @@ this.ScenarioInitialize(scenarioInfo);
           }
       }", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 115
+#line 106
  testRunner.Then("a \'UserNotificationsApiException\' should be thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -451,7 +412,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generate a notification template for unconfigured communication channel", null, tagsOfScenario, argumentsOfScenario);
-#line 117
+#line 108
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -471,20 +432,7 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
-                            "userId",
-                            "email",
-                            "phoneNumber",
-                            "communicationChannelsPerNotificationConfiguration"});
-                table18.AddRow(new string[] {
-                            "4",
-                            "test@test.com",
-                            "041532211",
-                            "{\"marain.notifications.test.v2\": [\"webpush\"]}"});
-#line 118
- testRunner.Given("I have created and stored a user preference for a user", ((string)(null)), table18, "Given ");
-#line hidden
-#line 121
+#line 109
  testRunner.When("I use the client to send a generate template API request", @"      {
           ""notificationType"": ""marain.notifications.test.v2"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
@@ -497,15 +445,15 @@ this.ScenarioInitialize(scenarioInfo);
           }
       }", ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 135
+#line 123
  testRunner.Then("the client response for the notification template property \'WebPushTemplate\' shou" +
                         "ld be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 136
+#line 124
  testRunner.And("the client response for the notification template property \'SmsTemplate\' should b" +
                         "e null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 137
+#line 125
  testRunner.And("the client response for the notification template property \'EmailTemplate\' should" +
                         " be null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
