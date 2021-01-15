@@ -19,14 +19,6 @@
     },
     {
       "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage",
-      "key": "userPreferencesStore",
-      "containerDefinition": {
-        "containerName": "userpreferences"
-      },
-      "description": "User preferences store."
-    },
-    {
-      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage",
       "key": "templateStore",
       "containerDefinition": {
         "containerName": "templates"
