@@ -167,7 +167,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
             {
                 this.logger.LogDebug($"Retrieving notifications for user {userId}");
                 results = string.IsNullOrEmpty(continuationToken)
-                                    ? await userNotificationStore.GetAsync(userId, Constants.ApiDeliveryChannelId, sinceNotificationId, maxItems).ConfigureAwait(false)
+                                    ? await userNotificationStore.GetAsync(userId, sinceNotificationId, maxItems).ConfigureAwait(false)
                                     : await userNotificationStore.GetAsync(userId, continuationToken).ConfigureAwait(false);
             }
             catch (ArgumentException) when (!string.IsNullOrEmpty(continuationToken))
