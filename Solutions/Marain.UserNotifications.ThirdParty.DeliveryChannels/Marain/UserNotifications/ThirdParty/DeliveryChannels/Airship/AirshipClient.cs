@@ -52,9 +52,9 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
         /// <param name="namedUser">The unique Id of the targetted user which is being sent this notification.</param>
         /// <param name="notification">The notification object which containts all necessary information about the triggered notificaion.</param>
         /// <returns>HttpResponse returned from the Airship Endpoint.</returns>
-        public async Task<string> SendWebPushNotification(string namedUser, Notification notification)
+        public async Task<AirshipWebPushResponse?> SendWebPushNotification(string namedUser, Notification notification)
         {
-            var testObject = new PushObject()
+            var pushObject = new PushObject()
             {
                 Audience = new Audience()
                 {
@@ -64,7 +64,7 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
                 DeviceTypes = new List<string>() { "web" },
             };
 
-            string? requestContent = JsonConvert.SerializeObject(testObject);
+            string? requestContent = JsonConvert.SerializeObject(pushObject);
 
             var request = new HttpRequestMessage()
             {
@@ -77,7 +77,14 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
 
             HttpResponseMessage? result = await this.Client.SendAsync(request).ConfigureAwait(false);
 
-            return await result.Content.ReadAsStringAsync();
+            string? responseContent = await result.Content.ReadAsStringAsync();
+
+            if (responseContent is null)
+            {
+                return null;
+            }
+
+            return JsonConvert.DeserializeObject<AirshipWebPushResponse>(responseContent);
         }
     }
 }

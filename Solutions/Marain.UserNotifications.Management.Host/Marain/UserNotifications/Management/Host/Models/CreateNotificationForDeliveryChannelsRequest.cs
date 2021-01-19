@@ -1,38 +1,44 @@
-﻿// <copyright file="CreateNotificationsRequest.cs" company="Endjin Limited">
+﻿// <copyright file="CreateNotificationForDeliveryChannelsRequest.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserNotifications.Management.Host.OpenApi
+namespace Marain.UserNotifications.Management.Host.Models
 {
     using System;
+    using System.Collections.Generic;
     using Corvus.Json;
+    using Marain.Models;
+    using Marain.UserNotifications.Management.Host.OpenApi;
 
     /// <summary>
-    /// Request body for the <see cref="CreateNotificationsService.CreateNotificationsAsync(Menes.IOpenApiContext, CreateNotificationsRequest)"/>
+    /// Request body for the <see cref="CreateNotificationForDeliveryChannelsService.CreateNotificationForDeliveryChannelsRequestAsync(Menes.IOpenApiContext, CreateNotificationForDeliveryChannelsRequest)"/>
     /// endpoint.
     /// </summary>
-    public class CreateNotificationsRequest
+    public class CreateNotificationForDeliveryChannelsRequest
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CreateNotificationsRequest"/> class.
+        /// Initializes a new instance of the <see cref="CreateNotificationForDeliveryChannelsRequest"/> class.
         /// </summary>
         /// <param name="notificationType">The <see cref="NotificationType" />.</param>
         /// <param name="userIds">The <see cref="UserIds" />.</param>
         /// <param name="timestamp">The <see cref="Timestamp" />.</param>
+        /// <param name="deliveryChannelConfiguredPerCommunicationType">The <see cref="DeliveryChannelConfiguredPerCommunicationType"/>.</param>
         /// <param name="properties">The <see cref="Properties" />.</param>
         /// <param name="correlationIds">The <see cref="CorrelationIds" />.</param>
-        public CreateNotificationsRequest(
+        public CreateNotificationForDeliveryChannelsRequest(
             string notificationType,
             string[] userIds,
             DateTime timestamp,
             IPropertyBag properties,
-            string[] correlationIds)
+            string[] correlationIds,
+            Dictionary<CommunicationType, DeliveryChannel>? deliveryChannelConfiguredPerCommunicationType = null)
         {
             this.NotificationType = notificationType;
             this.UserIds = userIds;
             this.Timestamp = timestamp;
             this.Properties = properties;
             this.CorrelationIds = correlationIds;
+            this.DeliveryChannelConfiguredPerCommunicationType = deliveryChannelConfiguredPerCommunicationType;
         }
 
         /// <summary>
@@ -57,6 +63,11 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// Gets the date and time at which the event being notified took place.
         /// </summary>
         public DateTime Timestamp { get; }
+
+        /// <summary>
+        /// Gets the desired delivery channels which are configured for the communication type.
+        /// </summary>
+        public Dictionary<CommunicationType, DeliveryChannel>? DeliveryChannelConfiguredPerCommunicationType { get; }
 
         /// <summary>
         /// Gets additional data associated with the notification. This is generally used by a delivery channel

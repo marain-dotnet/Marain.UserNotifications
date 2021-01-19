@@ -227,7 +227,7 @@ namespace Marain.UserNotifications.Storage.AzureTable
 
             if (!string.IsNullOrEmpty(deliveryChannelId))
             {
-                userNotifications = userNotifications.Where(x => x.ChannelStatuses.Select(y => y.DeliveryChannelId).Contains(deliveryChannelId!)).ToList();
+                userNotifications = userNotifications.Where(x => x.ChannelStatuses.Select(y => y.DeliveryChannelId).Contains(deliveryChannelId)).ToList();
             }
 
             return new GetNotificationsResult(

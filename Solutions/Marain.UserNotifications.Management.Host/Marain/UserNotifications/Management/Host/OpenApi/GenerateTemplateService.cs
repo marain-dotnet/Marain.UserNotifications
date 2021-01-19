@@ -15,6 +15,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.Services.Tenancy;
     using Marain.UserNotifications.Management.Host.Composer;
+    using Marain.UserNotifications.Management.Host.Models;
     using Menes;
     using Microsoft.Extensions.Logging;
 

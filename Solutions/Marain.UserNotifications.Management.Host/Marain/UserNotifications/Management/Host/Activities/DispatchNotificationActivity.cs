@@ -6,6 +6,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
     using Marain.DeliveryChannelConfiguration;
@@ -79,6 +80,11 @@ namespace Marain.UserNotifications.Management.Host.Activities
         {
             TenantedFunctionData<UserNotification> request = context.GetInput<TenantedFunctionData<UserNotification>>();
 
+            if (request.Payload.Id is null)
+            {
+                throw new Exception($"Notification Id missing.");
+            }
+
             ITenant tenant = await this.tenantProvider.GetTenantAsync(request.TenantId).ConfigureAwait(false);
 
             logger.LogInformation(
@@ -86,20 +92,46 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 request.Payload.NotificationType,
                 request.Payload.UserId);
 
-            // This is the current notification we want to send
-            var registeredCommunicationChannels = new List<CommunicationType>() { CommunicationType.WebPush };
+            if (request.Payload.DeliveryChannelConfiguredPerCommunicationType is null)
+            {
+                throw new Exception($"There is no communication channels and delivery channel defined the notification type: {request.Payload.NotificationType}");
+            }
+
+            var registeredCommunicationChannels = request.Payload.DeliveryChannelConfiguredPerCommunicationType.Keys.ToList();
+            if (registeredCommunicationChannels.Count == 0)
+            {
+                throw new Exception($"There is no communication channels and delivery channel defined the notification type: {request.Payload.NotificationType}");
+            }
 
             // Gets the AzureBlobTemplateStore
             INotificationTemplateStore templateStore = await this.tenantedTemplateStoreFactory.GetTemplateStoreForTenantAsync(tenant).ConfigureAwait(false);
             NotificationTemplate notificationTemplate = await this.generateTemplateComposer.GenerateTemplateAsync(templateStore, request.Payload.Properties, registeredCommunicationChannels, request.Payload.NotificationType).ConfigureAwait(false);
 
-            if (notificationTemplate != null && notificationTemplate.WebPushTemplate != null)
+            if (notificationTemplate is null)
             {
-                await this.SendWebPushNotificationAsync(request.Payload.UserId, request.Payload.NotificationType, tenant, notificationTemplate.WebPushTemplate).ConfigureAwait(false);
+                throw new Exception("There was an issue generating notification templates.");
+            }
+
+            foreach (KeyValuePair<CommunicationType, DeliveryChannel> keyValuePair in request.Payload.DeliveryChannelConfiguredPerCommunicationType)
+            {
+                switch (keyValuePair.Value)
+                {
+                    case DeliveryChannel.Airship:
+                        if (notificationTemplate.WebPushTemplate != null && keyValuePair.Key == CommunicationType.WebPush)
+                        {
+                            await this.SendWebPushNotificationAsync(request.Payload.UserId, request.Payload.NotificationType, request.Payload.Id, tenant, notificationTemplate.WebPushTemplate).ConfigureAwait(false);
+                        }
+
+                        break;
+
+                    default:
+                        throw new Exception(
+                            $"Currently the Delivery Channel is limited to {DeliveryChannel.Airship}");
+                }
             }
         }
 
-        private async Task SendWebPushNotificationAsync(string userId, string notificationType, ITenant tenant, WebPushTemplate webPushTemplate)
+        private async Task SendWebPushNotificationAsync(string userId, string notificationType, string notificationId, ITenant tenant, WebPushTemplate webPushTemplate)
         {
             if (webPushTemplate is null)
             {
@@ -121,27 +153,73 @@ namespace Marain.UserNotifications.Management.Host.Activities
             // Convert secret to airship secret model
             Airship airshipSecrets = JsonConvert.DeserializeObject<Airship>(airshipSecretsString);
 
-            // TODO: get the delivery channel configuration for that tenant
-            // Need to also set the delivery channel configuration before we try to get it for that tenant
+            var airshipDeliveryChannelObject = new AirshipDeliveryChannel(
+                webPushTemplate.Title!,
+                webPushTemplate.Body!,
+                webPushTemplate.ActionUrl!);
+            try
+            {
+                AirshipWebPushResponse? airshipResponse = await this.SendAirshipNotificationAsync(
+                      airshipUserId,
+                      airshipDeliveryChannelObject,
+                      airshipSecrets).ConfigureAwait(false);
+
+                await this.UpdateNotificationDeliveryStatusAsync(
+                    airshipDeliveryChannelObject.ContentType,
+                    notificationId,
+                    airshipResponse is null ? UserNotificationDeliveryStatus.Unknown : UserNotificationDeliveryStatus.NotTracked,
+                    tenant).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                // TODO: Capture the failure reason and add to the delivery channel json.
+                await this.UpdateNotificationDeliveryStatusAsync(airshipDeliveryChannelObject.ContentType, notificationId, UserNotificationDeliveryStatus.Failed, tenant).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Send a web push airship notification.
+        /// </summary>
+        /// <param name="airshipUserId">Targetted Airship User.</param>
+        /// <param name="airshipDeliveryChannel">The <see cref="AirshipDeliveryChannel"/>.</param>
+        /// <param name="airshipSecrets">The <see cref="Airship"/>.</param>
+        private async Task<AirshipWebPushResponse?> SendAirshipNotificationAsync(string airshipUserId, AirshipDeliveryChannel airshipDeliveryChannel, Airship airshipSecrets)
+        {
+            if (airshipDeliveryChannel is null)
+            {
+                throw new Exception();
+            }
+
             AirshipClient? airshipClient = this.airshipClientFactory.GetAirshipClient(airshipSecrets.ApplicationKey!, airshipSecrets.MasterSecret!);
 
             var newNotification = new Notification()
             {
-                Alert = webPushTemplate.Title,
+                Alert = airshipDeliveryChannel.Title,
                 Web = new WebAlert()
                 {
-                    Alert = webPushTemplate.Body,
-                    Title = webPushTemplate.Title,
+                    Alert = airshipDeliveryChannel.Body,
+                    Title = airshipDeliveryChannel.Title,
                 },
                 Actions = new Actions()
                 {
-                    // TODO: Need to pass in the URL where it need to be directed.
-                    Open = new OpenUrlAction { Type = "url", Content = webPushTemplate.ActionUrl },
+                    Open = new OpenUrlAction { Type = "url", Content = airshipDeliveryChannel.ActionUrl },
                 },
             };
 
-            // TODO: Update the notification with the success or failure of the airship notificaton.
-            string? httpResponseContent = await airshipClient.SendWebPushNotification(airshipUserId, newNotification).ConfigureAwait(false);
+            return await airshipClient.SendWebPushNotification(airshipUserId, newNotification).ConfigureAwait(false);
+        }
+
+        private async Task UpdateNotificationDeliveryStatusAsync(string deliveryChannelId, string notificationId, UserNotificationDeliveryStatus deliveryStatus, ITenant tenant)
+        {
+            IUserNotificationStore store = await this.notificationStoreFactory.GetUserNotificationStoreForTenantAsync(tenant).ConfigureAwait(false);
+            UserNotification originalNotification = await store.GetByIdAsync(notificationId).ConfigureAwait(false);
+
+            UserNotification modifiedNotification = originalNotification.WithChannelDeliveryStatus(
+                deliveryChannelId,
+                deliveryStatus,
+                DateTimeOffset.UtcNow);
+
+            await store.StoreAsync(modifiedNotification).ConfigureAwait(false);
         }
     }
 }

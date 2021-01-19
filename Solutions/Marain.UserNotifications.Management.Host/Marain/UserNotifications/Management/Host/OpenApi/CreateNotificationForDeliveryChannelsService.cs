@@ -1,14 +1,12 @@
-﻿// <copyright file="CreateNotificationsService.cs" company="Endjin Limited">
+﻿// <copyright file="CreateNotificationForDeliveryChannelsService.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Marain.UserNotifications.Management.Host.OpenApi
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
-    using Marain.Models;
     using Marain.Operations.Client.OperationsControl;
     using Marain.Operations.Client.OperationsControl.Models;
     using Marain.Services.Tenancy;
@@ -22,22 +20,22 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     /// <summary>
     /// Implements the create notifications endpoint for the management API.
     /// </summary>
-    public class CreateNotificationsService : IOpenApiService
+    public class CreateNotificationForDeliveryChannelsService : IOpenApiService
     {
         /// <summary>
         /// The operation Id for the endpoint.
         /// </summary>
-        public const string CreateNotificationsOperationId = "createNotifications";
+        public const string CreateNotificationsOperationId = "createNotificationForDeliveryChannels";
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly IMarainOperationsControl operationsControlClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CreateNotificationsService"/> class.
+        /// Initializes a new instance of the <see cref="CreateNotificationForDeliveryChannelsService"/> class.
         /// </summary>
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="operationsControlClient">The operations control client.</param>
-        public CreateNotificationsService(
+        public CreateNotificationForDeliveryChannelsService(
             IMarainServicesTenancy marainServicesTenancy,
             IMarainOperationsControl operationsControlClient)
         {
@@ -52,9 +50,9 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="body">The request body.</param>
         /// <returns>Confirmation that the update request has been accepted.</returns>
         [OperationId(CreateNotificationsOperationId)]
-        public async Task<OpenApiResult> CreateNotificationsAsync(
+        public async Task<OpenApiResult> CreateNotificationForDeliveryChannelsRequestAsync(
             IOpenApiContext context,
-            CreateNotificationsRequest body)
+            CreateNotificationForDeliveryChannelsRequest body)
         {
             // We can guarantee tenant Id is available because it's part of the Uri.
             ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId!).ConfigureAwait(false);
@@ -65,20 +63,12 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 delegatedTenantId,
                 operationId).ConfigureAwait(false);
 
-            // Create a new CreateNotificationForDeliveryChannelsRequest Object which supports the communication types and delivery channels
-            var createNotificationForDeliveryChannelsRequestObject = new CreateNotificationForDeliveryChannelsRequest(
-                body.NotificationType,
-                body.UserIds,
-                body.Timestamp,
-                body.Properties,
-                body.CorrelationIds);
-
             IDurableOrchestrationClient orchestrationClient = context.AsDurableFunctionsOpenApiContext().OrchestrationClient
                 ?? throw new OpenApiServiceMismatchException($"Operation {CreateNotificationsOperationId} has been invoked, but no Durable Orchestration Client is available on the OpenApi context.");
 
             await orchestrationClient.StartNewAsync(
                 nameof(CreateAndDispatchNotificationsOrchestration),
-                new TenantedFunctionData<CreateNotificationForDeliveryChannelsRequest>(context.CurrentTenantId!, createNotificationForDeliveryChannelsRequestObject, operationId)).ConfigureAwait(false);
+                new TenantedFunctionData<CreateNotificationForDeliveryChannelsRequest>(context.CurrentTenantId!, body, operationId)).ConfigureAwait(false);
 
             return this.AcceptedResult(response.Location);
         }

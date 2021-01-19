@@ -76,6 +76,42 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
 
+  /{tenantId}/marain/usernotifications/v2:
+    put:
+      summary: Create a new notification for one or more users with desired communication type and delivery channel it should be sent through..
+      operationId: createNotificationForDeliveryChannels
+      parameters:
+        - $ref: '#/components/parameters/tenantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNotificationForDeliveryChannelsRequest'
+      responses:
+        '202':
+          description: Accepted
+          headers:
+            Location:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
   /{tenantId}/marain/usernotifications/batchdeliverystatusupdate:
     post:
       summary: Updates delivery statuses for a batch of user notifications
@@ -374,6 +410,37 @@ components:
           type: array
           items:
             type: string
+        correlationIds:
+          $ref: '#/components/schemas/CorrelationIds'
+        properties:
+          $ref: '#/components/schemas/PropertyBag'
+        timestamp:
+          type: string
+          format: date-time
+          description: The date and time at which the event being notified took place.
+
+    CreateNotificationForDeliveryChannelsRequest:
+      description: Request data for creating a new notification for a user with communication type and delivery channel it should be sent through.
+      required: 
+        - userIds
+        - notificationType
+        - timestamp
+      properties:
+        notificationType:
+          type: string
+          description: The type of the notification. These types are defined by the consuming application, so can be arbitrary strings. It is strongly recommended that you version these types, as shown in the example.
+          nullable: false
+        userIds:
+          description: The Ids of the users that this notification is for
+          nullable: false
+          type: array
+          items:
+            type: string
+        deliveryChannelConfiguredPerCommunicationType:
+          description: The desired delivery channels which are configured for the communication type.
+          type: object
+          additionalProperties: true
+          uniqueItems: true
         correlationIds:
           $ref: '#/components/schemas/CorrelationIds'
         properties:

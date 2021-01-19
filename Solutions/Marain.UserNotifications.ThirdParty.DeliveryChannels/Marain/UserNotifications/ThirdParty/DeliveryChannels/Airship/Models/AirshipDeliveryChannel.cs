@@ -21,8 +21,17 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship.Models
         /// <summary>
         /// Initilises the <see cref="AirshipDeliveryChannel"/> with predefined settings.
         /// </summary>
-        public AirshipDeliveryChannel()
+        /// <param name="title">The title of the Airship notification.</param>
+        /// <param name="body">The body of the notification.</param>
+        /// <param name="actionUrl">The action url where the user should be navigated on click of the notification.</param>
+        public AirshipDeliveryChannel(
+            string title,
+            string body,
+            string actionUrl)
         {
+            this.Title = title;
+            this.Body = body;
+            this.ActionUrl = actionUrl;
             this.SupportedCommunicationTypes = new List<CommunicationType>() { CommunicationType.WebPush };
         }
 
@@ -35,5 +44,20 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship.Models
         /// Gets list of supported communication types.
         /// </summary>
         public IList<CommunicationType> SupportedCommunicationTypes { get; }
+
+        /// <summary>
+        /// Gets the title of the notification.
+        /// </summary>
+        public string? Title { get; }
+
+        /// <summary>
+        /// Gets the body of the notification.
+        /// </summary>
+        public string? Body { get; }
+
+        /// <summary>
+        /// Gets the action url where the user should be navigated on click of the notification.
+        /// </summary>
+        public string? ActionUrl { get; }
     }
 }

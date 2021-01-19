@@ -54,6 +54,7 @@ namespace Marain.UserNotifications.Management.Host
             services.AddHalDocumentMapper<SmsTemplate, IOpenApiContext, SmsTemplateMapper>();
 
             services.AddSingleton<IOpenApiService, CreateNotificationsService>();
+            services.AddSingleton<IOpenApiService, CreateNotificationForDeliveryChannelsService>();
             services.AddSingleton<IOpenApiService, GetNotificationsService>();
             services.AddSingleton<IOpenApiService, GetNotificationStatusService>();
             services.AddSingleton<IOpenApiService, BatchDeliveryStatusUpdateService>();

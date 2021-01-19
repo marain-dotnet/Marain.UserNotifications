@@ -5,8 +5,10 @@
 namespace Marain.UserNotifications
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+    using Marain.Models;
 
     /// <summary>
     /// Extension methods for the <see cref="UserNotification"/> class.
@@ -200,6 +202,37 @@ namespace Marain.UserNotifications
                 notification.Properties,
                 notification.Metadata,
                 builder.ToImmutable());
+        }
+
+        /// <summary>
+        /// Creates an updated version of the supplied UserNotification with Delivery Channel Configuration Per Communication Type.
+        /// </summary>
+        /// <param name="notification">The notification to which the status change applies.</param>
+        /// <param name="deliveryChannelConfiguredPerCommunicationType">The delivery channel configuration which need to be applied.</param>
+        /// <returns>A copy of the notification with the updated delivery status.</returns>
+        public static UserNotification AddDeliveryChannelConfiguredPerCommunicationType(
+            this UserNotification notification,
+            Dictionary<CommunicationType, DeliveryChannel>? deliveryChannelConfiguredPerCommunicationType)
+        {
+            if (notification is null)
+            {
+                throw new ArgumentNullException(nameof(notification));
+            }
+
+            if (deliveryChannelConfiguredPerCommunicationType is null)
+            {
+                throw new ArgumentNullException(nameof(deliveryChannelConfiguredPerCommunicationType));
+            }
+
+            return new UserNotification(
+                notification.Id,
+                notification.NotificationType,
+                notification.UserId,
+                notification.Timestamp,
+                notification.Properties,
+                notification.Metadata,
+                notification.ChannelStatuses,
+                deliveryChannelConfiguredPerCommunicationType);
         }
     }
 }

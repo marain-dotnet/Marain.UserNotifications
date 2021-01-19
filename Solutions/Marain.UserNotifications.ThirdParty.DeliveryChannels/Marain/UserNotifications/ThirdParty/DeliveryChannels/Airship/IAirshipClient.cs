@@ -30,6 +30,6 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
         /// <param name="namedUser">The unique Id of the targetted user which is being sent this notification.</param>
         /// <param name="notification">The notification object which containts all necessary information about the triggered notificaion.</param>
         /// <returns>Response content returned from the Airship Endpoint.</returns>
-        Task<string> SendWebPushNotification(string namedUser, Notification notification);
+        Task<AirshipWebPushResponse?> SendWebPushNotification(string namedUser, Notification notification);
     }
 }
