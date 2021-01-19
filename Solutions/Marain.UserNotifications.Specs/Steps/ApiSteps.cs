@@ -73,21 +73,13 @@ namespace Marain.UserNotifications.Specs.Steps
         [When("I send a management API request to create a new notification:")]
         public async Task WhenISendAManagementApiRequestToCreateANewNotification(string requestJson)
         {
-            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
-            string transientTenantId = this.featureContext.GetTransientTenantId();
+            await this.CreateNotifications(requestJson, string.Empty).ConfigureAwait(false);
+        }
 
-            HttpResponseMessage response = await HttpClient.PutAsync(
-                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications"),
-                requestContent).ConfigureAwait(false);
-
-            this.scenarioContext.Set(response);
-
-            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (!string.IsNullOrEmpty(responseContent))
-            {
-                this.scenarioContext.Set(responseContent, ResponseContent);
-            }
+        [When("I send a management API request to create a new notification for delivery channels")]
+        public async Task WhenISendAManagementAPIRequestToCreateANewNotificationForDeliveryChannels(string requestJson)
+        {
+            await this.CreateNotifications(requestJson, "/v2").ConfigureAwait(false);
         }
 
         [Given("I have sent a management API request to batch update the delivery status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
@@ -387,6 +379,25 @@ namespace Marain.UserNotifications.Specs.Steps
                 new Linear(TimeSpan.FromSeconds(5), int.MaxValue),
                 new AnyExceptionPolicy(),
                 false);
+        }
+
+        private async Task CreateNotifications(string requestJson, string version)
+        {
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            HttpResponseMessage response = await HttpClient.PutAsync(
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications{version}"),
+                requestContent).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
+            }
         }
 
         private async Task SendGetRequest(Uri baseUri, string path)
