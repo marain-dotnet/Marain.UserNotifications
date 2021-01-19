@@ -57,6 +57,7 @@ namespace Marain.UserNotifications.Management.Host.Mappers
                     resource.Image,
                     resource.NotificationType,
                     CommunicationType = CommunicationType.WebPush,
+                    resource.ActionUrl,
                 });
 
             response.ResolveAndAddByOwnerAndRelationType(

@@ -20,17 +20,17 @@ Scenario: Create a web push notification template
 
 Scenario: Update a web push notification template
 	Given I have created and stored a web push notification template
-		| body | title | contentType                                                                      | image        | notificationType      |
-		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template1 |
+		| body | title | contentType                                                                      | actionUrl                 | image        | notificationType      |
+		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.test.template1 |
 	When I send the user notification template API a request to update an existing web push notification template
-		| body                  | title | contentType                                                                      | image        | notificationType      |
-		| updated body template | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template1 |
+		| body                  | title | contentType                                                                      | actionUrl                 | image        | notificationType      |
+		| updated body template | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.test.template1 |
 	Then the response status code should be 'OK'
 
 Scenario: Get a web push notification template
 	Given I have created and stored a web push notification template
-		| body                                    | title | contentType                                                                      | image        | notificationType      |
-		| A new lead was added by {{leadAddedBy}} | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template2 |
+		| body                                    | title | contentType                                                                      | actionUrl                 | image        | notificationType      |
+		| A new lead was added by {{leadAddedBy}} | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.test.template2 |
 	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template2' and communicationType 'webPush'
 	Then the response status code should be 'OK'
 	And the response header should have a property called eTag that should not be null
@@ -39,6 +39,7 @@ Scenario: Get a web push notification template
 	And the response content should have a json property called 'title' with value 'test'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1'
 	And the response content should have a json property called 'image' with value 'Base+64xddfa'
+	And the response content should have a json property called 'actionUrl' with value 'https://www.google.co.uk/'
 	And the response content should have a property called '_links.self'
 
 #####################################
