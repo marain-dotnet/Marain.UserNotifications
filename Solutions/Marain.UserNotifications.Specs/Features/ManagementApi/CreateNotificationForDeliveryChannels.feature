@@ -1,10 +1,10 @@
 ﻿@perFeatureContainer
 @useApis
 @useTransientTenant
-Feature: Create Notification For Delivery Channels
+Feature: Create Notification For Third Party Delivery Channels
 
 Scenario: Create a web push notification for a single user
-	When I send a management API request to create a new notification for delivery channels
+	When I send a management API request to create a new notification via third party delivery channels
 		"""
         {
             "notificationType": "marain.notifications.test.v1",
@@ -28,7 +28,7 @@ Scenario: Create a web push notification for a single user
 	And the long running operation whose Url is in the response Location header should have a 'status' of 'Succeeded' within 30 seconds
 
 Scenario: Create web push notifications for multiple users
-	When I send a management API request to create a new notification for delivery channels
+	When I send a management API request to create a new notification via third party delivery channels
 		"""
         {
             "notificationType": "marain.notifications.test.v1",

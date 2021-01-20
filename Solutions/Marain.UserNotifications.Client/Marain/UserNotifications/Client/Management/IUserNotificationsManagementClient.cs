@@ -26,6 +26,18 @@ namespace Marain.UserNotifications.Client.Management
             CreateNotificationsRequest body,
             CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Create a new notification for one or more users and also handle delivery via configured communication type and delivery channel.
+        /// </summary>
+        /// <param name="tenantId">The tenant within which the request should operate.</param>
+        /// <param name="body">The new notifications.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>A task representing the operation status.</returns>
+        Task<ApiResponse> CreateNotificationForDeliveryChannelsAsync(
+             string tenantId,
+             CreateNotificationForDeliveryChannelsRequest body,
+             CancellationToken cancellationToken = default);
+
         /// <summary>Updates delivery statuses for a batch of user notifications.</summary>
         /// <param name="tenantId">The tenant within which the request should operate.</param>
         /// <param name="body">The update batch.</param>

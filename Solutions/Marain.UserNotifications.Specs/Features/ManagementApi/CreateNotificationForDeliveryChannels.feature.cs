@@ -20,11 +20,11 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Create Notification For Delivery Channels")]
+    [NUnit.Framework.DescriptionAttribute("Create Notification For Third Party Delivery Channels")]
     [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
     [NUnit.Framework.CategoryAttribute("useApis")]
     [NUnit.Framework.CategoryAttribute("useTransientTenant")]
-    public partial class CreateNotificationForDeliveryChannelsFeature
+    public partial class CreateNotificationForThirdPartyDeliveryChannelsFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -41,7 +41,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApi
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApi", "Create Notification For Delivery Channels", null, ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApi", "Create Notification For Third Party Delivery Channels", null, ProgrammingLanguage.CSharp, new string[] {
                         "perFeatureContainer",
                         "useApis",
                         "useTransientTenant"});
@@ -110,8 +110,8 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 7
- testRunner.When("I send a management API request to create a new notification for delivery channel" +
-                        "s", @"      {
+ testRunner.When("I send a management API request to create a new notification via third party deli" +
+                        "very channels", @"      {
           ""notificationType"": ""marain.notifications.test.v1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
           ""userIds"": [
@@ -173,8 +173,8 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 31
- testRunner.When("I send a management API request to create a new notification for delivery channel" +
-                        "s", @"      {
+ testRunner.When("I send a management API request to create a new notification via third party deli" +
+                        "very channels", @"      {
           ""notificationType"": ""marain.notifications.test.v1"",
           ""timestamp"": ""2020-07-21T17:32:28Z"",
           ""userIds"": [

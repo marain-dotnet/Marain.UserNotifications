@@ -77,6 +77,22 @@ namespace Marain.UserNotifications.Client.Management
             return this.CallLongRunningOperationEndpointAsync(requestUri, HttpMethod.Put, body, cancellationToken);
         }
 
+        /// <inheritdoc />
+        public Task<ApiResponse> CreateNotificationForDeliveryChannelsAsync(
+            string tenantId,
+            CreateNotificationForDeliveryChannelsRequest body,
+            CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+
+            var requestUri = new Uri($"/{tenantId}/marain/usernotifications/v2", UriKind.Relative);
+
+            return this.CallLongRunningOperationEndpointAsync(requestUri, HttpMethod.Put, body, cancellationToken);
+        }
+
         /// <inheritdoc/>
         public async Task<ApiResponse<WebPushTemplateResource>> GetWebPushNotificationTemplate(
             string tenantId,

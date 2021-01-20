@@ -66,6 +66,26 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [When("I use the client to send a management API request to create a new notification via third party delivery channels")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToCreateANewNotificationViaThirdPartyDeliveryChannels(Table table)
+        {
+            IJsonSerializerSettingsProvider jsonSerializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            CreateNotificationForDeliveryChannelsRequest data = BuildCreateNotificationForDeliveryChannelsRequestFrom(table.Rows[0], jsonSerializerSettingsProvider.Instance);
+
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            try
+            {
+                ApiResponse result = await client.CreateNotificationForDeliveryChannelsAsync(transientTenantId, data, CancellationToken.None).ConfigureAwait(false);
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
         [When("I use the client to send an API delivery request for notifications for the user with Id '(.*)'")]
         public Task WhenIUseTheClientToSendAnAPIDeliveryRequestForNotificationsForTheUserWithId(string userId)
         {
@@ -582,6 +602,26 @@ namespace Marain.UserNotifications.Specs.Steps
                 Timestamp = DateTime.Parse(tableRow["Timestamp"]),
                 UserIds = userIds,
                 Properties = properties,
+            };
+        }
+
+        private static CreateNotificationForDeliveryChannelsRequest BuildCreateNotificationForDeliveryChannelsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        {
+            string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();
+            string[] userIds = JArray.Parse(tableRow["UserIds"]).Select(token => token.Value<string>()).ToArray();
+            var properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["PropertiesJson"], serializerSettings).ToDictionary(x => x.Key, x => (object)x.Value);
+            var deliveryChannelConfiguredPerCommunicationType = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["DeliveryChannelConfiguredPerCommunicationType"], serializerSettings).ToDictionary(x => x.Key, x => x.Value);
+
+            string? notificationId = tableRow.ContainsKey("Id") ? tableRow["Id"] : null;
+
+            return new CreateNotificationForDeliveryChannelsRequest
+            {
+                NotificationType = tableRow["NotificationType"],
+                CorrelationIds = correlationIds,
+                Timestamp = DateTime.Parse(tableRow["Timestamp"]),
+                UserIds = userIds,
+                Properties = properties,
+                DeliveryChannelConfiguredPerCommunicationType = deliveryChannelConfiguredPerCommunicationType,
             };
         }
 

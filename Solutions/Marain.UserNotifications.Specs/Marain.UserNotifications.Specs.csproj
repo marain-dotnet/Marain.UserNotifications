@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ApiDeliveryChannelClient\MarkNotificationAsRead.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApiClient\CreateNotifications - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApi\CreateNotifications - Copy.feature.cs" />
   </ItemGroup>
 
@@ -76,6 +77,9 @@
     <Compile Update="Features\ApiDeliveryChannelClient\MarkNotificationAsRead.feature.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
+    <Compile Update="Features\ManagementApiClient\CreateNotificationForDeliveryChannels.feature.cs">
+      <DependentUpon>CreateNotificationForDeliveryChannels.feature</DependentUpon>
+    </Compile>
     <Compile Update="Features\ManagementApi\CreateNotificationForDeliveryChannels.feature.cs">
       <DependentUpon>CreateNotificationForDeliveryChannels.feature</DependentUpon>
     </Compile>
@@ -83,6 +87,10 @@
 
   <ItemGroup>
     <SpecFlowFeatureFiles Update="Features\ApiDeliveryChannelClient\MarkNotificationAsRead.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\ManagementApiClient\CreateNotificationForDeliveryChannels.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>

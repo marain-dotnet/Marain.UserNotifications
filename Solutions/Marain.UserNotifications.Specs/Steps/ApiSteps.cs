@@ -76,7 +76,7 @@ namespace Marain.UserNotifications.Specs.Steps
             await this.CreateNotifications(requestJson, string.Empty).ConfigureAwait(false);
         }
 
-        [When("I send a management API request to create a new notification for delivery channels")]
+        [When("I send a management API request to create a new notification via third party delivery channels")]
         public async Task WhenISendAManagementAPIRequestToCreateANewNotificationForDeliveryChannels(string requestJson)
         {
             await this.CreateNotifications(requestJson, "/v2").ConfigureAwait(false);
