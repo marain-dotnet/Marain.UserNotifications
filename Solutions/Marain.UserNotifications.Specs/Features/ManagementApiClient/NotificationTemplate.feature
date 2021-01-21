@@ -13,37 +13,40 @@ Scenario: Create a Web Push Notification Template
 			"body": "this is a test template",
 			"title": "test",
 			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
-			"notificationType": "marain.test.template"
+			"notificationType": "marain.test.template",
+			"actionUrl": "https://www.google.co.uk/"
 		}
 		"""
 	Then the client response status code should be 'OK'
 
 Scenario: Update a Web Push Notification Template
 	Given I have created and stored a web push notification template
-		| body | title | contentType                                                                      | image        | notificationType      |
-		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template3 |
+		| body | title | contentType                                                                      | actionUrl                 | image        | notificationType      |
+		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.test.template3 |
 	When I use the client to send the notification template API a request to update a web push notification template
 		"""
 		{
 			"body": "this is an updated test template2",
 			"title": "test",
 			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
-			"notificationType": "marain.test.template3"
+			"notificationType": "marain.test.template3",
+			"actionUrl": "https://www.google.co.uk/"
 		}
 		"""
 	Then the client response status code should be 'OK'
 
 Scenario: Get a Web Push notification template
 	Given I have created and stored a web push notification template
-		| body | title | contentType                                                                      | image        | notificationType      |
-		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | Base+64xddfa | marain.test.template4 |
-	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template' and communication type 'WebPush'
+		| body | title | contentType                                                                      | actionUrl                 | image        | notificationType      |
+		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.test.template4 |
+	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template4' and communication type 'WebPush'
 	Then the client response status code should be 'OK'
 	And the web push template in the UserManagement API response should have a 'body' with value 'body'
 	And the web push template in the UserManagement API response should have a 'title' with value 'test'
 	And the web push template in the UserManagement API response should have a 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1'
 	And the web push template in the UserManagement API response should have a 'image' with value 'Base+64xddfa'
 	And the web push template in the UserManagement API response should have a 'notificationType' with value 'marain.test.template4'
+	And the web push template in the UserManagement API response should have a 'actionUrl' with value 'https://www.google.co.uk/'
 
 #####################################
 # Email notification template tests #
