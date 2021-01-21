@@ -53,8 +53,7 @@ namespace Marain.UserNotifications.Storage.AzureBlob
 
             if (!exists)
             {
-                // TODO:
-                // return (default(T), default(string));
+                throw new NotificationTemplateNotFoundException(this.GetBlockBlobName(notificationType, communicationType));
             }
 
             string? etag = blob.Properties.ETag;

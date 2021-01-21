@@ -42,6 +42,10 @@ Scenario: Get a web push notification template
 	And the response content should have a json property called 'actionUrl' with value 'https://www.google.co.uk/'
 	And the response content should have a property called '_links.self'
 
+Scenario: Get a web push notification for invalid notificationType
+	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.invalidNotificationType' and communicationType 'webPush'
+	Then the response status code should be 'NotFound'
+
 #####################################
 # Email notification template tests #
 #####################################

@@ -8,6 +8,7 @@ namespace Marain.UserNotifications.Management.Host
 {
     using System.Net.Http;
     using Marain.Extensions.DependancyInjection;
+    using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.Composer;
     using Marain.UserNotifications.Management.Host.Helpers;
@@ -76,6 +77,8 @@ namespace Marain.UserNotifications.Management.Host
                     hostConfig.Documents.RegisterOpenApiServiceWithEmbeddedDefinition(
                         serviceType.Assembly,
                         $"{serviceType.Namespace}.ManagementService.yaml");
+
+                    hostConfig.Exceptions.Map<NotificationTemplateNotFoundException>(404);
 
                     hostConfig.Documents.AddSwaggerEndpoint();
                 });
