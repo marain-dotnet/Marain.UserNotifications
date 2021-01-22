@@ -63,8 +63,6 @@ namespace Marain.UserNotifications.Management.Host
             services.AddSingleton<IOpenApiService, GetTemplateService>();
             services.AddSingleton<IOpenApiService, CreateOrUpdateTemplateService>();
             services.AddSingleton<IOpenApiService, GenerateTemplateService>();
-            services.AddSingleton<IOpenApiService, GetDeliveryChannelConfigurationService>();
-            services.AddSingleton<IOpenApiService, CreateOrUpdateDeliveryChannelConfigurationService>();
 
             services.AddHttpClient();
             services.AddSingleton<IAirshipClientFactory, AirshipClientFactory>();

@@ -83,13 +83,6 @@ namespace Marain.UserNotifications.Specs.Bindings
                             AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
                         });
 
-                    // Add the tenanted blob store for the delivery channel configuration store so we can clear up our own mess after the test.
-                    services.AddTenantedAzureBlobDeliveryChannelConfigurationStore(
-                        sp => new TenantCloudBlobContainerFactoryOptions
-                        {
-                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                        });
-
                     services.RegisterCoreUserNotificationsContentTypes();
                 });
         }

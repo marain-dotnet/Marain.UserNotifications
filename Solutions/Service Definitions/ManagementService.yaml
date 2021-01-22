@@ -327,70 +327,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
 
-  /{tenantId}/marain/usernotifications/deliverychannelconfiguration:
-    get:
-      summary: Query Delivery Channel Configuration
-      operationId: getDeliveryChannelConfiguration
-      parameters:
-        - $ref: '#/components/parameters/tenantId'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeliveryChannelConfiguration'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        '404':
-          description: Not found
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        '501':
-          description: Not implemented
-          
-    put:
-      summary: Create or update a new delivery channel configuration per tenant.
-      operationId: createOrUpdateDeliveryChannelConfiguration
-      parameters:
-        - $ref: '#/components/parameters/tenantId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              anyOf:
-               - $ref: '#/components/schemas/DeliveryChannelConfiguration'
-      responses:
-        '200':
-          description: Successful operation
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        '404':
-          description: Not found
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-
 components:
   schemas:
     CreateNotificationsRequest:
@@ -721,18 +657,6 @@ components:
                 self:
                   $ref: '#/components/schemas/Link'
 
-    DeliveryChannelConfiguration:
-      description: Object used to create/update a new delivery channel configuration for a tenant.
-      properties:
-        DeliveryChannelConfiguredPerCommunicationType:
-          description: This is a dictionary of (CommunicationType, DeliveryChannel) that configures which delivery channel will be used for what type of communication type.
-          nullable: false
-          type: object
-        DeliveryChannelKeyVaultSecretUrl:
-          description: This is a dictionary of the (DeliveryChannel, string) that configures the KeyVault location for the keys/secrets to be used by the delivery channels to send the notification through the said delivery channels.
-          nullable: false
-          type: object
-              
     NotificationStatus:
       description: The delivery/read status for a notification on a delivery channel.
       allOf:

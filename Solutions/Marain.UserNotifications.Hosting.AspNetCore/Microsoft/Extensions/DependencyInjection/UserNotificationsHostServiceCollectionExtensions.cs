@@ -89,13 +89,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
                 });
 
-            // Delivery Channel Configuration
-            services.AddTenantedAzureBlobDeliveryChannelConfigurationStore(
-                sp => new TenantCloudBlobContainerFactoryOptions
-                {
-                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                });
-
             return services;
         }
 

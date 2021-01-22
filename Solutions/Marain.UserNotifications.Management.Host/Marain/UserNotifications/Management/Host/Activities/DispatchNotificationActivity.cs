@@ -9,7 +9,6 @@ namespace Marain.UserNotifications.Management.Host.Activities
     using System.Linq;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
-    using Marain.DeliveryChannelConfiguration;
     using Marain.Models;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
@@ -82,7 +81,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
 
             if (request.Payload.Id is null)
             {
-                throw new Exception($"Notification Id missing.");
+                throw new Exception("Notification has to be created before being dispatched via Third Party Delivery Channels.");
             }
 
             ITenant tenant = await this.tenantProvider.GetTenantAsync(request.TenantId).ConfigureAwait(false);
@@ -141,7 +140,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
             // UserId will be a combination of tenantId and userId of that business.
             string airshipUserId = $"{tenant.Id}:{userId}";
 
-            // TODO: THINK ABOUT THIS. SHOULD TAKE THIS FROM APPSETTING / BEING PASSED INTO THIS FROM THE NEW NOTIFICATION OBJECT.
+            // TODO: This will be accepted from the ITenant
             string sharedKeyVault = "https://smtlocalshared.vault.azure.net/secrets/SharedAirshipKeys/";
             string? airshipSecretsString = await KeyVaultHelper.GetDeliveryChannelSecretAsync(this.configuration, sharedKeyVault).ConfigureAwait(false);
 
@@ -172,7 +171,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
             }
             catch (Exception)
             {
-                // TODO: Capture the failure reason and add to the delivery channel json.
+                // TODO: Capture the failure reason and add to the delivery channel json in the future.
                 await this.UpdateNotificationDeliveryStatusAsync(airshipDeliveryChannelObject.ContentType, notificationId, UserNotificationDeliveryStatus.Failed, tenant).ConfigureAwait(false);
             }
         }

@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
     using System;
     using System.Linq;
     using Corvus.Azure.Storage.Tenancy;
-    using Marain.DeliveryChannelConfiguration;
     using Marain.NotificationTemplates;
     using Marain.UserNotifications;
     using Marain.UserNotifications.Storage.AzureBlob;
@@ -57,26 +56,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTenantCloudBlobContainerFactory(getTenantCloudBlobContainerFactoryOptions);
             services.AddSingleton<ITenantedNotificationTemplateStoreFactory, TenantedAzureBlobTemplateStoreFactory>();
 
-            return services;
-        }
-
-        /// <summary>
-        /// Adds Azure blob-based implementation of <see cref="ITenantedDeliveryChannelConfigurationStoreFactory"/> to the service container.
-        /// </summary>
-        /// <param name="services">The collection.</param>
-        /// <param name="getTenantCloudBlobContainerFactoryOptions">A callback function that returns the <see cref="TenantCloudBlobContainerFactoryOptions"/>.</param>
-        /// <returns>The configured <see cref="IServiceCollection"/>.</returns>
-        public static IServiceCollection AddTenantedAzureBlobDeliveryChannelConfigurationStore(
-            this IServiceCollection services,
-            Func<IServiceProvider, TenantCloudBlobContainerFactoryOptions> getTenantCloudBlobContainerFactoryOptions)
-        {
-            if (services.Any(s => s.ServiceType is ITenantedDeliveryChannelConfigurationStoreFactory))
-            {
-                return services;
-            }
-
-            services.AddTenantCloudBlobContainerFactory(getTenantCloudBlobContainerFactoryOptions);
-            services.AddSingleton<ITenantedDeliveryChannelConfigurationStoreFactory, TenantedAzureBlobDeliveryChannelConfigurationStoreFactory>();
             return services;
         }
     }

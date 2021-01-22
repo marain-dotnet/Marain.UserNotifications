@@ -24,14 +24,6 @@
         "containerName": "templates"
       },
       "description": "Template Store"
-    },
-    {
-      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage",
-      "key": "deliveryChannelConfigurationStore",
-      "containerDefinition": {
-        "containerName": "deliverychannelconfiguration"
-      },
-      "description": "Delivery Channel Configuration Store"
     }
   ]
 }

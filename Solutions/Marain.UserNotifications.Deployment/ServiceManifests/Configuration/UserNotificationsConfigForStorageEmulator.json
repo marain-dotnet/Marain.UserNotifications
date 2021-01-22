@@ -24,14 +24,5 @@
       "container": "templates",
       "disableTenantIdPrefix": false
     }
-  },
-  {
-    "key": "deliveryChannelConfigurationStore",
-    "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azureblobstorage",
-    "configuration": {
-      "accountName": null,
-      "container": "deliverychannelconfiguration",
-      "disableTenantIdPrefix": false
-    }
   }
 ]
