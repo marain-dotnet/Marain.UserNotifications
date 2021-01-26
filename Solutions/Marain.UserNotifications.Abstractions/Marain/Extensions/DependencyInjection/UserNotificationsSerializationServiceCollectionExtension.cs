@@ -2,16 +2,14 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.Extensions.DependancyInjection
+namespace Marain.Extensions.DependencyInjection
 {
     using Corvus.ContentHandling;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
-    /// Class that provides a method for adding user notification objects
-    /// to the service collection so they can be serialized and deserialised by
-    /// their content type.
+    /// Adds content types to a service collection enabling serialization and deserializion of email, SMS, and web push templates.
     /// </summary>
     public static class UserNotificationsSerializationServiceCollectionExtension
     {

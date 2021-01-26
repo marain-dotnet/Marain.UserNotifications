@@ -20,8 +20,8 @@ namespace Marain.NotificationTemplates.CommunicationObjects
         /// <param name="fromName">The from name of the email.</param>
         /// <param name="fromEmail">The from email of the email.</param>
         /// <param name="toEmails">The email addresses this email will be sent to.</param>
-        /// <param name="cCEmails">The carbon copy email addresses this email will be sent to.</param>
-        /// <param name="bCCEmails">The blind carbon copy email addresses this email will be sent to.</param>
+        /// <param name="ccEmails">The carbon copy email addresses this email will be sent to.</param>
+        /// <param name="bccEmails">The blind carbon copy email addresses this email will be sent to.</param>
         public Email(
             string body,
             string subject,
@@ -29,8 +29,8 @@ namespace Marain.NotificationTemplates.CommunicationObjects
             string fromName,
             string fromEmail,
             IEnumerable<string> toEmails,
-            IEnumerable<string> cCEmails,
-            IEnumerable<string> bCCEmails)
+            IEnumerable<string> ccEmails,
+            IEnumerable<string> bccEmails)
         {
             this.Body = body;
             this.Subject = subject;
@@ -38,8 +38,8 @@ namespace Marain.NotificationTemplates.CommunicationObjects
             this.FromName = fromName;
             this.FromEmail = fromEmail;
             this.ToEmails = toEmails;
-            this.CCEmails = cCEmails;
-            this.BCCEmails = bCCEmails;
+            this.CCEmails = ccEmails;
+            this.BccEmails = bccEmails;
         }
 
         /// <summary>
@@ -80,6 +80,6 @@ namespace Marain.NotificationTemplates.CommunicationObjects
         /// <summary>
         /// Gets a list of email addresses who will receive blind carbon copies of this email.
         /// </summary>
-        public IEnumerable<string> BCCEmails { get; }
+        public IEnumerable<string> BccEmails { get; }
     }
 }

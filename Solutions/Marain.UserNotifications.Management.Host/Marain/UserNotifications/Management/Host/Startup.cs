@@ -7,7 +7,7 @@
 namespace Marain.UserNotifications.Management.Host
 {
     using System.Net.Http;
-    using Marain.Extensions.DependancyInjection;
+    using Marain.Extensions.DependencyInjection;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.Composer;
