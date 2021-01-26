@@ -14,6 +14,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.Composer;
     using Marain.UserNotifications.Management.Host.Helpers;
+    using Marain.UserNotifications.Management.Host.Models;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship.Models;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.KeyVaultSecretModels;
@@ -140,9 +141,14 @@ namespace Marain.UserNotifications.Management.Host.Activities
             // UserId will be a combination of tenantId and userId of that business.
             string airshipUserId = $"{tenant.Id}:{userId}";
 
-            // TODO: This will be accepted from the ITenant
-            string sharedKeyVault = "https://smtlocalshared.vault.azure.net/secrets/SharedAirshipKeys/";
-            string? airshipSecretsString = await KeyVaultHelper.GetDeliveryChannelSecretAsync(this.configuration, sharedKeyVault).ConfigureAwait(false);
+            // Fetch the shared airship config url from the tenant
+            tenant.Properties.TryGet(Constants.TenantPropertyNames.SharedAirshipConfig, out string sharedAirshipConfigUrl);
+            if (string.IsNullOrEmpty(sharedAirshipConfigUrl))
+            {
+                throw new Exception($"There is no SharedAirshipConfig defined for tenant: {tenant.Id} and notification type: {notificationType}");
+            }
+
+            string? airshipSecretsString = await KeyVaultHelper.GetDeliveryChannelSecretAsync(this.configuration, sharedAirshipConfigUrl).ConfigureAwait(false);
 
             if (airshipSecretsString is null)
             {
