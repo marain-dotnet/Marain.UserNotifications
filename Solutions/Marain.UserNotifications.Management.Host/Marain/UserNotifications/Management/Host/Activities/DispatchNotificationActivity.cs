@@ -142,15 +142,15 @@ namespace Marain.UserNotifications.Management.Host.Activities
             string airshipUserId = $"{tenant.Id}:{userId}";
 
             // Fetch the shared airship config url from the tenant
-            tenant.Properties.TryGet(Constants.TenantPropertyNames.SharedAirshipConfig, out string sharedAirshipConfigUrl);
-            if (string.IsNullOrEmpty(sharedAirshipConfigUrl))
+            tenant.Properties.TryGet(Constants.TenantPropertyNames.AirshipKeyVaultUrl, out string airshipKeyVaultUrl);
+            if (string.IsNullOrEmpty(airshipKeyVaultUrl))
             {
                 throw new Exception($"There is no SharedAirshipConfig defined for tenant: {tenant.Id} and notification type: {notificationType}");
             }
 
-            string? airshipSecretsString = await KeyVaultHelper.GetDeliveryChannelSecretAsync(this.configuration, sharedAirshipConfigUrl).ConfigureAwait(false);
+            string? airshipSecretsString = await KeyVaultHelper.GetDeliveryChannelSecretAsync(this.configuration, airshipKeyVaultUrl).ConfigureAwait(false);
 
-            if (airshipSecretsString is null)
+            if (string.IsNullOrEmpty(airshipSecretsString))
             {
                 throw new Exception("There is no airship delivery channel configuration setup in the keyvault");
             }

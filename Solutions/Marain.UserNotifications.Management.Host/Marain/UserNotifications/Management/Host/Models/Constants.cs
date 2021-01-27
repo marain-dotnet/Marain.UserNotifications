@@ -20,9 +20,9 @@ namespace Marain.UserNotifications.Management.Host.Models
         public static class TenantPropertyNames
         {
             /// <summary>
-            /// The Shared Airship key vault url.
+            /// The Airship key vault url.
             /// </summary>
-            public const string SharedAirshipConfig = "SharedAirshipConfig";
+            public const string AirshipKeyVaultUrl = "AirshipKeyVaultUrl";
         }
     }
 }
