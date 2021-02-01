@@ -98,7 +98,6 @@ namespace Marain.UserNotifications.Specs.Steps
 
             return new NotificationTemplate(
                 tableRow["notificationType"],
-                null,
                 deserialisedSms,
                 deserialisedEmail,
                 deserialisedWebPush);

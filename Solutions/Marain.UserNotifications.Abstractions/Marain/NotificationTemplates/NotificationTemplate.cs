@@ -16,19 +16,16 @@ namespace Marain.NotificationTemplates
         /// Constructor for the notification template object.
         /// </summary>
         /// <param name="notificationType">The notification type.</param>
-        /// <param name="timestamp">The last updated time.</param>
         /// <param name="smsTemplate">The SMS object for the template.</param>
         /// <param name="emailTemplate">The email object for the notification.</param>
         /// <param name="webPushTemplate">The web push object for the notification.</param>
         public NotificationTemplate(
             string notificationType,
-            DateTimeOffset? timestamp = null,
             SmsTemplate? smsTemplate = null,
             EmailTemplate? emailTemplate = null,
             WebPushTemplate? webPushTemplate = null)
         {
             this.NotificationType = notificationType;
-            this.Timestamp = timestamp != null && timestamp != default ? timestamp.Value.ToUniversalTime() : DateTimeOffset.UtcNow;
             this.SmsTemplate = smsTemplate;
             this.EmailTemplate = emailTemplate;
             this.WebPushTemplate = webPushTemplate;
@@ -38,11 +35,6 @@ namespace Marain.NotificationTemplates
         /// Gets the notification type.
         /// </summary>
         public string NotificationType { get; }
-
-        /// <summary>
-        /// Gets the date and time at which the templates were last updated.
-        /// </summary>
-        public DateTimeOffset Timestamp { get; }
 
         /// <summary>
         /// Gets the Sms object.
