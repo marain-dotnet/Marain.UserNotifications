@@ -8,7 +8,7 @@ namespace Marain.NotificationTemplates
     using Marain.NotificationTemplates.CommunicationTemplates;
 
     /// <summary>
-    /// The Notification Template structure.
+    /// The Notification Template holds the templated notification which will be delivered via different communication types.
     /// </summary>
     public class NotificationTemplate
     {
