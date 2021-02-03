@@ -4,11 +4,6 @@
 
 namespace Marain.UserNotifications.Management.Host.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Text;
-
     /// <summary>
     /// Constants for tenant property names, field names, etc.
     /// </summary>

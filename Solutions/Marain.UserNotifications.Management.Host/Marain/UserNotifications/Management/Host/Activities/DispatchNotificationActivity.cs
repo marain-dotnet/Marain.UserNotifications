@@ -112,7 +112,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
                 throw new Exception("There was an issue generating notification templates.");
             }
 
-            foreach (KeyValuePair<CommunicationType, DeliveryChannel> keyValuePair in request.Payload.DeliveryChannelConfiguredPerCommunicationType)
+            foreach (KeyValuePair<CommunicationType, string> keyValuePair in request.Payload.DeliveryChannelConfiguredPerCommunicationType)
             {
                 switch (keyValuePair.Value)
                 {

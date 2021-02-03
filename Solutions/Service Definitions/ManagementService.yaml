@@ -700,7 +700,8 @@ components:
     DeliveryChannel:
         description: Delivery Channels
         type: string
-        enum: ['airship','sendGrid']
+        enum: ['application/vnd.marain.usernotifications.deliverychannel.airship.v1',
+              'application/vnd.marain.usernotifications.deliverychannel.sendgrid.v1']
     
     PagedNotificationStatusListResponse:
       description: A paged list of notification statuses

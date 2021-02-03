@@ -39,7 +39,7 @@ namespace Marain.UserNotifications
             UserNotificationMetadata metadata,
 #pragma warning disable SA1011 // Closing square brackets should be spaced correctly
             IEnumerable<UserNotificationStatus>? channelStatuses = null,
-            Dictionary<CommunicationType, DeliveryChannel>? deliveryChannelConfiguredPerCommunicationType = null)
+            Dictionary<CommunicationType, string>? deliveryChannelConfiguredPerCommunicationType = null)
 #pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         {
             this.Id = id;
@@ -97,7 +97,7 @@ namespace Marain.UserNotifications
         /// <summary>
         /// Gets the desired delivery channels which are configured for the communication type.
         /// </summary>
-        public Dictionary<CommunicationType, DeliveryChannel>? DeliveryChannelConfiguredPerCommunicationType { get; }
+        public Dictionary<CommunicationType, string>? DeliveryChannelConfiguredPerCommunicationType { get; }
 
         /// <summary>
         /// Constructs a hash for the notification that can be used to determine whether two notifications are

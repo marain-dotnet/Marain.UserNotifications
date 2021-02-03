@@ -212,7 +212,7 @@ namespace Marain.UserNotifications
         /// <returns>A copy of the notification with the updated delivery status.</returns>
         public static UserNotification AddDeliveryChannelConfiguredPerCommunicationType(
             this UserNotification notification,
-            Dictionary<CommunicationType, DeliveryChannel>? deliveryChannelConfiguredPerCommunicationType)
+            Dictionary<CommunicationType, string>? deliveryChannelConfiguredPerCommunicationType)
         {
             if (notification is null)
             {

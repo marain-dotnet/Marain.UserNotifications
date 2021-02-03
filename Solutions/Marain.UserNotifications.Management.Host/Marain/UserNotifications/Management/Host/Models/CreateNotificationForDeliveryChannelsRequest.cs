@@ -31,7 +31,7 @@ namespace Marain.UserNotifications.Management.Host.Models
             DateTime timestamp,
             IPropertyBag properties,
             string[] correlationIds,
-            Dictionary<CommunicationType, DeliveryChannel>? deliveryChannelConfiguredPerCommunicationType = null)
+            Dictionary<CommunicationType, string>? deliveryChannelConfiguredPerCommunicationType = null)
         {
             this.NotificationType = notificationType;
             this.UserIds = userIds;
@@ -67,7 +67,7 @@ namespace Marain.UserNotifications.Management.Host.Models
         /// <summary>
         /// Gets the desired delivery channels which are configured for the communication type.
         /// </summary>
-        public Dictionary<CommunicationType, DeliveryChannel>? DeliveryChannelConfiguredPerCommunicationType { get; }
+        public Dictionary<CommunicationType, string>? DeliveryChannelConfiguredPerCommunicationType { get; }
 
         /// <summary>
         /// Gets additional data associated with the notification. This is generally used by a delivery channel

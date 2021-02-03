@@ -7,16 +7,16 @@ namespace Marain.UserNotifications.Client.Management.Resources
     /// <summary>
     /// Values of the different Delivery Channels which are integrated.
     /// </summary>
-    public enum DeliveryChannel
+    public static class DeliveryChannel
     {
         /// <summary>
         /// Airship delivery channel.
         /// </summary>
-        Airship,
+        public const string Airship = "application/vnd.marain.usernotifications.deliverychannel.airship.v1";
 
         /// <summary>
         /// SendGrid delivery channel.
         /// </summary>
-        SendGrid,
+        public const string SendGrid = "application/vnd.marain.usernotifications.deliverychannel.sendgrid.v1";
     }
 }

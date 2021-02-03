@@ -13,7 +13,7 @@ Scenario: Create a web push notification for a single user
                 "user1"
             ],
             "deliveryChannelConfiguredPerCommunicationType": {
-                "webPush": "airship"
+                "webPush": "application/vnd.marain.usernotifications.deliverychannel.airship.v1"
             },
             "correlationIds": ["cid1", "cid2"],
             "properties": {
@@ -42,7 +42,7 @@ Scenario: Create web push notifications for multiple users
                 "user7"
             ],
             "deliveryChannelConfiguredPerCommunicationType": {
-                "webPush": "airship"
+                "webPush": "application/vnd.marain.usernotifications.deliverychannel.airship.v1"
             },
             "correlationIds": ["cid1", "cid2"],
             "properties": {

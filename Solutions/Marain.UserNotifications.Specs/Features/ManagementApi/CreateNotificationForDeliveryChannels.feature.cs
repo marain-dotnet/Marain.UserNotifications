@@ -118,7 +118,7 @@ this.ScenarioInitialize(scenarioInfo);
               ""user1""
           ],
           ""deliveryChannelConfiguredPerCommunicationType"": {
-              ""webPush"": ""airship""
+              ""webPush"": ""application/vnd.marain.usernotifications.deliverychannel.airship.v1""
           },
           ""correlationIds"": [""cid1"", ""cid2""],
           ""properties"": {
@@ -186,7 +186,7 @@ this.ScenarioInitialize(scenarioInfo);
               ""user7""
           ],
           ""deliveryChannelConfiguredPerCommunicationType"": {
-              ""webPush"": ""airship""
+              ""webPush"": ""application/vnd.marain.usernotifications.deliverychannel.airship.v1""
           },
           ""correlationIds"": [""cid1"", ""cid2""],
           ""properties"": {
