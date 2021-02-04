@@ -54,6 +54,18 @@ namespace Marain.UserNotifications.Management.Host.Composer
                             string? emailBody = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
                             string? emailSubject = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Subject, existingProperties).ConfigureAwait(false);
 
+                            if (string.IsNullOrEmpty(emailSubject))
+                            {
+                                this.logger.LogError($"The template for the communication type Email doesn't have subject which is necessary to trigger a {notificationType} notification.");
+                                break;
+                            }
+
+                            if (string.IsNullOrEmpty(emailBody))
+                            {
+                                this.logger.LogError($"The template for the communication type Email doesn't have body which is necessary to trigger a {notificationType} notification.");
+                                break;
+                            }
+
                             emailTemplate = new EmailTemplate()
                             {
                                 NotificationType = notificationType,
@@ -68,11 +80,18 @@ namespace Marain.UserNotifications.Management.Host.Composer
                         }
 
                         break;
+
                     case CommunicationType.Sms:
                         try
                         {
                             (SmsTemplate, string?) smsRawTemplate = await templateStore.GetAsync<SmsTemplate>(notificationType, CommunicationType.Sms).ConfigureAwait(false);
                             string? smsBody = await this.GenerateTemplateForFieldAsync(smsRawTemplate.Item1.Body!, existingProperties).ConfigureAwait(false);
+
+                            if (string.IsNullOrEmpty(smsBody))
+                            {
+                                this.logger.LogError($"The template for the communication type Sms doesn't have body which is necessary to trigger a {notificationType} notification.");
+                                break;
+                            }
 
                             smsTemplate = new SmsTemplate() { NotificationType = notificationType, Body = smsBody };
                         }
@@ -82,6 +101,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
                         }
 
                         break;
+
                     case CommunicationType.WebPush:
                         try
                         {
@@ -90,6 +110,18 @@ namespace Marain.UserNotifications.Management.Host.Composer
                             string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
                             string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Image, existingProperties).ConfigureAwait(false);
                             string? actionUrl = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.ActionUrl, existingProperties).ConfigureAwait(false);
+
+                            if (string.IsNullOrEmpty(webPushTitle))
+                            {
+                                this.logger.LogError($"The template for the communication type WebPush doesn't have title which is necessary to trigger a {notificationType} notification.");
+                                break;
+                            }
+
+                            if (string.IsNullOrEmpty(webPushBody))
+                            {
+                                this.logger.LogError($"The template for the communication type WebPush doesn't have body which is necessary to trigger a {notificationType} notification.");
+                                break;
+                            }
 
                             webPushTemplate = new WebPushTemplate()
                             {
@@ -111,9 +143,9 @@ namespace Marain.UserNotifications.Management.Host.Composer
 
             return new NotificationTemplate(
                 notificationType,
-                smsTemplate: smsTemplate,
-                emailTemplate: emailTemplate,
-                webPushTemplate: webPushTemplate);
+                smsTemplate,
+                emailTemplate,
+                webPushTemplate);
         }
 
         /// <summary>
