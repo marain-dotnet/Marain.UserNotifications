@@ -27,9 +27,9 @@ namespace Marain.Extensions.DependencyInjection
         {
             services.AddContent(factory =>
             {
-                factory.RegisterTransientContent<EmailTemplate>();
-                factory.RegisterTransientContent<SmsTemplate>();
-                factory.RegisterTransientContent<WebPushTemplate>();
+                factory.RegisterContent<EmailTemplate>();
+                factory.RegisterContent<SmsTemplate>();
+                factory.RegisterContent<WebPushTemplate>();
             });
 
             return services;
