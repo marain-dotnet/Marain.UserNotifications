@@ -6,11 +6,15 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship.Models;
     using Newtonsoft.Json;
+    using Polly;
+    using Polly.Retry;
 
     /// <summary>
     /// Airship Client is responsible to trigger the push notification.
@@ -18,6 +22,17 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
     public class AirshipClient : IAirshipClient
     {
         private string baseUrl = "https://go.urbanairship.com";
+        private AsyncRetryPolicy<HttpResponseMessage> retryPolicy;
+
+        // Exceptions to be handled by the retry policy
+        private HttpStatusCode[] httpStatusCodesWorthRetrying =
+         {
+            HttpStatusCode.RequestTimeout, // 408
+            HttpStatusCode.InternalServerError, // 500
+            HttpStatusCode.BadGateway, // 502
+            HttpStatusCode.ServiceUnavailable, // 503
+            HttpStatusCode.GatewayTimeout, // 504
+         };
 
         /// <summary>
         /// Initilise the <see cref="AirshipClient"/>.
@@ -34,6 +49,12 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
             string? base64String = Convert.ToBase64String(plainTextBytes);
 
             this.AuthenticationHeaderValue = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", base64String);
+
+            // Handle both exceptions and return values in one policy
+            this.retryPolicy = Policy
+               .Handle<HttpRequestException>()
+               .OrResult<HttpResponseMessage>(r => this.httpStatusCodesWorthRetrying.Contains(r.StatusCode))
+               .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
         }
 
         /// <summary>
@@ -75,7 +96,7 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
 
             this.Client.DefaultRequestHeaders.Authorization = this.AuthenticationHeaderValue;
 
-            HttpResponseMessage? result = await this.Client.SendAsync(request).ConfigureAwait(false);
+            HttpResponseMessage? result = await this.retryPolicy.ExecuteAsync(async () => await this.Client.SendAsync(request).ConfigureAwait(false));
 
             string? responseContent = await result.Content.ReadAsStringAsync();
 
