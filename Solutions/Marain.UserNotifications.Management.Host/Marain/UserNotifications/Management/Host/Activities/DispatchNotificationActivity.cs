@@ -165,20 +165,18 @@ namespace Marain.UserNotifications.Management.Host.Activities
             try
             {
                 AirshipWebPushResponse? airshipResponse = await this.SendAirshipNotificationAsync(
-                      airshipUserId,
-                      airshipDeliveryChannelObject,
-                      airshipSecrets).ConfigureAwait(false);
-
+                     airshipUserId,
+                     airshipDeliveryChannelObject,
+                     airshipSecrets).ConfigureAwait(false);
                 await this.UpdateNotificationDeliveryStatusAsync(
-                    airshipDeliveryChannelObject.ContentType,
-                    notificationId,
-                    airshipResponse is null ? UserNotificationDeliveryStatus.Unknown : UserNotificationDeliveryStatus.NotTracked,
-                    tenant).ConfigureAwait(false);
+                   airshipDeliveryChannelObject.ContentType,
+                   notificationId,
+                   airshipResponse is null ? UserNotificationDeliveryStatus.Unknown : UserNotificationDeliveryStatus.NotTracked,
+                   tenant).ConfigureAwait(false);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Capture the failure reason and add to the delivery channel json in the future.
-                await this.UpdateNotificationDeliveryStatusAsync(airshipDeliveryChannelObject.ContentType, notificationId, UserNotificationDeliveryStatus.Failed, tenant).ConfigureAwait(false);
+                await this.UpdateNotificationDeliveryStatusAsync(airshipDeliveryChannelObject.ContentType, notificationId, UserNotificationDeliveryStatus.Failed, tenant, ex.Message).ConfigureAwait(false);
             }
         }
 
@@ -214,7 +212,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
             return await airshipClient.SendWebPushNotification(airshipUserId, newNotification).ConfigureAwait(false);
         }
 
-        private async Task UpdateNotificationDeliveryStatusAsync(string deliveryChannelId, string notificationId, UserNotificationDeliveryStatus deliveryStatus, ITenant tenant)
+        private async Task UpdateNotificationDeliveryStatusAsync(string deliveryChannelId, string notificationId, UserNotificationDeliveryStatus deliveryStatus, ITenant tenant, string? failureMessage = null)
         {
             IUserNotificationStore store = await this.notificationStoreFactory.GetUserNotificationStoreForTenantAsync(tenant).ConfigureAwait(false);
             UserNotification originalNotification = await store.GetByIdAsync(notificationId).ConfigureAwait(false);
@@ -222,7 +220,8 @@ namespace Marain.UserNotifications.Management.Host.Activities
             UserNotification modifiedNotification = originalNotification.WithChannelDeliveryStatus(
                 deliveryChannelId,
                 deliveryStatus,
-                DateTimeOffset.UtcNow);
+                DateTimeOffset.UtcNow,
+                failureMessage);
 
             await store.StoreAsync(modifiedNotification).ConfigureAwait(false);
         }

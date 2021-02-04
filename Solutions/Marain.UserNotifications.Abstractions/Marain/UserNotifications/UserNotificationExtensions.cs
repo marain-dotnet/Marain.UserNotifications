@@ -102,12 +102,14 @@ namespace Marain.UserNotifications
         /// <param name="deliveryChannelId">The delivery channel that the status applies to.</param>
         /// <param name="newDeliveryStatus">The new status.</param>
         /// <param name="effectiveDateTime">The time at which the status change happened.</param>
+        /// <param name="failureReason">The failure reason if the delivery channel status is failed.</param>
         /// <returns>A copy of the notification with the updated delivery status.</returns>
         public static UserNotification WithChannelDeliveryStatus(
             this UserNotification notification,
             string deliveryChannelId,
             UserNotificationDeliveryStatus newDeliveryStatus,
-            DateTimeOffset effectiveDateTime)
+            DateTimeOffset effectiveDateTime,
+            string? failureReason = null)
         {
             if (notification is null)
             {
@@ -127,7 +129,7 @@ namespace Marain.UserNotifications
             if (!(existingStatusForChannel is null))
             {
                 builder.Remove(existingStatusForChannel);
-                builder.Add(existingStatusForChannel.WithDeliveryStatus(newDeliveryStatus, effectiveDateTime));
+                builder.Add(existingStatusForChannel.WithDeliveryStatus(newDeliveryStatus, effectiveDateTime, failureReason));
             }
             else
             {
@@ -136,7 +138,8 @@ namespace Marain.UserNotifications
                     newDeliveryStatus,
                     effectiveDateTime,
                     UserNotificationReadStatus.Unknown,
-                    effectiveDateTime));
+                    effectiveDateTime,
+                    failureReason));
             }
 
             return new UserNotification(
