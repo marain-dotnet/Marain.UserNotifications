@@ -207,8 +207,8 @@ namespace Marain.UserNotifications.Storage.AzureTable
                 : null;
 
             return new GetNotificationsResult(
-                results.Take(maxItems).Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToArray(),
-                responseContinuationToken?.AsString(this.serializerSettingsProvider.Instance));
+              results.Take(maxItems).Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToArray(),
+              responseContinuationToken?.AsString(this.serializerSettingsProvider.Instance));
         }
     }
 }
