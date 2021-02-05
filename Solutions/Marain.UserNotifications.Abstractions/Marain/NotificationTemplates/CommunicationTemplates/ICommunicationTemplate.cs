@@ -17,13 +17,13 @@ namespace Marain.NotificationTemplates.CommunicationTemplates
         string ContentType { get; }
 
         /// <summary>
-        /// Gets or sets the notification type of the communication template.
+        /// Gets the notification type of the communication template.
         /// </summary>
-        string? NotificationType { get; set; }
+        string NotificationType { get; }
 
         /// <summary>
-        /// Gets or Sets the notification's etag.
+        /// Gets the notification's etag.
         /// </summary>
-        public string? ETag { get; set; }
+        public string? ETag { get; }
     }
 }
