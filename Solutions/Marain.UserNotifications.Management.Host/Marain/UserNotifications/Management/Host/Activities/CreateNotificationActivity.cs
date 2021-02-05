@@ -42,7 +42,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
         /// <param name="logger">The logger.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [FunctionName(nameof(CreateNotificationActivity))]
-        public async Task ExecuteAsync(
+        public async Task<UserNotification?> ExecuteAsync(
             [ActivityTrigger] IDurableActivityContext context,
             ILogger logger)
         {
@@ -59,7 +59,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
 
             try
             {
-                await store.StoreAsync(request.Payload).ConfigureAwait(false);
+                return await store.StoreAsync(request.Payload).ConfigureAwait(false);
             }
             catch (UserNotificationStoreConcurrencyException)
             {
@@ -70,6 +70,8 @@ namespace Marain.UserNotifications.Management.Host.Activities
                     "Received a concurrency exception when attempting to store notification for user '{userId}'.",
                     request.Payload.UserId);
             }
+
+            return null;
         }
     }
 }

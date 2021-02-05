@@ -17,18 +17,21 @@ namespace Marain.UserNotifications
         /// <param name="existing">The <see cref="UserNotificationStatus" /> to create a modified copy of.</param>
         /// <param name="newStatus">The new delivery status.</param>
         /// <param name="effectiveDateTime">The time at which the update occurred.</param>
+        /// <param name="failureReason">The failure reason if the delivery channel status is failed.</param>
         /// <returns>An updated instance of the <see cref="UserNotificationStatus"/>.</returns>
         public static UserNotificationStatus WithDeliveryStatus(
             this UserNotificationStatus existing,
             UserNotificationDeliveryStatus newStatus,
-            DateTimeOffset effectiveDateTime)
+            DateTimeOffset effectiveDateTime,
+            string? failureReason = null)
         {
             return new UserNotificationStatus(
                 existing.DeliveryChannelId,
                 newStatus,
                 effectiveDateTime.ToUniversalTime(),
                 existing.ReadStatus,
-                existing.ReadStatusLastUpdated);
+                existing.ReadStatusLastUpdated,
+                failureReason);
         }
 
         /// <summary>

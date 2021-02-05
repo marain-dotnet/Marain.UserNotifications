@@ -28,7 +28,7 @@ namespace Menes.Hal
         /// <returns>A <see cref="WebLink"/> initialized with the specified values.</returns>
         public WebLink CreateWebLink(string href, string? name = null, bool? isTemplated = null, string? title = null, string? profile = null, string? type = null, string? hreflang = null)
         {
-            if (href == null)
+            if (href is null)
             {
                 throw new ArgumentNullException(nameof(href));
             }

@@ -101,7 +101,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
                 continuationToken,
                 userNotificationStore).ConfigureAwait(false);
 
-            await this.EnsureAllNotificationsMarkedAsDelivered(context, results).ConfigureAwait(false);
+            await this.EnsureAllNotificationsMarkedAsDeliveredAsync(context, results).ConfigureAwait(false);
 
             HalDocument result = await this.userNotificationsMapper.MapAsync(
                 results,
@@ -110,7 +110,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
             return this.OkResult(result);
         }
 
-        private async Task EnsureAllNotificationsMarkedAsDelivered(IOpenApiContext context, GetNotificationsResult results)
+        private async Task EnsureAllNotificationsMarkedAsDeliveredAsync(IOpenApiContext context, GetNotificationsResult results)
         {
             // See if there are any notifications we need to mark as delivered. Whilst we want this to happen, we're
             // not going to fail the entire request operation if something goes wrong - hence the catch-all exception handler.

@@ -16,6 +16,7 @@
     <EmbeddedResource Include="..\Service Definitions\ManagementService.yaml" Link="Marain\UserNotifications\Management\Host\OpenApi\ManagementService.yaml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Corvus.DotLiquidAsync" Version="1.7.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="2.4.1" />
@@ -23,10 +24,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.8.55">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marain.UserNotifications.Abstractions\Marain.UserNotifications.Abstractions.csproj" />
     <ProjectReference Include="..\Marain.UserNotifications.Hosting.AspNetCore\Marain.UserNotifications.Hosting.AspNetCore.csproj" />
+    <ProjectReference Include="..\Marain.UserNotifications.ThirdParty.DeliveryChannels\Marain.UserNotifications.ThirdParty.DeliveryChannels.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
