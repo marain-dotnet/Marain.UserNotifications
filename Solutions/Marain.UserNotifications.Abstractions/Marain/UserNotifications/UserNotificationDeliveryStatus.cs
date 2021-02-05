@@ -30,8 +30,8 @@ namespace Marain.UserNotifications
         Delivered = 3,
 
         /// <summary>
-        /// The notification has failed to be delivered.
+        /// The notification has permanently failed to be delivered.
         /// </summary>
-        Failed = 4,
+        PermanentlyFailed = 4,
     }
 }

@@ -176,7 +176,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
             }
             catch (Exception ex)
             {
-                await this.UpdateNotificationDeliveryStatusAsync(airshipDeliveryChannelObject.ContentType, notificationId, UserNotificationDeliveryStatus.Failed, tenant, ex.Message).ConfigureAwait(false);
+                await this.UpdateNotificationDeliveryStatusAsync(airshipDeliveryChannelObject.ContentType, notificationId, UserNotificationDeliveryStatus.PermanentlyFailed, tenant, ex.Message).ConfigureAwait(false);
             }
         }
 
