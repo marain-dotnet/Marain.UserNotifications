@@ -67,14 +67,10 @@ namespace Marain.UserNotifications.Specs.Steps
 
         public static EmailTemplate BuildEmailNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
         {
-            bool important;
-            bool.TryParse(tableRow["important"], out important);
-
             return new EmailTemplate()
             {
                 Body = tableRow["body"],
                 Subject = tableRow["subject"],
-                Important = important,
                 NotificationType = tableRow["notificationType"],
                 ETag = eTag,
             };

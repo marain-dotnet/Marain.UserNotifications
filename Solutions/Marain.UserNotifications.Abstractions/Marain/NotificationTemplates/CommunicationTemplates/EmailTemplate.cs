@@ -31,11 +31,6 @@ namespace Marain.NotificationTemplates.CommunicationTemplates
         public string? Subject { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the email is important or not.
-        /// </summary>
-        public bool? Important { get; set; }
-
-        /// <summary>
         /// Gets the registered content type used when this object is serialized/deserialized.
         /// </summary>
         public string ContentType => RegisteredContentType;

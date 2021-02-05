@@ -33,11 +33,6 @@ namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemp
         public string Subject { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the email is important or not.
-        /// </summary>
-        public bool Important { get; set; }
-
-        /// <summary>
         /// Gets the registered content type used when this object is serialized/deserialized.
         /// </summary>
         public string ContentType => RegisteredContentType;

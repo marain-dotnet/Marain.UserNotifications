@@ -224,14 +224,12 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
                             "subject",
-                            "important",
                             "contentType",
                             "image",
                             "notificationType"});
                 table14.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}} with Mortgage Type: {{mortgageType}}",
                             "New lead {{leadAddedBy}}",
-                            "true",
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
                             "Base+64xddfa",
                             "marain.NewLeadv2"});

@@ -54,7 +54,6 @@ namespace Marain.UserNotifications.Management.Host.Mappers
                     resource.ContentType,
                     resource.Body,
                     resource.Subject,
-                    resource.Important,
                     resource.NotificationType,
                     CommunicationType = CommunicationType.Email,
                 });

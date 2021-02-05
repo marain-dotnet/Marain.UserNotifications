@@ -112,14 +112,12 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
                             "subject",
-                            "important",
                             "contentType",
                             "image",
                             "notificationType"});
                 table22.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}}",
                             "A new lead added: {{leadAddedBy}}",
-                            "true",
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
                             "Base+64xddfa",
                             "marain.NewLeadv1"});
@@ -178,7 +176,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And(@"the response content should have a json property called 'smsTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""New lead added by TestUser123"", ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1"" }'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 33
- testRunner.And(@"the response content should have a json property called 'emailTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""A new lead was added by TestUser123"", ""subject"": ""A new lead added: TestUser123"", ""important"": false, ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1"" }'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(@"the response content should have a json property called 'emailTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""A new lead was added by TestUser123"", ""subject"": ""A new lead added: TestUser123"", ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1"" }'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 34
  testRunner.And(@"the response content should have a json property called 'webPushTemplate' with value '{ ""notificationType"": ""marain.NewLeadv1"", ""body"": ""A new lead was added by TestUser123"", ""title"": ""A new lead added: TestUser123"", ""image"": ""Base+64xddfa"", ""actionUrl"": ""https://www.google.co.uk/"", ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1"" }'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

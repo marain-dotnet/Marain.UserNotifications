@@ -64,8 +64,8 @@ Scenario: Create an email notification template
 
 Scenario: Update an email notification template
 	Given I have created and stored an email notification template
-		| body | subject | contentType                                                                    | important | notificationType      |
-		| body | test    | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | true      | marain.test.template5 |
+		| body | subject | contentType                                                                    | notificationType      |
+		| body | test    | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | marain.test.template5 |
 	When I use the client to send the notification template API a request to update an email notification template
 		"""
 		{
@@ -78,14 +78,13 @@ Scenario: Update an email notification template
 
 Scenario: Get an email notification template
 	Given I have created and stored an email notification template
-		| body | subject | contentType                                                                    | important | notificationType      |
-		| body | test    | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | true      | marain.test.template6 |
+		| body | subject | contentType                                                                    | notificationType      |
+		| body | test    | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | marain.test.template6 |
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template6' and communication type 'Email'
 	Then the client response status code should be 'OK'
 	And the email template in the UserManagement API response should have a 'body' with value 'body'
 	And the email template in the UserManagement API response should have a 'subject' with value 'test'
 	And the email template in the UserManagement API response should have a 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
-	And the email template in the UserManagement API response should have a 'important' with value 'true'
 	And the email template in the UserManagement API response should have a 'notificationType' with value 'marain.test.template6'
 
 ########################################

@@ -36,8 +36,8 @@ Scenario: Generate a web push, sms and email Notification Template
 		| body                                    | contentType                                                                  | notificationType |
 		| A new lead was added by {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.NewLeadv2 |
 	And I have created and stored an email notification template
-		| body                                                                         | subject                  | important | contentType                                                                    | image        | notificationType |
-		| A new lead was added by {{leadAddedBy}} with Mortgage Type: {{mortgageType}} | New lead {{leadAddedBy}} | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.NewLeadv2 |
+		| body                                                                         | subject                  | contentType                                                                    | image        | notificationType |
+		| A new lead was added by {{leadAddedBy}} with Mortgage Type: {{mortgageType}} | New lead {{leadAddedBy}} | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.NewLeadv2 |
 	When I use the client to send a generate template API request
 		"""
         {

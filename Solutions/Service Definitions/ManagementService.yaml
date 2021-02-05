@@ -548,10 +548,6 @@ components:
           description: The subject of the email object.
           nullable: false
           type: string
-        important:
-          description: Mark is the email is important.
-          nullable: true
-          type: string
         eTag: 
           description: Etag for the email template object.
           nullable: true
@@ -576,10 +572,6 @@ components:
             subject:
               description: The subject of the email object.
               nullable: false
-              type: string
-            important:
-              description: Mark is the email is important.
-              nullable: true
               type: string
             eTag: 
               description: Etag for the email template resource object.

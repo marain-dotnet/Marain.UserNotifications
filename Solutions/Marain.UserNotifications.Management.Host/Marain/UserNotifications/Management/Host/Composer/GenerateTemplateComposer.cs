@@ -71,7 +71,6 @@ namespace Marain.UserNotifications.Management.Host.Composer
                                 NotificationType = notificationType,
                                 Body = emailBody,
                                 Subject = emailSubject,
-                                Important = false,
                             };
                         }
                         catch (Exception)

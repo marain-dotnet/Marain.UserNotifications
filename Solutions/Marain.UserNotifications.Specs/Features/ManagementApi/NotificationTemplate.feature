@@ -55,7 +55,6 @@ Scenario: Create an email notification template
 		{
 			"body": "this is a test template",
 			"subject": "test",
-			"important": true,
 			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
 			"notificationType": "marain.test.template"
 		}
@@ -64,24 +63,23 @@ Scenario: Create an email notification template
 
 Scenario: Update an email notification template
 	Given I have created and stored an email notification template
-		| body | subject | important | contentType                                                                    | image        | notificationType      |
-		| body | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template3 |
+		| body | subject | contentType                                                                    | image        | notificationType      |
+		| body | test    | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template3 |
 	When I send the user notification template API a request to update an existing email notification template
-		| body                  | subject | important | contentType                                                                    | image        | notificationType      |
-		| updated body template | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template3 |
+		| body                  | subject | contentType                                                                    | image        | notificationType      |
+		| updated body template | test    | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template3 |
 	Then the response status code should be 'OK'
 
 Scenario: Get an email notification template
 	Given I have created and stored an email notification template
-		| body                                    | subject | important | contentType                                                                    | image        | notificationType      |
-		| A new lead was added by {{leadAddedBy}} | test    | true      | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template4 |
+		| body                                    | subject | contentType                                                                    | image        | notificationType      |
+		| A new lead was added by {{leadAddedBy}} | test    | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | Base+64xddfa | marain.test.template4 |
 	When I send the notification template API a request to retreive a notification template with notificationType 'marain.test.template4' and communicationType 'email'
 	Then the response status code should be 'OK'
 	And the response header should have a property called eTag that should not be null
 	And the response content should have a string property called 'notificationType' with value 'marain.test.template4'
 	And the response content should have a json property called 'body' with value 'A new lead was added by {{leadAddedBy}}'
 	And the response content should have a json property called 'subject' with value 'test'
-	And the response content should have a json property called 'important' with value 'True'
 	And the response content should have a json property called 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
 	And the response content should have a property called '_links.self'
 
