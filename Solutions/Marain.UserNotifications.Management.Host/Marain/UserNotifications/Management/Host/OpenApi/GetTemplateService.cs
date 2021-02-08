@@ -82,7 +82,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
                     if (emailTemplateWrapper.Item1 is null)
                     {
-                        throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType.ToString()} was not found.");
+                        throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType} was not found.");
                     }
 
                     // Add etag to the EmailTemplate
@@ -95,7 +95,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                     (SmsTemplate, string?) smsTemplateWrapper = await store.GetAsync<SmsTemplate>(notificationType, communicationType).ConfigureAwait(false);
                     if (smsTemplateWrapper.Item1 is null)
                     {
-                        throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType.ToString()} was not found.");
+                        throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType} was not found.");
                     }
 
                     // Add etag to the SmsTemplate
@@ -108,7 +108,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                     (WebPushTemplate, string?) webpushWrapper = await store.GetAsync<WebPushTemplate>(notificationType, communicationType).ConfigureAwait(false);
                     if (webpushWrapper.Item1 is null)
                     {
-                        throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType.ToString()} was not found.");
+                        throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType} was not found.");
                     }
 
                     // Add etag to the WebPushTemplate
@@ -120,7 +120,7 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
             if (response is null)
             {
-                throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType.ToString()} was not found.");
+                throw new OpenApiNotFoundException($"The notification template for notificationType {notificationType} and communicationType {communicationType} was not found.");
             }
 
             OpenApiResult okResult = this.OkResult(response, "application/json");
