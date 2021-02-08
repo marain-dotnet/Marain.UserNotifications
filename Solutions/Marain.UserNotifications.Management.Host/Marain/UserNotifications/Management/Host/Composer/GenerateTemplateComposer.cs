@@ -66,12 +66,10 @@ namespace Marain.UserNotifications.Management.Host.Composer
                                 break;
                             }
 
-                            emailTemplate = new EmailTemplate()
-                            {
-                                NotificationType = notificationType,
-                                Body = emailBody,
-                                Subject = emailSubject,
-                            };
+                            emailTemplate = new EmailTemplate(
+                                notificationType,
+                                emailSubject,
+                                emailBody);
                         }
                         catch (Exception)
                         {
@@ -92,7 +90,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
                                 break;
                             }
 
-                            smsTemplate = new SmsTemplate() { NotificationType = notificationType, Body = smsBody };
+                            smsTemplate = new SmsTemplate(notificationType, smsBody);
                         }
                         catch (Exception)
                         {
@@ -122,14 +120,12 @@ namespace Marain.UserNotifications.Management.Host.Composer
                                 break;
                             }
 
-                            webPushTemplate = new WebPushTemplate()
-                            {
-                                NotificationType = notificationType,
-                                Body = webPushBody,
-                                Title = webPushTitle,
-                                Image = webPushImage,
-                                ActionUrl = actionUrl,
-                            };
+                            webPushTemplate = new WebPushTemplate(
+                                notificationType,
+                                webPushTitle,
+                                webPushBody,
+                                webPushImage,
+                                actionUrl);
                         }
                         catch (Exception)
                         {

@@ -54,36 +54,30 @@ namespace Marain.UserNotifications.Specs.Steps
 
         public static WebPushTemplate BuildWebPushNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
         {
-            return new WebPushTemplate()
-            {
-                Body = tableRow["body"],
-                Title = tableRow["title"],
-                Image = tableRow["image"],
-                NotificationType = tableRow["notificationType"],
-                ActionUrl = tableRow["actionUrl"],
-                ETag = eTag,
-            };
+            return new WebPushTemplate(
+                tableRow["notificationType"],
+                tableRow["title"],
+                tableRow["body"],
+                tableRow["image"],
+                tableRow["actionUrl"],
+                eTag);
         }
 
         public static EmailTemplate BuildEmailNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
         {
-            return new EmailTemplate()
-            {
-                Body = tableRow["body"],
-                Subject = tableRow["subject"],
-                NotificationType = tableRow["notificationType"],
-                ETag = eTag,
-            };
+            return new EmailTemplate(
+                tableRow["notificationType"],
+                tableRow["subject"],
+                tableRow["body"],
+                eTag);
         }
 
         public static SmsTemplate BuildSmsNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
         {
-            return new SmsTemplate()
-            {
-                Body = tableRow["body"],
-                NotificationType = tableRow["notificationType"],
-                ETag = tableRow.ContainsKey("eTag") ? tableRow["eTag"] : eTag,
-            };
+            return new SmsTemplate(
+                tableRow["notificationType"],
+                tableRow["body"],
+                tableRow.ContainsKey("eTag") ? tableRow["eTag"] : eTag);
         }
 
         public static NotificationTemplate BuildNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
