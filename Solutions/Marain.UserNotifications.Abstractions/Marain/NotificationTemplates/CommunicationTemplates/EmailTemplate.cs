@@ -14,21 +14,40 @@ namespace Marain.NotificationTemplates.CommunicationTemplates
         /// </summary>
         public const string RegisteredContentType = "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailTemplate"/> class.
+        /// </summary>
+        /// <param name="notificationType">The <see cref="NotificationType"/>.</param>
+        /// <param name="subject">The <see cref="Subject"/>.</param>
+        /// <param name="body">The <see cref="Body"/>.</param>
+        /// <param name="eTag">The <see cref="ETag"/>.</param>
+        public EmailTemplate(
+            string notificationType,
+            string subject,
+            string body,
+            string? eTag = null)
+        {
+            this.NotificationType = notificationType;
+            this.Subject = subject;
+            this.Body = body;
+            this.ETag = eTag;
+        }
+
         /// <inheritdoc/>
-        public string? NotificationType { get; set; }
+        public string NotificationType { get; }
 
         /// <inheritdoc/>
         public string? ETag { get; set; }
 
         /// <summary>
-        /// Gets or sets the body of the email.
+        /// Gets the body of the email.
         /// </summary>
-        public string? Body { get; set; }
+        public string Body { get; }
 
         /// <summary>
-        /// Gets or sets the subject of the email.
+        /// Gets the subject of the email.
         /// </summary>
-        public string? Subject { get; set; }
+        public string Subject { get; }
 
         /// <summary>
         /// Gets the registered content type used when this object is serialized/deserialized.

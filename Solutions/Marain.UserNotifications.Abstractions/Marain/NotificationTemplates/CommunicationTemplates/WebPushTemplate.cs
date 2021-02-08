@@ -14,31 +14,56 @@ namespace Marain.NotificationTemplates.CommunicationTemplates
         /// </summary>
         public const string RegisteredContentType = "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebPushTemplate"/> class.
+        /// </summary>
+        /// <param name="notificationType">The <see cref="NotificationType"/>.</param>
+        /// <param name="title">The <see cref="Title"/>.</param>
+        /// <param name="body">The <see cref="Body"/>.</param>
+        /// <param name="image">The <see cref="Image"/>.</param>
+        /// <param name="actionUrl">The <see cref="ActionUrl"/>.</param>
+        /// <param name="eTag">The <see cref="ETag"/>.</param>
+        public WebPushTemplate(
+            string notificationType,
+            string title,
+            string body,
+            string? image,
+            string? actionUrl,
+            string? eTag = null)
+        {
+            this.NotificationType = notificationType;
+            this.Title = title;
+            this.Body = body;
+            this.Image = image;
+            this.ActionUrl = actionUrl;
+            this.ETag = eTag;
+        }
+
         /// <inheritdoc/>
-        public string? NotificationType { get; set; }
+        public string NotificationType { get; }
 
         /// <inheritdoc/>
         public string? ETag { get; set; }
 
         /// <summary>
-        /// Gets or sets the body of a WebPush notification.
+        /// Gets the body of a WebPush notification.
         /// </summary>
-        public string? Body { get; set; }
+        public string Body { get; }
 
         /// <summary>
-        /// Gets or sets the title of the WebPush notification.
+        /// Gets the title of the WebPush notification.
         /// </summary>
-        public string? Title { get; set; }
+        public string Title { get; }
 
         /// <summary>
-        /// Gets or sets the Base64 image of a WebPush notification.
+        /// Gets the Base64 image of a WebPush notification.
         /// </summary>
-        public string? Image { get; set; }
+        public string? Image { get; }
 
         /// <summary>
-        /// Gets or sets navigation url on click of the notification.
+        /// Gets navigation url on click of the notification.
         /// </summary>
-        public string? ActionUrl { get; set; }
+        public string? ActionUrl { get; }
 
         /// <summary>
         /// Gets the registered content type used when this object is serialized/deserialized.
