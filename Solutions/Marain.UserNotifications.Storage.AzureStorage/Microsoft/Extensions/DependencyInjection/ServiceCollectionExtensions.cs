@@ -9,7 +9,6 @@ namespace Microsoft.Extensions.DependencyInjection
     using Corvus.Azure.Storage.Tenancy;
     using Marain.NotificationTemplates;
     using Marain.UserNotifications;
-    using Marain.UserNotifications.Storage.AzureBlob;
     using Marain.UserNotifications.Storage.AzureStorage;
 
     /// <summary>
