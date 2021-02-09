@@ -11,6 +11,9 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Extensions.Json;
     using Corvus.Json;
     using Corvus.Testing.SpecFlow;
+    using Marain.Models;
+    using Marain.NotificationTemplates;
+    using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Specs.Bindings;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
@@ -47,6 +50,47 @@ namespace Marain.UserNotifications.Specs.Steps
                 DateTime.Parse(tableRow["Timestamp"]),
                 properties,
                 new UserNotificationMetadata(correlationIds, null));
+        }
+
+        public static WebPushTemplate BuildWebPushNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
+        {
+            return new WebPushTemplate(
+                tableRow["notificationType"],
+                tableRow["title"],
+                tableRow["body"],
+                tableRow["image"],
+                tableRow["actionUrl"],
+                eTag);
+        }
+
+        public static EmailTemplate BuildEmailNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
+        {
+            return new EmailTemplate(
+                tableRow["notificationType"],
+                tableRow["subject"],
+                tableRow["body"],
+                eTag);
+        }
+
+        public static SmsTemplate BuildSmsNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
+        {
+            return new SmsTemplate(
+                tableRow["notificationType"],
+                tableRow["body"],
+                tableRow.ContainsKey("eTag") ? tableRow["eTag"] : eTag);
+        }
+
+        public static NotificationTemplate BuildNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        {
+            SmsTemplate? deserialisedSms = tableRow.ContainsKey("smsTemplate") ? JsonConvert.DeserializeObject<SmsTemplate>(tableRow["smsTemplate"], serializerSettings) : null;
+            EmailTemplate? deserialisedEmail = tableRow.ContainsKey("emailTemplate") ? JsonConvert.DeserializeObject<EmailTemplate>(tableRow["emailTemplate"], serializerSettings) : null;
+            WebPushTemplate? deserialisedWebPush = tableRow.ContainsKey("webPushTemplate") ? JsonConvert.DeserializeObject<WebPushTemplate>(tableRow["webPushTemplate"], serializerSettings) : null;
+
+            return new NotificationTemplate(
+                tableRow["notificationType"],
+                deserialisedSms,
+                deserialisedEmail,
+                deserialisedWebPush);
         }
 
         [Given("I have created and stored a notification in the current transient tenant for the user with Id '(.*)'")]
@@ -106,6 +150,72 @@ namespace Marain.UserNotifications.Specs.Steps
             UserNotification result = await store.StoreAsync(notification).ConfigureAwait(false);
 
             this.scenarioContext.Set(result, resultName);
+        }
+
+        [Given("I have created and stored a notification template")]
+        public async Task GivenIHaveCreatedAndStoredANotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+
+            NotificationTemplate notificationTemplate = BuildNotificationTemplateFrom(table.Rows[0], serializerSettingsProvider.Instance);
+
+            INotificationTemplateStore store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            EmailTemplate? result = await store.CreateOrUpdate("testshouldbreak", CommunicationType.Email, null, notificationTemplate.EmailTemplate!).ConfigureAwait(false);
+
+            this.scenarioContext.Set(result);
+        }
+
+        [Given("I have created and stored a web push notification template")]
+        public async Task GivenIHaveCreatedAndStoredAWebPushNotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            WebPushTemplate notificationTemplate = BuildWebPushNotificationTemplateFrom(table.Rows[0]);
+
+            INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            await store.CreateOrUpdate(notificationTemplate.NotificationType!, CommunicationType.WebPush, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
+            (WebPushTemplate, string?) webPushTemplate = await store.GetAsync<WebPushTemplate>(notificationTemplate.NotificationType!, CommunicationType.WebPush).ConfigureAwait(false);
+            webPushTemplate.Item1.ETag = webPushTemplate.Item2;
+            this.scenarioContext.Set(webPushTemplate.Item1);
+        }
+
+        [Given("I have created and stored an email notification template")]
+        public async Task GivenIHaveCreatedAndStoredAnEmailNotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            EmailTemplate notificationTemplate = BuildEmailNotificationTemplateFrom(table.Rows[0]);
+
+            INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            await store.CreateOrUpdate(notificationTemplate.NotificationType!, CommunicationType.Email, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
+            (EmailTemplate, string?) emailTemplate = await store.GetAsync<EmailTemplate>(notificationTemplate.NotificationType!, CommunicationType.Email).ConfigureAwait(false);
+            emailTemplate.Item1.ETag = emailTemplate.Item2;
+            this.scenarioContext.Set(emailTemplate.Item1);
+        }
+
+        [Given("I have created and stored an sms notification template")]
+        public async Task GivenIHaveCreatedAndStoredAnSmsNotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            SmsTemplate notificationTemplate = BuildSmsNotificationTemplateFrom(table.Rows[0]);
+
+            INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            await store.CreateOrUpdate(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
+            (SmsTemplate, string?) smsTemplate = await store.GetAsync<SmsTemplate>(notificationTemplate.NotificationType!, CommunicationType.Sms).ConfigureAwait(false);
+            smsTemplate.Item1.ETag = smsTemplate.Item2;
+            this.scenarioContext.Set(smsTemplate.Item1);
+        }
+
+        [Given("I have created and stored a sms notification template")]
+        public async Task GivenIHaveCreatedAndStoredASmsNotificationTemplate(Table table)
+        {
+            ITenantedNotificationTemplateStoreFactory storeFactory = this.serviceProvider.GetRequiredService<ITenantedNotificationTemplateStoreFactory>();
+            SmsTemplate notificationTemplate = BuildSmsNotificationTemplateFrom(table.Rows[0]);
+
+            INotificationTemplateStore? store = await storeFactory.GetTemplateStoreForTenantAsync(this.featureContext.GetTransientTenant()).ConfigureAwait(false);
+            await store.CreateOrUpdate(notificationTemplate.NotificationType!, CommunicationType.Sms, notificationTemplate.ETag, notificationTemplate).ConfigureAwait(false);
+            (SmsTemplate, string?) smsTemplate = await store.GetAsync<SmsTemplate>(notificationTemplate.NotificationType!, CommunicationType.Sms).ConfigureAwait(false);
+            smsTemplate.Item1.ETag = smsTemplate.Item2;
+            this.scenarioContext.Set(smsTemplate.Item1);
         }
     }
 }

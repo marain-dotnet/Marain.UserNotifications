@@ -10,6 +10,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
     using System.Threading.Tasks;
     using Marain.UserNotifications.Management.Host.Activities;
     using Marain.UserNotifications.Management.Host.Helpers;
+    using Marain.UserNotifications.Management.Host.Models;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -33,7 +34,7 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
         {
             ILogger replaySafeLogger = orchestrationContext.CreateReplaySafeLogger(log);
 
-            TenantedFunctionData<CreateNotificationsRequest> request = orchestrationContext.GetInput<TenantedFunctionData<CreateNotificationsRequest>>();
+            TenantedFunctionData<CreateNotificationForDeliveryChannelsRequest> request = orchestrationContext.GetInput<TenantedFunctionData<CreateNotificationForDeliveryChannelsRequest>>();
 
             try
             {
@@ -53,7 +54,9 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
                         userId,
                         request.Payload.Timestamp,
                         request.Payload.Properties,
-                        new UserNotificationMetadata(correlationIds, null)))
+                        new UserNotificationMetadata(correlationIds, null),
+                        null,
+                        request.Payload.DeliveryChannelConfiguredPerCommunicationType))
                     .Select(notification => orchestrationContext.CallSubOrchestratorAsync(
                         nameof(CreateAndDispatchNotificationOrchestration),
                         new TenantedFunctionData<UserNotification>(request.TenantId, notification)));

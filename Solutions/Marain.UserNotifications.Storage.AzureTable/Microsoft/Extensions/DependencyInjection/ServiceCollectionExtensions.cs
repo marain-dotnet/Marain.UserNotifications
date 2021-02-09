@@ -7,7 +7,9 @@ namespace Microsoft.Extensions.DependencyInjection
     using System;
     using System.Linq;
     using Corvus.Azure.Storage.Tenancy;
+    using Marain.NotificationTemplates;
     using Marain.UserNotifications;
+    using Marain.UserNotifications.Storage.AzureBlob;
     using Marain.UserNotifications.Storage.AzureTable;
 
     /// <summary>
@@ -32,6 +34,27 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTenantCloudTableFactory(getCloudTableFactoryOptions);
             services.AddSingleton<ITenantedUserNotificationStoreFactory, TenantedAzureTableUserNotificationStoreFactory>();
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds Azure blob-based implementation of <see cref="ITenantedNotificationTemplateStoreFactory"/> to the service container.
+        /// </summary>
+        /// <param name="services">The collection.</param>
+        /// <param name="getTenantCloudBlobContainerFactoryOptions">A callback function that returns the <see cref="TenantCloudBlobContainerFactoryOptions"/>.</param>
+        /// <returns>The configured <see cref="IServiceCollection"/>.</returns>
+        public static IServiceCollection AddTenantedAzureBlobTemplateStore(
+            this IServiceCollection services,
+            Func<IServiceProvider, TenantCloudBlobContainerFactoryOptions> getTenantCloudBlobContainerFactoryOptions)
+        {
+            if (services.Any(s => s.ServiceType is ITenantedNotificationTemplateStoreFactory))
+            {
+                return services;
+            }
+
+            services.AddTenantCloudBlobContainerFactory(getTenantCloudBlobContainerFactoryOptions);
+            services.AddSingleton<ITenantedNotificationTemplateStoreFactory, TenantedAzureBlobTemplateStoreFactory>();
 
             return services;
         }

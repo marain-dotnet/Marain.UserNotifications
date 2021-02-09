@@ -44,7 +44,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
         /// The <see cref="Task" />.
         /// </returns>
         [FunctionName(nameof(CompleteLongRunningOperationActivity))]
-        public async Task RunAction(
+        public async Task RunActionAsync(
             [ActivityTrigger] IDurableActivityContext context)
         {
             (Guid operationId, string tenantId) = context.GetInput<(Guid, string)>();

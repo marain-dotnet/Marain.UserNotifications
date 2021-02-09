@@ -5,8 +5,10 @@
 namespace Marain.UserNotifications
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+    using Marain.Models;
 
     /// <summary>
     /// Extension methods for the <see cref="UserNotification"/> class.
@@ -21,7 +23,7 @@ namespace Marain.UserNotifications
         /// <returns>
         /// The status for the channel, or null if not set.
         /// </returns>
-        public static UserNotificationStatus? GetStatusForChannel(
+        public static UserNotificationStatus GetStatusForChannel(
             this UserNotification userNotification,
             string deliveryChannelId)
         {
@@ -100,12 +102,14 @@ namespace Marain.UserNotifications
         /// <param name="deliveryChannelId">The delivery channel that the status applies to.</param>
         /// <param name="newDeliveryStatus">The new status.</param>
         /// <param name="effectiveDateTime">The time at which the status change happened.</param>
+        /// <param name="failureReason">The failure reason if the delivery channel status is failed.</param>
         /// <returns>A copy of the notification with the updated delivery status.</returns>
         public static UserNotification WithChannelDeliveryStatus(
             this UserNotification notification,
             string deliveryChannelId,
             UserNotificationDeliveryStatus newDeliveryStatus,
-            DateTimeOffset effectiveDateTime)
+            DateTimeOffset effectiveDateTime,
+            string? failureReason = null)
         {
             if (notification is null)
             {
@@ -125,7 +129,7 @@ namespace Marain.UserNotifications
             if (!(existingStatusForChannel is null))
             {
                 builder.Remove(existingStatusForChannel);
-                builder.Add(existingStatusForChannel.WithDeliveryStatus(newDeliveryStatus, effectiveDateTime));
+                builder.Add(existingStatusForChannel.WithDeliveryStatus(newDeliveryStatus, effectiveDateTime, failureReason));
             }
             else
             {
@@ -134,7 +138,8 @@ namespace Marain.UserNotifications
                     newDeliveryStatus,
                     effectiveDateTime,
                     UserNotificationReadStatus.Unknown,
-                    effectiveDateTime));
+                    effectiveDateTime,
+                    failureReason));
             }
 
             return new UserNotification(
@@ -200,6 +205,37 @@ namespace Marain.UserNotifications
                 notification.Properties,
                 notification.Metadata,
                 builder.ToImmutable());
+        }
+
+        /// <summary>
+        /// Creates an updated version of the supplied UserNotification with Delivery Channel Configuration Per Communication Type.
+        /// </summary>
+        /// <param name="notification">The notification to which the status change applies.</param>
+        /// <param name="deliveryChannelConfiguredPerCommunicationType">The delivery channel configuration which need to be applied.</param>
+        /// <returns>A copy of the notification with the updated delivery status.</returns>
+        public static UserNotification AddDeliveryChannelConfiguredPerCommunicationType(
+            this UserNotification notification,
+            Dictionary<CommunicationType, string>? deliveryChannelConfiguredPerCommunicationType)
+        {
+            if (notification is null)
+            {
+                throw new ArgumentNullException(nameof(notification));
+            }
+
+            if (deliveryChannelConfiguredPerCommunicationType is null)
+            {
+                throw new ArgumentNullException(nameof(deliveryChannelConfiguredPerCommunicationType));
+            }
+
+            return new UserNotification(
+                notification.Id,
+                notification.NotificationType,
+                notification.UserId,
+                notification.Timestamp,
+                notification.Properties,
+                notification.Metadata,
+                notification.ChannelStatuses,
+                deliveryChannelConfiguredPerCommunicationType);
         }
     }
 }

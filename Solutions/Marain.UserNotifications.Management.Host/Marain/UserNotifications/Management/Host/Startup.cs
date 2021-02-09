@@ -6,8 +6,15 @@
 
 namespace Marain.UserNotifications.Management.Host
 {
+    using System.Net.Http;
+    using Marain.Extensions.DependencyInjection;
+    using Marain.NotificationTemplates;
+    using Marain.NotificationTemplates.CommunicationTemplates;
+    using Marain.UserNotifications.Management.Host.Composer;
     using Marain.UserNotifications.Management.Host.Helpers;
+    using Marain.UserNotifications.Management.Host.Mappers;
     using Marain.UserNotifications.Management.Host.OpenApi;
+    using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship;
     using Menes;
     using Microsoft.Azure.Functions.Extensions.DependencyInjection;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -32,6 +39,8 @@ namespace Marain.UserNotifications.Management.Host
 
             services.AddCommonUserNotificationsApiServices();
 
+            services.RegisterCoreUserNotificationsContentTypes();
+
             AddTenantedUserNotificationsManagementApi(services);
         }
 
@@ -41,11 +50,23 @@ namespace Marain.UserNotifications.Management.Host
         /// <param name="services">The service collection.</param>
         private static void AddTenantedUserNotificationsManagementApi(IServiceCollection services)
         {
+            services.AddHalDocumentMapper<WebPushTemplate, IOpenApiContext, WebPushTemplateMapper>();
+            services.AddHalDocumentMapper<EmailTemplate, IOpenApiContext, EmailTemplateMapper>();
+            services.AddHalDocumentMapper<SmsTemplate, IOpenApiContext, SmsTemplateMapper>();
+
             services.AddSingleton<IOpenApiService, CreateNotificationsService>();
+            services.AddSingleton<IOpenApiService, CreateNotificationForDeliveryChannelsService>();
             services.AddSingleton<IOpenApiService, GetNotificationsService>();
             services.AddSingleton<IOpenApiService, GetNotificationStatusService>();
             services.AddSingleton<IOpenApiService, BatchDeliveryStatusUpdateService>();
             services.AddSingleton<IOpenApiService, BatchReadStatusUpdateService>();
+            services.AddSingleton<IOpenApiService, GetTemplateService>();
+            services.AddSingleton<IOpenApiService, CreateOrUpdateTemplateService>();
+            services.AddSingleton<IOpenApiService, GenerateTemplateService>();
+
+            services.AddHttpClient();
+            services.AddSingleton<IAirshipClientFactory, AirshipClientFactory>();
+            services.AddSingleton<IGenerateTemplateComposer, GenerateTemplateComposer>();
 
             services.AddOpenApiHttpRequestHosting<DurableFunctionsOpenApiContext>(
                 hostConfig =>
@@ -54,6 +75,8 @@ namespace Marain.UserNotifications.Management.Host
                     hostConfig.Documents.RegisterOpenApiServiceWithEmbeddedDefinition(
                         serviceType.Assembly,
                         $"{serviceType.Namespace}.ManagementService.yaml");
+
+                    hostConfig.Exceptions.Map<NotificationTemplateNotFoundException>(404);
 
                     hostConfig.Documents.AddSwaggerEndpoint();
                 });

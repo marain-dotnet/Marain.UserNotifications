@@ -34,6 +34,7 @@ namespace Marain.UserNotifications
         /// <param name="deliveryStatusLastUpdated">The <see cref="DeliveryStatusLastUpdated" />.</param>
         /// <param name="readStatus">The <see cref="ReadStatus" />.</param>
         /// <param name="readStatusLastUpdated">The <see cref="ReadStatusLastUpdated" />.</param>
+        /// <param name="failureReason">The <see cref="FailureReason"/>.</param>
         [JsonConstructor]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public UserNotificationStatus(
@@ -41,13 +42,15 @@ namespace Marain.UserNotifications
             UserNotificationDeliveryStatus deliveryStatus,
             DateTimeOffset deliveryStatusLastUpdated,
             UserNotificationReadStatus readStatus,
-            DateTimeOffset readStatusLastUpdated)
+            DateTimeOffset readStatusLastUpdated,
+            string? failureReason = null)
         {
             this.DeliveryChannelId = deliveryChannelId;
             this.DeliveryStatus = deliveryStatus;
             this.DeliveryStatusLastUpdated = deliveryStatusLastUpdated.ToUniversalTime();
             this.ReadStatus = readStatus;
             this.ReadStatusLastUpdated = readStatusLastUpdated.ToUniversalTime();
+            this.FailureReason = failureReason;
         }
 
         /// <summary>
@@ -74,5 +77,10 @@ namespace Marain.UserNotifications
         /// Gets the date/time that the read status was last updated.
         /// </summary>
         public DateTimeOffset ReadStatusLastUpdated { get; }
+
+        /// <summary>
+        /// Gets the failure reason if the delivery channel status is failed.
+        /// </summary>
+        public string? FailureReason { get; }
     }
 }
