@@ -109,40 +109,40 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
                             "subject",
                             "contentType",
                             "image",
                             "notificationType"});
-                table22.AddRow(new string[] {
+                table19.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}}",
                             "A new lead added: {{leadAddedBy}}",
                             "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
                             "Base+64xddfa",
                             "marain.NewLeadv1"});
 #line 7
- testRunner.Given("I have created and stored an email notification template", ((string)(null)), table22, "Given ");
+ testRunner.Given("I have created and stored an email notification template", ((string)(null)), table19, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
                             "contentType",
                             "notificationType"});
-                table23.AddRow(new string[] {
+                table20.AddRow(new string[] {
                             "New lead added by {{leadAddedBy}}",
                             "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
                             "marain.NewLeadv1"});
 #line 10
- testRunner.And("I have created and stored a sms notification template", ((string)(null)), table23, "And ");
+ testRunner.And("I have created and stored a sms notification template", ((string)(null)), table20, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
                             "body",
                             "title",
                             "contentType",
                             "actionUrl",
                             "image",
                             "notificationType"});
-                table24.AddRow(new string[] {
+                table21.AddRow(new string[] {
                             "A new lead was added by {{leadAddedBy}}",
                             "A new lead added: {{leadAddedBy}}",
                             "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
@@ -150,7 +150,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Base+64xddfa",
                             "marain.NewLeadv1"});
 #line 13
- testRunner.And("I have created and stored a web push notification template", ((string)(null)), table24, "And ");
+ testRunner.And("I have created and stored a web push notification template", ((string)(null)), table21, "And ");
 #line hidden
 #line 16
  testRunner.When("I send the generate template API request", @"      {
