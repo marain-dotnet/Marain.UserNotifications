@@ -36,17 +36,25 @@ Scenario: Update a Web Push Notification Template
 	Then the client response status code should be 'OK'
 
 Scenario: Get a Web Push notification template
-	Given I have created and stored a web push notification template
-		| body | title | contentType                                                                      | actionUrl                 | image        | notificationType      |
-		| body | test  | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.test.template4 |
+	Given I use the client to send the notification template API a request to create a new web push notification template
+		"""
+		{
+			"body": "body",
+			"title": "test",
+			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
+			"notificationType": "marain.test.template4",
+			"image": "Base+64xddfa",
+			"actionUrl": "https://www.google.co.uk/"
+		}
+		"""
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template4' and communication type 'WebPush'
 	Then the client response status code should be 'OK'
-	And the web push template in the UserManagement API response should have a 'body' with value 'body'
-	And the web push template in the UserManagement API response should have a 'title' with value 'test'
-	And the web push template in the UserManagement API response should have a 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1'
-	And the web push template in the UserManagement API response should have a 'image' with value 'Base+64xddfa'
-	And the web push template in the UserManagement API response should have a 'notificationType' with value 'marain.test.template4'
-	And the web push template in the UserManagement API response should have a 'actionUrl' with value 'https://www.google.co.uk/'
+	And the web push template in the UserManagement API response should have a 'Body' with value 'body'
+	And the web push template in the UserManagement API response should have a 'Title' with value 'test'
+	And the web push template in the UserManagement API response should have a 'ContentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1'
+	And the web push template in the UserManagement API response should have a 'Image' with value 'Base+64xddfa'
+	And the web push template in the UserManagement API response should have a 'NotificationType' with value 'marain.test.template4'
+	And the web push template in the UserManagement API response should have a 'ActionUrl' with value 'https://www.google.co.uk/'
 
 #####################################
 # Email notification template tests #
@@ -77,15 +85,21 @@ Scenario: Update an email notification template
 	Then the client response status code should be 'OK'
 
 Scenario: Get an email notification template
-	Given I have created and stored an email notification template
-		| body | subject | contentType                                                                    | notificationType      |
-		| body | test    | application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1 | marain.test.template6 |
+	Given I use the client to send the notification template API a request to create a new email notification template
+		"""
+		{
+			"body": "body",
+			"subject": "test",
+			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1",
+			"notificationType": "marain.test.template6"
+		}
+		"""
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template6' and communication type 'Email'
 	Then the client response status code should be 'OK'
-	And the email template in the UserManagement API response should have a 'body' with value 'body'
-	And the email template in the UserManagement API response should have a 'subject' with value 'test'
-	And the email template in the UserManagement API response should have a 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
-	And the email template in the UserManagement API response should have a 'notificationType' with value 'marain.test.template6'
+	And the email template in the UserManagement API response should have a 'Body' with value 'body'
+	And the email template in the UserManagement API response should have a 'Subject' with value 'test'
+	And the email template in the UserManagement API response should have a 'ContentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
+	And the email template in the UserManagement API response should have a 'NotificationType' with value 'marain.test.template6'
 
 ########################################
 # Sms notification template tests	   #
@@ -116,14 +130,19 @@ Scenario: Update an sms notification template
 	Then the client response status code should be 'OK'
 
 Scenario: Get an sms notification template
-	Given I have created and stored an sms notification template
-		| body | contentType                                                                  | notificationType      |
-		| body | application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1 | marain.test.template8 |
+	Given I use the client to send the notification template API a request to create a new sms notification template
+		"""
+		{
+			"body": "body",
+			"contentType": "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1",
+			"notificationType": "marain.test.template8"
+		}
+		"""
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template8' and communication type 'Sms'
 	Then the client response status code should be 'OK'
-	And the sms template in the UserManagement API response should have a 'body' with value 'body'
-	And the sms template in the UserManagement API response should have a 'contentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1'
-	And the sms template in the UserManagement API response should have a 'notificationType' with value 'marain.test.template8'
+	And the sms template in the UserManagement API response should have a 'Body' with value 'body'
+	And the sms template in the UserManagement API response should have a 'ContentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1'
+	And the sms template in the UserManagement API response should have a 'NotificationType' with value 'marain.test.template8'
 
 Scenario: Request sms notification template by self link
 	Given I have created and stored an sms notification template

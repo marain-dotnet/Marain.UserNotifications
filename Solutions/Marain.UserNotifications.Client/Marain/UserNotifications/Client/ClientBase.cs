@@ -88,8 +88,7 @@ namespace Marain.UserNotifications.Client
         {
             var request = new HttpRequestMessage(method, requestUri);
 
-            string json = JsonSerializer.Serialize(body, this.SerializerOptions);
-
+            string json = JsonSerializer.Serialize(body, body.GetType(), this.SerializerOptions);
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             return request;
