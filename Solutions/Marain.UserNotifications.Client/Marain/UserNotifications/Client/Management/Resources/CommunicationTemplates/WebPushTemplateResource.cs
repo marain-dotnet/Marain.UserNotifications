@@ -41,6 +41,23 @@ namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemp
         public WebLink SelfLink => this.HalDocument.SelfLink;
 
         /// <summary>
+        /// Gets the notification type of a WebPush notification.
+        /// </summary>
+        public string NotificationType
+        {
+            get
+            {
+                if (this.HalDocument.TryGetProperty("notificationType", out JsonElement notificationType) &&
+                    notificationType.ValueKind == JsonValueKind.String)
+                {
+                    return notificationType.GetString();
+                }
+
+                throw new Exception("Schema violation - this value is required.");
+            }
+        }
+
+        /// <summary>
         /// Gets the body of a WebPush notification.
         /// </summary>
         public string Body
