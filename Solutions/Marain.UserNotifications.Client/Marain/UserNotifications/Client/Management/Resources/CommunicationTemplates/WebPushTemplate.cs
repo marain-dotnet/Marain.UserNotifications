@@ -4,8 +4,6 @@
 
 namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemplates
 {
-    using Newtonsoft.Json;
-
     /// <summary>
     /// Webpush Object.
     /// </summary>
