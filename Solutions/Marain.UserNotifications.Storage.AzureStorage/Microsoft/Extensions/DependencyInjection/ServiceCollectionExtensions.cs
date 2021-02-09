@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using Marain.NotificationTemplates;
     using Marain.UserNotifications;
     using Marain.UserNotifications.Storage.AzureBlob;
-    using Marain.UserNotifications.Storage.AzureTable;
+    using Marain.UserNotifications.Storage.AzureStorage;
 
     /// <summary>
     /// Service collection extensions to add the Azure implementation of user notification store.

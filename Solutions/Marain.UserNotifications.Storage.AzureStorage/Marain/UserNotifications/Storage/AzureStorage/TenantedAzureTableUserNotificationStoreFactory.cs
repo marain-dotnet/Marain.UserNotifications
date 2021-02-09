@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserNotifications.Storage.AzureTable
+namespace Marain.UserNotifications.Storage.AzureStorage
 {
     using System;
     using System.Threading.Tasks;
