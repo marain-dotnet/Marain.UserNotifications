@@ -12,7 +12,7 @@ namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemp
     using Menes.Hal;
 
     /// <summary>
-    /// The web push template resource structure.
+    /// The email template resource structure.
     /// </summary>
     [JsonConverter(typeof(EmailTemplateResourceConverter))]
     public class EmailTemplateResource : IHalDocumentResource
@@ -41,7 +41,24 @@ namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemp
         public WebLink SelfLink => this.HalDocument.SelfLink;
 
         /// <summary>
-        /// Gets the body of a WebPush notification.
+        /// Gets the notification type of an email notification.
+        /// </summary>
+        public string NotificationType
+        {
+            get
+            {
+                if (this.HalDocument.TryGetProperty("notificationType", out JsonElement notificationType) &&
+                    notificationType.ValueKind == JsonValueKind.String)
+                {
+                    return notificationType.GetString();
+                }
+
+                throw new Exception("Schema violation - this value is required.");
+            }
+        }
+
+        /// <summary>
+        /// Gets the body of a Email notification.
         /// </summary>
         public string Body
         {
@@ -58,33 +75,16 @@ namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemp
         }
 
         /// <summary>
-        /// Gets the title of the WebPush notification.
+        /// Gets the title of the email notification.
         /// </summary>
-        public string Title
+        public string Subject
         {
             get
             {
-                if (this.HalDocument.TryGetProperty("title", out JsonElement title) &&
-                    title.ValueKind == JsonValueKind.String)
+                if (this.HalDocument.TryGetProperty("subject", out JsonElement subject) &&
+                    subject.ValueKind == JsonValueKind.String)
                 {
-                    return title.GetString();
-                }
-
-                throw new Exception("Schema violation - this value is required.");
-            }
-        }
-
-        /// <summary>
-        /// Gets the Base64 image of a WebPush notification.
-        /// </summary>
-        public string Image
-        {
-            get
-            {
-                if (this.HalDocument.TryGetProperty("image", out JsonElement image) &&
-                    image.ValueKind == JsonValueKind.String)
-                {
-                    return image.GetString();
+                    return subject.GetString();
                 }
 
                 throw new Exception("Schema violation - this value is required.");
