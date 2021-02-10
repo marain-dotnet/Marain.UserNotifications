@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserNotifications.Storage.AzureTable.Internal
+namespace Marain.UserNotifications.Storage.AzureStorage.Internal
 {
     using System;
     using System.Text;

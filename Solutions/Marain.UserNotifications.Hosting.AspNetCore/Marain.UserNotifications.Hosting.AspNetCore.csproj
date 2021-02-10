@@ -22,7 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Marain.UserNotifications.Client\Marain.UserNotifications.Client.csproj" />
     <ProjectReference Include="..\Marain.UserNotifications.OpenApi\Marain.UserNotifications.OpenApi.csproj" />
-    <ProjectReference Include="..\Marain.UserNotifications.Storage.AzureTable\Marain.UserNotifications.Storage.AzureTable.csproj" />
+    <ProjectReference Include="..\Marain.UserNotifications.Storage.AzureStorage\Marain.UserNotifications.Storage.AzureStorage.csproj" />
   </ItemGroup>
 
 </Project>
