@@ -122,7 +122,7 @@ namespace Marain.UserNotifications.Client.Management
 
             WebPushTemplateResource result = await JsonSerializer.DeserializeAsync<WebPushTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
-            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddEtagToImmutableDictionary(response);
+            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddETagToImmutableDictionary(response);
 
             return new ApiResponse<WebPushTemplateResource>(
                response.StatusCode,
@@ -166,7 +166,7 @@ namespace Marain.UserNotifications.Client.Management
 
             EmailTemplateResource result = await JsonSerializer.DeserializeAsync<EmailTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
-            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddEtagToImmutableDictionary(response);
+            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddETagToImmutableDictionary(response);
 
             return new ApiResponse<EmailTemplateResource>(
                response.StatusCode,
@@ -210,7 +210,7 @@ namespace Marain.UserNotifications.Client.Management
 
             SmsTemplateResource result = await JsonSerializer.DeserializeAsync<SmsTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
-            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddEtagToImmutableDictionary(response);
+            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddETagToImmutableDictionary(response);
 
             return new ApiResponse<SmsTemplateResource>(
                response.StatusCode,
@@ -310,7 +310,7 @@ namespace Marain.UserNotifications.Client.Management
             return null;
         }
 
-        private ImmutableDictionary<string, string> AddEtagToImmutableDictionary(HttpResponseMessage response)
+        private ImmutableDictionary<string, string> AddETagToImmutableDictionary(HttpResponseMessage response)
         {
             ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
             if (!string.IsNullOrEmpty(response.Headers.ETag?.Tag))
