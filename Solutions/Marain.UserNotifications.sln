@@ -38,7 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Be
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Abstractions", "Marain.UserNotifications.Abstractions\Marain.UserNotifications.Abstractions.csproj", "{83186152-DCB8-4AED-97DD-F1E73E8C8BDA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Storage.AzureTable", "Marain.UserNotifications.Storage.AzureTable\Marain.UserNotifications.Storage.AzureTable.csproj", "{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Storage.AzureStorage", "Marain.UserNotifications.Storage.AzureStorage\Marain.UserNotifications.Storage.AzureStorage.csproj", "{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Client", "Marain.UserNotifications.Client\Marain.UserNotifications.Client.csproj", "{5AE3D18F-5C27-462A-B6DF-80F05A5ED99E}"
 EndProject
