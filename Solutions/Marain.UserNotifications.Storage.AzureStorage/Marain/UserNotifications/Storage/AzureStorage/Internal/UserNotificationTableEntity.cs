@@ -3,7 +3,7 @@
 // </copyright>
 
 #nullable disable
-namespace Marain.UserNotifications.Storage.AzureTable.Internal
+namespace Marain.UserNotifications.Storage.AzureStorage.Internal
 {
     using System;
     using Corvus.Json;
