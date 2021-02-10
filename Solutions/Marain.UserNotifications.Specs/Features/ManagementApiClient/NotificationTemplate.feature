@@ -49,12 +49,17 @@ Scenario: Get a Web Push notification template
 		"""
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template4' and communication type 'WebPush'
 	Then the client response status code should be 'OK'
+    And the client response should contain a 'If-None-Match' header
 	And the web push template in the UserManagement API response should have a 'Body' with value 'body'
 	And the web push template in the UserManagement API response should have a 'Title' with value 'test'
 	And the web push template in the UserManagement API response should have a 'ContentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1'
 	And the web push template in the UserManagement API response should have a 'Image' with value 'Base+64xddfa'
 	And the web push template in the UserManagement API response should have a 'NotificationType' with value 'marain.test.template4'
 	And the web push template in the UserManagement API response should have a 'ActionUrl' with value 'https://www.google.co.uk/'
+
+Scenario: Get a Web Push notification template that doesn't exist
+	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.notcreatedtemplate' and communication type 'WebPush'
+	Then the UserNotificationsApiException status code should be 'NotFound'
 
 #####################################
 # Email notification template tests #
@@ -96,11 +101,15 @@ Scenario: Get an email notification template
 		"""
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template6' and communication type 'Email'
 	Then the client response status code should be 'OK'
+    And the client response should contain a 'If-None-Match' header
 	And the email template in the UserManagement API response should have a 'Body' with value 'body'
 	And the email template in the UserManagement API response should have a 'Subject' with value 'test'
 	And the email template in the UserManagement API response should have a 'ContentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
 	And the email template in the UserManagement API response should have a 'NotificationType' with value 'marain.test.template6'
 
+Scenario: Get a Email notification template that doesn't exist
+	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.notcreatedtemplate' and communication type 'Email'
+	Then the UserNotificationsApiException status code should be 'NotFound'
 ########################################
 # Sms notification template tests	   #
 ########################################
@@ -140,6 +149,7 @@ Scenario: Get an sms notification template
 		"""
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template8' and communication type 'Sms'
 	Then the client response status code should be 'OK'
+    And the client response should contain a 'If-None-Match' header
 	And the sms template in the UserManagement API response should have a 'Body' with value 'body'
 	And the sms template in the UserManagement API response should have a 'ContentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1'
 	And the sms template in the UserManagement API response should have a 'NotificationType' with value 'marain.test.template8'
@@ -151,3 +161,7 @@ Scenario: Request sms notification template by self link
 	And I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template9' and communication type 'Sms'
 	When I use the client to send a management API request to get a sms notification template using the link called 'self' from the previous API response
 	Then the client response status code should be 'OK'
+
+Scenario: Get a sms notification template that doesn't exist
+	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.notcreatedtemplate' and communication type 'Sms'
+	Then the UserNotificationsApiException status code should be 'NotFound'

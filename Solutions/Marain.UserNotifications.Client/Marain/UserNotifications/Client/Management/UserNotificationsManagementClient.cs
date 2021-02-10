@@ -6,6 +6,7 @@ namespace Marain.UserNotifications.Client.Management
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.IO;
     using System.Net.Http;
     using System.Text.Json;
@@ -121,9 +122,12 @@ namespace Marain.UserNotifications.Client.Management
 
             WebPushTemplateResource result = await JsonSerializer.DeserializeAsync<WebPushTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
+            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddEtagToImmutableDictionary(response);
+
             return new ApiResponse<WebPushTemplateResource>(
                response.StatusCode,
-               result);
+               result,
+               immutableHeaderDictionary);
         }
 
         /// <inheritdoc />
@@ -162,9 +166,12 @@ namespace Marain.UserNotifications.Client.Management
 
             EmailTemplateResource result = await JsonSerializer.DeserializeAsync<EmailTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
+            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddEtagToImmutableDictionary(response);
+
             return new ApiResponse<EmailTemplateResource>(
                response.StatusCode,
-               result);
+               result,
+               immutableHeaderDictionary);
         }
 
         /// <inheritdoc />
@@ -203,9 +210,12 @@ namespace Marain.UserNotifications.Client.Management
 
             SmsTemplateResource result = await JsonSerializer.DeserializeAsync<SmsTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
+            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddEtagToImmutableDictionary(response);
+
             return new ApiResponse<SmsTemplateResource>(
                response.StatusCode,
-               result);
+               result,
+               immutableHeaderDictionary);
         }
 
         /// <inheritdoc />
@@ -298,6 +308,17 @@ namespace Marain.UserNotifications.Client.Management
             }
 
             return null;
+        }
+
+        private ImmutableDictionary<string, string> AddEtagToImmutableDictionary(HttpResponseMessage response)
+        {
+            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
+            if (!string.IsNullOrEmpty(response.Headers.ETag?.Tag))
+            {
+                builder.Add("If-None-Match", response.Headers.ETag.Tag);
+            }
+
+            return builder.ToImmutable();
         }
     }
 }
