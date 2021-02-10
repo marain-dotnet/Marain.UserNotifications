@@ -14,7 +14,7 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Testing.SpecFlow;
     using Marain.TenantManagement.EnrollmentConfiguration;
     using Marain.TenantManagement.Testing;
-    using Marain.UserNotifications.Storage.AzureTable;
+    using Marain.UserNotifications.Storage.AzureStorage;
     using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
