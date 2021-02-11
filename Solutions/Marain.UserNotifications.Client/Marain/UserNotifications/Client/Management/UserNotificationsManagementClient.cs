@@ -122,12 +122,10 @@ namespace Marain.UserNotifications.Client.Management
 
             WebPushTemplateResource result = await JsonSerializer.DeserializeAsync<WebPushTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
-            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddETagToImmutableDictionary(response);
-
             return new ApiResponse<WebPushTemplateResource>(
                response.StatusCode,
                result,
-               immutableHeaderDictionary);
+               WrapETagInImmutableDictionary(response));
         }
 
         /// <inheritdoc />
@@ -166,12 +164,10 @@ namespace Marain.UserNotifications.Client.Management
 
             EmailTemplateResource result = await JsonSerializer.DeserializeAsync<EmailTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
-            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddETagToImmutableDictionary(response);
-
             return new ApiResponse<EmailTemplateResource>(
                response.StatusCode,
                result,
-               immutableHeaderDictionary);
+               WrapETagInImmutableDictionary(response));
         }
 
         /// <inheritdoc />
@@ -210,12 +206,10 @@ namespace Marain.UserNotifications.Client.Management
 
             SmsTemplateResource result = await JsonSerializer.DeserializeAsync<SmsTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
 
-            ImmutableDictionary<string, string> immutableHeaderDictionary = this.AddETagToImmutableDictionary(response);
-
             return new ApiResponse<SmsTemplateResource>(
                response.StatusCode,
                result,
-               immutableHeaderDictionary);
+               WrapETagInImmutableDictionary(response));
         }
 
         /// <inheritdoc />
@@ -282,6 +276,17 @@ namespace Marain.UserNotifications.Client.Management
                 result);
         }
 
+        private static ImmutableDictionary<string, string> WrapETagInImmutableDictionary(HttpResponseMessage response)
+        {
+            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
+            if (!string.IsNullOrEmpty(response.Headers.ETag?.Tag))
+            {
+                builder.Add("ETag", response.Headers.ETag.Tag);
+            }
+
+            return builder.ToImmutable();
+        }
+
         private HttpRequestMessage AddETagToHeader(HttpRequestMessage httpRequestMessage, string eTag)
         {
             if (!string.IsNullOrWhiteSpace(eTag))
@@ -308,17 +313,6 @@ namespace Marain.UserNotifications.Client.Management
             }
 
             return null;
-        }
-
-        private ImmutableDictionary<string, string> AddETagToImmutableDictionary(HttpResponseMessage response)
-        {
-            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
-            if (!string.IsNullOrEmpty(response.Headers.ETag?.Tag))
-            {
-                builder.Add("ETag", response.Headers.ETag.Tag);
-            }
-
-            return builder.ToImmutable();
         }
     }
 }
