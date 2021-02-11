@@ -6,6 +6,7 @@ namespace Marain.UserNotifications.Client.Management
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.IO;
     using System.Net.Http;
     using System.Text.Json;
@@ -123,7 +124,8 @@ namespace Marain.UserNotifications.Client.Management
 
             return new ApiResponse<WebPushTemplateResource>(
                response.StatusCode,
-               result);
+               result,
+               WrapETagInImmutableDictionary(response));
         }
 
         /// <inheritdoc />
@@ -164,7 +166,8 @@ namespace Marain.UserNotifications.Client.Management
 
             return new ApiResponse<EmailTemplateResource>(
                response.StatusCode,
-               result);
+               result,
+               WrapETagInImmutableDictionary(response));
         }
 
         /// <inheritdoc />
@@ -205,7 +208,8 @@ namespace Marain.UserNotifications.Client.Management
 
             return new ApiResponse<SmsTemplateResource>(
                response.StatusCode,
-               result);
+               result,
+               WrapETagInImmutableDictionary(response));
         }
 
         /// <inheritdoc />
@@ -270,6 +274,17 @@ namespace Marain.UserNotifications.Client.Management
             return new ApiResponse<NotificationTemplate>(
                 response.StatusCode,
                 result);
+        }
+
+        private static ImmutableDictionary<string, string> WrapETagInImmutableDictionary(HttpResponseMessage response)
+        {
+            ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
+            if (!string.IsNullOrEmpty(response.Headers.ETag?.Tag))
+            {
+                builder.Add("ETag", response.Headers.ETag.Tag);
+            }
+
+            return builder.ToImmutable();
         }
 
         private HttpRequestMessage AddETagToHeader(HttpRequestMessage httpRequestMessage, string eTag)
