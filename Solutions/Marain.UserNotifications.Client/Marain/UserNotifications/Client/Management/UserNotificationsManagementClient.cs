@@ -315,7 +315,7 @@ namespace Marain.UserNotifications.Client.Management
             ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>();
             if (!string.IsNullOrEmpty(response.Headers.ETag?.Tag))
             {
-                builder.Add("If-None-Match", response.Headers.ETag.Tag);
+                builder.Add("ETag", response.Headers.ETag.Tag);
             }
 
             return builder.ToImmutable();

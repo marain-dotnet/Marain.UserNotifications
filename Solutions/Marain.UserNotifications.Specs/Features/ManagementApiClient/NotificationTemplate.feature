@@ -49,7 +49,7 @@ Scenario: Get a Web Push notification template
 		"""
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template4' and communication type 'WebPush'
 	Then the client response status code should be 'OK'
-	And the client response should contain a 'If-None-Match' header
+	And the client response should contain a 'ETag' header
 	And the web push template in the UserManagement API response should have a 'Body' with value 'body'
 	And the web push template in the UserManagement API response should have a 'Title' with value 'test'
 	And the web push template in the UserManagement API response should have a 'ContentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1'
@@ -101,7 +101,7 @@ Scenario: Get an email notification template
 		"""
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template6' and communication type 'Email'
 	Then the client response status code should be 'OK'
-	And the client response should contain a 'If-None-Match' header
+	And the client response should contain a 'ETag' header
 	And the email template in the UserManagement API response should have a 'Body' with value 'body'
 	And the email template in the UserManagement API response should have a 'Subject' with value 'test'
 	And the email template in the UserManagement API response should have a 'ContentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1'
@@ -150,7 +150,7 @@ Scenario: Get an sms notification template
 		"""
 	When I use the client to send the notification template API a request to get a notification template with notification type 'marain.test.template8' and communication type 'Sms'
 	Then the client response status code should be 'OK'
-	And the client response should contain a 'If-None-Match' header
+	And the client response should contain a 'ETag' header
 	And the sms template in the UserManagement API response should have a 'Body' with value 'body'
 	And the sms template in the UserManagement API response should have a 'ContentType' with value 'application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1'
 	And the sms template in the UserManagement API response should have a 'NotificationType' with value 'marain.test.template8'
