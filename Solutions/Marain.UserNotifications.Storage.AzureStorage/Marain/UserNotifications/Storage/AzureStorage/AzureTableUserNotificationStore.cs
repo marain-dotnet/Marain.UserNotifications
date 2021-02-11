@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.UserNotifications.Storage.AzureTable
+namespace Marain.UserNotifications.Storage.AzureStorage
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace Marain.UserNotifications.Storage.AzureTable
     using System.Threading.Tasks;
     using Corvus.Extensions.Json;
     using Marain.UserNotifications;
-    using Marain.UserNotifications.Storage.AzureTable.Internal;
+    using Marain.UserNotifications.Storage.AzureStorage.Internal;
     using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Logging;
 

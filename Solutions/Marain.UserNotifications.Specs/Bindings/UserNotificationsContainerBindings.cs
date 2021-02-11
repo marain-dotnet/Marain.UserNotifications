@@ -14,7 +14,7 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Marain.Tenancy.Client;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
-    using Marain.UserNotifications.Storage.AzureTable;
+    using Marain.UserNotifications.Storage.AzureStorage;
     using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;

@@ -4,7 +4,7 @@
 
 #pragma warning disable RCS1194 // Roslynator's 'all the constructors' fixation
 
-namespace Marain.UserNotifications.Storage.AzureTable
+namespace Marain.UserNotifications.Storage.AzureStorage
 {
     using System;
 
