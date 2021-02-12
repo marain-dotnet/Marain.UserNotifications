@@ -21,7 +21,7 @@
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApi\CreateNotifications - Copy.feature.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.1.0" />
+    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.2.0" />
     <PackageReference Include="Corvus.Extensions.Newtonsoft.Json" Version="1.2.0" />
     <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.1.1" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
