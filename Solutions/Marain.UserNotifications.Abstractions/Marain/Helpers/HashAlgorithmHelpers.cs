@@ -20,7 +20,8 @@ namespace Marain.Helpers
         public static byte[] GetSHA256Hash(string input)
         {
             // Convert the input string to a byte array and compute the hash.
-            return SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(input));
+            using var sha256Hash = SHA256.Create();
+            return sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
         }
     }
 }

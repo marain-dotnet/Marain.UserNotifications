@@ -59,7 +59,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
             string propertiesJson = JsonConvert.SerializeObject(source.Properties, serializerSettings);
             string channelDeliveryStatusesJson = JsonConvert.SerializeObject(source.ChannelStatuses, serializerSettings);
             byte[] identityHash = source.GetIdentityHash(serializerSettings);
-            string rowKey = $"{reversedTimestamp:D21}-{GetHexaDecimalString(identityHash)}";
+            string rowKey = $"{reversedTimestamp:D21}-{GetHexadecimalString(identityHash)}";
 
             return new UserNotificationTableEntity
             {
@@ -96,11 +96,11 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
                 channelDeliveryStatuses);
         }
 
-        private static string GetHexaDecimalString(byte[] identityHash)
+        private static string GetHexadecimalString(byte[] identityHash)
         {
             // Create a new Stringbuilder to collect the bytes
             // and create a string.
-            var sBuilder = new System.Text.StringBuilder(64);
+            var sBuilder = new System.Text.StringBuilder(identityHash.Length * 2);
 
             // Loop through each byte of the hashed data
             // and format each one as a hexadecimal string.
