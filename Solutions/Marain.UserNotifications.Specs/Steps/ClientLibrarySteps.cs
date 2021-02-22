@@ -218,6 +218,7 @@ namespace Marain.UserNotifications.Specs.Steps
 
         [When("I use the client to send the notification template API a request to create a new web push notification template")]
         [When("I use the client to send the notification template API a request to update a web push notification template")]
+        [Given("I use the client to send the notification template API a request to create a new web push notification template")]
         public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewNotificationTemplate(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -249,6 +250,7 @@ namespace Marain.UserNotifications.Specs.Steps
 
         [When("I use the client to send the notification template API a request to create a new email notification template")]
         [When("I use the client to send the notification template API a request to update an email notification template")]
+        [Given("I use the client to send the notification template API a request to create a new email notification template")]
         public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewEmailNotificationTemplate(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -280,6 +282,7 @@ namespace Marain.UserNotifications.Specs.Steps
 
         [When("I use the client to send the notification template API a request to create a new sms notification template")]
         [When("I use the client to send the notification template API a request to update an sms notification template")]
+        [Given("I use the client to send the notification template API a request to create a new sms notification template")]
         public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewSmsNotificationTemplate(string request)
         {
             string transientTenantId = this.featureContext.GetTransientTenantId();
@@ -551,7 +554,7 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             WebPushTemplateResource response = this.GetApiResponseBody<WebPushTemplateResource>();
             object? actualValue = this.GetPropertyValue(response, propertyName);
-            Assert.IsNull(actualValue);
+            Assert.AreEqual(expectedValue, actualValue);
         }
 
         [Then("the email template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
@@ -559,7 +562,7 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             EmailTemplateResource response = this.GetApiResponseBody<EmailTemplateResource>();
             object? actualValue = this.GetPropertyValue(response, propertyName);
-            Assert.IsNull(actualValue);
+            Assert.AreEqual(expectedValue, actualValue);
         }
 
         [Then("the sms template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
@@ -567,7 +570,7 @@ namespace Marain.UserNotifications.Specs.Steps
         {
             SmsTemplateResource response = this.GetApiResponseBody<SmsTemplateResource>();
             object? actualValue = this.GetPropertyValue(response, propertyName);
-            Assert.IsNull(actualValue);
+            Assert.AreEqual(expectedValue, actualValue);
         }
 
         [Then("the client response for the object '(.*)' with property '(.*)' should have a value of '(.*)'")]
