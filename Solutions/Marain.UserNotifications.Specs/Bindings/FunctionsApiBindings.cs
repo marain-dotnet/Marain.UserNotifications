@@ -9,6 +9,8 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Testing.AzureFunctions;
     using Corvus.Testing.AzureFunctions.SpecFlow;
     using Corvus.Testing.SpecFlow;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using TechTalk.SpecFlow;
 
     [Binding]
@@ -47,8 +49,9 @@ namespace Marain.UserNotifications.Specs.Bindings
         [AfterScenario("useApis")]
         public static void WriteOutput(FeatureContext featureContext)
         {
+            ILogger<FunctionsController> logger = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<ILogger<FunctionsController>>();
             FunctionsController functionsController = FunctionsBindings.GetFunctionsController(featureContext);
-            functionsController.GetFunctionsOutput().WriteAllToConsoleAndClear();
+            logger.LogAllAndClear(functionsController.GetFunctionsOutput());
         }
 
         [AfterFeature("useApis")]
