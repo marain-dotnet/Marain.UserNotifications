@@ -8,8 +8,10 @@ namespace Marain.UserNotifications
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics;
+    using System.Security.Cryptography;
     using System.Text;
     using Corvus.Json;
+    using Marain.Helpers;
     using Marain.Models;
     using Newtonsoft.Json;
 
@@ -108,11 +110,11 @@ namespace Marain.UserNotifications
         /// </summary>
         /// <param name="serializerSettings">The JsonSerializerSettings that will be used.</param>
         /// <returns>A hash for the notification.</returns>
-        public string GetIdentityHash(JsonSerializerSettings serializerSettings)
+        public byte[] GetIdentityHash(JsonSerializerSettings serializerSettings)
         {
             string propertiesJson = JsonConvert.SerializeObject(this.Properties, serializerSettings);
             string fingerprint = $"{this.UserId}{this.Timestamp.ToUnixTimeMilliseconds()}{this.NotificationType}{propertiesJson}";
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(fingerprint));
+            return HashAlgorithmHelpers.GetSHA256Hash(fingerprint);
         }
     }
 }
