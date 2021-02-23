@@ -38,7 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Be
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Abstractions", "Marain.UserNotifications.Abstractions\Marain.UserNotifications.Abstractions.csproj", "{83186152-DCB8-4AED-97DD-F1E73E8C8BDA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Storage.AzureTable", "Marain.UserNotifications.Storage.AzureTable\Marain.UserNotifications.Storage.AzureTable.csproj", "{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Storage.AzureStorage", "Marain.UserNotifications.Storage.AzureStorage\Marain.UserNotifications.Storage.AzureStorage.csproj", "{5ADAFB44-8434-4EC3-89C7-D5963FBA8B7C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.UserNotifications.Client", "Marain.UserNotifications.Client\Marain.UserNotifications.Client.csproj", "{5AE3D18F-5C27-462A-B6DF-80F05A5ED99E}"
 EndProject
@@ -49,6 +49,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service Definitions", "Serv
 		Service Definitions\ApiDeliveryChannelService.yaml = Service Definitions\ApiDeliveryChannelService.yaml
 		Service Definitions\ManagementService.yaml = Service Definitions\ManagementService.yaml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.UserNotifications.ThirdParty.DeliveryChannels", "Marain.UserNotifications.ThirdParty.DeliveryChannels\Marain.UserNotifications.ThirdParty.DeliveryChannels.csproj", "{931D12B2-D18D-4662-9C46-233D6D345C2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +98,10 @@ Global
 		{795A7A4B-C140-44D4-A2F2-2F97BFE20B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{795A7A4B-C140-44D4-A2F2-2F97BFE20B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{795A7A4B-C140-44D4-A2F2-2F97BFE20B41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{931D12B2-D18D-4662-9C46-233D6D345C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{931D12B2-D18D-4662-9C46-233D6D345C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{931D12B2-D18D-4662-9C46-233D6D345C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{931D12B2-D18D-4662-9C46-233D6D345C2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

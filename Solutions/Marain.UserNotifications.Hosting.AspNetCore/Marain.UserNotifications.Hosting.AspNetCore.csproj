@@ -8,13 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Monitoring.ApplicationInsights" Version="1.0.0" />
+    <PackageReference Include="Corvus.Monitoring.ApplicationInsights" Version="1.2.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Marain.Services.Tenancy" Version="2.0.0" />
-    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.0.3" />
+    <PackageReference Include="Marain.Services.Tenancy" Version="2.2.0" />
+    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.1.1" />
     <PackageReference Include="Menes.Hosting.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Marain.Operations.ControlClient" Version="1.1.0" />
   </ItemGroup>
@@ -22,7 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Marain.UserNotifications.Client\Marain.UserNotifications.Client.csproj" />
     <ProjectReference Include="..\Marain.UserNotifications.OpenApi\Marain.UserNotifications.OpenApi.csproj" />
-    <ProjectReference Include="..\Marain.UserNotifications.Storage.AzureTable\Marain.UserNotifications.Storage.AzureTable.csproj" />
+    <ProjectReference Include="..\Marain.UserNotifications.Storage.AzureStorage\Marain.UserNotifications.Storage.AzureStorage.csproj" />
   </ItemGroup>
 
 </Project>

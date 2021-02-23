@@ -8,8 +8,11 @@ namespace Marain.UserNotifications
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics;
+    using System.Security.Cryptography;
     using System.Text;
     using Corvus.Json;
+    using Marain.Helpers;
+    using Marain.Models;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -28,6 +31,7 @@ namespace Marain.UserNotifications
         /// <param name="properties">The <see cref="Properties" />.</param>
         /// <param name="metadata">The <see cref="Metadata"/>.</param>
         /// <param name="channelStatuses">The <see cref="ChannelStatuses"/>.</param>
+        /// <param name="deliveryChannelConfiguredPerCommunicationType">The <see cref="DeliveryChannelConfiguredPerCommunicationType"/>.</param>
         public UserNotification(
             string? id,
             string notificationType,
@@ -36,7 +40,8 @@ namespace Marain.UserNotifications
             IPropertyBag properties,
             UserNotificationMetadata metadata,
 #pragma warning disable SA1011 // Closing square brackets should be spaced correctly
-            IEnumerable<UserNotificationStatus>? channelStatuses = null)
+            IEnumerable<UserNotificationStatus>? channelStatuses = null,
+            Dictionary<CommunicationType, string>? deliveryChannelConfiguredPerCommunicationType = null)
 #pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         {
             this.Id = id;
@@ -46,6 +51,7 @@ namespace Marain.UserNotifications
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
             this.ChannelStatuses = channelStatuses?.ToImmutableArray() ?? ImmutableArray<UserNotificationStatus>.Empty;
+            this.DeliveryChannelConfiguredPerCommunicationType = deliveryChannelConfiguredPerCommunicationType;
         }
 
         /// <summary>
@@ -91,6 +97,11 @@ namespace Marain.UserNotifications
         public ImmutableArray<UserNotificationStatus> ChannelStatuses { get; }
 
         /// <summary>
+        /// Gets the desired delivery channels which are configured for the communication type.
+        /// </summary>
+        public Dictionary<CommunicationType, string>? DeliveryChannelConfiguredPerCommunicationType { get; }
+
+        /// <summary>
         /// Constructs a hash for the notification that can be used to determine whether two notifications are
         /// equivalent. This takes into account the notification's <see cref="NotificationType"/>, <see cref="UserId"/>,
         /// <see cref="Timestamp"/> and <see cref="Properties"/>, but does not include <see cref="Id"/> or
@@ -99,11 +110,11 @@ namespace Marain.UserNotifications
         /// </summary>
         /// <param name="serializerSettings">The JsonSerializerSettings that will be used.</param>
         /// <returns>A hash for the notification.</returns>
-        public string GetIdentityHash(JsonSerializerSettings serializerSettings)
+        public byte[] GetIdentityHash(JsonSerializerSettings serializerSettings)
         {
             string propertiesJson = JsonConvert.SerializeObject(this.Properties, serializerSettings);
             string fingerprint = $"{this.UserId}{this.Timestamp.ToUnixTimeMilliseconds()}{this.NotificationType}{propertiesJson}";
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(fingerprint));
+            return HashAlgorithmHelpers.GetSHA256Hash(fingerprint);
         }
     }
 }

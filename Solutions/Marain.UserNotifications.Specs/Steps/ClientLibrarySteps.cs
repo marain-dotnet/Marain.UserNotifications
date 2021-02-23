@@ -17,6 +17,8 @@ namespace Marain.UserNotifications.Specs.Steps
     using Marain.UserNotifications.Client.ApiDeliveryChannel.Resources;
     using Marain.UserNotifications.Client.Management;
     using Marain.UserNotifications.Client.Management.Requests;
+    using Marain.UserNotifications.Client.Management.Resources;
+    using Marain.UserNotifications.Client.Management.Resources.CommunicationTemplates;
     using Marain.UserNotifications.Specs.Bindings;
     using Menes.Hal;
     using Microsoft.Extensions.DependencyInjection;
@@ -56,6 +58,26 @@ namespace Marain.UserNotifications.Specs.Steps
             try
             {
                 ApiResponse result = await client.CreateNotificationsAsync(transientTenantId, data, CancellationToken.None).ConfigureAwait(false);
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When("I use the client to send a management API request to create a new notification via third party delivery channels")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToCreateANewNotificationViaThirdPartyDeliveryChannels(Table table)
+        {
+            IJsonSerializerSettingsProvider jsonSerializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            CreateNotificationForDeliveryChannelsRequest data = BuildCreateNotificationForDeliveryChannelsRequestFrom(table.Rows[0], jsonSerializerSettingsProvider.Instance);
+
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            try
+            {
+                ApiResponse result = await client.CreateNotificationForDeliveryChannelsAsync(transientTenantId, data, CancellationToken.None).ConfigureAwait(false);
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers);
             }
             catch (Exception ex)
@@ -194,6 +216,155 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
+        [When("I use the client to send the notification template API a request to create a new web push notification template")]
+        [When("I use the client to send the notification template API a request to update a web push notification template")]
+        [Given("I use the client to send the notification template API a request to create a new web push notification template")]
+        public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewNotificationTemplate(string request)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            WebPushTemplate notificationTemplate = JsonConvert.DeserializeObject<WebPushTemplate>(request);
+
+            // Try get the stored WebPushTemplate object and retrieve eTag value if exists.
+            this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate response);
+
+            if (response != null)
+            {
+                notificationTemplate.ETag = response.ETag;
+            }
+
+            try
+            {
+                ApiResponse result = await client.SetNotificationTemplate(
+                    transientTenantId,
+                    notificationTemplate).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, notificationTemplate);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When("I use the client to send the notification template API a request to create a new email notification template")]
+        [When("I use the client to send the notification template API a request to update an email notification template")]
+        [Given("I use the client to send the notification template API a request to create a new email notification template")]
+        public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewEmailNotificationTemplate(string request)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            EmailTemplate emailTemplate = JsonConvert.DeserializeObject<EmailTemplate>(request);
+
+            // Try get the stored EmailTemplate object and retrieve eTag value if exists.
+            this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate response);
+
+            if (response != null)
+            {
+                emailTemplate.ETag = response.ETag;
+            }
+
+            try
+            {
+                ApiResponse result = await client.SetNotificationTemplate(
+                    transientTenantId,
+                    emailTemplate).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, emailTemplate);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When("I use the client to send the notification template API a request to create a new sms notification template")]
+        [When("I use the client to send the notification template API a request to update an sms notification template")]
+        [Given("I use the client to send the notification template API a request to create a new sms notification template")]
+        public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToCreateANewSmsNotificationTemplate(string request)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            SmsTemplate smsTemplate = JsonConvert.DeserializeObject<SmsTemplate>(request);
+
+            // Try get the stored SmsTemplate object and retrieve eTag value if exists.
+            this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate response);
+
+            if (response != null)
+            {
+                smsTemplate.ETag = response.ETag;
+            }
+
+            try
+            {
+                ApiResponse result = await client.SetNotificationTemplate(
+                    transientTenantId,
+                    smsTemplate).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, smsTemplate);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [Given("I use the client to send the notification template API a request to get a notification template with notification type '(.*)' and communication type '(.*)'")]
+        [When("I use the client to send the notification template API a request to get a notification template with notification type '(.*)' and communication type '(.*)'")]
+        public async Task WhenIUseTheClientToSendTheNotificationTemplateAPIARequestToGetANotificationTemplateWithNotificationType(string notificationType, string communicationType)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            Enum.TryParse(communicationType, out CommunicationType communicationTypeEnum);
+
+            try
+            {
+                switch (communicationTypeEnum)
+                {
+                    case CommunicationType.Email:
+                        ApiResponse<EmailTemplateResource> emailResult = await client.GetEmailNotificationTemplate(transientTenantId, notificationType).ConfigureAwait(false);
+                        this.StoreApiResponseDetails(emailResult.StatusCode, emailResult.Headers, emailResult.Body);
+                        break;
+                    case CommunicationType.Sms:
+                        ApiResponse<SmsTemplateResource> smsResult = await client.GetSmsNotificationTemplate(transientTenantId, notificationType).ConfigureAwait(false);
+                        this.StoreApiResponseDetails(smsResult.StatusCode, smsResult.Headers, smsResult.Body);
+                        break;
+                    case CommunicationType.WebPush:
+                        ApiResponse<WebPushTemplateResource> webPushResult = await client.GetWebPushNotificationTemplate(transientTenantId, notificationType).ConfigureAwait(false);
+                        this.StoreApiResponseDetails(webPushResult.StatusCode, webPushResult.Headers, webPushResult.Body);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When("I use the client to send a generate template API request")]
+        public async Task WhenIUseTheClientToSendAGenerateTemplateAPIRequest(string request)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            CreateNotificationsRequest createNotificationRequest = JsonConvert.DeserializeObject<CreateNotificationsRequest>(request);
+
+            try
+            {
+                ApiResponse<NotificationTemplate> result = await client.GenerateNotificationTemplate(transientTenantId, createNotificationRequest).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
         [Given("I use the client to send an API delivery request for the user notification with the same Id as the user notification called '(.*)'")]
         public Task GivenIUseTheClientToSendAnAPIDeliveryRequestForTheUserNotificationWithTheSameIdAsTheUserNotificationCalled(string notificationName)
         {
@@ -212,6 +383,27 @@ namespace Marain.UserNotifications.Specs.Steps
                 ApiResponse<NotificationResource> result = await client.GetNotificationAsync(
                     transientTenantId,
                     notificationId).ConfigureAwait(false);
+
+                this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
+            }
+            catch (Exception ex)
+            {
+                ExceptionSteps.StoreLastExceptionInScenarioContext(ex, this.scenarioContext);
+            }
+        }
+
+        [When("I use the client to send a management API request to get a sms notification template using the link called '(.*)' from the previous API response")]
+        public async Task WhenIUseTheClientToSendAManagementAPIRequestToGetASmsNotificationTemplateUsingTheLinkCalledFromThePreviousAPIResponse(string linkRelationName)
+        {
+            SmsTemplateResource previousResponseBody = this.GetApiResponseBody<SmsTemplateResource>();
+            WebLink nextLink = previousResponseBody.EnumerateLinks(linkRelationName).Single();
+
+            IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
+
+            try
+            {
+                ApiResponse<SmsTemplateResource> result = await client.GetSmsNotificationTemplateByLinkAsync(
+                    nextLink.Href).ConfigureAwait(false);
 
                 this.StoreApiResponseDetails(result.StatusCode, result.Headers, result.Body);
             }
@@ -341,6 +533,63 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.AreEqual(expected, response.Read);
         }
 
+        [Then("the client response for the notification template property '(.*)' should not be null")]
+        public void ThenTheClientResponseForTheNotificationTemplatePropertyShouldNotBeNull(string propertyName)
+        {
+            NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
+            object? actualValue = this.GetPropertyValue(response, propertyName);
+            Assert.IsNotNull(actualValue);
+        }
+
+        [Then("the client response for the notification template property '(.*)' should be null")]
+        public void ThenTheClientResponseForTheNotificationTemplatePropertyShouldBeNull(string propertyName)
+        {
+            NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
+            object? actualValue = this.GetPropertyValue(response, propertyName);
+            Assert.IsNull(actualValue);
+        }
+
+        [Then("the web push template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
+        public void ThenTheWebPushTemplateInTheUserManagementAPIResponseShouldHaveAWithValue(string propertyName, string expectedValue)
+        {
+            WebPushTemplateResource response = this.GetApiResponseBody<WebPushTemplateResource>();
+            object? actualValue = this.GetPropertyValue(response, propertyName);
+            Assert.AreEqual(expectedValue, actualValue);
+        }
+
+        [Then("the email template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
+        public void ThenTheEmailTemplateInTheUserManagementAPIResponseShouldHaveAWithValue(string propertyName, string expectedValue)
+        {
+            EmailTemplateResource response = this.GetApiResponseBody<EmailTemplateResource>();
+            object? actualValue = this.GetPropertyValue(response, propertyName);
+            Assert.AreEqual(expectedValue, actualValue);
+        }
+
+        [Then("the sms template in the UserManagement API response should have a '(.*)' with value '(.*)'")]
+        public void ThenTheSmsTemplateInTheUserManagementAPIResponseShouldHaveAWithValue(string propertyName, string expectedValue)
+        {
+            SmsTemplateResource response = this.GetApiResponseBody<SmsTemplateResource>();
+            object? actualValue = this.GetPropertyValue(response, propertyName);
+            Assert.AreEqual(expectedValue, actualValue);
+        }
+
+        [Then("the client response for the object '(.*)' with property '(.*)' should have a value of '(.*)'")]
+        public void ThenTheClientResponseForTheObjectWithPropertyShouldHaveAValueOf(string objectName, string propertyName, string propertyValue)
+        {
+            NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
+            object? objectValue = this.GetPropertyValue(response, objectName);
+
+            if (objectValue != null)
+            {
+                object? propertyObjectValue = this.GetPropertyValue(objectValue, propertyName);
+                Assert.AreEqual(propertyValue, propertyObjectValue);
+            }
+            else
+            {
+                Assert.Fail($"Could not find the value for the property {propertyName} in the client response");
+            }
+        }
+
         private static CreateNotificationsRequest BuildCreateNotificationsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();
@@ -356,6 +605,26 @@ namespace Marain.UserNotifications.Specs.Steps
                 Timestamp = DateTime.Parse(tableRow["Timestamp"]),
                 UserIds = userIds,
                 Properties = properties,
+            };
+        }
+
+        private static CreateNotificationForDeliveryChannelsRequest BuildCreateNotificationForDeliveryChannelsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        {
+            string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();
+            string[] userIds = JArray.Parse(tableRow["UserIds"]).Select(token => token.Value<string>()).ToArray();
+            var properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["PropertiesJson"], serializerSettings).ToDictionary(x => x.Key, x => (object)x.Value);
+            var deliveryChannelConfiguredPerCommunicationType = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["DeliveryChannelConfiguredPerCommunicationType"], serializerSettings).ToDictionary(x => x.Key, x => x.Value);
+
+            string? notificationId = tableRow.ContainsKey("Id") ? tableRow["Id"] : null;
+
+            return new CreateNotificationForDeliveryChannelsRequest
+            {
+                NotificationType = tableRow["NotificationType"],
+                CorrelationIds = correlationIds,
+                Timestamp = DateTime.Parse(tableRow["Timestamp"]),
+                UserIds = userIds,
+                Properties = properties,
+                DeliveryChannelConfiguredPerCommunicationType = deliveryChannelConfiguredPerCommunicationType,
             };
         }
 
@@ -380,6 +649,11 @@ namespace Marain.UserNotifications.Specs.Steps
         private T GetApiResponseBody<T>()
         {
             return this.scenarioContext.Get<T>(ApiResponseBodyKey);
+        }
+
+        private object? GetPropertyValue(object src, string propName)
+        {
+            return src?.GetType()?.GetProperty(propName)?.GetValue(src, null);
         }
     }
 }

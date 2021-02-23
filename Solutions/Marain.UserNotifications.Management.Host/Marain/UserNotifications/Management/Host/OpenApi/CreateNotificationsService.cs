@@ -5,12 +5,15 @@
 namespace Marain.UserNotifications.Management.Host.OpenApi
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
+    using Marain.Models;
     using Marain.Operations.Client.OperationsControl;
     using Marain.Operations.Client.OperationsControl.Models;
     using Marain.Services.Tenancy;
     using Marain.UserNotifications.Management.Host.Helpers;
+    using Marain.UserNotifications.Management.Host.Models;
     using Marain.UserNotifications.Management.Host.Orchestrations;
     using Menes;
     using Menes.Exceptions;
@@ -62,12 +65,20 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                 delegatedTenantId,
                 operationId).ConfigureAwait(false);
 
+            // Create a new CreateNotificationForDeliveryChannelsRequest Object which supports the communication types and delivery channels
+            var createNotificationForDeliveryChannelsRequestObject = new CreateNotificationForDeliveryChannelsRequest(
+                body.NotificationType,
+                body.UserIds,
+                body.Timestamp,
+                body.Properties,
+                body.CorrelationIds);
+
             IDurableOrchestrationClient orchestrationClient = context.AsDurableFunctionsOpenApiContext().OrchestrationClient
                 ?? throw new OpenApiServiceMismatchException($"Operation {CreateNotificationsOperationId} has been invoked, but no Durable Orchestration Client is available on the OpenApi context.");
 
             await orchestrationClient.StartNewAsync(
                 nameof(CreateAndDispatchNotificationsOrchestration),
-                new TenantedFunctionData<CreateNotificationsRequest>(context.CurrentTenantId!, body, operationId)).ConfigureAwait(false);
+                new TenantedFunctionData<CreateNotificationForDeliveryChannelsRequest>(context.CurrentTenantId!, createNotificationForDeliveryChannelsRequestObject, operationId)).ConfigureAwait(false);
 
             return this.AcceptedResult(response.Location);
         }

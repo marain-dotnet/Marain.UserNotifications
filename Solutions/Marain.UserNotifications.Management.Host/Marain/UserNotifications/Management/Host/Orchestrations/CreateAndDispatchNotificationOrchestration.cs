@@ -40,7 +40,20 @@ namespace Marain.UserNotifications.Management.Host.Orchestrations
 
             replaySafeLogger.LogDebug("Deserialized CreateNotificationsRequest for user Id '{userId}'", request.Payload.UserId);
 
-            await orchestrationContext.CallActivityAsync(nameof(CreateNotificationActivity), request);
+            UserNotification? savedUserNotification = await orchestrationContext
+                .CallActivityAsync<UserNotification>(nameof(CreateNotificationActivity), request)
+                .ConfigureAwait(true);
+
+            // Only trigger to send the notifications from the configured thirdparty delivery channels if they have been configured in the request.
+            if (request.Payload.DeliveryChannelConfiguredPerCommunicationType != null && savedUserNotification != null)
+            {
+                // Add DeliveryChannelConfiguredPerCommunicationType
+                UserNotification updatedNotification = savedUserNotification.AddDeliveryChannelConfiguredPerCommunicationType(request.Payload.DeliveryChannelConfiguredPerCommunicationType);
+
+                await orchestrationContext.CallActivityAsync(
+                    nameof(DispatchNotificationActivity),
+                    new TenantedFunctionData<UserNotification>(request.TenantId, updatedNotification));
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Retry.Policies;
     using Corvus.Retry.Strategies;
     using Corvus.Testing.SpecFlow;
+    using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications.Specs.Bindings;
     using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,7 @@ namespace Marain.UserNotifications.Specs.Steps
     public class ApiSteps
     {
         private const string ResponseContent = "ApiSteps:ResponseContent";
+        private const string ResponseETag = "ApiSteps:ResponseETag";
 
         private static readonly HttpClient HttpClient = HttpClientFactory.Create();
 
@@ -71,21 +73,13 @@ namespace Marain.UserNotifications.Specs.Steps
         [When("I send a management API request to create a new notification:")]
         public async Task WhenISendAManagementApiRequestToCreateANewNotification(string requestJson)
         {
-            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
-            string transientTenantId = this.featureContext.GetTransientTenantId();
+            await this.CreateNotifications(requestJson, string.Empty).ConfigureAwait(false);
+        }
 
-            HttpResponseMessage response = await HttpClient.PutAsync(
-                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications"),
-                requestContent).ConfigureAwait(false);
-
-            this.scenarioContext.Set(response);
-
-            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (!string.IsNullOrEmpty(responseContent))
-            {
-                this.scenarioContext.Set(responseContent, ResponseContent);
-            }
+        [When("I send a management API request to create a new notification via third party delivery channels")]
+        public async Task WhenISendAManagementAPIRequestToCreateANewNotificationForDeliveryChannels(string requestJson)
+        {
+            await this.CreateNotifications(requestJson, "/v2").ConfigureAwait(false);
         }
 
         [Given("I have sent a management API request to batch update the delivery status of the first (.*) stored notifications for user '(.*)' to '(.*)' for the delivery channel with Id '(.*)'")]
@@ -245,6 +239,127 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.SendPostRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, url.Value<string>(), null);
         }
 
+        [When("I send the user notification template API a request to create a new user notification template")]
+        [When("I send the user notification template API a request to update an existing notification template")]
+        public async Task WhenISendTheUserNotificationTemplateAPIARequestToCreateANewUserNotificationTemplate(string requestJson)
+        {
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            HttpResponseMessage response = await HttpClient.PutAsync(
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates"),
+                requestContent).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
+            }
+        }
+
+        [When("I send the user notification template API a request to update an existing web push notification template")]
+        public async Task WhenISendTheUserNotificationTemplateAPIARequestToUpdateAnExistingWebPushNotificationTemplate(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            WebPushTemplate? savedWebPushTemplate = this.scenarioContext.Get<WebPushTemplate>();
+
+            WebPushTemplate notificationTemplate = DataSetupSteps.BuildWebPushNotificationTemplateFrom(table.Rows[0], savedWebPushTemplate.ETag);
+
+            string? requestJson = JsonConvert.SerializeObject(notificationTemplate, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            var uri = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates");
+            await this.SendRequest(uri, HttpMethod.Put, requestContent, notificationTemplate.ETag).ConfigureAwait(false);
+        }
+
+        [When("I send the user notification template API a request to update an existing email notification template")]
+        public async Task WhenISendTheUserNotificationTemplateAPIARequestToUpdateAnExistingEmailNotificationTemplate(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            EmailTemplate? savedEmailTemplate = this.scenarioContext.Get<EmailTemplate>();
+
+            EmailTemplate notificationTemplate = DataSetupSteps.BuildEmailNotificationTemplateFrom(table.Rows[0], savedEmailTemplate.ETag);
+
+            string? requestJson = JsonConvert.SerializeObject(notificationTemplate, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            var uri = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates");
+            await this.SendRequest(uri, HttpMethod.Put, requestContent, notificationTemplate.ETag).ConfigureAwait(false);
+        }
+
+        [When("I send the user notification template API a request to update an existing sms notification template with an invalid eTag")]
+        [When("I send the user notification template API a request to update an existing sms notification template without an eTag")]
+        public async Task WhenISendTheUserNotificationTemplateAPIARequestToUpdateAnExistingSmsNotificationTemplateWithoutAnETag(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+
+            SmsTemplate notificationTemplate = DataSetupSteps.BuildSmsNotificationTemplateFrom(table.Rows[0]);
+            string? requestJson = JsonConvert.SerializeObject(notificationTemplate, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            var uri = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates");
+            await this.SendRequest(uri, HttpMethod.Put, requestContent, notificationTemplate.ETag).ConfigureAwait(false);
+        }
+
+        [When("I send the user notification template API a request to update an existing sms notification template")]
+        public async Task WhenISendTheUserNotificationTemplateAPIARequestToUpdateAnExistingSmsNotificationTemplate(Table table)
+        {
+            IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
+            SmsTemplate? savedSmsTemplate = this.scenarioContext.Get<SmsTemplate>();
+
+            SmsTemplate notificationTemplate = DataSetupSteps.BuildSmsNotificationTemplateFrom(table.Rows[0], savedSmsTemplate.ETag);
+            string? requestJson = JsonConvert.SerializeObject(notificationTemplate, serializerSettingsProvider.Instance);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            var uri = new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates");
+            await this.SendRequest(uri, HttpMethod.Put, requestContent, notificationTemplate.ETag).ConfigureAwait(false);
+        }
+
+        [When("I send the notification template API a request to retreive a notification template with notificationType '(.*)' and communicationType '(.*)'")]
+        public Task WhenISendTheNotificationTemplateAPIARequestToRetreiveANotificationTemplateWithNotificationTypeAndCommunicationType(string notificationType, string communicationType)
+        {
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            return this.SendGetRequest(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates?notificationType={notificationType}&communicationType={communicationType}");
+        }
+
+        [When("I send the generate template API request")]
+        public async Task WhenISendTheGenerateTemplateAPIRequest(string requestJson)
+        {
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            HttpResponseMessage response = await HttpClient.PutAsync(
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications/templates/generate"),
+                requestContent).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            this.scenarioContext.Set(content, ResponseContent);
+
+            if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(content))
+            {
+                var parsedResponse = JObject.Parse(content);
+                this.scenarioContext.Set(parsedResponse);
+            }
+        }
+
+        [Then("the response header should have a property called eTag that should not be null")]
+        public void ThenTheResponseHeaderShouldHaveAPropertyCalledETagThatShouldNotBeNull()
+        {
+            string? eTag = this.scenarioContext.Get<string?>(ResponseETag);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(eTag));
+        }
+
         private Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)
         {
             var tokenSource = new CancellationTokenSource();
@@ -266,6 +381,25 @@ namespace Marain.UserNotifications.Specs.Steps
                 false);
         }
 
+        private async Task CreateNotifications(string requestJson, string version)
+        {
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string transientTenantId = this.featureContext.GetTransientTenantId();
+
+            HttpResponseMessage response = await HttpClient.PutAsync(
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, $"/{transientTenantId}/marain/usernotifications{version}"),
+                requestContent).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
+            }
+        }
+
         private async Task SendGetRequest(Uri baseUri, string path)
         {
             HttpResponseMessage response = await HttpClient.GetAsync(new Uri(baseUri, path)).ConfigureAwait(false);
@@ -280,6 +414,27 @@ namespace Marain.UserNotifications.Specs.Steps
             {
                 var parsedResponse = JObject.Parse(content);
                 this.scenarioContext.Set(parsedResponse);
+            }
+
+            if (!string.IsNullOrWhiteSpace(response.Headers?.ETag?.ToString()))
+            {
+                this.scenarioContext.Set(response.Headers?.ETag?.ToString(), ResponseETag);
+            }
+        }
+
+        private async Task SendPutRequest(StringContent requestContent, string path)
+        {
+            HttpResponseMessage response = await HttpClient.PutAsync(
+                new Uri(FunctionsApiBindings.ManagementApiBaseUri, path),
+                requestContent).ConfigureAwait(false);
+
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
             }
         }
 
@@ -303,6 +458,36 @@ namespace Marain.UserNotifications.Specs.Steps
             if (!string.IsNullOrEmpty(ResponseContent))
             {
                 this.scenarioContext.Set(responseContent, ResponseContent);
+            }
+        }
+
+        private async Task SendRequest(Uri uri, HttpMethod httpMethod, StringContent requestContent, string? etag = null)
+        {
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = uri,
+                Method = httpMethod,
+                Content = requestContent,
+            };
+
+            if (!string.IsNullOrWhiteSpace(etag))
+            {
+                request.Headers.Add("If-None-Match", etag);
+            }
+
+            HttpResponseMessage response = await HttpClient.SendAsync(request).ConfigureAwait(false);
+            this.scenarioContext.Set(response);
+
+            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(ResponseContent))
+            {
+                this.scenarioContext.Set(responseContent, ResponseContent);
+            }
+
+            if (!string.IsNullOrWhiteSpace(response.Headers?.ETag?.ToString()))
+            {
+                this.scenarioContext.Set(response.Headers?.ETag?.ToString(), ResponseETag);
             }
         }
     }

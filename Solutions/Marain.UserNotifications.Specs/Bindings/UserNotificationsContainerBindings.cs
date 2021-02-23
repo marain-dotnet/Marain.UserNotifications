@@ -10,10 +10,11 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Extensions.Json;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
+    using Marain.Extensions.DependencyInjection;
     using Marain.Tenancy.Client;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
-    using Marain.UserNotifications.Storage.AzureTable;
+    using Marain.UserNotifications.Storage.AzureStorage;
     using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -74,6 +75,15 @@ namespace Marain.UserNotifications.Specs.Bindings
                         {
                             AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
                         });
+
+                    // Add the tenanted blob store for the notification tempalte store so we can clear up our own mess after the test.
+                    services.AddTenantedAzureBlobTemplateStore(
+                        sp => new TenantCloudBlobContainerFactoryOptions
+                        {
+                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
+                        });
+
+                    services.RegisterCoreUserNotificationsContentTypes();
                 });
         }
 
