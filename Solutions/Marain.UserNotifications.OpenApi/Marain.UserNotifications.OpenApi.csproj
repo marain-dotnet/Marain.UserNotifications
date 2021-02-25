@@ -23,12 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Json.Abstractions" Version="1.2.0" />
+    <PackageReference Include="Corvus.Json.Abstractions" Version="2.0.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Marain.Services.Tenancy" Version="2.2.0" />
+    <PackageReference Include="Marain.Services.Tenancy" Version="2.2.1" />
     <PackageReference Include="Menes.Abstractions" Version="1.1.1" />
     <PackageReference Include="Menes.Hosting" Version="1.1.1" />
   </ItemGroup>

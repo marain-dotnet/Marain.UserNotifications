@@ -184,6 +184,75 @@ this.ScenarioInitialize(scenarioInfo);
             }
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Generate populated template having nested objects in the property bag")]
+        public virtual void GeneratePopulatedTemplateHavingNestedObjectsInThePropertyBag()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generate populated template having nested objects in the property bag", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 36
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
+                            "body",
+                            "title",
+                            "contentType",
+                            "actionUrl",
+                            "image",
+                            "notificationType"});
+                table22.AddRow(new string[] {
+                            "A new lead was added by {{leadAddedBy}}",
+                            "A new lead added: {{leadAddedBy}}",
+                            "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1",
+                            "https://www.google.co.uk/",
+                            "Base+64xddfa",
+                            "marain.NewLeadv2"});
+#line 37
+ testRunner.Given("I have created and stored a web push notification template", ((string)(null)), table22, "Given ");
+#line hidden
+#line 40
+ testRunner.When("I send the generate template API request", @"      {
+          ""notificationType"": ""marain.NewLeadv2"",
+          ""timestamp"": ""2020-07-21T17:32:28Z"",
+          ""userIds"": [
+              ""1""
+          ],
+          ""correlationIds"": [""cid1"", ""cid2""],
+          ""properties"": {
+              ""lead"": {
+			""leadAddedBy"": ""TestUser123"",
+		}
+          }
+      }", ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 56
+ testRunner.Then("the response status code should be \'OK\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 57
+ testRunner.And(@"the response content should have a json property called 'webPushTemplate' with value '{ ""notificationType"": ""marain.NewLeadv2"", ""body"": ""A new lead was added by TestUser123"", ""title"": ""A new lead added: TestUser123"", ""image"": ""Base+64xddfa"", ""actionUrl"": ""https://www.google.co.uk/"", ""contentType"": ""application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1"" }'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

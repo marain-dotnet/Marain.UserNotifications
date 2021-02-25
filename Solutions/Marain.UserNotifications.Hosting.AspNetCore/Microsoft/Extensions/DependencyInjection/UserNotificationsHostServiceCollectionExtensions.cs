@@ -148,8 +148,9 @@ namespace Microsoft.Extensions.DependencyInjection
             // Ideally we'd have a fully customised setup here rather than using the Corvus extension method and then
             // removing what we don't want. However, it won't be possible to do that until
             // https://github.com/corvus-dotnet/Corvus.Extensions.Newtonsoft.Json/issues/129 is resolved.
-            services.AddJsonSerializerSettings();
-            services.Remove(services.First(x => x.ImplementationType == typeof(DateTimeOffsetConverter)));
+            services.AddJsonNetSerializerSettingsProvider();
+            services.AddJsonNetPropertyBag();
+            services.AddJsonNetCultureInfoConverter();
 
             return services;
         }

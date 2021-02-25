@@ -35,7 +35,7 @@ namespace Marain.Helper
                     nameof(properties));
             }
 
-            return (Dictionary<string, object>)propertyBag.AsDictionary();
+            return (Dictionary<string, object>)propertyBag.AsDictionaryRecursive();
         }
     }
 }
