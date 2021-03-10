@@ -41,8 +41,8 @@ namespace Marain.UserNotifications.Management.Host.Composer
             EmailTemplate? emailTemplate = null;
             SmsTemplate? smsTemplate = null;
             WebPushTemplate? webPushTemplate = null;
-            var propertiesDictionary = body.AsDictionaryRecursive().ToDictionary(x => x.Key, x => x.Value);
-            var propertiesHash = Hash.FromDictionary(propertiesDictionary);
+            IReadOnlyDictionary<string, object> propertiesDictionary = body.AsDictionaryRecursive();
+            var propertiesHash = Hash.FromReadOnlyDictionary(propertiesDictionary);
 
             foreach (CommunicationType channel in registeredCommunicationChannels)
             {
@@ -158,7 +158,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
             }
 
             var template = Template.Parse(templateBody);
-            return await template.RenderAsync().ConfigureAwait(false);
+            return await template.RenderAsync(properties).ConfigureAwait(false);
         }
     }
 }
