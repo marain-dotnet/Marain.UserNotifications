@@ -42,6 +42,8 @@ namespace Marain.UserNotifications.Management.Host
             services.RegisterCoreUserNotificationsContentTypes();
 
             AddTenantedUserNotificationsManagementApi(services);
+
+            services.EnsureDateTimeOffsetConverterNotPresent();
         }
 
         /// <summary>

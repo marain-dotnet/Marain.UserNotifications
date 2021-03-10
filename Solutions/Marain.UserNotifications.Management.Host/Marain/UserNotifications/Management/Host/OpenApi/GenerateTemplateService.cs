@@ -8,11 +8,8 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
-    using DotLiquid;
-    using Marain.Helper;
     using Marain.Models;
     using Marain.NotificationTemplates;
-    using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.Services.Tenancy;
     using Marain.UserNotifications.Management.Host.Composer;
     using Marain.UserNotifications.Management.Host.Models;
