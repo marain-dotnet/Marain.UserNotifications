@@ -84,6 +84,8 @@ namespace Marain.UserNotifications.Specs.Bindings
                         });
 
                     services.RegisterCoreUserNotificationsContentTypes();
+
+                    services.EnsureDateTimeOffsetConverterNotPresent();
                 });
         }
 

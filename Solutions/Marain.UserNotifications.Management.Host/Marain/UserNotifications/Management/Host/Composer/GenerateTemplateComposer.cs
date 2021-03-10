@@ -6,11 +6,11 @@ namespace Marain.UserNotifications.Management.Host.Composer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
     using Corvus.Json;
     using DotLiquid;
-    using Marain.Helper;
     using Marain.Models;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
@@ -41,7 +41,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
             EmailTemplate? emailTemplate = null;
             SmsTemplate? smsTemplate = null;
             WebPushTemplate? webPushTemplate = null;
-            Dictionary<string, object> existingProperties = PropertyBagHelpers.GetDictionaryFromPropertyBag(body);
+            var existingProperties = body.AsDictionaryRecursive().ToDictionary(x => x.Key, x => x.Value);
 
             foreach (CommunicationType channel in registeredCommunicationChannels)
             {
@@ -149,7 +149,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
         /// <param name="templateBody">A string with handlebars. </param>
         /// <param name="properties">A dictionary of all properties that can be used to render the templateBody string. </param>
         /// <returns>A rendered string. </returns>
-        private async Task<string?> GenerateTemplateForFieldAsync(string? templateBody, Dictionary<string, object> properties)
+        private async Task<string?> GenerateTemplateForFieldAsync(string? templateBody, IDictionary<string, object> properties)
         {
             if (string.IsNullOrEmpty(templateBody))
             {

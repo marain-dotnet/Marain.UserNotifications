@@ -15,6 +15,8 @@ namespace Microsoft.Extensions.DependencyInjection
     using Menes;
     using Menes.Exceptions;
     using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// Configures the user notifications API hosts.
@@ -89,6 +91,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
                 });
 
+            services.EnsureDateTimeOffsetConverterNotPresent();
+
             return services;
         }
 
@@ -128,6 +132,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     return managementClientConfiguration;
                 });
 
+            services.EnsureDateTimeOffsetConverterNotPresent();
+
             return services;
         }
 
@@ -145,11 +151,33 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddOpenApiJsonSerializerSettings(
             this IServiceCollection services)
         {
-            // Ideally we'd have a fully customised setup here rather than using the Corvus extension method and then
-            // removing what we don't want. However, it won't be possible to do that until
-            // https://github.com/corvus-dotnet/Corvus.Extensions.Newtonsoft.Json/issues/129 is resolved.
-            services.AddJsonSerializerSettings();
-            services.Remove(services.First(x => x.ImplementationType == typeof(DateTimeOffsetConverter)));
+            services.AddJsonNetSerializerSettingsProvider();
+            services.AddJsonNetPropertyBag();
+            services.AddJsonNetCultureInfoConverter();
+            services.AddSingleton<JsonConverter>(new StringEnumConverter(true));
+
+            return services;
+        }
+
+        /// <summary>
+        /// Ensures that the DateTimeOffsetConverter from Corvus.Extensions.Newtonsoft.Json is not present in the
+        /// service collection.
+        /// </summary>
+        /// <param name="services">The target service collection.</param>
+        /// <returns>The service collection.</returns>
+        /// <remarks>
+        /// Various of the Marain components add this by default, primarily now for backwards compatibility. However,
+        /// this service has never used the DateTimeOffsetConverter, so we need to make sure it's not in the service
+        /// collection. This method should be called at the end of your service initialisation.
+        /// </remarks>
+        public static IServiceCollection EnsureDateTimeOffsetConverterNotPresent(this IServiceCollection services)
+        {
+            ServiceDescriptor? registration = services.FirstOrDefault(x => x.ImplementationType == typeof(DateTimeOffsetConverter));
+
+            if (registration is not null)
+            {
+                services.Remove(registration);
+            }
 
             return services;
         }
