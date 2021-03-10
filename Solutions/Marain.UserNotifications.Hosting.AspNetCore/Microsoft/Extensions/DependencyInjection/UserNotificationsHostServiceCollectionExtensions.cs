@@ -132,8 +132,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     return managementClientConfiguration;
                 });
 
-            services.EnsureDateTimeOffsetConverterNotPresent();
-
             return services;
         }
 

@@ -27,6 +27,8 @@ namespace Marain.UserNotifications.ApiDeliveryChannel.Host
             services.AddCommonUserNotificationsApiServices();
 
             services.AddTenantedUserNotificationsApiDeliveryChannel();
+
+            services.EnsureDateTimeOffsetConverterNotPresent();
         }
     }
 }
