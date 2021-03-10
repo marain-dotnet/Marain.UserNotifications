@@ -32,3 +32,30 @@ Scenario: Generate populated template
 	And the response content should have a json property called 'smsTemplate' with value '{ "notificationType": "marain.NewLeadv1", "body": "New lead added by TestUser123", "contentType": "application/vnd.marain.usernotifications.notificationtemplate.smstemplate.v1" }'
 	And the response content should have a json property called 'emailTemplate' with value '{ "notificationType": "marain.NewLeadv1", "body": "A new lead was added by TestUser123", "subject": "A new lead added: TestUser123", "contentType": "application/vnd.marain.usernotifications.notificationtemplate.emailtemplate.v1" }'
 	And the response content should have a json property called 'webPushTemplate' with value '{ "notificationType": "marain.NewLeadv1", "body": "A new lead was added by TestUser123", "title": "A new lead added: TestUser123", "image": "Base+64xddfa", "actionUrl": "https://www.google.co.uk/", "contentType": "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1" }'
+
+Scenario: Generate populated template having nested objects in the property bag
+	Given I have created and stored a web push notification template
+		| body                                                                                     | title                                | contentType                                                                      | actionUrl                 | image        | notificationType |
+		| A new lead, {{lead.client.name}} ({{lead.client.number}}), was added by {{lead.addedBy}} | New lead added by {{lead.addedBy}} | application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1 | https://www.google.co.uk/ | Base+64xddfa | marain.NewLeadv2 |
+	When I send the generate template API request
+		"""
+        {
+            "notificationType": "marain.NewLeadv2",
+            "timestamp": "2020-07-21T17:32:28Z",
+            "userIds": [
+                "1"
+            ],
+            "correlationIds": ["cid1", "cid2"],
+            "properties": {
+                "lead": {
+					"addedBy": "TestUser123",
+					"client": {
+						"name": "Client123",
+						"number": 5
+					}
+				},
+            }
+        }
+		"""
+	Then the response status code should be 'OK'
+	And the response content should have a json property called 'webPushTemplate' with value '{ "notificationType": "marain.NewLeadv2", "body": "A new lead, Client123 (5), was added by TestUser123", "title": "New lead added by TestUser123", "image": "Base+64xddfa", "actionUrl": "https://www.google.co.uk/", "contentType": "application/vnd.marain.usernotifications.notificationtemplate.webpushtemplate.v1" }'
