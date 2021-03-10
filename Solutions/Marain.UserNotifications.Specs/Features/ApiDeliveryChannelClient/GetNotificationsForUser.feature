@@ -12,7 +12,7 @@ Scenario: Request notifications for a user
 	And I have created and stored 5 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user101'
 	When I use the client to send an API delivery request for 10 notifications for the user with Id 'user100'
 	Then no exception should be thrown
-	Then the client response status code should be 'OK'
+	And the client response status code should be 'OK'
 	And the paged list of notifications in the API delivery channel response should contain 10 item links
 	And the paged list of notifications in the API delivery channel response should contain 10 embedded items
 	And the paged list of notifications in the API delivery channel response should have a 'self' link
@@ -25,7 +25,7 @@ Scenario: Request notifications for a user using a continuation token from a pre
 	And I have used the client to send an API delivery request for 10 notifications for the user with Id 'user250'	
 	When I use the client to send an API delivery request for a paged list of notifications using the link called 'next' from the previous API delivery channel response
 	Then no exception should be thrown
-	Then the client response status code should be 'OK'
+	And the client response status code should be 'OK'
 	And the paged list of notifications in the API delivery channel response should contain 10 item links
 	And the paged list of notifications in the API delivery channel response should contain 10 embedded items
 	And the paged list of notifications in the API delivery channel response should have a 'self' link
@@ -54,7 +54,7 @@ Scenario: Request notifications for a user without specifying the maximum number
 	And I have created and stored 5 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user151'
 	When I use the client to send an API delivery request for notifications for the user with Id 'user150'
 	Then no exception should be thrown
-	Then the client response status code should be 'OK'
+	And the client response status code should be 'OK'
 	And the paged list of notifications in the API delivery channel response should contain 50 item links
 	And the paged list of notifications in the API delivery channel response should contain 50 embedded items
 
@@ -62,13 +62,15 @@ Scenario: Request more notifications for a user than exist
 	Given I have created and stored 25 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user200'
 	And I have created and stored 5 notifications in the current transient tenant with timestamps at 30 second intervals for the user with Id 'user201'
 	When I use the client to send an API delivery request for 100 notifications for the user with Id 'user200'
-	Then the client response status code should be 'OK'
+	Then no exception should be thrown
+	And the client response status code should be 'OK'
 	And the paged list of notifications in the API delivery channel response should contain 25 item links
 	And the paged list of notifications in the API delivery channel response should contain 25 embedded items
 
 Scenario: Retrieve notifications for a user where none exist
 	When I use the client to send an API delivery request for 100 notifications for the user with Id 'userXXXXX'
-	Then the client response status code should be 'OK'
+	Then no exception should be thrown
+	And the client response status code should be 'OK'
 	And the paged list of notifications in the API delivery channel response should contain 0 item links
 	And the paged list of notifications in the API delivery channel response should contain 0 embedded items
 

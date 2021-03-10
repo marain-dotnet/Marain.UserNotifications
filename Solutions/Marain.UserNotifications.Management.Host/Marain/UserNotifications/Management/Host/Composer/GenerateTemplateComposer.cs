@@ -6,11 +6,11 @@ namespace Marain.UserNotifications.Management.Host.Composer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
     using Corvus.Json;
     using DotLiquid;
-    using Marain.Helper;
     using Marain.Models;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
@@ -41,7 +41,8 @@ namespace Marain.UserNotifications.Management.Host.Composer
             EmailTemplate? emailTemplate = null;
             SmsTemplate? smsTemplate = null;
             WebPushTemplate? webPushTemplate = null;
-            Dictionary<string, object> existingProperties = PropertyBagHelpers.GetDictionaryFromPropertyBag(body);
+            IReadOnlyDictionary<string, object> propertiesDictionary = body.AsDictionaryRecursive();
+            var propertiesHash = Hash.FromReadOnlyDictionary(propertiesDictionary);
 
             foreach (CommunicationType channel in registeredCommunicationChannels)
             {
@@ -51,8 +52,8 @@ namespace Marain.UserNotifications.Management.Host.Composer
                         try
                         {
                             (EmailTemplate, string?) emailRawTemplate = await templateStore.GetAsync<EmailTemplate>(notificationType, CommunicationType.Email).ConfigureAwait(false);
-                            string? emailBody = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
-                            string? emailSubject = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Subject, existingProperties).ConfigureAwait(false);
+                            string? emailBody = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Body, propertiesHash).ConfigureAwait(false);
+                            string? emailSubject = await this.GenerateTemplateForFieldAsync(emailRawTemplate.Item1.Subject, propertiesHash).ConfigureAwait(false);
 
                             if (string.IsNullOrEmpty(emailSubject))
                             {
@@ -82,7 +83,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
                         try
                         {
                             (SmsTemplate, string?) smsRawTemplate = await templateStore.GetAsync<SmsTemplate>(notificationType, CommunicationType.Sms).ConfigureAwait(false);
-                            string? smsBody = await this.GenerateTemplateForFieldAsync(smsRawTemplate.Item1.Body!, existingProperties).ConfigureAwait(false);
+                            string? smsBody = await this.GenerateTemplateForFieldAsync(smsRawTemplate.Item1.Body!, propertiesHash).ConfigureAwait(false);
 
                             if (string.IsNullOrEmpty(smsBody))
                             {
@@ -103,10 +104,10 @@ namespace Marain.UserNotifications.Management.Host.Composer
                         try
                         {
                             (WebPushTemplate, string?) webPushRawTemplate = await templateStore.GetAsync<WebPushTemplate>(notificationType, CommunicationType.WebPush).ConfigureAwait(false);
-                            string? webPushTitle = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Title, existingProperties).ConfigureAwait(false);
-                            string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Body, existingProperties).ConfigureAwait(false);
-                            string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Image, existingProperties).ConfigureAwait(false);
-                            string? actionUrl = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.ActionUrl, existingProperties).ConfigureAwait(false);
+                            string? webPushTitle = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Title, propertiesHash).ConfigureAwait(false);
+                            string? webPushBody = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Body, propertiesHash).ConfigureAwait(false);
+                            string? webPushImage = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.Image, propertiesHash).ConfigureAwait(false);
+                            string? actionUrl = await this.GenerateTemplateForFieldAsync(webPushRawTemplate.Item1.ActionUrl, propertiesHash).ConfigureAwait(false);
 
                             if (string.IsNullOrEmpty(webPushTitle))
                             {
@@ -149,7 +150,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
         /// <param name="templateBody">A string with handlebars. </param>
         /// <param name="properties">A dictionary of all properties that can be used to render the templateBody string. </param>
         /// <returns>A rendered string. </returns>
-        private async Task<string?> GenerateTemplateForFieldAsync(string? templateBody, Dictionary<string, object> properties)
+        private async Task<string?> GenerateTemplateForFieldAsync(string? templateBody, Hash properties)
         {
             if (string.IsNullOrEmpty(templateBody))
             {
@@ -157,7 +158,7 @@ namespace Marain.UserNotifications.Management.Host.Composer
             }
 
             var template = Template.Parse(templateBody);
-            return await template.RenderAsync(Hash.FromDictionary(properties)).ConfigureAwait(false);
+            return await template.RenderAsync(properties).ConfigureAwait(false);
         }
     }
 }
