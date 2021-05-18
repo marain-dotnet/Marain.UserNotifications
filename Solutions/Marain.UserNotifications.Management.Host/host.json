@@ -3,6 +3,12 @@
   "extensions": {
     "http": {
       "routePrefix": ""
+    },
+    "durableTask": {
+      "tracing": {
+        "distributedTracingEnabled": true,
+        "distributedTracingProtocol": "W3CTraceContext"
+      }
     }
   },
   "logging": {
@@ -10,6 +16,14 @@
       "default": "Information",
       "Host.Results": "Information",
       "Host.Aggregator": "Information"
+    },
+    "applicationInsights": {
+      "httpAutoCollectionOptions": {
+        "enableW3CDistributedTracing": true
+      },
+      "samplingSettings": {
+        "isEnabled": false
+      }
     }
   }
 }

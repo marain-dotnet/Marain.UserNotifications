@@ -10,6 +10,11 @@
       "default": "Information",
       "Host.Results": "Information",
       "Host.Aggregator": "Information"
+    },
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": false
+      }
     }
   }
 }
