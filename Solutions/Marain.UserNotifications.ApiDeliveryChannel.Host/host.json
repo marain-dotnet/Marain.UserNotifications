@@ -10,6 +10,14 @@
       "default": "Information",
       "Host.Results": "Information",
       "Host.Aggregator": "Information"
+    },
+    "applicationInsights": {
+      "httpAutoCollectionOptions": {
+        "enableW3CDistributedTracing": true
+      },
+      "samplingSettings": {
+        "isEnabled": false
+      }
     }
   }
 }
