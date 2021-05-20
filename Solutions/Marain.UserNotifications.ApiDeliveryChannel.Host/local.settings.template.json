@@ -3,6 +3,8 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+    "AI:DeveloperMode": "true",
 
     "MarainServiceConfiguration:ServiceTenantId": "3633754ac4c9be44b55bfe791b1780f17ffa2f897c1169458ecb7240edb9f0c3",
     "MarainServiceConfiguration:ServiceDisplayName": "User Notifications v1",

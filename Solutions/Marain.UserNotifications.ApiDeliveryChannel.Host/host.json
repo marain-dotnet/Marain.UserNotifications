@@ -12,6 +12,9 @@
       "Host.Aggregator": "Information"
     },
     "applicationInsights": {
+      "httpAutoCollectionOptions": {
+        "enableW3CDistributedTracing": true
+      },
       "samplingSettings": {
         "isEnabled": false
       }
