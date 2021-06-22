@@ -53,7 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 return tenancyConfiguration;
             });
 
-            services.AddTenantProviderServiceClient();
+            services.AddTenantProviderServiceClient(true);
 
             // Operations control client
             services.AddOperationsControlClient(

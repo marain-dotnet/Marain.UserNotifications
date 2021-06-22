@@ -21,15 +21,14 @@
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApi\CreateNotifications - Copy.feature.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.2.2" />
-    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.4.1" />
+    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.2.3" />
+    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.4.2" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Marain.Services.Tenancy.Testing" Version="2.3.3" />
-    <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="1.4.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="1.4.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marain.UserNotifications.ApiDeliveryChannel.Host\Marain.UserNotifications.ApiDeliveryChannel.Host.csproj" />
