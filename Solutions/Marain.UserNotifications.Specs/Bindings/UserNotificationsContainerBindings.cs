@@ -57,7 +57,8 @@ namespace Marain.UserNotifications.Specs.Bindings
                         return tenancyConfiguration;
                     });
 
-                    services.AddTenantProviderServiceClient();
+                    // Disable response caching here so that it doesn't affect the TransientTenantManager.
+                    services.AddTenantProviderServiceClient(false);
 
                     // Token source, to provide authentication when accessing external services.
                     services.AddAzureManagedIdentityBasedTokenSource(
