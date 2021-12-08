@@ -73,7 +73,9 @@
     "diagnosticsStorageDeployName": "[concat(variables('keyVaultDeployName'), '-diagnostics-storage-account')]",
     "notificationStorageDeployName": "[concat(deployment().name, '-storage-notifications')]",
     "apiDeliveryChannelAppDeployName": "[concat(deployment().name, '-fn-app-delivery-channel')]",
-    "managementAppDeployName": "[concat(deployment().name, '-fn-app-management')]"
+    "managementAppDeployName": "[concat(deployment().name, '-fn-app-management')]",
+    "apiDeliveryChannelAppKeyVaultAccessPolicyDeployName": "[concat(variables('apiDeliveryChannelAppDeployName'), '-kv-access')]",
+    "managementAppKeyVaultAccessPolicyDeployName": "[concat(variables('managementAppDeployName'), '-kv-access')]"
   },
   "resources": [
     {
@@ -246,7 +248,7 @@
       }
     },
     {
-      "name": "[concat(variables('apiDeliveryChannelAppDeployName'), '-kv-access')]",
+      "name": "[variables('apiDeliveryChannelAppKeyVaultAccessPolicyDeployName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
@@ -357,12 +359,13 @@
       }
     },
     {
-      "name": "[concat(variables('managementAppDeployName'), '-kv-access')]",
+      "name": "[variables('managementAppKeyVaultAccessPolicyDeployName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
         "[variables('managementAppDeployName')]",
-        "[variables('keyVaultDeployName')]"
+        "[variables('keyVaultDeployName')]",
+        "[variables('apiDeliveryChannelAppKeyVaultAccessPolicyDeployName')]"
       ],
       "properties": {
         "mode": "Incremental",
