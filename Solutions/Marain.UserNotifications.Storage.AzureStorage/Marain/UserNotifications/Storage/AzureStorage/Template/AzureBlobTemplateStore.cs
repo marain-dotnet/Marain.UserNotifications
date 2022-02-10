@@ -43,7 +43,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         }
 
         /// <inheritdoc/>
-        public async Task<(T, string?)> GetAsync<T>(string notificationType, CommunicationType communicationType)
+        public async Task<(T Template, string? ETag)> GetAsync<T>(string notificationType, CommunicationType communicationType)
         {
             // Gets the blob reference by the notificationType
             CloudBlockBlob blob = this.blobContainer.GetBlockBlobReference(this.GetBlockBlobName(notificationType, communicationType));

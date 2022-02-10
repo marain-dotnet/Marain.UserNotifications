@@ -61,11 +61,8 @@ namespace Marain.UserNotifications.Specs.Bindings
                     services.AddTenantProviderServiceClient(false);
 
                     // Token source, to provide authentication when accessing external services.
-                    services.AddAzureManagedIdentityBasedTokenSource(
-                        sp => new AzureManagedIdentityTokenSourceOptions
-                        {
-                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                        });
+                    string azureServicesAuthConnectionString = config["AzureServicesAuthConnectionString"];
+                    services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
 
                     // Marain tenancy management, required to create transient client/service tenants.
                     services.AddMarainTenantManagement();

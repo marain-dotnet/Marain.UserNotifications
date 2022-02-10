@@ -20,6 +20,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Testing.SpecFlow;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.UserNotifications.Management.Host.OpenApi;
+    using Marain.UserNotifications;
     using Marain.UserNotifications.Specs.Bindings;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
@@ -146,7 +147,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public Task GivenIHaveWaitedForUpToSecondsForTheLongRunningOperationWhoseUrlIsInTheResponseLocationHeaderToHaveAOf(int timeout, string operationPropertyPath, string expectedOperationPropertyValue)
         {
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
-            Uri operationLocation = response.Headers.Location;
+            Uri operationLocation = response.Headers.Location!;
 
             return this.LongRunningOperationPropertyCheck(
                 operationLocation,
@@ -165,7 +166,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public Task ThenTheLongRunningOperationWhoseUrlIsInTheResponseLocationHeaderShouldHaveAOfWithinSeconds(string operationPropertyPath, string expectedOperationPropertyValue, int timeout)
         {
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
-            Uri operationLocation = response.Headers.Location;
+            Uri operationLocation = response.Headers.Location!;
 
             return this.LongRunningOperationPropertyCheck(
                 operationLocation,
@@ -184,7 +185,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public Task ThenTheLongRunningOperationWhoseUrlIsInTheResponseLocationHeaderShouldNotHaveAOfWithinSeconds(string operationPropertyPath, string expectedOperationPropertyValue, int timeout)
         {
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
-            Uri operationLocation = response.Headers.Location;
+            Uri operationLocation = response.Headers.Location!;
 
             return this.LongRunningOperationPropertyCheck(
                 operationLocation,
@@ -236,7 +237,7 @@ namespace Marain.UserNotifications.Specs.Steps
             // Get the previous response
             JObject previousResponse = this.scenarioContext.Get<JObject>();
             JToken url = JsonSteps.GetRequiredToken(previousResponse, path);
-            return this.SendPostRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, url.Value<string>(), null);
+            return this.SendPostRequest(FunctionsApiBindings.ApiDeliveryChannelBaseUri, url.Value<string>()!, null);
         }
 
         [When("I send the user notification template API a request to create a new user notification template")]
@@ -371,8 +372,8 @@ namespace Marain.UserNotifications.Specs.Steps
                     HttpResponseMessage response = await HttpClient.GetAsync(location).ConfigureAwait(false);
                     string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var operation = JObject.Parse(responseBody);
-                    JToken targetToken = operation.SelectToken(operationPropertyPath);
-                    string currentValue = targetToken.Value<string>();
+                    JToken targetToken = operation.SelectToken(operationPropertyPath)!;
+                    string currentValue = targetToken.Value<string>()!;
                     testValue(currentValue);
                 },
                 tokenSource.Token,

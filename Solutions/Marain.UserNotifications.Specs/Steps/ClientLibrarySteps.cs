@@ -224,7 +224,7 @@ namespace Marain.UserNotifications.Specs.Steps
             string transientTenantId = this.featureContext.GetTransientTenantId();
             IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
 
-            WebPushTemplate notificationTemplate = JsonConvert.DeserializeObject<WebPushTemplate>(request);
+            WebPushTemplate notificationTemplate = JsonConvert.DeserializeObject<WebPushTemplate>(request)!;
 
             // Try get the stored WebPushTemplate object and retrieve eTag value if exists.
             this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.WebPushTemplate response);
@@ -256,7 +256,7 @@ namespace Marain.UserNotifications.Specs.Steps
             string transientTenantId = this.featureContext.GetTransientTenantId();
             IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
 
-            EmailTemplate emailTemplate = JsonConvert.DeserializeObject<EmailTemplate>(request);
+            EmailTemplate emailTemplate = JsonConvert.DeserializeObject<EmailTemplate>(request)!;
 
             // Try get the stored EmailTemplate object and retrieve eTag value if exists.
             this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.EmailTemplate response);
@@ -288,7 +288,7 @@ namespace Marain.UserNotifications.Specs.Steps
             string transientTenantId = this.featureContext.GetTransientTenantId();
             IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
 
-            SmsTemplate smsTemplate = JsonConvert.DeserializeObject<SmsTemplate>(request);
+            SmsTemplate smsTemplate = JsonConvert.DeserializeObject<SmsTemplate>(request)!;
 
             // Try get the stored SmsTemplate object and retrieve eTag value if exists.
             this.scenarioContext.TryGetValue<Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate>(out Marain.NotificationTemplates.CommunicationTemplates.SmsTemplate response);
@@ -351,7 +351,7 @@ namespace Marain.UserNotifications.Specs.Steps
             string transientTenantId = this.featureContext.GetTransientTenantId();
             IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
 
-            CreateNotificationsRequest createNotificationRequest = JsonConvert.DeserializeObject<CreateNotificationsRequest>(request);
+            CreateNotificationsRequest createNotificationRequest = JsonConvert.DeserializeObject<CreateNotificationsRequest>(request)!;
 
             try
             {
@@ -592,9 +592,9 @@ namespace Marain.UserNotifications.Specs.Steps
 
         private static CreateNotificationsRequest BuildCreateNotificationsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
-            string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();
-            string[] userIds = JArray.Parse(tableRow["UserIds"]).Select(token => token.Value<string>()).ToArray();
-            var properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["PropertiesJson"], serializerSettings).ToDictionary(x => x.Key, x => (object)x.Value);
+            string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray()!;
+            string[] userIds = JArray.Parse(tableRow["UserIds"]).Select(token => token.Value<string>()).ToArray()!;
+            var properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["PropertiesJson"], serializerSettings)!.ToDictionary(x => x.Key, x => (object)x.Value);
 
             string? notificationId = tableRow.ContainsKey("Id") ? tableRow["Id"] : null;
 
@@ -610,10 +610,10 @@ namespace Marain.UserNotifications.Specs.Steps
 
         private static CreateNotificationForDeliveryChannelsRequest BuildCreateNotificationForDeliveryChannelsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
-            string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();
-            string[] userIds = JArray.Parse(tableRow["UserIds"]).Select(token => token.Value<string>()).ToArray();
-            var properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["PropertiesJson"], serializerSettings).ToDictionary(x => x.Key, x => (object)x.Value);
-            var deliveryChannelConfiguredPerCommunicationType = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["DeliveryChannelConfiguredPerCommunicationType"], serializerSettings).ToDictionary(x => x.Key, x => x.Value);
+            string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray()!;
+            string[] userIds = JArray.Parse(tableRow["UserIds"]).Select(token => token.Value<string>()).ToArray()!;
+            var properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["PropertiesJson"], serializerSettings)!.ToDictionary(x => x.Key, x => (object)x.Value);
+            var deliveryChannelConfiguredPerCommunicationType = JsonConvert.DeserializeObject<Dictionary<string, string>>(tableRow["DeliveryChannelConfiguredPerCommunicationType"], serializerSettings)!.ToDictionary(x => x.Key, x => x.Value);
 
             string? notificationId = tableRow.ContainsKey("Id") ? tableRow["Id"] : null;
 
@@ -641,7 +641,7 @@ namespace Marain.UserNotifications.Specs.Steps
             this.scenarioContext.Set(body, ApiResponseBodyKey);
         }
 
-        private (HttpStatusCode, IDictionary<string, string>) GetApiResponseDetails()
+        private (HttpStatusCode StatusCode, IDictionary<string, string> Headers) GetApiResponseDetails()
         {
             return (this.scenarioContext.Get<HttpStatusCode>(ApiResponseStatusCodeKey), this.scenarioContext.Get<IDictionary<string, string>>(ApiResponseHeadersKey));
         }

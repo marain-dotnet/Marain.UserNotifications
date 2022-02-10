@@ -8,6 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using Corvus.Identity.ClientAuthentication;
+    using Corvus.Identity.ClientAuthentication.MicrosoftRest;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
@@ -35,7 +37,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 client.BaseAddress = new Uri(config.BaseUri);
             }).AddHttpMessageHandler(sp =>
             {
-                IServiceIdentityTokenSource tokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
+                IServiceIdentityAccessTokenSource tokenSource = sp.GetRequiredService<IServiceIdentityAccessTokenSource>();
                 UserNotificationsManagementClientConfiguration config = configurationCallback(sp);
                 return new AddAuthenticationHeaderHandler(tokenSource, config.ResourceIdForMsiAuthentication);
             });
@@ -67,7 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 })
                 .AddHttpMessageHandler(sp =>
                 {
-                    IServiceIdentityTokenSource tokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
+                    IServiceIdentityAccessTokenSource tokenSource = sp.GetRequiredService<IServiceIdentityAccessTokenSource>();
                     UserNotificationsApiDeliveryChannelClientConfiguration config = configurationCallback(sp);
                     return new AddAuthenticationHeaderHandler(tokenSource, config.ResourceIdForMsiAuthentication);
                 });
@@ -83,13 +85,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private class AddAuthenticationHeaderHandler : DelegatingHandler
         {
-            private readonly ServiceIdentityTokenProvider provider;
+            private readonly ServiceIdentityMicrosoftRestTokenProvider provider;
 
-            public AddAuthenticationHeaderHandler(IServiceIdentityTokenSource tokenSource, string resourceIdForMsiAuthentication)
+            public AddAuthenticationHeaderHandler(IServiceIdentityAccessTokenSource tokenSource, string resourceIdForMsiAuthentication)
             {
                 if (!string.IsNullOrEmpty(resourceIdForMsiAuthentication))
                 {
-                    this.provider = new ServiceIdentityTokenProvider(tokenSource, resourceIdForMsiAuthentication);
+                    this.provider = new ServiceIdentityMicrosoftRestTokenProvider(tokenSource, resourceIdForMsiAuthentication);
                 }
             }
 

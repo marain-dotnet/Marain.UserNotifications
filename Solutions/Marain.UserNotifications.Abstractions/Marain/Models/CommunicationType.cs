@@ -20,7 +20,7 @@ namespace Marain.Models
         Sms,
 
         /// <summary>
-        /// The delivery channel supports web push
+        /// The delivery channel supports web push.
         /// </summary>
         WebPush,
     }

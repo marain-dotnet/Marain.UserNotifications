@@ -7,6 +7,7 @@
 namespace Marain.UserNotifications.ApiDeliveryChannel.Host
 {
     using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
@@ -21,10 +22,11 @@ namespace Marain.UserNotifications.ApiDeliveryChannel.Host
         public override void Configure(IFunctionsHostBuilder builder)
         {
             IServiceCollection services = builder.Services;
+            IConfiguration configuration = builder.GetContext().Configuration;
 
             services.AddLogging();
 
-            services.AddCommonUserNotificationsApiServices();
+            services.AddCommonUserNotificationsApiServices(configuration);
 
             services.AddTenantedUserNotificationsApiDeliveryChannel();
 

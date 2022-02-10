@@ -69,7 +69,7 @@ namespace Menes.Hal
         /// Either a URI [RFC3986] or URI Template [RFC6570] of the target
         /// resource.
         /// </remarks>
-        public string Href => this.source.GetProperty(HrefProperty).GetString();
+        public string Href => this.source.GetProperty(HrefProperty).GetString() ?? string.Empty;
 
         /// <summary>
         /// Gets the name.

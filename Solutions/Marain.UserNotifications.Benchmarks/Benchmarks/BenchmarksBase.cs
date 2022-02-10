@@ -7,6 +7,7 @@ namespace Benchmarks
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
+    using Corvus.Identity.ClientAuthentication.Azure;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
@@ -30,8 +31,8 @@ namespace Benchmarks
 
             var services = new ServiceCollection();
             services.AddSingleton<IConfiguration>(this.Configuration);
-            services.AddAzureManagedIdentityBasedTokenSource(
-                sp => new AzureManagedIdentityTokenSourceOptions
+            services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(
+                new LegacyAzureServiceTokenProviderOptions
                 {
                     AzureServicesAuthConnectionString = this.Configuration["AzureServicesAuthConnectionString"],
                 });

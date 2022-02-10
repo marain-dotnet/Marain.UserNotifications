@@ -23,7 +23,7 @@ namespace Marain.UserNotifications.Client.Management.Resources
         Sms,
 
         /// <summary>
-        /// The delivery channel supports web push
+        /// The delivery channel supports web push.
         /// </summary>
         WebPush,
     }

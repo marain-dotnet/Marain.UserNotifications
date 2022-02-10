@@ -31,7 +31,7 @@ namespace Marain.UserNotifications.Specs
         {
             JToken actualToken = this.GetRequiredTokenFromResponseObject(propertyPath);
 
-            string actualValue = actualToken.Value<string>();
+            string actualValue = actualToken.Value<string>()!;
             Assert.AreEqual(expectedValue, actualValue, $"Expected value of property '{propertyPath}' was '{expectedValue}', but actual value was '{actualValue}'");
         }
 
@@ -66,7 +66,7 @@ namespace Marain.UserNotifications.Specs
         public void ThenTheResponseObjectShouldNotHaveAPropertyCalled(string propertyPath)
         {
             JObject data = this.scenarioContext.Get<JObject>();
-            JToken token = data.SelectToken(propertyPath);
+            JToken? token = data.SelectToken(propertyPath);
             Assert.IsNull(token, $"Expected not to find a property with path '{propertyPath}', but one was present.");
         }
 
@@ -93,7 +93,7 @@ namespace Marain.UserNotifications.Specs
         public void GivenIHaveStoredTheValueOfTheResponseObjectPropertyCalledAs(string propertyPath, string storeAsName)
         {
             JToken token = this.GetRequiredTokenFromResponseObject(propertyPath);
-            string valueAsString = token.Value<string>();
+            string valueAsString = token.Value<string>()!;
             this.scenarioContext.Set(valueAsString, storeAsName);
         }
 
@@ -116,7 +116,7 @@ namespace Marain.UserNotifications.Specs
 
         public static JToken GetRequiredToken(JToken data, string propertyPath)
         {
-            JToken token = data.SelectToken(propertyPath);
+            JToken token = data.SelectToken(propertyPath)!;
             Assert.IsNotNull(token, $"Could not locate a property with path '{propertyPath}' under the token with path '{data.Path}'");
             return token;
         }

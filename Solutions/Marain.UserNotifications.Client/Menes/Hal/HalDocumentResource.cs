@@ -79,7 +79,7 @@ namespace Menes.Hal
                     throw new Exception("Invalid schema for HAL document - no content type.");
                 }
 
-                return element.GetString();
+                return element.GetString()!;
             }
         }
 

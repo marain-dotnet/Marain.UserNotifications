@@ -113,7 +113,7 @@ namespace Marain.UserNotifications.Client
         /// <returns>The Uri.</returns>
         protected Uri ConstructUri(string path, params (string Key, string Value)[] queryParameters)
         {
-            string query = string.Join("&", queryParameters.Where(x => !string.IsNullOrEmpty(x.Item2)).Select(x => $"{x.Key}={Uri.EscapeUriString(x.Value)}"));
+            string query = string.Join("&", queryParameters.Where(x => !string.IsNullOrEmpty(x.Value)).Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
 
             if (!string.IsNullOrEmpty(query))
             {
