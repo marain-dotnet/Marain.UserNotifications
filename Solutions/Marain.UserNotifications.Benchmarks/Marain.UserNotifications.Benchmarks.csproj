@@ -7,18 +7,21 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode Condition="$(ContinuousIntegrationBuild) == 'true'">true</RestoreLockedMode>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
-    <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.16" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.16" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.16" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.16" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.16" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.2-mauipre.1.22054.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.2-mauipre.1.22054.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.2-mauipre.1.22054.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.2-mauipre.1.22054.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.2-mauipre.1.22054.8" />
   </ItemGroup>
 
   <ItemGroup>
