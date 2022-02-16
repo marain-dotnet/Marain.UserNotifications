@@ -45,17 +45,17 @@ jobs:
           ENDJIN_MARAINUSERNOTIFICATIONSSERVICEDISPLAYNAME: $(Endjin_MarainUserNotificationsServiceDisplayName)
           ENDJIN_MARAINUSERNOTIFICATIONSSERVICETENANTID: $(Endjin_MarainUserNotificationsServiceTenantId)
       - task: Npm@1
-        displayName: 'Install Latest Azure Functions V3 Runtime'
+        displayName: 'Install Latest Azure Functions V4 Runtime'
         inputs:
           command: custom
           verbose: false
-          customCommand: 'install -g azure-functions-core-tools@3 --unsafe-perm true'
+          customCommand: 'install -g azure-functions-core-tools@4 --unsafe-perm true'
 
     postSpecs:
       - task: ArchiveFiles@2
         displayName: 'Archive Management Function App'
         inputs:
-          rootFolderOrFile: 'Solutions/Marain.UserNotifications.Management.Host/bin/Release/netcoreapp3.1/'
+          rootFolderOrFile: 'Solutions/Marain.UserNotifications.Management.Host/bin/Release/net6.0/'
           includeRootFolder: false
           archiveType: 'zip'
           archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.UserNotifications.Management.Host.zip'
@@ -63,7 +63,7 @@ jobs:
       - task: ArchiveFiles@2
         displayName: 'Archive API Delivery Channel Function App'
         inputs:
-          rootFolderOrFile: 'Solutions/Marain.UserNotifications.ApiDeliveryChannel.Host/bin/Release/netcoreapp3.1/'
+          rootFolderOrFile: 'Solutions/Marain.UserNotifications.ApiDeliveryChannel.Host/bin/Release/net6.0/'
           includeRootFolder: false
           archiveType: 'zip'
           archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.UserNotifications.ApiDeliveryChannel.Host.zip'
