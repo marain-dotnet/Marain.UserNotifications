@@ -10,10 +10,8 @@ namespace Microsoft.Extensions.DependencyInjection
     using System.Threading.Tasks;
     using Corvus.Identity.ClientAuthentication;
     using Corvus.Identity.ClientAuthentication.MicrosoftRest;
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
-    using Microsoft.Rest;
 
     /// <summary>
     /// Extension methods to add the service client to the DI container.

@@ -250,37 +250,27 @@
       },
       "Corvus.Identity.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.0.1-228-cache-token-microsoftrest.1",
-        "contentHash": "LB1wTwaWR0eDi3bUr2nOYef9sZeCyxE4gBDWhQ+jnOLrnf81+v3Yu9u+67+nf5p0gECScOPHkD6DTi6kqAbDTw=="
+        "resolved": "3.0.0",
+        "contentHash": "fGYhKMz/n1Ejv77r+0bmzdC9EW3sCfZ3P8dky6rrOEGK4Kijd9yjTwoFEaG9ZHPXu5C7r2O2VqpesgIDkn5iQA=="
       },
       "Corvus.Identity.Azure": {
         "type": "Transitive",
-        "resolved": "3.0.1-228-cache-token-microsoftrest.1",
-        "contentHash": "ErwgBs/He6MIMCdGUcJ6P+p86slNZUl55qFqs5/fM2dQ+W0QLkFAQvRexFmPxMUw27l5PIIm9DB5X96c7fCy/g==",
+        "resolved": "3.0.0",
+        "contentHash": "TYNTb4CD0pyn9WX4gC8TFGTU0v4inAkVEEG9xCyASgpp0ahMlL8RUfgQAwKZqr6yJ+tHpdjlx02mHJeSWidSiA==",
         "dependencies": {
           "Azure.Identity": "1.5.0",
           "Azure.Security.KeyVault.Secrets": "4.2.0",
-          "Corvus.Identity.Abstractions": "3.0.1-228-cache-token-microsoftrest.1",
+          "Corvus.Identity.Abstractions": "3.0.0",
           "Microsoft.Extensions.Caching.Memory": "6.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
         }
       },
-      "Corvus.Identity.ManagedServiceIdentity.ClientAuthentication": {
-        "type": "Transitive",
-        "resolved": "2.0.2",
-        "contentHash": "P2A5l1Rkcuti8LA5bGqFN+fE8KfzWHtK5DfTEHATy/yRj/S9wL+8BjCFmYHn3GoDOEvjCzCJAGqP5RdEPjm8Zg==",
-        "dependencies": {
-          "Microsoft.Azure.Services.AppAuthentication": "1.6.2",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.20",
-          "Microsoft.Rest.ClientRuntime": "2.3.23"
-        }
-      },
       "Corvus.Identity.MicrosoftRest": {
         "type": "Transitive",
-        "resolved": "3.0.1-228-cache-token-microsoftrest.1",
-        "contentHash": "dbZp/QKfW3QZmZo4WWJ6nOtiRu6yx+8S0wlv2BCY56A0YD6PazHzbWyx2b/T3G2rLW+tCX33FQK6BBUTl3Ejtw==",
+        "resolved": "3.0.0",
+        "contentHash": "vo0093/bxEASSxC7TFJ6ZPKo9Paj2bIwREic0iTzrjiO4K6JI+oKMW58zPwciEZ2gJJYvov0mx68LmIpibSZSw==",
         "dependencies": {
-          "Corvus.Identity.Azure": "3.0.1-228-cache-token-microsoftrest.1",
+          "Corvus.Identity.Azure": "3.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0",
           "Microsoft.Rest.ClientRuntime": "2.3.23"
         }
@@ -3172,9 +3162,8 @@
         "type": "Project",
         "dependencies": {
           "Corvus.Extensions.Newtonsoft.Json": "2.0.6",
-          "Corvus.Identity.Azure": "3.0.1-228-cache-token-microsoftrest.1",
-          "Corvus.Identity.ManagedServiceIdentity.ClientAuthentication": "2.0.2",
-          "Corvus.Identity.MicrosoftRest": "3.0.1-228-cache-token-microsoftrest.1",
+          "Corvus.Identity.Azure": "3.0.0",
+          "Corvus.Identity.MicrosoftRest": "3.0.0",
           "Microsoft.Extensions.DependencyInjection": "6.0.0",
           "Microsoft.Extensions.Http": "6.0.0",
           "Newtonsoft.Json": "13.0.1",

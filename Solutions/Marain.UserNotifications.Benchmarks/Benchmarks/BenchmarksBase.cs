@@ -4,11 +4,7 @@
 
 namespace Benchmarks
 {
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading.Tasks;
     using Corvus.Identity.ClientAuthentication.Azure;
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
     using Microsoft.Extensions.Configuration;

@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
     using System.Linq;
     using Corvus.Azure.Storage.Tenancy;
     using Corvus.Extensions.Json.Internal;
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.Operations.Client.OperationsControl;
     using Marain.Tenancy.Client;
     using Marain.UserNotifications;
@@ -75,6 +74,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Token source, to provide authentication when accessing external services.
             string azureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"];
             services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
+            services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
             // Notification storage
             services.AddTenantedAzureTableUserNotificationStore(

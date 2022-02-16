@@ -8,7 +8,6 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Azure.Storage.Tenancy;
     using Corvus.Configuration;
     using Corvus.Extensions.Json;
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
     using Marain.Extensions.DependencyInjection;
     using Marain.Tenancy.Client;
@@ -40,7 +39,6 @@ namespace Marain.UserNotifications.Specs.Bindings
                     configBuilder.AddConfigurationForTest("appsettings.json");
                     IConfigurationRoot config = configBuilder.Build();
                     services.AddSingleton<IConfiguration>(config);
-
                     services.AddLogging();
                     services.AddOpenApiJsonSerializerSettings();
 
@@ -63,6 +61,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                     // Token source, to provide authentication when accessing external services.
                     string azureServicesAuthConnectionString = config["AzureServicesAuthConnectionString"];
                     services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
+                    services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
                     // Marain tenancy management, required to create transient client/service tenants.
                     services.AddMarainTenantManagement();
