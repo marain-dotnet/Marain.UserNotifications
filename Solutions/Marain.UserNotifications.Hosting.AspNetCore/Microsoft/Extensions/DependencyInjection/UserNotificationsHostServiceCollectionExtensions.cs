@@ -77,18 +77,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
             // Notification storage
-            services.AddTenantedAzureTableUserNotificationStore(
-                sp => new TenantCloudTableFactoryOptions
-                {
-                    AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
-                });
+            services.AddTenantedAzureTableUserNotificationStore();
 
             // Template Store
-            services.AddTenantedAzureBlobTemplateStore(
-                sp => new TenantCloudBlobContainerFactoryOptions
-                {
-                    AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
-                });
+            services.AddTenantedAzureBlobTemplateStore();
 
             services.EnsureDateTimeOffsetConverterNotPresent();
 

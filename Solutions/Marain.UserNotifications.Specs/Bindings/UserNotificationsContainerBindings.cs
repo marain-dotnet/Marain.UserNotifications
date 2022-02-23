@@ -5,6 +5,7 @@
 namespace Marain.UserNotifications.Specs.Bindings
 {
     using System;
+    using Azure.Data.Tables;
     using Corvus.Azure.Storage.Tenancy;
     using Corvus.Configuration;
     using Corvus.Extensions.Json;
@@ -67,18 +68,10 @@ namespace Marain.UserNotifications.Specs.Bindings
                     services.AddMarainTenantManagement();
 
                     // Add the tenanted table store for notifications so we can clear up our own mess after the test.
-                    services.AddTenantedAzureTableUserNotificationStore(
-                        sp => new TenantCloudTableFactoryOptions
-                        {
-                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                        });
+                    services.AddTenantedAzureTableUserNotificationStore();
 
                     // Add the tenanted blob store for the notification tempalte store so we can clear up our own mess after the test.
-                    services.AddTenantedAzureBlobTemplateStore(
-                        sp => new TenantCloudBlobContainerFactoryOptions
-                        {
-                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                        });
+                    services.AddTenantedAzureBlobTemplateStore();
 
                     services.RegisterCoreUserNotificationsContentTypes();
 
@@ -137,13 +130,12 @@ namespace Marain.UserNotifications.Specs.Bindings
                         {
                             IConfiguration config = sp.GetRequiredService<IConfiguration>();
                             string connectionString = config["TestTableStorageConfiguration:AccountName"];
+                            TableServiceClient tableServiceClient = new(
+                                string.IsNullOrEmpty(connectionString)
+                                    ? "UseDevelopmentStorage=True"
+                                    : connectionString);
 
-                            CloudStorageAccount storageAccount = string.IsNullOrEmpty(connectionString)
-                                ? CloudStorageAccount.DevelopmentStorageAccount
-                                : CloudStorageAccount.Parse(connectionString);
-
-                            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-                            CloudTable table = tableClient.GetTableReference($"testrun{Guid.NewGuid():N}");
+                            TableClient table = tableServiceClient.GetTableClient($"testrun{Guid.NewGuid():N}");
 
                             // Add the table to the scenario context so it can be deleted later.
                             scenarioContext.Set(table);
