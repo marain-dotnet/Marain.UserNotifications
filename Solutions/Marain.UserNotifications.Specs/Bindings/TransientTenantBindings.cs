@@ -6,8 +6,10 @@ namespace Marain.UserNotifications.Specs.Bindings
 {
     using System;
     using System.Threading.Tasks;
+    using Azure.Data.Tables;
     using Corvus.Azure.Cosmos.Tenancy;
     using Corvus.Azure.Storage.Tenancy;
+    using Corvus.Storage.Azure.TableStorage.Tenancy;
     using Corvus.Tenancy;
     using Corvus.Testing.AzureFunctions;
     using Corvus.Testing.AzureFunctions.SpecFlow;
@@ -15,7 +17,6 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Marain.TenantManagement.EnrollmentConfiguration;
     using Marain.TenantManagement.Testing;
     using Marain.UserNotifications.Storage.AzureStorage;
-    using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -73,9 +74,13 @@ namespace Marain.UserNotifications.Specs.Bindings
 
             await featureContext.RunAndStoreExceptionsAsync(async () =>
             {
-                ITenantCloudTableFactory cloudTableFactory = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<ITenantCloudTableFactory>();
-                CloudTable testTable = await cloudTableFactory.GetTableForTenantAsync(tenantManager.PrimaryTransientClient, TenantedAzureTableUserNotificationStoreFactory.TableDefinition).ConfigureAwait(false);
-                await testTable.DeleteIfExistsAsync().ConfigureAwait(false);
+                ITableSourceWithTenantLegacyTransition cloudTableFactory = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<ITableSourceWithTenantLegacyTransition>();
+
+                TableClient testTable = await cloudTableFactory.GetTableClientFromTenantAsync(
+                    tenant: tenantManager.PrimaryTransientClient,
+                    v2ConfigurationKey: "StorageConfiguration__Table__usernotifications",
+                    v3ConfigurationKey: "StorageConfigurationV3__usernotifications").ConfigureAwait(false);
+                await testTable.DeleteAsync().ConfigureAwait(false);
             }).ConfigureAwait(false);
 
             await featureContext.RunAndStoreExceptionsAsync(() =>
