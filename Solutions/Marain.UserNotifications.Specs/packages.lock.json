@@ -62,6 +62,21 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.13"
         }
       },
+      "Roslynator.Analyzers": {
+        "type": "Direct",
+        "requested": "[4.0.2, )",
+        "resolved": "4.0.2",
+        "contentHash": "UmKLY06/yIAAkARvvGHjIS5LA0XEeEn7pbRHmsDcxvbLFla2fqrTTPVBUW7HMttBAwFi2WKvkVzGNu3/0JDdxA=="
+      },
+      "StyleCop.Analyzers": {
+        "type": "Direct",
+        "requested": "[1.2.0-beta.406, )",
+        "resolved": "1.2.0-beta.406",
+        "contentHash": "YbsYoczQPZyz+4nmQ7bBiU9uQkk7Q2KUizQWEv01S4/ImCdJFiHvJfm8HAINNS0cvSLOA7xM9Y+KWQ2FOYjgkA==",
+        "dependencies": {
+          "StyleCop.Analyzers.Unstable": "1.2.0.406"
+        }
+      },
       "Azure.Core": {
         "type": "Transitive",
         "resolved": "1.22.0",
@@ -1080,8 +1095,8 @@
       },
       "Microsoft.Bcl.AsyncInterfaces": {
         "type": "Transitive",
-        "resolved": "1.1.1",
-        "contentHash": "yuvf07qFWFqtK3P/MRkEKLhn5r2UbSpVueRziSqj0yJQIKFwG1pq9mOayK3zE5qZCTs0CbrwL9M6R8VwqyGy2w=="
+        "resolved": "6.0.0",
+        "contentHash": "UcSjPsst+DfAdJGVDsu346FX0ci0ah+lw3WRtn18NUwEqRt70HaOQ7lI72vy3+1LxtqI3T5GWwV39rQSrCzAeg=="
       },
       "Microsoft.Bcl.HashCode": {
         "type": "Transitive",
@@ -1837,6 +1852,11 @@
           "SpecFlow": "[3.8.14]"
         }
       },
+      "StyleCop.Analyzers.Unstable": {
+        "type": "Transitive",
+        "resolved": "1.2.0.406",
+        "contentHash": "FclNdBR81ynIo9l1QNlo+l0I/PaFIYaPQPlMram8XVIMh6G6G43KTa1aCxfwTj13uKlAJS/LhLy6KjOPOeAU4w=="
+      },
       "System.AppContext": {
         "type": "Transitive",
         "resolved": "4.1.0",
@@ -2174,6 +2194,14 @@
           "System.Resources.ResourceManager": "4.3.0",
           "System.Runtime": "4.3.0",
           "System.Runtime.Extensions": "4.3.0"
+        }
+      },
+      "System.Linq.Async": {
+        "type": "Transitive",
+        "resolved": "6.0.1",
+        "contentHash": "0YhHcaroWpQ9UCot3Pizah7ryAzQhNvobLMSxeDIGmnXfkQn8u5owvpOH0K6EVB+z9L7u6Cc4W17Br/+jyttEQ==",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "6.0.0"
         }
       },
       "System.Linq.Expressions": {
@@ -3251,7 +3279,8 @@
         "dependencies": {
           "Corvus.Storage.Azure.BlobStorage.Tenancy": "3.2.0-PullRequest0409.5",
           "Corvus.Storage.Azure.TableStorage.Tenancy": "3.2.0-PullRequest0409.5",
-          "Marain.UserNotifications.Abstractions": "1.0.0"
+          "Marain.UserNotifications.Abstractions": "1.0.0",
+          "System.Linq.Async": "6.0.1"
         }
       },
       "marain.usernotifications.thirdparty.deliverychannels": {
