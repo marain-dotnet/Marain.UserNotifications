@@ -7,11 +7,14 @@ namespace Marain.UserNotifications.Storage.AzureStorage
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
+    using Azure;
+    using Azure.Core;
+    using Azure.Data.Tables;
     using Corvus.Extensions.Json;
     using Marain.UserNotifications;
     using Marain.UserNotifications.Storage.AzureStorage.Internal;
-    using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -21,7 +24,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
     {
         private readonly ILogger logger;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
-        private readonly CloudTable table;
+        private readonly TableClient table;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureTableUserNotificationStore"/> class.
@@ -30,7 +33,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
         /// <param name="logger">The logger.</param>
         public AzureTableUserNotificationStore(
-            CloudTable table,
+            TableClient table,
             IJsonSerializerSettingsProvider serializerSettingsProvider,
             ILogger logger)
         {
@@ -79,20 +82,19 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         public async Task<UserNotification> GetByIdAsync(string id)
         {
             var notificationId = NotificationId.FromString(id, this.serializerSettingsProvider.Instance);
-            var operation = TableOperation.Retrieve<UserNotificationTableEntity>(notificationId.PartitionKey, notificationId.RowKey);
-            TableResult result = await this.table.ExecuteAsync(operation).ConfigureAwait(false);
-
-            switch (result.HttpStatusCode)
+            try
             {
-                case 200:
-                    var notification = (UserNotificationTableEntity)result.Result;
-                    return notification.ToNotification(this.serializerSettingsProvider.Instance);
-
-                case 404:
+                Response<UserNotificationTableEntity> result = await this.table.GetEntityAsync<UserNotificationTableEntity>(notificationId.PartitionKey, notificationId.RowKey).ConfigureAwait(false);
+                return result.Value.ToNotification(this.serializerSettingsProvider.Instance);
+            }
+            catch (RequestFailedException ex)
+            {
+                if (ex.Status == 404)
+                {
                     throw new UserNotificationNotFoundException(id);
+                }
 
-                default:
-                    throw new AzureTableUserNotificationStoreException($"Unexpected response code '{result.HttpStatusCode}' from table storage when attempting to retrieve the notification with Id '{id}'");
+                throw new AzureTableUserNotificationStoreException($"Unexpected response code '{ex.Status}' from table storage when attempting to retrieve the notification with Id '{id}'");
             }
         }
 
@@ -118,17 +120,19 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         {
             var notificationEntity = UserNotificationTableEntity.FromNotification(notification, this.serializerSettingsProvider.Instance);
 
-            var createOperation = TableOperation.Insert(notificationEntity);
-
             try
             {
-                TableResult result = await this.table.ExecuteAsync(createOperation).ConfigureAwait(false);
+                Response result = await this.table.AddEntityAsync(notificationEntity).ConfigureAwait(false);
 
                 // TODO: Check result status code
-                var response = (UserNotificationTableEntity)result.Result;
-                return response.ToNotification(this.serializerSettingsProvider.Instance);
+                if (result.Headers.ETag.HasValue)
+                {
+                    notificationEntity.ETag = result.Headers.ETag.Value;
+                }
+
+                return notificationEntity.ToNotification(this.serializerSettingsProvider.Instance);
             }
-            catch (StorageException ex) when (ex.Message == "Conflict")
+            catch (RequestFailedException ex)
             {
                 throw new UserNotificationStoreConcurrencyException("Could not create the notification because a notification with the same identity hash already exists in the store.", ex);
             }
@@ -138,22 +142,29 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         {
             var notificationEntity = UserNotificationTableEntity.FromNotification(notification, this.serializerSettingsProvider.Instance);
 
-            var replaceOperation = TableOperation.Replace(notificationEntity);
-
             try
             {
-                TableResult result = await this.table.ExecuteAsync(replaceOperation).ConfigureAwait(false);
+                Response result = await this.table.UpdateEntityAsync(notificationEntity, notificationEntity.ETag).ConfigureAwait(false);
 
-                var response = (UserNotificationTableEntity)result.Result;
-                return response.ToNotification(this.serializerSettingsProvider.Instance);
+                if (result.Headers.ETag.HasValue)
+                {
+                    notificationEntity.ETag = result.Headers.ETag.Value;
+                }
+
+                return notificationEntity.ToNotification(this.serializerSettingsProvider.Instance);
             }
-            catch (StorageException ex) when (ex.Message == "Not Found")
+            catch (RequestFailedException ex)
             {
-                throw new UserNotificationNotFoundException(notification.Id ?? "{null}");
-            }
-            catch (StorageException ex) when (ex.Message == "Precondition Failed")
-            {
-                throw new UserNotificationStoreConcurrencyException($"Could not update the notification with Id '{notification.Id}' because it has been modified by another process.", ex);
+                if (ex.Status == 404)
+                {
+                    throw new UserNotificationNotFoundException(notification.Id ?? "{null}");
+                }
+                else if (ex.Status == (int)HttpStatusCode.PreconditionFailed)
+                {
+                    throw new UserNotificationStoreConcurrencyException($"Could not update the notification with Id '{notification.Id}' because it has been modified by another process.", ex);
+                }
+
+                throw;
             }
         }
 
@@ -163,42 +174,25 @@ namespace Marain.UserNotifications.Storage.AzureStorage
             string? afterRowKey,
             int maxItems)
         {
-            string filter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, userId);
+            string filter = $"PartitionKey eq '{userId}'";
 
             if (!string.IsNullOrEmpty(beforeRowKey))
             {
-                filter = TableQuery.CombineFilters(
-                    filter,
-                    TableOperators.And,
-                    TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.GreaterThan, beforeRowKey));
+                filter += $" and RowKey gt '{beforeRowKey}'";
             }
 
             if (!string.IsNullOrEmpty(afterRowKey))
             {
-                filter = TableQuery.CombineFilters(
-                    filter,
-                    TableOperators.And,
-                    TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.LessThan, afterRowKey));
+                filter = filter += $" and RowKey lt '{afterRowKey}'";
             }
 
-            TableQuery<UserNotificationTableEntity> query = new TableQuery<UserNotificationTableEntity>()
-                .Where(filter)
-                .Take(maxItems);
+            AsyncPageable<UserNotificationTableEntity> query = this.table.QueryAsync<UserNotificationTableEntity>(filter, maxItems);
 
-            TableContinuationToken? continuationToken = null;
             var results = new List<UserNotificationTableEntity>(maxItems);
-
-            do
+            await foreach (UserNotificationTableEntity notification in query.Take(maxItems))
             {
-                TableQuerySegment<UserNotificationTableEntity> result = await this.table.ExecuteQuerySegmentedAsync(
-                    query,
-                    continuationToken).ConfigureAwait(false);
-
-                continuationToken = result.ContinuationToken;
-
-                results.AddRange(result.Results);
+                results.Add(notification);
             }
-            while (results.Count < maxItems && !(continuationToken is null));
 
             // If we've managed to read up to the max items, then there might be more - build a continuation token
             // to return.
@@ -207,7 +201,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
                 : null;
 
             return new GetNotificationsResult(
-              results.Take(maxItems).Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToArray(),
+              results.Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToArray(),
               responseContinuationToken?.AsString(this.serializerSettingsProvider.Instance));
         }
     }
