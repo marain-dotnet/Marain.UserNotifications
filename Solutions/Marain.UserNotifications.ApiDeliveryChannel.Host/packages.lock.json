@@ -279,11 +279,11 @@
       },
       "Corvus.Storage.Azure.BlobStorage.Tenancy": {
         "type": "Transitive",
-        "resolved": "3.2.0-PullRequest0409.5",
-        "contentHash": "Tr6HY/+xscRetONrV3BJjM2Z+QLI9pPSmIBNm0y+A6X/Y28wZAsSFLYhVTWpiKhWwC8Nd0srduBPJFbZt6L6gA==",
+        "resolved": "3.2.0-PullRequest0409.6",
+        "contentHash": "tZEYe/vAmzRR10YGhTvCEp5lyidgQwxBjYiBfg99XSoZd+FcX/OykWr8RDEZEYWn0eUk4BN35j7DaivgwawpsA==",
         "dependencies": {
           "Corvus.Storage.Azure.BlobStorage": "1.1.1",
-          "Corvus.Tenancy.Abstractions": "3.2.0-PullRequest0409.5"
+          "Corvus.Tenancy.Abstractions": "3.2.0-PullRequest0409.6"
         }
       },
       "Corvus.Storage.Azure.TableStorage": {
@@ -297,11 +297,11 @@
       },
       "Corvus.Storage.Azure.TableStorage.Tenancy": {
         "type": "Transitive",
-        "resolved": "3.2.0-PullRequest0409.5",
-        "contentHash": "sHwWSrKY+IIf6LkStAnU1mPWuntr+kVita3qn/tZ89Z/2/dmJkzxL2kRqSPFsPL6DQ7nd6fMBiCjxyHXPfkuiQ==",
+        "resolved": "3.2.0-PullRequest0409.6",
+        "contentHash": "NuxEXuvVnrxCC5J53mlDcqtBdNFBqYT4+kwDSNcpPtsHpFg/Fhpjpk62AlBc/TagxibJHK1y/sv5FYOSCU6vXw==",
         "dependencies": {
           "Corvus.Storage.Azure.TableStorage": "1.2.0-PullRequest0034.3",
-          "Corvus.Tenancy.Abstractions": "3.2.0-PullRequest0409.5"
+          "Corvus.Tenancy.Abstractions": "3.2.0-PullRequest0409.6"
         }
       },
       "Corvus.Storage.Common": {
@@ -315,8 +315,8 @@
       },
       "Corvus.Tenancy.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.2.0-PullRequest0409.5",
-        "contentHash": "cCiim8WUkJpaU+I370bEGj0X57Yr/wOitv4aDgZ6WcvR9TCnc1eGao2wemynlgp7pc/z36Gr7Mb1ZF75VL7ddg==",
+        "resolved": "3.2.0-PullRequest0409.6",
+        "contentHash": "HozuB76S4xXFVatX3q0zHKI1nfQSsEfqyWbRhHAQ7NPKs6wC3rbFPGip5YNtehg+ui9n38/vZV6b7E9kMmDJuQ==",
         "dependencies": {
           "Corvus.ContentHandling.Json": "2.0.11",
           "Corvus.Extensions": "1.1.4",
@@ -2682,8 +2682,8 @@
       "marain.usernotifications.storage.azurestorage": {
         "type": "Project",
         "dependencies": {
-          "Corvus.Storage.Azure.BlobStorage.Tenancy": "3.2.0-PullRequest0409.5",
-          "Corvus.Storage.Azure.TableStorage.Tenancy": "3.2.0-PullRequest0409.5",
+          "Corvus.Storage.Azure.BlobStorage.Tenancy": "3.2.0-PullRequest0409.6",
+          "Corvus.Storage.Azure.TableStorage.Tenancy": "3.2.0-PullRequest0409.6",
           "Marain.UserNotifications.Abstractions": "1.0.0",
           "System.Linq.Async": "6.0.0"
         }
