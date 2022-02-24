@@ -19,8 +19,8 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Retry.Strategies;
     using Corvus.Testing.SpecFlow;
     using Marain.NotificationTemplates.CommunicationTemplates;
-    using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications;
+    using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications.Specs.Bindings;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
