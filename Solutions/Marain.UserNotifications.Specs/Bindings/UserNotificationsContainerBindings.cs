@@ -15,6 +15,7 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
     using Marain.UserNotifications.Storage.AzureStorage;
+    using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -150,7 +151,7 @@ namespace Marain.UserNotifications.Specs.Bindings
         [AfterScenario("withUserNotificationTableStorage")]
         public static async Task ClearDownTableStorage(ScenarioContext scenarioContext)
         {
-            await scenarioContext.RunAndStoreExceptionsAsync(() => scenarioContext.Get<TableClient>().DeleteAsync());
+            await scenarioContext.RunAndStoreExceptionsAsync(() => scenarioContext.Get<CloudTable>().DeleteAsync());
         }
     }
 }
