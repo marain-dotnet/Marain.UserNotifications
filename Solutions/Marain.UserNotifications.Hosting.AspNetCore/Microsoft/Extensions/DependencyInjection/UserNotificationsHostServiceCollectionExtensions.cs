@@ -5,7 +5,6 @@
 namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Linq;
-    using Corvus.Azure.Storage.Tenancy;
     using Corvus.Extensions.Json.Internal;
     using Marain.Operations.Client.OperationsControl;
     using Marain.Tenancy.Client;

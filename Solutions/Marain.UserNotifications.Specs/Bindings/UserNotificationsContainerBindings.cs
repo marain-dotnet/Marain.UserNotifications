@@ -5,8 +5,8 @@
 namespace Marain.UserNotifications.Specs.Bindings
 {
     using System;
+    using System.Threading.Tasks;
     using Azure.Data.Tables;
-    using Corvus.Azure.Storage.Tenancy;
     using Corvus.Configuration;
     using Corvus.Extensions.Json;
     using Corvus.Testing.SpecFlow;
@@ -15,7 +15,6 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
     using Marain.UserNotifications.Storage.AzureStorage;
-    using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -132,7 +131,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                             string connectionString = config["TestTableStorageConfiguration:AccountName"];
                             TableServiceClient tableServiceClient = new(
                                 string.IsNullOrEmpty(connectionString)
-                                    ? "UseDevelopmentStorage=True"
+                                    ? "UseDevelopmentStorage=true"
                                     : connectionString);
 
                             TableClient table = tableServiceClient.GetTableClient($"testrun{Guid.NewGuid():N}");
@@ -149,9 +148,9 @@ namespace Marain.UserNotifications.Specs.Bindings
         }
 
         [AfterScenario("withUserNotificationTableStorage")]
-        public static void ClearDownTableStorage(ScenarioContext scenarioContext)
+        public static async Task ClearDownTableStorage(ScenarioContext scenarioContext)
         {
-            scenarioContext.RunAndStoreExceptionsAsync(() => scenarioContext.Get<TableClient>().DeleteAsync());
+            await scenarioContext.RunAndStoreExceptionsAsync(() => scenarioContext.Get<TableClient>().DeleteAsync());
         }
     }
 }
