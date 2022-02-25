@@ -151,7 +151,7 @@ namespace Marain.UserNotifications.Specs.Bindings
         [AfterScenario("withUserNotificationTableStorage")]
         public static async Task ClearDownTableStorage(ScenarioContext scenarioContext)
         {
-            await scenarioContext.RunAndStoreExceptionsAsync(() => scenarioContext.Get<CloudTable>().DeleteAsync());
+            await scenarioContext.RunAndStoreExceptionsAsync(() => scenarioContext.Get<TableClient>().DeleteAsync());
         }
     }
 }

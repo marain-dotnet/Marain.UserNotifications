@@ -79,7 +79,8 @@ namespace Marain.UserNotifications.Specs.Bindings
                 TableClient testTable = await cloudTableFactory.GetTableClientFromTenantAsync(
                     tenant: tenantManager.PrimaryTransientClient,
                     v2ConfigurationKey: "StorageConfiguration__Table__usernotifications",
-                    v3ConfigurationKey: "StorageConfigurationV3__usernotifications").ConfigureAwait(false);
+                    v3ConfigurationKey: "StorageConfigurationV3__usernotifications",
+                    containerName: "usernotifications").ConfigureAwait(false);
                 await testTable.DeleteAsync().ConfigureAwait(false);
             }).ConfigureAwait(false);
 
