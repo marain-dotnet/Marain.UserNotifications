@@ -96,14 +96,9 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
                     throw new OpenApiNotFoundException($"The template for ContentType: {body.ContentType} is not a valid content type");
                 }
             }
-            catch (StorageException e)
+            catch (NotificationTemplateStoreConcurrencyException)
             {
-                if (e?.RequestInformation?.HttpStatusCode == (int)System.Net.HttpStatusCode.PreconditionFailed)
-                {
-                    throw new OpenApiBadRequestException("Precondition failure. Blob's ETag does not match ETag provided.");
-                }
-
-                throw;
+                throw new OpenApiBadRequestException("Precondition failure. Blob's ETag does not match ETag provided.");
             }
 
             return this.OkResult();

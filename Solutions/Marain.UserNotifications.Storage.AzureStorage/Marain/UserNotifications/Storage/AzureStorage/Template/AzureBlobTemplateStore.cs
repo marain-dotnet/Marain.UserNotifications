@@ -5,12 +5,14 @@
 namespace Marain.UserNotifications.Storage.AzureStorage
 {
     using System;
+    using System.Net;
     using System.Threading.Tasks;
+    using Azure;
+    using Azure.Storage.Blobs;
+    using Azure.Storage.Blobs.Models;
     using Corvus.Extensions.Json;
     using Marain.Models;
     using Marain.NotificationTemplates;
-    using Microsoft.Azure.Storage;
-    using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
@@ -21,7 +23,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
     {
         private readonly ILogger logger;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
-        private readonly CloudBlobContainer blobContainer;
+        private readonly BlobContainerClient blobContainer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureBlobTemplateStore"/> class.
@@ -30,7 +32,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
         /// <param name="logger">The logger.</param>
         public AzureBlobTemplateStore(
-            CloudBlobContainer blobContainer,
+            BlobContainerClient blobContainer,
             IJsonSerializerSettingsProvider serializerSettingsProvider,
             ILogger logger)
         {
@@ -43,25 +45,25 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         }
 
         /// <inheritdoc/>
-        public async Task<(T, string?)> GetAsync<T>(string notificationType, CommunicationType communicationType)
+        public async Task<(T Template, string? ETag)> GetAsync<T>(string notificationType, CommunicationType communicationType)
         {
             // Gets the blob reference by the notificationType
-            CloudBlockBlob blob = this.blobContainer.GetBlockBlobReference(this.GetBlockBlobName(notificationType, communicationType));
+            BlobClient blob = this.blobContainer.GetBlobClient(this.GetBlockBlobName(notificationType, communicationType));
 
-            // Check if the blob exists
-            bool exists = await blob.ExistsAsync().ConfigureAwait(false);
-
-            if (!exists)
+            try
+            {
+                // Download and convert the blob text into TemplateWrapper object
+                Response<BlobDownloadResult> response = await blob.DownloadContentAsync().ConfigureAwait(false);
+                string json = response.Value.Content.ToString();
+                T dynamicObject = JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance);
+                string etag = response.Value.Details.ETag.ToString("H");
+                return (dynamicObject, etag);
+            }
+            catch (RequestFailedException ex)
+            when (ex.Status == 404)
             {
                 throw new NotificationTemplateNotFoundException(this.GetBlockBlobName(notificationType, communicationType));
             }
-
-            string? etag = blob.Properties.ETag;
-
-            // Download and convert the blob text into TemplateWrapper object
-            string json = await blob.DownloadTextAsync().ConfigureAwait(false);
-            T dynamicObject = JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance);
-            return (dynamicObject, etag);
         }
 
         /// <inheritdoc/>
@@ -70,31 +72,31 @@ namespace Marain.UserNotifications.Storage.AzureStorage
             this.logger.LogDebug("CreateOrUpdate: Storing template for notification type ", notificationType);
 
             // Gets the blob reference by the NotificationType
-            CloudBlockBlob blockBlob = this.blobContainer.GetBlockBlobReference(this.GetBlockBlobName(notificationType, communicationType));
-
-            bool exists = await blockBlob.ExistsAsync().ConfigureAwait(false);
-
-            // Check if the blob exists and it has the same etag
-            if (exists && string.IsNullOrWhiteSpace(eTag))
-            {
-                throw new StorageException("ETag was not present in the template object.");
-            }
+            BlobClient blockBlob = this.blobContainer.GetBlobClient(this.GetBlockBlobName(notificationType, communicationType));
 
             // Serialise the TemplateWrapper object
             string templateBlob = JsonConvert.SerializeObject(template, this.serializerSettingsProvider.Instance);
+            BlobRequestConditions uploadConditions = string.IsNullOrWhiteSpace(eTag)
+                ? new BlobRequestConditions { IfNoneMatch = ETag.All }
+                : new BlobRequestConditions { IfMatch = new ETag(eTag) };
 
-            if (exists)
+            try
             {
-                // Update the notification template
-                await blockBlob.UploadTextAsync(templateBlob, null, AccessCondition.GenerateIfMatchCondition(eTag), null, null).ConfigureAwait(false);
-                this.logger.LogDebug("CreateOrUpdate: Notification template updated successfully ", notificationType);
+                Response<BlobContentInfo> response = await  blockBlob.UploadAsync(
+                        BinaryData.FromString(templateBlob),
+                        new BlobUploadOptions { Conditions = uploadConditions });
             }
-            else
+            catch (RequestFailedException ex)
+            when (ex.Status == (int)HttpStatusCode.PreconditionFailed)
             {
-                // Create the notification template
-                await blockBlob.UploadTextAsync(templateBlob, null, AccessCondition.GenerateIfNotExistsCondition(), null, null).ConfigureAwait(false);
-                this.logger.LogDebug("CreateOrUpdate: Notification template updated successfully ", notificationType);
+                throw new NotificationTemplateStoreConcurrencyException(
+                    string.IsNullOrWhiteSpace(eTag)
+                        ? "Template already in store"
+                        : "Template in store did not match ETag",
+                    ex);
             }
+
+            this.logger.LogDebug("CreateOrUpdate: Notification template updated successfully ", notificationType);
 
             return template;
         }

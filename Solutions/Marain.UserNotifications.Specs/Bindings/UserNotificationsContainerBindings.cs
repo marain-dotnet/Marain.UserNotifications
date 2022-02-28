@@ -5,17 +5,16 @@
 namespace Marain.UserNotifications.Specs.Bindings
 {
     using System;
-    using Corvus.Azure.Storage.Tenancy;
+    using System.Threading.Tasks;
+    using Azure.Data.Tables;
     using Corvus.Configuration;
     using Corvus.Extensions.Json;
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
     using Marain.Extensions.DependencyInjection;
     using Marain.Tenancy.Client;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
     using Marain.UserNotifications.Storage.AzureStorage;
-    using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -40,7 +39,6 @@ namespace Marain.UserNotifications.Specs.Bindings
                     configBuilder.AddConfigurationForTest("appsettings.json");
                     IConfigurationRoot config = configBuilder.Build();
                     services.AddSingleton<IConfiguration>(config);
-
                     services.AddLogging();
                     services.AddOpenApiJsonSerializerSettings();
 
@@ -61,28 +59,18 @@ namespace Marain.UserNotifications.Specs.Bindings
                     services.AddTenantProviderServiceClient(false);
 
                     // Token source, to provide authentication when accessing external services.
-                    services.AddAzureManagedIdentityBasedTokenSource(
-                        sp => new AzureManagedIdentityTokenSourceOptions
-                        {
-                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                        });
+                    string azureServicesAuthConnectionString = config["AzureServicesAuthConnectionString"];
+                    services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
+                    services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
                     // Marain tenancy management, required to create transient client/service tenants.
                     services.AddMarainTenantManagement();
 
                     // Add the tenanted table store for notifications so we can clear up our own mess after the test.
-                    services.AddTenantedAzureTableUserNotificationStore(
-                        sp => new TenantCloudTableFactoryOptions
-                        {
-                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                        });
+                    services.AddTenantedAzureTableUserNotificationStore();
 
                     // Add the tenanted blob store for the notification tempalte store so we can clear up our own mess after the test.
-                    services.AddTenantedAzureBlobTemplateStore(
-                        sp => new TenantCloudBlobContainerFactoryOptions
-                        {
-                            AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                        });
+                    services.AddTenantedAzureBlobTemplateStore();
 
                     services.RegisterCoreUserNotificationsContentTypes();
 
@@ -141,13 +129,12 @@ namespace Marain.UserNotifications.Specs.Bindings
                         {
                             IConfiguration config = sp.GetRequiredService<IConfiguration>();
                             string connectionString = config["TestTableStorageConfiguration:AccountName"];
+                            TableServiceClient tableServiceClient = new(
+                                string.IsNullOrEmpty(connectionString)
+                                    ? "UseDevelopmentStorage=true"
+                                    : connectionString);
 
-                            CloudStorageAccount storageAccount = string.IsNullOrEmpty(connectionString)
-                                ? CloudStorageAccount.DevelopmentStorageAccount
-                                : CloudStorageAccount.Parse(connectionString);
-
-                            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-                            CloudTable table = tableClient.GetTableReference($"testrun{Guid.NewGuid():N}");
+                            TableClient table = tableServiceClient.GetTableClient($"testrun{Guid.NewGuid():N}");
 
                             // Add the table to the scenario context so it can be deleted later.
                             scenarioContext.Set(table);
@@ -161,9 +148,9 @@ namespace Marain.UserNotifications.Specs.Bindings
         }
 
         [AfterScenario("withUserNotificationTableStorage")]
-        public static void ClearDownTableStorage(ScenarioContext scenarioContext)
+        public static async Task ClearDownTableStorage(ScenarioContext scenarioContext)
         {
-            scenarioContext.RunAndStoreExceptionsAsync(() => scenarioContext.Get<CloudTable>().DeleteIfExistsAsync());
+            await scenarioContext.RunAndStoreExceptionsAsync(() => scenarioContext.Get<TableClient>().DeleteAsync());
         }
     }
 }

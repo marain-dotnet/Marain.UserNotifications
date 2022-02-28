@@ -5,9 +5,7 @@
 namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Linq;
-    using Corvus.Azure.Storage.Tenancy;
     using Corvus.Extensions.Json.Internal;
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.Operations.Client.OperationsControl;
     using Marain.Tenancy.Client;
     using Marain.UserNotifications;
@@ -17,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using Microsoft.Extensions.Configuration;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json.Serialization;
 
     /// <summary>
     /// Configures the user notifications API hosts.
@@ -27,9 +26,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Configures common services required by both management and delivery channel APIs.
         /// </summary>
         /// <param name="services">The service collection.</param>
+        /// <param name="configuration">Application configuration.</param>
         /// <returns>The service collection, to enable chaining.</returns>
         public static IServiceCollection AddCommonUserNotificationsApiServices(
-            this IServiceCollection services)
+            this IServiceCollection services, IConfiguration configuration)
         {
             // Monitoring - for better AppInsights integration
             services.AddApplicationInsightsInstrumentationTelemetry();
@@ -71,25 +71,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
 
             // Token source, to provide authentication when accessing external services.
-            services.AddAzureManagedIdentityBasedTokenSource(
-                sp => new AzureManagedIdentityTokenSourceOptions
-                {
-                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                });
+            string azureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"];
+            services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
+            services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
             // Notification storage
-            services.AddTenantedAzureTableUserNotificationStore(
-                sp => new TenantCloudTableFactoryOptions
-                {
-                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                });
+            services.AddTenantedAzureTableUserNotificationStore();
 
             // Template Store
-            services.AddTenantedAzureBlobTemplateStore(
-                sp => new TenantCloudBlobContainerFactoryOptions
-                {
-                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                });
+            services.AddTenantedAzureBlobTemplateStore();
 
             services.EnsureDateTimeOffsetConverterNotPresent();
 
@@ -106,7 +96,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddApiDeliveryChannelOpenApiServices();
 
-            services.AddOpenApiHttpRequestHosting<SimpleOpenApiContext>(
+            services.AddOpenApiActionResultHosting<SimpleOpenApiContext>(
                 hostConfig =>
                 {
                     hostConfig.Documents.RegisterOpenApiServiceWithEmbeddedDefinition(
@@ -152,7 +142,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddJsonNetSerializerSettingsProvider();
             services.AddJsonNetPropertyBag();
             services.AddJsonNetCultureInfoConverter();
-            services.AddSingleton<JsonConverter>(new StringEnumConverter(true));
+            services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
             return services;
         }

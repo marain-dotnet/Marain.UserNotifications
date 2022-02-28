@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <RootNamespace>Marain.UserNotifications.Specs</RootNamespace>
@@ -14,6 +14,11 @@
     -->
     <NoWarn>SA0001;SA1204;SA1600;SA1602;CS1591</NoWarn>
     <RootNamespace>Marain.UserNotifications.Specs</RootNamespace>
+
+  </PropertyGroup>
+  <PropertyGroup>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode Condition="$(ContinuousIntegrationBuild) == 'true'">true</RestoreLockedMode>
   </PropertyGroup>
   <ItemGroup>
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ApiDeliveryChannelClient\MarkNotificationAsRead.feature.cs" />
@@ -21,14 +26,16 @@
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApi\CreateNotifications - Copy.feature.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.2.3" />
-    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.4.2" />
-    <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
+    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.2.5" />
+    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.4.9" />
+	 
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+	
     <PackageReference Include="Marain.Services.Tenancy.Testing" Version="2.3.3" />
-    <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="1.4.5" />
+    <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="1.4.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marain.UserNotifications.ApiDeliveryChannel.Host\Marain.UserNotifications.ApiDeliveryChannel.Host.csproj" />

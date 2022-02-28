@@ -6,11 +6,11 @@ namespace Marain.UserNotifications.Storage.AzureStorage
 {
     using System;
     using System.Threading.Tasks;
-    using Corvus.Azure.Storage.Tenancy;
+    using Azure.Storage.Blobs;
     using Corvus.Extensions.Json;
+    using Corvus.Storage.Azure.BlobStorage.Tenancy;
     using Corvus.Tenancy;
     using Marain.NotificationTemplates;
-    using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -22,11 +22,13 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// The blob definition for the store. This is used to look up the corresponding configuration from.
         /// tenant.
         /// </summary>
-        public static readonly BlobStorageContainerDefinition BlobContainerDefinition = new BlobStorageContainerDefinition("templates");
+        public const string BlobContainerName = "templates";
+        private const string TemplatesV2ConfigurationKey = "StorageConfiguration__" + BlobContainerName;
+        private const string TemplatesV3ConfigurationKey = "StorageConfigurationV3__" + BlobContainerName;
 
         private readonly ILogger logger;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
-        private readonly ITenantCloudBlobContainerFactory blobContainerFactory;
+        private readonly IBlobContainerSourceWithTenantLegacyTransition blobContainerFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="INotificationTemplateStore"/> class.
@@ -35,7 +37,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
         /// <param name="logger">The logger.</param>
         public TenantedAzureBlobTemplateStoreFactory(
-            ITenantCloudBlobContainerFactory blobContainerFactory,
+            IBlobContainerSourceWithTenantLegacyTransition blobContainerFactory,
             IJsonSerializerSettingsProvider serializerSettingsProvider,
             ILogger<TenantedAzureBlobTemplateStoreFactory> logger)
         {
@@ -51,7 +53,8 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         public async Task<INotificationTemplateStore> GetTemplateStoreForTenantAsync(ITenant tenant)
         {
             // Gets the blob container for the tenant or creates a new one if it does not exists
-            CloudBlobContainer blob = await this.blobContainerFactory.GetBlobContainerForTenantAsync(tenant, BlobContainerDefinition).ConfigureAwait(false);
+            BlobContainerClient blob = await this.blobContainerFactory.GetBlobContainerClientFromTenantAsync(
+                tenant, TemplatesV2ConfigurationKey, TemplatesV3ConfigurationKey, BlobContainerName).ConfigureAwait(false);
 
             // No need to cache these instances as they are lightweight wrappers around the container.
             return new AzureBlobTemplateStore(blob, this.serializerSettingsProvider, this.logger);

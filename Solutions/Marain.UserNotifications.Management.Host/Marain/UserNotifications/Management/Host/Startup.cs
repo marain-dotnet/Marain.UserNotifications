@@ -18,6 +18,7 @@ namespace Marain.UserNotifications.Management.Host
     using Menes;
     using Microsoft.Azure.Functions.Extensions.DependencyInjection;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
@@ -32,12 +33,13 @@ namespace Marain.UserNotifications.Management.Host
         public override void Configure(IFunctionsHostBuilder builder)
         {
             IServiceCollection services = builder.Services;
+            IConfiguration configuration = builder.GetContext().Configuration;
 
             services.AddLogging();
 
             services.AddSingleton<IMessageSerializerSettingsFactory, SerializationSettingsFactoryAdapter>();
 
-            services.AddCommonUserNotificationsApiServices();
+            services.AddCommonUserNotificationsApiServices(configuration);
 
             services.RegisterCoreUserNotificationsContentTypes();
 
@@ -70,7 +72,7 @@ namespace Marain.UserNotifications.Management.Host
             services.AddSingleton<IAirshipClientFactory, AirshipClientFactory>();
             services.AddSingleton<IGenerateTemplateComposer, GenerateTemplateComposer>();
 
-            services.AddOpenApiHttpRequestHosting<DurableFunctionsOpenApiContext>(
+            services.AddOpenApiActionResultHosting<DurableFunctionsOpenApiContext>(
                 hostConfig =>
                 {
                     System.Type serviceType = typeof(CreateNotificationsService);

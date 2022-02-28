@@ -6,10 +6,10 @@ namespace Marain.UserNotifications.Storage.AzureStorage
 {
     using System;
     using System.Threading.Tasks;
-    using Corvus.Azure.Storage.Tenancy;
+    using Azure.Data.Tables;
     using Corvus.Extensions.Json;
+    using Corvus.Storage.Azure.TableStorage.Tenancy;
     using Corvus.Tenancy;
-    using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -21,11 +21,13 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// The table definition for the store. This is used to look up the corresponding configuration from the
         /// tenant.
         /// </summary>
-        public static readonly TableStorageTableDefinition TableDefinition = new TableStorageTableDefinition("usernotifications");
+        public const string TableName =  "usernotifications";
+        private const string TemplatesV2ConfigurationKey = "StorageConfiguration__Table__" + TableName;
+        private const string TemplatesV3ConfigurationKey = "StorageConfigurationV3__" + TableName;
 
         private readonly ILogger logger;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
-        private readonly ITenantCloudTableFactory tableFactory;
+        private readonly ITableSourceWithTenantLegacyTransition tableFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TenantedAzureTableUserNotificationStoreFactory"/> class.
@@ -34,7 +36,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
         /// <param name="logger">The logger.</param>
         public TenantedAzureTableUserNotificationStoreFactory(
-            ITenantCloudTableFactory tableFactory,
+            ITableSourceWithTenantLegacyTransition tableFactory,
             IJsonSerializerSettingsProvider serializerSettingsProvider,
             ILogger<TenantedAzureTableUserNotificationStoreFactory> logger)
         {
@@ -49,8 +51,9 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// <inheritdoc/>#
         public async Task<IUserNotificationStore> GetUserNotificationStoreForTenantAsync(ITenant tenant)
         {
-            CloudTable table =
-                await this.tableFactory.GetTableForTenantAsync(tenant, TableDefinition).ConfigureAwait(false);
+            TableClient table =
+                await this.tableFactory.GetTableClientFromTenantAsync(
+                    tenant, TemplatesV2ConfigurationKey, TemplatesV3ConfigurationKey, TableName).ConfigureAwait(false);
 
             // No need to cache these instances as they are lightweight wrappers around the container.
             return new AzureTableUserNotificationStore(table, this.serializerSettingsProvider, this.logger);

@@ -156,7 +156,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
             }
 
             // Convert secret to airship secret model
-            Airship airshipSecrets = JsonConvert.DeserializeObject<Airship>(airshipSecretsString);
+            Airship airshipSecrets = JsonConvert.DeserializeObject<Airship>(airshipSecretsString)!;
 
             var airshipDeliveryChannelObject = new AirshipDeliveryChannel(
                 webPushTemplate.Title!,

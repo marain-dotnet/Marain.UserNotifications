@@ -19,7 +19,7 @@ namespace Marain.NotificationTemplates
         /// <param name="notificationType">The notification type.</param>
         /// <param name="communicationType">The communication type.</param>
         /// <returns>The template.</returns>
-        Task<(T, string?)> GetAsync<T>(string notificationType, CommunicationType communicationType);
+        Task<(T Template, string? ETag)> GetAsync<T>(string notificationType, CommunicationType communicationType);
 
         /// <summary>
         /// Stores the given template.

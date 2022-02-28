@@ -38,8 +38,8 @@ namespace Marain.UserNotifications.Specs.Steps
 
         public static UserNotification BuildNotificationFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
         {
-            string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray();
-            IPropertyBag properties = JsonConvert.DeserializeObject<IPropertyBag>(tableRow["PropertiesJson"], serializerSettings);
+            string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray()!;
+            IPropertyBag properties = JsonConvert.DeserializeObject<IPropertyBag>(tableRow["PropertiesJson"], serializerSettings)!;
 
             string? notificationId = tableRow.ContainsKey("Id") ? tableRow["Id"] : null;
 

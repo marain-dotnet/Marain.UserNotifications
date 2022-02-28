@@ -59,6 +59,16 @@ namespace Menes.Hal
         /// <param name="source">The json element representing the web link.</param>
         public WebLink(in JsonElement source)
         {
+            if (!source.TryGetProperty(HrefProperty, out JsonElement hrefProperty))
+            {
+                throw new ArgumentException("WebLink must have an href", nameof(source));
+            }
+
+            if (hrefProperty.ValueKind != JsonValueKind.String || hrefProperty.ValueEquals(string.Empty))
+            {
+                throw new ArgumentException("WebLink href must be a non-empty string", nameof(source));
+            }
+
             this.source = source;
         }
 
@@ -69,7 +79,7 @@ namespace Menes.Hal
         /// Either a URI [RFC3986] or URI Template [RFC6570] of the target
         /// resource.
         /// </remarks>
-        public string Href => this.source.GetProperty(HrefProperty).GetString();
+        public string Href => this.source.GetProperty(HrefProperty).GetString()!;
 
         /// <summary>
         /// Gets the name.

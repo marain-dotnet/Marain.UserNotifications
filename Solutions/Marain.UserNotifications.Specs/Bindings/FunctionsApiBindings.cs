@@ -37,12 +37,12 @@ namespace Marain.UserNotifications.Specs.Bindings
                 functionsController.StartFunctionsInstance(
                     "Marain.UserNotifications.Management.Host",
                     ManagementApiPort,
-                    "netcoreapp3.1",
+                    "net6.0",
                     configuration: functionConfiguration),
                 functionsController.StartFunctionsInstance(
                     "Marain.UserNotifications.ApiDeliveryChannel.Host",
                     ApiDeliveryChannelPort,
-                    "netcoreapp3.1",
+                    "net6.0",
                     configuration: functionConfiguration));
         }
 

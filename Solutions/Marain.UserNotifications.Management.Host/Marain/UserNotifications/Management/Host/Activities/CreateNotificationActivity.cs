@@ -7,6 +7,7 @@ namespace Marain.UserNotifications.Management.Host.Activities
     using System;
     using System.Threading.Tasks;
     using Corvus.Tenancy;
+    using Marain.NotificationTemplates;
     using Marain.UserNotifications.Management.Host.Helpers;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
