@@ -60,6 +60,10 @@ namespace Menes.Hal
         public WebLink(in JsonElement source)
         {
             this.source = source;
+            if (string.IsNullOrEmpty(this.Href))
+            {
+                throw new ArgumentException(nameof(this.Href));
+            }
         }
 
         /// <summary>
@@ -69,7 +73,7 @@ namespace Menes.Hal
         /// Either a URI [RFC3986] or URI Template [RFC6570] of the target
         /// resource.
         /// </remarks>
-        public string Href => this.source.GetProperty(HrefProperty).GetString() ?? string.Empty;
+        public string Href => this.source.GetProperty(HrefProperty).GetString()!;
 
         /// <summary>
         /// Gets the name.
