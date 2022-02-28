@@ -23,7 +23,7 @@ namespace Benchmarks
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Benchmark]
-        public Task RequestNotificationsWhereNoneExist()
+        public Task RequestNotificationsWhereNoneExistAsync()
         {
             string madeUpUserId = Guid.NewGuid().ToString();
             return this.ApiDeliveryChannelClient.GetUserNotificationsAsync(this.BenchmarkClientTenantId, madeUpUserId, null, null);

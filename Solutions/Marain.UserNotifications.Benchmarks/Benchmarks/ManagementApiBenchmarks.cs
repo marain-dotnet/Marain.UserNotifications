@@ -26,7 +26,7 @@ namespace Benchmarks
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Benchmark]
-        public Task CreateSingleNotificationInitialResponse()
+        public Task CreateSingleNotificationInitialResponseAsync()
         {
             var properties = new Dictionary<string, object>
             {
