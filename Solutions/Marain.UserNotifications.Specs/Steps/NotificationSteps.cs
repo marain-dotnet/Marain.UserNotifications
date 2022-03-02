@@ -54,7 +54,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 Assert.AreEqual(expected.Metadata.CorrelationIds[idx], actual.Metadata.CorrelationIds[idx], $"Correlation Ids at index {idx} do not match.");
             }
 
-            Assert.AreEqual(expected.ChannelStatuses.Count(), actual.ChannelStatuses.Count());
+            Assert.AreEqual(expected.ChannelStatuses.Length, actual.ChannelStatuses.Length);
             foreach (UserNotificationStatus expectedStatus in expected.ChannelStatuses)
             {
                 UserNotificationStatus? actualStatus = actual.ChannelStatuses.FirstOrDefault(s => s.DeliveryChannelId == expectedStatus.DeliveryChannelId);

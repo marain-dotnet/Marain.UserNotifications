@@ -4,9 +4,8 @@
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    using System;
     using System.Linq;
-    using Corvus.Storage.Azure.TableStorage.Tenancy;
+
     using Marain.NotificationTemplates;
     using Marain.UserNotifications;
     using Marain.UserNotifications.Storage.AzureStorage;

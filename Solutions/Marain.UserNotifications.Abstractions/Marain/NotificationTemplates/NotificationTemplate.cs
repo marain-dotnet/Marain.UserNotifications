@@ -4,7 +4,6 @@
 
 namespace Marain.NotificationTemplates
 {
-    using System;
     using Marain.NotificationTemplates.CommunicationTemplates;
 
     /// <summary>

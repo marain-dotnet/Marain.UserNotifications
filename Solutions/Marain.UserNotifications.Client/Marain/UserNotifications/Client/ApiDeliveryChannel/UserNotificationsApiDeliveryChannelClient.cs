@@ -48,8 +48,8 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
-            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            NotificationResource result = await JsonSerializer.DeserializeAsync<NotificationResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+            using Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            NotificationResource result = await JsonSerializer.DeserializeAsync<NotificationResource>(contentStream, this.SerializerOptions, cancellationToken).ConfigureAwait(false);
 
             return new ApiResponse<NotificationResource>(
                 response.StatusCode,
@@ -83,8 +83,8 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
-            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            PagedNotificationListResource result = await JsonSerializer.DeserializeAsync<PagedNotificationListResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+            using Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            PagedNotificationListResource result = await JsonSerializer.DeserializeAsync<PagedNotificationListResource>(contentStream, this.SerializerOptions, cancellationToken).ConfigureAwait(false);
 
             return new ApiResponse<PagedNotificationListResource>(
                 response.StatusCode,
@@ -107,7 +107,7 @@ namespace Marain.UserNotifications.Client.ApiDeliveryChannel
                 throw new ArgumentNullException(nameof(link));
             }
 
-            return this.CallLongRunningOperationEndpointAsync(new Uri(link, UriKind.Relative), HttpMethod.Post);
+            return this.CallLongRunningOperationEndpointAsync(new Uri(link, UriKind.Relative), HttpMethod.Post, cancellationToken);
         }
     }
 }

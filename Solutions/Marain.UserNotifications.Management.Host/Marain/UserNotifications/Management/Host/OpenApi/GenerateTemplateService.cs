@@ -7,14 +7,16 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using Corvus.Tenancy;
+
     using Marain.Models;
     using Marain.NotificationTemplates;
     using Marain.Services.Tenancy;
     using Marain.UserNotifications.Management.Host.Composer;
     using Marain.UserNotifications.Management.Host.Models;
+
     using Menes;
-    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Implements the generate template endpoint for the management API.
@@ -28,7 +30,6 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 
         private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory;
-        private readonly ILogger<GenerateTemplateService> logger;
         private readonly IGenerateTemplateComposer generateTemplateComposer;
 
         /// <summary>
@@ -37,16 +38,13 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
         /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="tenantedTemplateStoreFactory">Template store factory.</param>
         /// <param name="generateTemplateComposer">The composer to generate the templated notification per communication channel.</param>
-        /// <param name="logger">The logger for GenerateTemplateService.</param>
         public GenerateTemplateService(
             IMarainServicesTenancy marainServicesTenancy,
             ITenantedNotificationTemplateStoreFactory tenantedTemplateStoreFactory,
-            IGenerateTemplateComposer generateTemplateComposer,
-            ILogger<GenerateTemplateService> logger)
+            IGenerateTemplateComposer generateTemplateComposer)
         {
             this.marainServicesTenancy = marainServicesTenancy;
             this.tenantedTemplateStoreFactory = tenantedTemplateStoreFactory;
-            this.logger = logger;
             this.generateTemplateComposer = generateTemplateComposer;
         }
 

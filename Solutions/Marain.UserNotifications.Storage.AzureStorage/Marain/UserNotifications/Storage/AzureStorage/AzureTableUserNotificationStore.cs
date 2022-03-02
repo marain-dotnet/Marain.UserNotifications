@@ -9,12 +9,15 @@ namespace Marain.UserNotifications.Storage.AzureStorage
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
+
     using Azure;
-    using Azure.Core;
     using Azure.Data.Tables;
+
     using Corvus.Extensions.Json;
+
     using Marain.UserNotifications;
     using Marain.UserNotifications.Storage.AzureStorage.Internal;
+
     using Microsoft.Extensions.Logging;
 
     /// <summary>

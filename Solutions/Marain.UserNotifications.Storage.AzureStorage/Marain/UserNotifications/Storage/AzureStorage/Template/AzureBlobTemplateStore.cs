@@ -48,7 +48,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         public async Task<(T Template, string? ETag)> GetAsync<T>(string notificationType, CommunicationType communicationType)
         {
             // Gets the blob reference by the notificationType
-            BlobClient blob = this.blobContainer.GetBlobClient(this.GetBlockBlobName(notificationType, communicationType));
+            BlobClient blob = this.blobContainer.GetBlobClient(GetBlockBlobName(notificationType, communicationType));
 
             try
             {
@@ -62,7 +62,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
             catch (RequestFailedException ex)
             when (ex.Status == 404)
             {
-                throw new NotificationTemplateNotFoundException(this.GetBlockBlobName(notificationType, communicationType));
+                throw new NotificationTemplateNotFoundException(GetBlockBlobName(notificationType, communicationType));
             }
         }
 
@@ -72,7 +72,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
             this.logger.LogDebug("CreateOrUpdate: Storing template for notification type ", notificationType);
 
             // Gets the blob reference by the NotificationType
-            BlobClient blockBlob = this.blobContainer.GetBlobClient(this.GetBlockBlobName(notificationType, communicationType));
+            BlobClient blockBlob = this.blobContainer.GetBlobClient(GetBlockBlobName(notificationType, communicationType));
 
             // Serialise the TemplateWrapper object
             string templateBlob = JsonConvert.SerializeObject(template, this.serializerSettingsProvider.Instance);
@@ -101,7 +101,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
             return template;
         }
 
-        private string GetBlockBlobName(string notificationType, CommunicationType communicationType)
+        private static string GetBlockBlobName(string notificationType, CommunicationType communicationType)
         {
             return $"{notificationType}:{communicationType}";
         }

@@ -2,6 +2,8 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
+#pragma warning disable CA1822 // Mark members as static - protected members don't use 'this' today but might in the future
+
 namespace Marain.UserNotifications.Client
 {
     using System;
@@ -68,8 +70,8 @@ namespace Marain.UserNotifications.Client
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
-            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            T result = await JsonSerializer.DeserializeAsync<T>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+            using Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            T result = await JsonSerializer.DeserializeAsync<T>(contentStream, this.SerializerOptions, cancellationToken).ConfigureAwait(false);
 
             return new ApiResponse<T>(
                 response.StatusCode,
@@ -186,7 +188,7 @@ namespace Marain.UserNotifications.Client
             {
                 string responseContent = (response is null || response.Content is null)
                     ? string.Empty
-                    : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    : await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
                 throw new UserNotificationsApiException("Unexpected error when calling service; see InnerException for details.", ex)
                 {

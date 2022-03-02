@@ -23,6 +23,6 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
         }
 
         /// <inheritdoc/>
-        public AirshipClient GetAirshipClient(string applicationKey, string masterSecret) => new AirshipClient(this.httpClient, applicationKey, masterSecret);
+        public AirshipClient GetAirshipClient(string applicationKey, string masterSecret) => new(this.httpClient, applicationKey, masterSecret);
     }
 }

@@ -5,10 +5,9 @@
 namespace Benchmarks
 {
     using System;
-    using System.Net.Http;
     using System.Threading.Tasks;
+
     using BenchmarkDotNet.Attributes;
-    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Benchmarks for the API delivery channel.

@@ -8,11 +8,12 @@ namespace Marain.UserNotifications
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics;
-    using System.Security.Cryptography;
-    using System.Text;
+
     using Corvus.Json;
+
     using Marain.Helpers;
     using Marain.Models;
+
     using Newtonsoft.Json;
 
     /// <summary>
@@ -39,15 +40,13 @@ namespace Marain.UserNotifications
             DateTimeOffset timestamp,
             IPropertyBag properties,
             UserNotificationMetadata metadata,
-#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
             IEnumerable<UserNotificationStatus>? channelStatuses = null,
             Dictionary<CommunicationType, string>? deliveryChannelConfiguredPerCommunicationType = null)
-#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         {
             this.Id = id;
             this.NotificationType = notificationType ?? throw new ArgumentNullException(nameof(notificationType));
             this.UserId = userId ?? throw new ArgumentNullException(nameof(userId));
-            this.Timestamp = timestamp != default ? timestamp.ToUniversalTime() : throw new ArgumentException(nameof(timestamp));
+            this.Timestamp = timestamp != default ? timestamp.ToUniversalTime() : throw new ArgumentException("Timestamp must not be zero", nameof(timestamp));
             this.Properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
             this.ChannelStatuses = channelStatuses?.ToImmutableArray() ?? ImmutableArray<UserNotificationStatus>.Empty;

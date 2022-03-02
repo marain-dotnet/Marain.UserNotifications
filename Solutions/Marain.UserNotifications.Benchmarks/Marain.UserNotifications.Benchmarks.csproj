@@ -13,10 +13,29 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
-    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <!--
+    The reference to Microsoft.CodeAnalysis.CSharp is to prevent warnings from appearing for this project
+    in Visual Studio 2022. With version 17.1.0, and with version 6.0.200 of the .NET SDK installed, Visual
+    Studio was producing CS8032 warnings with this message:
+    
+    An instance of analyzer Microsoft.CodeAnalysis.CSharp.Analyzers.MetaAnalyzers.CSharpDiagnosticAnalyzerFieldsAnalyzer cannot be created from C:\Users\xyzzy\.nuget\packages\microsoft.codeanalysis.analyzers\2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll: Could not load type 'Microsoft.CodeAnalysis.Analyzers.MetaAnalyzers.DiagnosticAnalyzerFieldsAnalyzer`4' from assembly 'Microsoft.CodeAnalysis.Analyzers, Version=3.3.3.10305, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.
+    
+    These only appear in Visual Studio's Error List window. They don't appear in the build output, either in build agents
+    or in VS. They seem to be errors categorized under "IntelliSense" which generally means they came from the dynamic,
+    continuous execution of analyzers against the current code (including any unsaved edits), and not from a real build.
+    This appears to be an upshot of BenchmarkDotNet v0.13.1 having a dependency on Microsoft.CodeAnalysis.CSharp. It specifies
+    a version >= 2.10.0, and in the absence of any other requests, 2.10.0 is what we get. But that's quite old, and appears
+    to cause a conflict when code analyzers run in VS, because they are built for newer versions.
+    It's not clear why Visual Studio wouldn't just load versions of these libraries consistent with the compiler being
+    used by the tool chain. It might be a bug - apparently this problem surfaces from time to time, and often goes away
+    again with subsequent releases of Visual Studio:
+    https://docs.microsoft.com/en-us/answers/questions/244179/microsoftcodeanalysis-problem.html
+    It's also possible that some future release of BenchmarkDotNet will make this problem go away.
+    So it might be that we will be able to remove this reference to Microsoft.CodeAnalysis.CSharp again at some point
+    in the future. We don't really want it in here - it's not like this project uses that library directly. It's just
+    necessary with the current versions of everything on 2nd March 2022 if we are to avoid spurious warnings in VS.
+    -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="[6.0.*,)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="[6.0.*,)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="[6.0.*,)" />
