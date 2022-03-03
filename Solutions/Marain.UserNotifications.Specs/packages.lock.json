@@ -1421,8 +1421,8 @@
       },
       "Microsoft.NET.Sdk.Functions": {
         "type": "Transitive",
-        "resolved": "4.0.1",
-        "contentHash": "ETL2yIoB66dUBorl0cllKHXuK1ItXDgC68AhzXX7amnQNv/rG+zS+ivLs7xpczhXq1Tkcdr02rPGoE0X7HTBwQ==",
+        "resolved": "4.1.0",
+        "contentHash": "ycPJA1emOWi5p/gxiPhaWJD9Lxc7S6dAU5fbhopOtd25VoWZPx62J7Hqk5RdpiWsRAuxWPSIs4WdJF3oYaHVLg==",
         "dependencies": {
           "Microsoft.Azure.Functions.Analyzers": "[1.0.0, 2.0.0)",
           "Microsoft.Azure.WebJobs": "[3.0.23, 3.1.0)",
@@ -3197,7 +3197,7 @@
         "dependencies": {
           "Marain.UserNotifications.Hosting.AspNetCore": "1.0.0",
           "Microsoft.Azure.Functions.Extensions": "1.1.0",
-          "Microsoft.NET.Sdk.Functions": "4.0.1"
+          "Microsoft.NET.Sdk.Functions": "4.1.0"
         }
       },
       "marain.usernotifications.client": {
@@ -3234,7 +3234,7 @@
           "Marain.UserNotifications.ThirdParty.DeliveryChannels": "1.0.0",
           "Microsoft.Azure.Functions.Extensions": "1.1.0",
           "Microsoft.Azure.WebJobs.Extensions.DurableTask": "2.6.1",
-          "Microsoft.NET.Sdk.Functions": "4.0.1"
+          "Microsoft.NET.Sdk.Functions": "4.1.0"
         }
       },
       "marain.usernotifications.openapi": {
