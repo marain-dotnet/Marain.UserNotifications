@@ -24,9 +24,9 @@
       },
       "Microsoft.NET.Sdk.Functions": {
         "type": "Direct",
-        "requested": "[4.0.1, )",
-        "resolved": "4.0.1",
-        "contentHash": "ETL2yIoB66dUBorl0cllKHXuK1ItXDgC68AhzXX7amnQNv/rG+zS+ivLs7xpczhXq1Tkcdr02rPGoE0X7HTBwQ==",
+        "requested": "[4.1.0, )",
+        "resolved": "4.1.0",
+        "contentHash": "ycPJA1emOWi5p/gxiPhaWJD9Lxc7S6dAU5fbhopOtd25VoWZPx62J7Hqk5RdpiWsRAuxWPSIs4WdJF3oYaHVLg==",
         "dependencies": {
           "Microsoft.Azure.Functions.Analyzers": "[1.0.0, 2.0.0)",
           "Microsoft.Azure.WebJobs": "[3.0.23, 3.1.0)",
@@ -35,6 +35,12 @@
           "Microsoft.Azure.WebJobs.Script.ExtensionsMetadataGenerator": "4.0.1",
           "Newtonsoft.Json": "11.0.2"
         }
+      },
+      "Microsoft.VisualStudio.Threading.Analyzers": {
+        "type": "Direct",
+        "requested": "[17.1.46, )",
+        "resolved": "17.1.46",
+        "contentHash": "7pImoMcQaWZYAwu1aDBB8yBkvgad13yjrRHQ65pwHMX757vZ49OrNaEuRSLDu2PjZGonsTkQAJK8JK4W/wW4bw=="
       },
       "Roslynator.Analyzers": {
         "type": "Direct",
@@ -333,8 +339,8 @@
       },
       "Marain.Operations.ControlClient": {
         "type": "Transitive",
-        "resolved": "2.0.0",
-        "contentHash": "iVnxjZrDEAv+J47t3gWc7qzpPpSxJlv6rHdPEMdaAqaFfHEeWYbynZeA2QOyEE6I6Azn9UVrLuYrLMOc5ShVkg==",
+        "resolved": "2.0.2",
+        "contentHash": "g67vFkJ+ZjtX+9bag7Qm9nWskoQfgFv2CW5oOvigv3kllFgnn6ZRAUHE0yaGudEoUHP8aEiXTgylN8Vud/jsmQ==",
         "dependencies": {
           "Corvus.Identity.MicrosoftRest": "3.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
@@ -352,8 +358,8 @@
       },
       "Marain.Tenancy.Client": {
         "type": "Transitive",
-        "resolved": "2.0.4",
-        "contentHash": "lAbgRQOj0vdtljeQ1al0z8YpKjXpWE1RK4cmbJJ+FefYgLKyjAzINHWvTtDxLCxgXbMRtSuTaEegn1W09yQbzA==",
+        "resolved": "2.0.5",
+        "contentHash": "sRQWtVmNv61p+qTvndnq0/TRNxwWC/Y8U+7b2Fi1rZOYe/7VeGsaX98ml/+v7u/GYbHF3zbU48KAwAYFCJhjuw==",
         "dependencies": {
           "CacheCow.Client": "2.9.0",
           "Corvus.ContentHandling.Json": "2.0.11",
@@ -365,11 +371,11 @@
       },
       "Marain.Tenancy.ClientTenantProvider": {
         "type": "Transitive",
-        "resolved": "2.0.4",
-        "contentHash": "rEqjiKm+z0e/y5KMr8F+5FC4QvfUnPzkzYYXjgNNdsRAFiqPLbezlERjnhi/HQgrNesZvSgQBzAYvFUp3SGsrQ==",
+        "resolved": "2.0.5",
+        "contentHash": "SfvwnOvdz5i+GIZ4GJU/Fze5Cg0AzEenIavi5jxSSQcy9olzUc+HfeTf1T7JLBVCMYQryWWYP4ZViEXsyQew6g==",
         "dependencies": {
-          "Corvus.Tenancy.Abstractions": "3.0.0",
-          "Marain.Tenancy.Client": "2.0.4",
+          "Corvus.Tenancy.Abstractions": "3.2.0",
+          "Marain.Tenancy.Client": "2.0.5",
           "Microsoft.AspNetCore.WebUtilities": "2.2.0"
         }
       },
@@ -386,8 +392,8 @@
       },
       "Menes.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.1.2",
-        "contentHash": "igOUpLSuVJRP6uTepqn88q5hf4YqKJvmmpyM1vDGg4UOL4sR3mT2brWtWNDR9X2Xxnc+RUMEhXhiVGTzsldgpg==",
+        "resolved": "3.1.3",
+        "contentHash": "YN2hawnAXFzjdjgk1CLobnxUej96X6guM4eL7pK3objQ3kR1jgveirVFUipBul4FG7H+1uWSyl/z6PIbF4zdnA==",
         "dependencies": {
           "Corvus.ContentHandling": "2.0.11",
           "Corvus.Extensions": "1.1.4",
@@ -403,18 +409,18 @@
       },
       "Menes.Hosting": {
         "type": "Transitive",
-        "resolved": "3.1.2",
-        "contentHash": "+/WynRoi4DVh8El+kFmq/cIAaVJVTWXZV7XVtffkfPUKVI1y5XHB1kHZ/L6LpxFk/nbHF+9jsH2MMrYOA9LggQ==",
+        "resolved": "3.1.3",
+        "contentHash": "FKCCsuWpI3qkrOt0Grphlr2sk5SAK1qcDm3ZvwaWekXJj7tBFEw/C29tDhDtIUy/2WFjlHYx9MR+OQnrViJIOA==",
         "dependencies": {
-          "Menes.Abstractions": "3.1.2"
+          "Menes.Abstractions": "3.1.3"
         }
       },
       "Menes.Hosting.AspNetCore": {
         "type": "Transitive",
-        "resolved": "3.1.2",
-        "contentHash": "hKpy3mt8IxehYPnJedFH3Cj5z5NIrRriWDrhmVZsVMNQ5MHsvm1ruyIiB6gGI2I2Z4ApOLeSvxiMIfhdicHK1Q==",
+        "resolved": "3.1.3",
+        "contentHash": "OdU1rXNw20AomA8xH6DLX7SHB1zF/2GdAHZnqsIVIdsoL7A68sh6B0QyrikSv5yz1dzSBrMDa2zY9/23EGRVzA==",
         "dependencies": {
-          "Menes.Hosting": "3.1.2"
+          "Menes.Hosting": "3.1.3"
         }
       },
       "Microsoft.ApplicationInsights": {
@@ -2641,7 +2647,7 @@
         "type": "Project",
         "dependencies": {
           "Corvus.Json.Abstractions": "2.0.6",
-          "Corvus.Tenancy.Abstractions": "3.0.1"
+          "Corvus.Tenancy.Abstractions": "3.2.0"
         }
       },
       "marain.usernotifications.client": {
@@ -2661,12 +2667,12 @@
         "type": "Project",
         "dependencies": {
           "Corvus.Monitoring.ApplicationInsights": "1.3.2",
-          "Marain.Operations.ControlClient": "2.0.0",
-          "Marain.Tenancy.ClientTenantProvider": "2.0.4",
+          "Marain.Operations.ControlClient": "2.0.2",
+          "Marain.Tenancy.ClientTenantProvider": "2.0.5",
           "Marain.UserNotifications.Client": "1.0.0",
           "Marain.UserNotifications.OpenApi": "1.0.0",
           "Marain.UserNotifications.Storage.AzureStorage": "1.0.0",
-          "Menes.Hosting.AspNetCore": "3.1.2"
+          "Menes.Hosting.AspNetCore": "3.1.3"
         }
       },
       "marain.usernotifications.openapi": {
@@ -2675,8 +2681,8 @@
           "Marain.Services.Tenancy": "2.3.3",
           "Marain.UserNotifications.Abstractions": "1.0.0",
           "Marain.UserNotifications.Client": "1.0.0",
-          "Menes.Abstractions": "3.1.2",
-          "Menes.Hosting": "3.1.2"
+          "Menes.Abstractions": "3.1.3",
+          "Menes.Hosting": "3.1.3"
         }
       },
       "marain.usernotifications.storage.azurestorage": {
