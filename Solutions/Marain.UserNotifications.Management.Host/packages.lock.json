@@ -63,9 +63,9 @@
       },
       "Microsoft.VisualStudio.Threading.Analyzers": {
         "type": "Direct",
-        "requested": "[17.0.64, )",
-        "resolved": "17.0.64",
-        "contentHash": "+xz3lAqA3h2/5q6H7Udmz9TsxDQ99O+PjoQ4k4BTO3SfAfyJX7ejh7I1D1N/M/GzGUci9YOUpr6KBO4vXLg+zQ=="
+        "requested": "[17.1.46, )",
+        "resolved": "17.1.46",
+        "contentHash": "7pImoMcQaWZYAwu1aDBB8yBkvgad13yjrRHQ65pwHMX757vZ49OrNaEuRSLDu2PjZGonsTkQAJK8JK4W/wW4bw=="
       },
       "Roslynator.Analyzers": {
         "type": "Direct",

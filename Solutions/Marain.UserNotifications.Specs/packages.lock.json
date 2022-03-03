@@ -62,6 +62,12 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.13"
         }
       },
+      "Microsoft.VisualStudio.Threading.Analyzers": {
+        "type": "Direct",
+        "requested": "[17.1.46, )",
+        "resolved": "17.1.46",
+        "contentHash": "7pImoMcQaWZYAwu1aDBB8yBkvgad13yjrRHQ65pwHMX757vZ49OrNaEuRSLDu2PjZGonsTkQAJK8JK4W/wW4bw=="
+      },
       "Roslynator.Analyzers": {
         "type": "Direct",
         "requested": "[4.0.2, )",

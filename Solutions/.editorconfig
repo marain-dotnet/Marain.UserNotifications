@@ -108,3 +108,6 @@ dotnet_diagnostic.RCS1194.severity = None
 
 # Localize string constants - apps that want localization can turn this back on
 dotnet_diagnostic.CA1303.severity = None
+
+# Use Async suffix for awaitable methods - already committed to names without this, so a bit late to change
+dotnet_diagnostic.VSTHRD200.severity = None
