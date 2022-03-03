@@ -20,9 +20,9 @@ namespace Marain.UserNotifications.Specs.Bindings
 
         public const int ApiDeliveryChannelPort = 7001;
 
-        public static readonly Uri ManagementApiBaseUri = new Uri($"http://localhost:{ManagementApiPort}");
+        public static readonly Uri ManagementApiBaseUri = new($"http://localhost:{ManagementApiPort}");
 
-        public static readonly Uri ApiDeliveryChannelBaseUri = new Uri($"http://localhost:{ApiDeliveryChannelPort}");
+        public static readonly Uri ApiDeliveryChannelBaseUri = new($"http://localhost:{ApiDeliveryChannelPort}");
 
         [BeforeFeature("useApis", Order = BindingSequence.FunctionStartup)]
         public static Task StartManagementApi(FeatureContext featureContext)

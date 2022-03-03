@@ -126,7 +126,7 @@ namespace Marain.UserNotifications
 
             var builder = deliveryStatuses.ToBuilder();
 
-            if (!(existingStatusForChannel is null))
+            if (existingStatusForChannel is not null)
             {
                 builder.Remove(existingStatusForChannel);
                 builder.Add(existingStatusForChannel.WithDeliveryStatus(newDeliveryStatus, effectiveDateTime, failureReason));
@@ -182,7 +182,7 @@ namespace Marain.UserNotifications
 
             var builder = deliveryStatuses.ToBuilder();
 
-            if (!(existingStatusForChannel is null))
+            if (existingStatusForChannel is not null)
             {
                 builder.Remove(existingStatusForChannel);
                 builder.Add(existingStatusForChannel.WithReadStatus(newReadStatus, effectiveDateTime));

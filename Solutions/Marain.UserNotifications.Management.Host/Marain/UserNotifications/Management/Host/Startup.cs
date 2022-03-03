@@ -6,7 +6,6 @@
 
 namespace Marain.UserNotifications.Management.Host
 {
-    using System.Net.Http;
     using Marain.Extensions.DependencyInjection;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
@@ -15,7 +14,9 @@ namespace Marain.UserNotifications.Management.Host
     using Marain.UserNotifications.Management.Host.Mappers;
     using Marain.UserNotifications.Management.Host.OpenApi;
     using Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship;
+
     using Menes;
+
     using Microsoft.Azure.Functions.Extensions.DependencyInjection;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
     using Microsoft.Extensions.Configuration;

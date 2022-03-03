@@ -6,14 +6,16 @@ namespace Marain.UserNotifications.Management.Host.OpenApi
 {
     using System;
     using System.Threading.Tasks;
+
     using Corvus.Tenancy;
+
     using Marain.Models;
     using Marain.NotificationTemplates;
     using Marain.NotificationTemplates.CommunicationTemplates;
     using Marain.Services.Tenancy;
+
     using Menes;
     using Menes.Exceptions;
-    using Microsoft.Azure.Storage;
 
     /// <summary>
     /// Implements the create or update template endpoint for the management API.

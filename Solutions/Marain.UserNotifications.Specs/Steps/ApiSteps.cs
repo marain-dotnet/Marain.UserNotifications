@@ -149,7 +149,7 @@ namespace Marain.UserNotifications.Specs.Steps
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
             Uri operationLocation = response.Headers.Location!;
 
-            return this.LongRunningOperationPropertyCheck(
+            return LongRunningOperationPropertyCheck(
                 operationLocation,
                 operationPropertyPath,
                 timeout,
@@ -168,7 +168,7 @@ namespace Marain.UserNotifications.Specs.Steps
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
             Uri operationLocation = response.Headers.Location!;
 
-            return this.LongRunningOperationPropertyCheck(
+            return LongRunningOperationPropertyCheck(
                 operationLocation,
                 operationPropertyPath,
                 timeout,
@@ -187,7 +187,7 @@ namespace Marain.UserNotifications.Specs.Steps
             HttpResponseMessage response = this.scenarioContext.Get<HttpResponseMessage>();
             Uri operationLocation = response.Headers.Location!;
 
-            return this.LongRunningOperationPropertyCheck(
+            return LongRunningOperationPropertyCheck(
                 operationLocation,
                 operationPropertyPath,
                 timeout,
@@ -361,7 +361,7 @@ namespace Marain.UserNotifications.Specs.Steps
             Assert.IsFalse(string.IsNullOrWhiteSpace(eTag));
         }
 
-        private Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)
+        private static Task LongRunningOperationPropertyCheck(Uri location, string operationPropertyPath, int timeoutSeconds, Action<string> testValue)
         {
             var tokenSource = new CancellationTokenSource();
             tokenSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
@@ -423,27 +423,11 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        private async Task SendPutRequest(StringContent requestContent, string path)
-        {
-            HttpResponseMessage response = await HttpClient.PutAsync(
-                new Uri(FunctionsApiBindings.ManagementApiBaseUri, path),
-                requestContent).ConfigureAwait(false);
-
-            this.scenarioContext.Set(response);
-
-            string responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (!string.IsNullOrEmpty(responseContent))
-            {
-                this.scenarioContext.Set(responseContent, ResponseContent);
-            }
-        }
-
         private async Task SendPostRequest(Uri baseUri, string path, object? data)
         {
             HttpContent? content = null;
 
-            if (!(data is null))
+            if (data is not null)
             {
                 IJsonSerializerSettingsProvider serializerSettingsProvider = this.serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>();
                 string requestJson = JsonConvert.SerializeObject(data, serializerSettingsProvider.Instance);

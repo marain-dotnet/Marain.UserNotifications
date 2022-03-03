@@ -5,10 +5,9 @@
 namespace Marain.UserNotifications.Client.Management.Resources.CommunicationTemplates
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Text.Json;
     using System.Text.Json.Serialization;
+
     using Menes.Hal;
 
     /// <summary>

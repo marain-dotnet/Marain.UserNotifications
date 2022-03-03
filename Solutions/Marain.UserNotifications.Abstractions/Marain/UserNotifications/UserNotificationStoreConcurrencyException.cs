@@ -2,8 +2,6 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-#pragma warning disable RCS1194 // Roslynator's 'all the constructors' fixation
-
 namespace Marain.UserNotifications
 {
     using System;

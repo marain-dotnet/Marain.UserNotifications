@@ -121,7 +121,9 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
 
                 if (notificationsToMarkAsDelivered.Any())
                 {
-                    this.logger.LogDebug($"Updating notification state to 'Delivered' for {notificationsToMarkAsDelivered.Count()} notifications.");
+                    this.logger.LogDebug(
+                        "Updating notification state to 'Delivered' for {NotificationsMarkedAsDeliveredCount} notifications.",
+                        notificationsToMarkAsDelivered.Count());
 
                     DateTimeOffset timestamp = DateTimeOffset.UtcNow;
                     IEnumerable<BatchDeliveryStatusUpdateRequestItem> deliveryStatusUpdateBatch = notificationsToMarkAsDelivered.Select(
@@ -144,7 +146,8 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
                         CancellationToken.None).ConfigureAwait(false);
 
                     this.logger.LogInformation(
-                        $"Sent request to update notification delivery status; long running operation Url is {response.Headers["Location"]}");
+                        "Sent request to update notification delivery status; long running operation Url is {UpdateStatusUrl}",
+                        response.Headers["Location"]);
                 }
             }
             catch (Exception ex)
@@ -165,7 +168,7 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
 
             try
             {
-                this.logger.LogDebug($"Retrieving notifications for user {userId}");
+                this.logger.LogDebug("Retrieving notifications for user {UserId}", userId);
                 results = string.IsNullOrEmpty(continuationToken)
                                     ? await userNotificationStore.GetAsync(userId, sinceNotificationId, maxItems).ConfigureAwait(false)
                                     : await userNotificationStore.GetAsync(userId, continuationToken).ConfigureAwait(false);

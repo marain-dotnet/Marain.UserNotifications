@@ -6,8 +6,6 @@ namespace Marain.UserNotifications.Client.Management.Requests
 {
     using System;
     using System.Collections.Generic;
-    using Corvus.Json;
-    using Marain.UserNotifications.Client.Management.Resources;
 
     /// <summary>
     /// Request to create a new notification with communication type and configured delivery channel.

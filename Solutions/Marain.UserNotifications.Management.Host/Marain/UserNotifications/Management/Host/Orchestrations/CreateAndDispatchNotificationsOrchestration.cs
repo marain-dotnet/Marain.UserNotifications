@@ -2,16 +2,16 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-#pragma warning disable RCS1090 // Call 'ConfigureAwait(false)'
 namespace Marain.UserNotifications.Management.Host.Orchestrations
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Marain.UserNotifications.Management.Host.Activities;
     using Marain.UserNotifications.Management.Host.Helpers;
     using Marain.UserNotifications.Management.Host.Models;
-    using Marain.UserNotifications.Management.Host.OpenApi;
+
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.DurableTask;
     using Microsoft.Extensions.Logging;

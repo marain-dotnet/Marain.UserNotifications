@@ -11,7 +11,10 @@ namespace Marain.UserNotifications.Specs.Steps
     using System.Threading;
     using System.Threading.Tasks;
     using Corvus.Extensions.Json;
+    using Corvus.Tenancy;
     using Corvus.Testing.SpecFlow;
+
+    using Marain.TenantManagement;
     using Marain.UserNotifications.Client;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.ApiDeliveryChannel.Resources;
@@ -95,13 +98,13 @@ namespace Marain.UserNotifications.Specs.Steps
         [When("I use the client to send an API delivery request with an non-existent tenant Id for notifications for the user with Id '(.*)'")]
         public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestWithAnNon_ExistentTenantIdForNotificationsForTheUserWithId(string userId)
         {
-            string transientTenantId = this.featureContext.GetTransientTenantId();
+            string nonExistentTenantId = WellKnownTenantIds.ClientTenantParentId.CreateChildId(null);
             IUserNotificationsApiDeliveryChannelClient client = this.serviceProvider.GetRequiredService<IUserNotificationsApiDeliveryChannelClient>();
 
             try
             {
                 ApiResponse<PagedNotificationListResource> result = await client.GetUserNotificationsAsync(
-                    "75b9261673c2714681f14c97bc0439fb0000a5fa332426462456245252435600",
+                    nonExistentTenantId,
                     userId,
                     null,
                     null).ConfigureAwait(false);
@@ -319,7 +322,7 @@ namespace Marain.UserNotifications.Specs.Steps
             string transientTenantId = this.featureContext.GetTransientTenantId();
             IUserNotificationsManagementClient client = this.serviceProvider.GetRequiredService<IUserNotificationsManagementClient>();
 
-            Enum.TryParse(communicationType, out CommunicationType communicationTypeEnum);
+            CommunicationType communicationTypeEnum = Enum.Parse<CommunicationType>(communicationType);
 
             try
             {
@@ -417,7 +420,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public async Task WhenIUseTheClientToSendAnAPIDeliveryRequestForAPagedListOfNotificationsUsingTheLinkCalledFromThePreviousAPIDeliveryChannelResponse(string linkRelationName)
         {
             PagedNotificationListResource previousResponseBody = this.GetApiResponseBody<PagedNotificationListResource>();
-            WebLink nextLink = previousResponseBody.EnumerateLinks("next").Single();
+            WebLink nextLink = previousResponseBody.EnumerateLinks(linkRelationName).Single();
 
             IUserNotificationsApiDeliveryChannelClient client = this.serviceProvider.GetRequiredService<IUserNotificationsApiDeliveryChannelClient>();
 
@@ -537,7 +540,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public void ThenTheClientResponseForTheNotificationTemplatePropertyShouldNotBeNull(string propertyName)
         {
             NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
-            object? actualValue = this.GetPropertyValue(response, propertyName);
+            object? actualValue = GetPropertyValue(response, propertyName);
             Assert.IsNotNull(actualValue);
         }
 
@@ -545,7 +548,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public void ThenTheClientResponseForTheNotificationTemplatePropertyShouldBeNull(string propertyName)
         {
             NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
-            object? actualValue = this.GetPropertyValue(response, propertyName);
+            object? actualValue = GetPropertyValue(response, propertyName);
             Assert.IsNull(actualValue);
         }
 
@@ -553,7 +556,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public void ThenTheWebPushTemplateInTheUserManagementAPIResponseShouldHaveAWithValue(string propertyName, string expectedValue)
         {
             WebPushTemplateResource response = this.GetApiResponseBody<WebPushTemplateResource>();
-            object? actualValue = this.GetPropertyValue(response, propertyName);
+            object? actualValue = GetPropertyValue(response, propertyName);
             Assert.AreEqual(expectedValue, actualValue);
         }
 
@@ -561,7 +564,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public void ThenTheEmailTemplateInTheUserManagementAPIResponseShouldHaveAWithValue(string propertyName, string expectedValue)
         {
             EmailTemplateResource response = this.GetApiResponseBody<EmailTemplateResource>();
-            object? actualValue = this.GetPropertyValue(response, propertyName);
+            object? actualValue = GetPropertyValue(response, propertyName);
             Assert.AreEqual(expectedValue, actualValue);
         }
 
@@ -569,7 +572,7 @@ namespace Marain.UserNotifications.Specs.Steps
         public void ThenTheSmsTemplateInTheUserManagementAPIResponseShouldHaveAWithValue(string propertyName, string expectedValue)
         {
             SmsTemplateResource response = this.GetApiResponseBody<SmsTemplateResource>();
-            object? actualValue = this.GetPropertyValue(response, propertyName);
+            object? actualValue = GetPropertyValue(response, propertyName);
             Assert.AreEqual(expectedValue, actualValue);
         }
 
@@ -577,11 +580,11 @@ namespace Marain.UserNotifications.Specs.Steps
         public void ThenTheClientResponseForTheObjectWithPropertyShouldHaveAValueOf(string objectName, string propertyName, string propertyValue)
         {
             NotificationTemplate response = this.GetApiResponseBody<NotificationTemplate>();
-            object? objectValue = this.GetPropertyValue(response, objectName);
+            object? objectValue = GetPropertyValue(response, objectName);
 
             if (objectValue != null)
             {
-                object? propertyObjectValue = this.GetPropertyValue(objectValue, propertyName);
+                object? propertyObjectValue = GetPropertyValue(objectValue, propertyName);
                 Assert.AreEqual(propertyValue, propertyObjectValue);
             }
             else
@@ -651,7 +654,7 @@ namespace Marain.UserNotifications.Specs.Steps
             return this.scenarioContext.Get<T>(ApiResponseBodyKey);
         }
 
-        private object? GetPropertyValue(object src, string propName)
+        private static object? GetPropertyValue(object src, string propName)
         {
             return src?.GetType()?.GetProperty(propName)?.GetValue(src, null);
         }

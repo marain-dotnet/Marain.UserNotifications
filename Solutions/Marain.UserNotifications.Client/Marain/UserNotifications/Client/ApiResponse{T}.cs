@@ -17,8 +17,8 @@ namespace Marain.UserNotifications.Client
         /// Initializes a new instance of the <see cref="ApiResponse{T}"/> class.
         /// </summary>
         /// <param name="statusCode">The <see cref="ApiResponse.StatusCode"/>.</param>
-        /// <param name="headers">The <see cref="ApiResponse.Headers"/>.</param>
         /// <param name="body">The <see cref="Body"/>.</param>
+        /// <param name="headers">The <see cref="ApiResponse.Headers"/>.</param>
         public ApiResponse(HttpStatusCode statusCode, in T body, ImmutableDictionary<string, string> headers = null)
         {
             this.StatusCode = statusCode;

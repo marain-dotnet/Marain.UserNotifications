@@ -83,10 +83,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                 await testTable.DeleteAsync().ConfigureAwait(false);
             }).ConfigureAwait(false);
 
-            await featureContext.RunAndStoreExceptionsAsync(() =>
-            {
-                return tenantManager.CleanupAsync();
-            }).ConfigureAwait(false);
+            await featureContext.RunAndStoreExceptionsAsync(async () => await tenantManager.CleanupAsync()).ConfigureAwait(false);
         }
 
         /// <summary>

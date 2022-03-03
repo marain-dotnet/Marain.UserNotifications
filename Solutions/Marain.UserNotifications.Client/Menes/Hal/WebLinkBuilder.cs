@@ -26,7 +26,7 @@ namespace Menes.Hal
         /// <param name="type">The (optional) media type indication of the target resource.</param>
         /// <param name="hreflang">The (optional) language indication of the target resource [RFC5988].</param>
         /// <returns>A <see cref="WebLink"/> initialized with the specified values.</returns>
-        public WebLink CreateWebLink(string href, string? name = null, bool? isTemplated = null, string? title = null, string? profile = null, string? type = null, string? hreflang = null)
+        public static WebLink CreateWebLink(string href, string? name = null, bool? isTemplated = null, string? title = null, string? profile = null, string? type = null, string? hreflang = null)
         {
             if (href is null)
             {
@@ -54,7 +54,7 @@ namespace Menes.Hal
         /// <param name="type">The (optional) media type indication of the target resource.</param>
         /// <param name="hreflang">The (optional) language indication of the target resource [RFC5988].</param>
         /// <returns>A <see cref="WebLink"/> initialized with the specified values.</returns>
-        public WebLink CreateWebLink(ReadOnlySpan<char> href, ReadOnlySpan<char> name = default, bool isTemplated = default, ReadOnlySpan<char> title = default, ReadOnlySpan<char> profile = default, ReadOnlySpan<char> type = default, ReadOnlySpan<char> hreflang = default)
+        public static WebLink CreateWebLink(ReadOnlySpan<char> href, ReadOnlySpan<char> name = default, bool isTemplated = default, ReadOnlySpan<char> title = default, ReadOnlySpan<char> profile = default, ReadOnlySpan<char> type = default, ReadOnlySpan<char> hreflang = default)
         {
             using var stream = new MemoryStream();
             var writer = new Utf8JsonWriter(stream);
@@ -77,7 +77,7 @@ namespace Menes.Hal
         /// <param name="utf8Type">The (optional) media type indication of the target resource.</param>
         /// <param name="utf8Hreflang">The (optional) language indication of the target resource [RFC5988].</param>
         /// <returns>A <see cref="WebLink"/> initialized with the specified values.</returns>
-        public WebLink CreateWebLink(ReadOnlySpan<byte> utf8Href, ReadOnlySpan<byte> utf8Name = default, bool isTemplated = default, ReadOnlySpan<byte> utf8Title = default, ReadOnlySpan<byte> utf8Profile = default, ReadOnlySpan<byte> utf8Type = default, ReadOnlySpan<byte> utf8Hreflang = default)
+        public static WebLink CreateWebLink(ReadOnlySpan<byte> utf8Href, ReadOnlySpan<byte> utf8Name = default, bool isTemplated = default, ReadOnlySpan<byte> utf8Title = default, ReadOnlySpan<byte> utf8Profile = default, ReadOnlySpan<byte> utf8Type = default, ReadOnlySpan<byte> utf8Hreflang = default)
         {
             using var stream = new MemoryStream();
             var writer = new Utf8JsonWriter(stream);
@@ -100,7 +100,7 @@ namespace Menes.Hal
         /// <param name="type">The (optional) media type indication of the target resource.</param>
         /// <param name="hreflang">The (optional) language indication of the target resource [RFC5988].</param>
         /// <returns>A <see cref="WebLink"/> initialized with the specified values.</returns>
-        public WebLink CreateWebLink(in JsonElement href, in JsonElement name = default, in JsonElement isTemplated = default, in JsonElement title = default, in JsonElement profile = default, in JsonElement type = default, in JsonElement hreflang = default)
+        public static WebLink CreateWebLink(in JsonElement href, in JsonElement name = default, in JsonElement isTemplated = default, in JsonElement title = default, in JsonElement profile = default, in JsonElement type = default, in JsonElement hreflang = default)
         {
             using var stream = new MemoryStream();
             var writer = new Utf8JsonWriter(stream);

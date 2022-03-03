@@ -28,8 +28,8 @@ namespace Marain.UserNotifications.OpenApi.ApiDeliveryChannel
         /// <summary>
         /// Initializes a new instance of the <see cref="MarkNotificationAsReadService"/> class.
         /// </summary>
-        /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         /// <param name="managementApiClient">The client for the management API.</param>
+        /// <param name="marainServicesTenancy">Marain tenancy services.</param>
         public MarkNotificationAsReadService(
             IUserNotificationsManagementClient managementApiClient,
             IMarainServicesTenancy marainServicesTenancy)

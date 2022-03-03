@@ -21,11 +21,11 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
     /// </summary>
     public class AirshipClient : IAirshipClient
     {
-        private string baseUrl = "https://go.urbanairship.com";
-        private AsyncRetryPolicy<HttpResponseMessage> retryPolicy;
+        private const string BaseUrl = "https://go.urbanairship.com";
+        private readonly AsyncRetryPolicy<HttpResponseMessage> retryPolicy;
 
         // Exceptions to be handled by the retry policy
-        private HttpStatusCode[] httpStatusCodesWorthRetrying =
+        private readonly HttpStatusCode[] httpStatusCodesWorthRetrying =
          {
             HttpStatusCode.RequestTimeout, // 408
             HttpStatusCode.InternalServerError, // 500
@@ -89,7 +89,7 @@ namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship
 
             var request = new HttpRequestMessage()
             {
-                RequestUri = new Uri($"{this.baseUrl}/api/push"),
+                RequestUri = new Uri($"{BaseUrl}/api/push"),
                 Method = HttpMethod.Post,
                 Content = new StringContent(requestContent),
             };

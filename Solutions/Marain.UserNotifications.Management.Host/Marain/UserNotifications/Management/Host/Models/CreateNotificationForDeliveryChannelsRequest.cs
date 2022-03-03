@@ -22,9 +22,9 @@ namespace Marain.UserNotifications.Management.Host.Models
         /// <param name="notificationType">The <see cref="NotificationType" />.</param>
         /// <param name="userIds">The <see cref="UserIds" />.</param>
         /// <param name="timestamp">The <see cref="Timestamp" />.</param>
-        /// <param name="deliveryChannelConfiguredPerCommunicationType">The <see cref="DeliveryChannelConfiguredPerCommunicationType"/>.</param>
         /// <param name="properties">The <see cref="Properties" />.</param>
         /// <param name="correlationIds">The <see cref="CorrelationIds" />.</param>
+        /// <param name="deliveryChannelConfiguredPerCommunicationType">The <see cref="DeliveryChannelConfiguredPerCommunicationType"/>.</param>
         public CreateNotificationForDeliveryChannelsRequest(
             string notificationType,
             string[] userIds,

@@ -64,7 +64,7 @@ namespace Marain.UserNotifications.Management.Host.Mappers
                 "self",
                 ("tenantId", context.CurrentTenantId),
                 ("notificationType", resource.NotificationType),
-                ("communicationType", CommunicationType.Email.ToString()));
+                ("communicationType", nameof(CommunicationType.Email)));
 
             return new ValueTask<HalDocument>(response);
         }

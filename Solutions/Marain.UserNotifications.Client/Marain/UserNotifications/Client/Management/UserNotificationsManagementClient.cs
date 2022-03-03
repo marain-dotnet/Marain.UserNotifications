@@ -2,6 +2,8 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
+#pragma warning disable CA1822 // Mark members as static - protected members don't use 'this' today but might in the future
+
 namespace Marain.UserNotifications.Client.Management
 {
     using System;
@@ -110,7 +112,7 @@ namespace Marain.UserNotifications.Client.Management
                 throw new ArgumentNullException(nameof(notificationType));
             }
 
-            string communicationType = "webPush";
+            const string communicationType = "webPush";
 
             Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/templates?notificationType={notificationType}&communicationType={communicationType}");
 
@@ -118,9 +120,9 @@ namespace Marain.UserNotifications.Client.Management
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
-            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            using Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
 
-            WebPushTemplateResource result = await JsonSerializer.DeserializeAsync<WebPushTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+            WebPushTemplateResource result = await JsonSerializer.DeserializeAsync<WebPushTemplateResource>(contentStream, this.SerializerOptions, cancellationToken).ConfigureAwait(false);
 
             return new ApiResponse<WebPushTemplateResource>(
                response.StatusCode,
@@ -152,7 +154,7 @@ namespace Marain.UserNotifications.Client.Management
                 throw new ArgumentNullException(nameof(notificationType));
             }
 
-            string communicationType = "email";
+            const string communicationType = "email";
 
             Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/templates?notificationType={notificationType}&communicationType={communicationType}");
 
@@ -160,9 +162,9 @@ namespace Marain.UserNotifications.Client.Management
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
-            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            using Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
 
-            EmailTemplateResource result = await JsonSerializer.DeserializeAsync<EmailTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+            EmailTemplateResource result = await JsonSerializer.DeserializeAsync<EmailTemplateResource>(contentStream, this.SerializerOptions, cancellationToken).ConfigureAwait(false);
 
             return new ApiResponse<EmailTemplateResource>(
                response.StatusCode,
@@ -194,7 +196,7 @@ namespace Marain.UserNotifications.Client.Management
                 throw new ArgumentNullException(nameof(notificationType));
             }
 
-            string communicationType = "sms";
+            const string communicationType = "sms";
 
             Uri requestUri = this.ConstructUri($"/{tenantId}/marain/usernotifications/templates?notificationType={notificationType}&communicationType={communicationType}");
 
@@ -202,9 +204,9 @@ namespace Marain.UserNotifications.Client.Management
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
-            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            using Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
 
-            SmsTemplateResource result = await JsonSerializer.DeserializeAsync<SmsTemplateResource>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+            SmsTemplateResource result = await JsonSerializer.DeserializeAsync<SmsTemplateResource>(contentStream, this.SerializerOptions, cancellationToken).ConfigureAwait(false);
 
             return new ApiResponse<SmsTemplateResource>(
                response.StatusCode,
@@ -268,8 +270,8 @@ namespace Marain.UserNotifications.Client.Management
 
             HttpResponseMessage response = await this.SendRequestAndThrowOnFailure(request, cancellationToken).ConfigureAwait(false);
 
-            using Stream contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            NotificationTemplate result = await JsonSerializer.DeserializeAsync<NotificationTemplate>(contentStream, this.SerializerOptions).ConfigureAwait(false);
+            using Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            NotificationTemplate result = await JsonSerializer.DeserializeAsync<NotificationTemplate>(contentStream, this.SerializerOptions, cancellationToken).ConfigureAwait(false);
 
             return new ApiResponse<NotificationTemplate>(
                 response.StatusCode,

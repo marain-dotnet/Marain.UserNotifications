@@ -4,9 +4,8 @@
 
 namespace Marain.UserNotifications.ThirdParty.DeliveryChannels.Airship.Models
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
+
     using Newtonsoft.Json;
 
     /// <summary>
