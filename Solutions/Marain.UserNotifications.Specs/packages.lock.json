@@ -15,29 +15,16 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.22"
         }
       },
-      "Corvus.Testing.AzureFunctions.SpecFlow": {
+      "Corvus.Testing.AzureFunctions.SpecFlow.NUnit": {
         "type": "Direct",
-        "requested": "[1.4.10, )",
-        "resolved": "1.4.10",
-        "contentHash": "P5rh7XNivjpbrmdi3L5GBWcOXWfcgczsgiCZ2ehUKLBR9d15VnfeYQ1Bckdspz7WqUoHws4kkGQUfc8OntwAMQ==",
+        "requested": "[1.4.11, )",
+        "resolved": "1.4.11",
+        "contentHash": "HuxrBchE4W0nauKdfbN4asd0/zOdtiC4nGzUaTZdkvNvpK0168NOodvMH/9o5zVyFNt5VRUGVpapE5H7Uq2eFA==",
         "dependencies": {
-          "Corvus.Testing.AzureFunctions": "1.4.10",
-          "Corvus.Testing.SpecFlow": "1.4.10",
-          "Microsoft.Extensions.Logging.Console": "3.1.22",
-          "NUnit": "3.13.2",
-          "SpecFlow": "3.9.52"
-        }
-      },
-      "Corvus.Testing.SpecFlow.NUnit": {
-        "type": "Direct",
-        "requested": "[1.4.10, )",
-        "resolved": "1.4.10",
-        "contentHash": "qWb2ubOHrzp/avVlf+ZO43xL+N2bjsIv9QayGAzitwy7mKgpdbHcnz262r4zaSdhmBFAd+o32UEz8taVVa77XA==",
-        "dependencies": {
-          "Corvus.Testing.SpecFlow": "1.4.10",
+          "Corvus.Testing.AzureFunctions.SpecFlow": "1.4.11",
           "Microsoft.NET.Test.Sdk": "16.11.0",
-          "Moq": "4.17.1",
-          "SpecFlow.NUnit.Runners": "3.9.52",
+          "Moq": "4.17.2",
+          "SpecFlow.NUnit.Runners": "3.9.58",
           "coverlet.msbuild": "3.1.2"
         }
       },
@@ -392,23 +379,35 @@
       },
       "Corvus.Testing.AzureFunctions": {
         "type": "Transitive",
-        "resolved": "1.4.10",
-        "contentHash": "wCZ1ioc5jvysiipPirD3puSyhWtKENFPOy6s5J0FiIv+TBYE8OP9xG9ANCWZ8HD05oc9Eq0J+oOarWod8WpCwg==",
+        "resolved": "1.4.11",
+        "contentHash": "JU5dEhFkhDTOgiFTiHfcgNhyRaBv8Ud5nsKzTTfc9fx7Ug5FdWBYYZwavR/0l5SSyWd3QX42FRFDla+sZarauA==",
         "dependencies": {
-          "Microsoft.Extensions.Logging.Abstractions": "3.1.22",
+          "Microsoft.Extensions.Logging.Abstractions": "3.1.23",
           "System.Management": "4.7.0"
+        }
+      },
+      "Corvus.Testing.AzureFunctions.SpecFlow": {
+        "type": "Transitive",
+        "resolved": "1.4.11",
+        "contentHash": "wmELfaOQjYEaY8ARCBMjqTsvzHVF/nAbPrgBSuZI9eahD0Ni90mPcfD7gQyuqUmSqZmU0lMgiQHwTJsw2jDV8Q==",
+        "dependencies": {
+          "Corvus.Testing.AzureFunctions": "1.4.11",
+          "Corvus.Testing.SpecFlow": "1.4.11",
+          "Microsoft.Extensions.Logging.Console": "3.1.23",
+          "NUnit": "3.13.2",
+          "SpecFlow": "3.9.58"
         }
       },
       "Corvus.Testing.SpecFlow": {
         "type": "Transitive",
-        "resolved": "1.4.10",
-        "contentHash": "a+/w5W2A2tqIznq0dWROATqBcowJKgFERjSPQmYQ2m0/+LI9yiWz6eBM91ENEnLwyY8f5VptDYUvZfa4ycK58A==",
+        "resolved": "1.4.11",
+        "contentHash": "9gad0P5cJY0EOvSiA3JQ5hShaoA6YdgwVoi4H0RQIdfOUr5OOpWp/dD6BmhRNE4zmoFg8jB+VMBJqmA0LwVrDQ==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "3.1.22",
-          "Microsoft.Extensions.DependencyInjection": "3.1.22",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.22",
+          "Microsoft.Extensions.Configuration.Abstractions": "3.1.23",
+          "Microsoft.Extensions.DependencyInjection": "3.1.23",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.23",
           "NUnit": "3.13.2",
-          "SpecFlow": "3.9.52",
+          "SpecFlow": "3.9.58",
           "System.Management": "4.7.0"
         }
       },
@@ -1184,26 +1183,26 @@
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Transitive",
-        "resolved": "3.1.22",
-        "contentHash": "pk9tfTk3NCFdKqdWIWeoGAy/wiqVk38hA9Gso3c3deRLWqu4/5Jipp0X+fzgAXlELTN9AIxkkhRePTDFjBpQfQ==",
+        "resolved": "3.1.23",
+        "contentHash": "dSwOHfXimkWKpkzD+FpAJ0RZB4++bg1eyPyY2/RrkhzuN7QXrfP1y2ZN+6msoYZETkzZqvrIJ195xlzWSWg7IA==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "3.1.22"
+          "Microsoft.Extensions.Configuration.Abstractions": "3.1.23"
         }
       },
       "Microsoft.Extensions.Configuration.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.1.22",
-        "contentHash": "znkB/7CpLNzFPFrZP0dK5dLwLt/GgrDBdBCaTQvVAPAJdA96DkhizknBC5+vn0Le8JNOoGt4QlG7WMywswkA0w==",
+        "resolved": "3.1.23",
+        "contentHash": "kab/2n5NZ+65ECGG5W8cKUaKTS4HzLLR/g7FJnGPoBLNI8Byd0hgok4IXcLMiHwQjCPSldDTQFQFJvxiC6eR3Q==",
         "dependencies": {
-          "Microsoft.Extensions.Primitives": "3.1.22"
+          "Microsoft.Extensions.Primitives": "3.1.23"
         }
       },
       "Microsoft.Extensions.Configuration.Binder": {
         "type": "Transitive",
-        "resolved": "3.1.22",
-        "contentHash": "H1iZD70uzCqsX79Eza/a/Z+CkAhqGUPH7LNRCz3GJLyeFiJMTUU7rMPNUgkJ2tRxAN9f/3MTXuHpSQVikugC3g==",
+        "resolved": "3.1.23",
+        "contentHash": "hLtVF07HB/oVhEBtsF9a/gs4UHioHHgu1rPe8Zu4oEqXfX9PlUL2HR50uNNx1zjJc1iRjquTy1sRNfIptPfFDw==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration": "3.1.22"
+          "Microsoft.Extensions.Configuration": "3.1.23"
         }
       },
       "Microsoft.Extensions.Configuration.EnvironmentVariables": {
@@ -1333,21 +1332,21 @@
       },
       "Microsoft.Extensions.Logging.Configuration": {
         "type": "Transitive",
-        "resolved": "3.1.22",
-        "contentHash": "j4/ktr1coUddmVSwzx3F8yaOVebRyu+wMGyAui17wVoX2wiHRBSNCHOgtffmDZIfiCGIE357Ps3RbgxOPtRZZQ==",
+        "resolved": "3.1.23",
+        "contentHash": "kKPE717Xz19suOtX4oQr7uXErAxEoBb/HDIZj7bXsklBWKnO1wimvtElHVyH3eynwZq4KJqDEZVk/ytf65eBuQ==",
         "dependencies": {
-          "Microsoft.Extensions.Logging": "3.1.22",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "3.1.22"
+          "Microsoft.Extensions.Logging": "3.1.23",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "3.1.23"
         }
       },
       "Microsoft.Extensions.Logging.Console": {
         "type": "Transitive",
-        "resolved": "3.1.22",
-        "contentHash": "BMMLSxm1X4/KoMn3hnS9xqr0Zqive9A9RhYrBJpNNWmkcSqKaAvk02Gy6IQb4rh1t0imeMplwXoCuI9xCD4a5Q==",
+        "resolved": "3.1.23",
+        "contentHash": "1+hFLFFks3xDsLZefUpvwEhmhl040YQw0gQ6zdl2/d7KExHgRhWGvIHKsyZBd4d8Dx/mQBIddpQ5fIoBSXp08g==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "3.1.22",
-          "Microsoft.Extensions.Logging": "3.1.22",
-          "Microsoft.Extensions.Logging.Configuration": "3.1.22"
+          "Microsoft.Extensions.Configuration.Abstractions": "3.1.23",
+          "Microsoft.Extensions.Logging": "3.1.23",
+          "Microsoft.Extensions.Logging.Configuration": "3.1.23"
         }
       },
       "Microsoft.Extensions.ObjectPool": {
@@ -1366,13 +1365,13 @@
       },
       "Microsoft.Extensions.Options.ConfigurationExtensions": {
         "type": "Transitive",
-        "resolved": "3.1.22",
-        "contentHash": "dkCz+MybMd3q0r7U6d8KXeLI6Vlv7eNF2pjq2LKFixGKpg7N8/i+iXgQDlu06CuqoFTI1esjz9kbzk4nfWicQg==",
+        "resolved": "3.1.23",
+        "contentHash": "wCONmXWSH9A1psMP2Q/9dgGTDYXPqhdxhhIHVrOJIjaPsnZdmo4uGdhDauODo8+zMh/gyp2rddmWZ7vaTV1keQ==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "3.1.22",
-          "Microsoft.Extensions.Configuration.Binder": "3.1.22",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.22",
-          "Microsoft.Extensions.Options": "3.1.22"
+          "Microsoft.Extensions.Configuration.Abstractions": "3.1.23",
+          "Microsoft.Extensions.Configuration.Binder": "3.1.23",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.23",
+          "Microsoft.Extensions.Options": "3.1.23"
         }
       },
       "Microsoft.Extensions.Primitives": {
@@ -1561,8 +1560,8 @@
       },
       "Moq": {
         "type": "Transitive",
-        "resolved": "4.17.1",
-        "contentHash": "TzEvfuFC9Mcr49q6cEaSqLEQA8N2S6OFmj+7Vax21Q0uKSKKaM35tt+cmPfRZyyfx/NggfdTZRWv05mBhUaVLg==",
+        "resolved": "4.17.2",
+        "contentHash": "HytUPJ3/uks2UgJ9hIcyXm3YxpFAR4OJzbQwTHltbKGun3lFLhEHs97hiiPj1dY8jV/kasXeihTzDxct6Zf3iQ==",
         "dependencies": {
           "Castle.Core": "4.4.1",
           "System.Threading.Tasks.Extensions": "4.5.4"
@@ -1797,8 +1796,8 @@
       },
       "SpecFlow": {
         "type": "Transitive",
-        "resolved": "3.9.52",
-        "contentHash": "m/CtKdN+xRSfdGtWRsvNPoz5nhVEp0yqwVjILBvUf1kLAvZo/j2wxnHbVL5g3XzhOaNFdTx1jtk+WtfJJfbS4g==",
+        "resolved": "3.9.58",
+        "contentHash": "dHyOfnE00yapmXsStx08TqIKJITgOOaEKnvKZl3hhs8oEeCkx+vsIAQ43zmYAYvW/cUAw4yjIyIykZHuf2vIpQ==",
         "dependencies": {
           "BoDi": "1.5.0",
           "Gherkin": "19.0.3",
@@ -1816,30 +1815,30 @@
       },
       "SpecFlow.NUnit": {
         "type": "Transitive",
-        "resolved": "3.9.52",
-        "contentHash": "ba7ohjFwtywuUsk9eGcMouLUfAkq6UdT6Nd1kAsTDeiEx26KV2NFVmwgUqJ4tvPk842Fwg/5BkDJYX6FldRCmA==",
+        "resolved": "3.9.58",
+        "contentHash": "WqJrBrhtVjVGabCS9veWVJIz9SgJJZ//neakYBFpLbweVjOA+DPdfpWeJK/3ePJrxYurHA+VVowwPt8QPrYJxg==",
         "dependencies": {
           "NUnit": "3.13.1",
-          "SpecFlow": "[3.9.52]",
-          "SpecFlow.Tools.MsBuild.Generation": "[3.9.52]"
+          "SpecFlow": "[3.9.58]",
+          "SpecFlow.Tools.MsBuild.Generation": "[3.9.58]"
         }
       },
       "SpecFlow.NUnit.Runners": {
         "type": "Transitive",
-        "resolved": "3.9.52",
-        "contentHash": "f5xfVIEFYbYaaW2hcQyKqt8CFxzDK+V8TjNANfZTcpOhcS3tZI7n+RWF6pUZqQcs2fdRILJ+v/b4U4FDbxDRAA==",
+        "resolved": "3.9.58",
+        "contentHash": "GcPgTw5pdDEQ3LakB/3LyR0CtMU63g3ZVl6nwrDSsUn4RM+RqeigOX3oPQO2gnbggRO/zm3RuS7XjXjJb85Apw==",
         "dependencies": {
           "NUnit.Console": "3.12.0",
           "NUnit3TestAdapter": "3.17.0",
-          "SpecFlow.NUnit": "[3.9.52]"
+          "SpecFlow.NUnit": "[3.9.58]"
         }
       },
       "SpecFlow.Tools.MsBuild.Generation": {
         "type": "Transitive",
-        "resolved": "3.9.52",
-        "contentHash": "GD345e/lNdxZ3xt84NoR/GJKqpMMbQapTog0+mZyHGJUvFgt8lFlAgFsVI58Ge1jXLDqF5c9W7eRpk0ovCGMag==",
+        "resolved": "3.9.58",
+        "contentHash": "U66NXbgtLz9fLI1EqkEZpd71kpsmlLKJ/ibMobh308lx+NCcapNs3ORVrQinfYtCWAmrScXhTGkPsgqS1zIJeQ==",
         "dependencies": {
-          "SpecFlow": "[3.9.52]"
+          "SpecFlow": "[3.9.58]"
         }
       },
       "StyleCop.Analyzers.Unstable": {
