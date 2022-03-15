@@ -29,7 +29,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-        private string[] _featureTags = new string[] {
+        private static string[] featureTags = new string[] {
                 "perFeatureContainer",
                 "useApis",
                 "useTransientTenant"};
@@ -41,10 +41,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApiClient", "Create Notification For Third Party Delivery Channels via the client library", null, ProgrammingLanguage.CSharp, new string[] {
-                        "perFeatureContainer",
-                        "useApis",
-                        "useTransientTenant"});
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/ManagementApiClient", "Create Notification For Third Party Delivery Channels via the client library", null, ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -56,28 +53,28 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
         }
         
         [NUnit.Framework.SetUpAttribute()]
-        public virtual void TestInitialize()
+        public void TestInitialize()
         {
         }
         
         [NUnit.Framework.TearDownAttribute()]
-        public virtual void TestTearDown()
+        public void TestTearDown()
         {
             testRunner.OnScenarioEnd();
         }
         
-        public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
+        public void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
-        public virtual void ScenarioStart()
+        public void ScenarioStart()
         {
             testRunner.OnScenarioStart();
         }
         
-        public virtual void ScenarioCleanup()
+        public void ScenarioCleanup()
         {
             testRunner.CollectScenarioErrors();
         }
@@ -86,7 +83,7 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
         [NUnit.Framework.DescriptionAttribute("Create web push notifications")]
         [NUnit.Framework.TestCaseAttribute("Single user", "marain.test.notification.v1", "[\"304ABC0E-08AF-4EF5-A9AC-281B67D633F4\"]", "2012-03-19T07:22Z", "{ \"prop1\": \"val1\" }", "[\"id1\", \"id2\"]", "{ \"webPush\": \"airship\" }", null)]
         [NUnit.Framework.TestCaseAttribute("Multiple users", "marain.test.notification.v1", "[\"304ABC0E-08AF-4EF5-A9AC-281B67D633F4\", \"5547F9E1-A3B1-4D39-BFA9-73129EF475A9\"]", "2012-03-19T07:22Z", "{ \"prop1\": \"val1\" }", "[\"id1\", \"id2\"]", "{ \"webPush\": \"airship\" }", null)]
-        public virtual void CreateWebPushNotifications(string notes, string notificationType, string userIds, string timestamp, string propertiesJson, string correlationIds, string deliveryChannelConfiguredPerCommunicationType, string[] exampleTags)
+        public void CreateWebPushNotifications(string notes, string notificationType, string userIds, string timestamp, string propertiesJson, string correlationIds, string deliveryChannelConfiguredPerCommunicationType, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -97,21 +94,11 @@ namespace Marain.UserNotifications.Specs.Features.ManagementApiClient
             argumentsOfScenario.Add("PropertiesJson", propertiesJson);
             argumentsOfScenario.Add("CorrelationIds", correlationIds);
             argumentsOfScenario.Add("DeliveryChannelConfiguredPerCommunicationType", deliveryChannelConfiguredPerCommunicationType);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create web push notifications", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create web push notifications", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
             {
                 testRunner.SkipScenario();
             }
