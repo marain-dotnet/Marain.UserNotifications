@@ -5,8 +5,6 @@ trigger:
   tags:
     include:
     - '*'
-pr:
-- master
 
 resources:
   repositories:
