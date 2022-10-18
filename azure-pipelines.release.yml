@@ -8,6 +8,7 @@ resources:
       name: endjin/Endjin.RecommendedPractices.AzureDevopsPipelines.GitHub
       endpoint: marain-dotnet-github
 
+
 jobs:
 - template: templates/tag.for.release.yml@recommended_practices
   parameters:
