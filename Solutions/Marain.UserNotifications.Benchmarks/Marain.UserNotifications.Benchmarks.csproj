@@ -35,7 +35,7 @@
     in the future. We don't really want it in here - it's not like this project uses that library directly. It's just
     necessary with the current versions of everything on 2nd March 2022 if we are to avoid spurious warnings in VS.
     -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="[6.0.*,)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="[6.0.*,)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="[6.0.*,)" />
