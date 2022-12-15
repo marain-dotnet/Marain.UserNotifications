@@ -164,7 +164,9 @@ task PreVersion {}
 task PostVersion {}
 task PreBuild {}
 task PostBuild {}
-task PreTest {}
+task PreTest {
+    gci env:/ | ft -autosize | out-string | write-host
+}
 task PostTest {}
 task PreTestReport {}
 task PostTestReport {}
