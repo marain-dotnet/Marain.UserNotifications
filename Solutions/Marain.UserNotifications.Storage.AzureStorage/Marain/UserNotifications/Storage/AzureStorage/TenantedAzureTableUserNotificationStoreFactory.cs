@@ -23,7 +23,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// </summary>
         public const string TableName =  "usernotifications";
         private const string TemplatesV2ConfigurationKey = "StorageConfiguration__Table__" + TableName;
-        private const string TemplatesV3ConfigurationKey = "StorageConfigurationV3__" + TableName;
+        private const string TemplatesV3ConfigurationKey = "Marain:UserNotifications:TableConfiguration:UserNotifications";
 
         private readonly ILogger logger;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;

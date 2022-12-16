@@ -10,19 +10,15 @@
   ],
   "requiredConfigurationEntries": [
     {
-      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azuretablestorage",
-      "key": "userNotificationStore",
-      "containerDefinition": {
-        "tableName": "usernotifications"
-      },
+      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azuretablestorage.v3",
+      "key": "Marain:UserNotifications:TableConfiguration:UserNotificationsMarain:UserNotifications:TableConfiguration:UserNotifications",
+      "legacyV2Key": "StorageConfiguration__Table__usernotifications",
       "description": "User notifications store."
     },
     {
-      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage",
-      "key": "templateStore",
-      "containerDefinition": {
-        "containerName": "templates"
-      },
+      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage.v3",
+      "key": "Marain:UserNotifications:BlobContainerConfiguration:Templates",
+      "legacyV2Key": "StorageConfiguration__templates",
       "description": "Template Store"
     }
   ]

@@ -55,7 +55,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
                 // Download and convert the blob text into TemplateWrapper object
                 Response<BlobDownloadResult> response = await blob.DownloadContentAsync().ConfigureAwait(false);
                 string json = response.Value.Content.ToString();
-                T dynamicObject = JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance);
+                T dynamicObject = JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance)!;
                 string etag = response.Value.Details.ETag.ToString("H");
                 return (dynamicObject, etag);
             }

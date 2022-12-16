@@ -64,7 +64,8 @@ namespace Marain.UserNotifications.Specs.Bindings
                     services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
                     // Marain tenancy management, required to create transient client/service tenants.
-                    services.AddMarainTenantManagement();
+                    services.AddMarainTenantManagementForBlobStorage();
+                    services.AddMarainTenantManagementForTableStorage();
 
                     // Add the tenanted table store for notifications so we can clear up our own mess after the test.
                     services.AddTenantedAzureTableUserNotificationStore();

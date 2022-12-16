@@ -4,12 +4,16 @@
 
 namespace Marain.UserNotifications.Management.Host.Helpers
 {
+    using System;
     using System.Threading.Tasks;
-    using Microsoft.Azure.KeyVault;
+
+    using Azure;
+    using Azure.Security.KeyVault.Secrets;
+
     using Microsoft.Extensions.Configuration;
 
     /// <summary>
-    /// Helper methods to work with the <see cref="Microsoft.Azure.KeyVault"/>.
+    /// Helper methods to work with the <see cref="SecretClient"/>.
     /// </summary>
     public static class KeyVaultHelper
     {
@@ -22,11 +26,13 @@ namespace Marain.UserNotifications.Management.Host.Helpers
         public static async Task<string> GetDeliveryChannelSecretAsync(IConfiguration configuration, string deliveryChannelSecretUrl)
         {
             string? azureConnectionString = configuration.GetValue<string>("AzureServicesAuthConnectionString");
-            var azureServiceTokenProvider = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider(azureConnectionString);
-            using var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+            var azureCredentials = Corvus.Identity.ClientAuthentication.Azure.LegacyAzureServiceTokenProviderConnectionString.ToTokenCredential(azureConnectionString);
 
-            Microsoft.Azure.KeyVault.Models.SecretBundle accountKey = await keyVaultClient.GetSecretAsync(deliveryChannelSecretUrl).ConfigureAwait(false);
-            return accountKey.Value;
+            Uri secretUri = new(deliveryChannelSecretUrl);
+            Uri vaultUri = new(secretUri, "/");
+            SecretClient keyVaultClient = new(vaultUri, azureCredentials);
+            Response<KeyVaultSecret> accountKey = await keyVaultClient.GetSecretAsync(deliveryChannelSecretUrl).ConfigureAwait(false);
+            return accountKey.Value.Value;
         }
     }
 }

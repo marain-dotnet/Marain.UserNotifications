@@ -222,11 +222,6 @@ namespace Marain.UserNotifications
                 throw new ArgumentNullException(nameof(notification));
             }
 
-            if (deliveryChannelConfiguredPerCommunicationType is null)
-            {
-                throw new ArgumentNullException(nameof(deliveryChannelConfiguredPerCommunicationType));
-            }
-
             return new UserNotification(
                 notification.Id,
                 notification.NotificationType,
