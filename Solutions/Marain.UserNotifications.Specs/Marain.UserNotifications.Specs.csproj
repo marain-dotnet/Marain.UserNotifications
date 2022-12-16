@@ -40,7 +40,7 @@
     <PackageReference Include="Marain.TenantManagement.Azure.BlobStorage" Version="3.1.0" />
 	
     <PackageReference Include="Marain.TenantManagement.Azure.TableStorage" Version="3.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.1.46">
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.4.27">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
