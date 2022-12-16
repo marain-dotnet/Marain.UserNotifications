@@ -27,14 +27,19 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.2.5" />
-    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow.NUnit" Version="1.4.11" />
+    <PackageReference Include="Corvus.Retry" Version="1.0.2" />
+    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow.NUnit" Version="2.0.0" />
 	 
-    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.2">
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 	
-    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="2.3.3" />
+    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="3.1.0" />
+	
+    <PackageReference Include="Marain.TenantManagement.Azure.BlobStorage" Version="3.1.0" />
+	
+    <PackageReference Include="Marain.TenantManagement.Azure.TableStorage" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.1.46">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

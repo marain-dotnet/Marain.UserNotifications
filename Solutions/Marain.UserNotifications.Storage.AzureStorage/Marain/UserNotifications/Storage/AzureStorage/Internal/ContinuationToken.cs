@@ -57,7 +57,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
         public static ContinuationToken FromString(string input, JsonSerializerSettings serializerSettings)
         {
             string serializedToken = Encoding.UTF8.GetString(Convert.FromBase64String(input));
-            return JsonConvert.DeserializeObject<ContinuationToken>(serializedToken, serializerSettings);
+            return JsonConvert.DeserializeObject<ContinuationToken>(serializedToken, serializerSettings)!;
         }
 
         /// <summary>

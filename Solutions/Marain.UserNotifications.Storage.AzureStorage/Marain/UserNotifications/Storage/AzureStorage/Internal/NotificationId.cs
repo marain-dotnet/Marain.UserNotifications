@@ -55,7 +55,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
             try
             {
                 string idJson = Encoding.UTF8.GetString(Convert.FromBase64String(serializedNotificationId));
-                return JsonConvert.DeserializeObject<NotificationId>(idJson, serializerSettings);
+                return JsonConvert.DeserializeObject<NotificationId>(idJson, serializerSettings)!;
             }
             catch (Exception ex)
             {

@@ -5,21 +5,27 @@
 namespace Marain.UserNotifications.Specs.Bindings
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Azure.Data.Tables;
-    using Corvus.Azure.Cosmos.Tenancy;
-    using Corvus.Azure.Storage.Tenancy;
+
+    using Corvus.Storage.Azure.BlobStorage.Tenancy;
     using Corvus.Storage.Azure.TableStorage.Tenancy;
     using Corvus.Tenancy;
     using Corvus.Testing.AzureFunctions;
     using Corvus.Testing.AzureFunctions.SpecFlow;
     using Corvus.Testing.SpecFlow;
+
+    using Dynamitey.DynamicObjects;
+
+    using Marain.TenantManagement.Configuration;
     using Marain.TenantManagement.EnrollmentConfiguration;
     using Marain.TenantManagement.Testing;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using TechTalk.SpecFlow;
+    using TechTalk.SpecFlow.EnvironmentAccess;
 
     /// <summary>
     /// Bindings to manage creation and deletion of tenants for test features.
@@ -28,7 +34,7 @@ namespace Marain.UserNotifications.Specs.Bindings
     public static class TransientTenantBindings
     {
         /// <summary>
-        /// Creates a new <see cref="ITenant"/> for the current feature, adding a test <see cref="CosmosConfiguration"/>
+        /// Creates a new <see cref="ITenant"/> for the current feature, adding test storage configurations
         /// to the tenant data.
         /// </summary>
         /// <param name="featureContext">The current <see cref="FeatureContext"/>.</param>
@@ -78,7 +84,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                 TableClient testTable = await cloudTableFactory.GetTableClientFromTenantAsync(
                     tenant: tenantManager.PrimaryTransientClient,
                     v2ConfigurationKey: "StorageConfiguration__Table__usernotifications",
-                    v3ConfigurationKey: "StorageConfigurationV3__usernotifications",
+                    v3ConfigurationKey: "Marain:UserNotifications:TableConfiguration:UserNotifications",
                     containerName: "usernotifications").ConfigureAwait(false);
                 await testTable.DeleteAsync().ConfigureAwait(false);
             }).ConfigureAwait(false);
@@ -124,7 +130,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                 transientServiceTenant.Name);
         }
 
-        private static EnrollmentConfigurationItem[] GetUserNotificationsConfig(FeatureContext featureContext)
+        private static EnrollmentConfigurationEntry GetUserNotificationsConfig(FeatureContext featureContext)
         {
             IConfiguration configuration = ContainerBindings
                 .GetServiceProvider(featureContext)
@@ -137,47 +143,52 @@ namespace Marain.UserNotifications.Specs.Bindings
                 .GetRequiredService<ILogger<FeatureContext>>();
 
             // Load the config items we need:
-            TableStorageConfiguration tableStorageConfiguration =
-                configuration.GetSection("TestTableStorageConfiguration").Get<TableStorageConfiguration>()
-                ?? new TableStorageConfiguration();
+            LegacyV2TableConfiguration tableStorageConfiguration =
+                configuration.GetSection("TestTableStorageConfiguration").Get<LegacyV2TableConfiguration>()
+                ?? new LegacyV2TableConfiguration();
 
             if (string.IsNullOrEmpty(tableStorageConfiguration.AccountName))
             {
                 logger.LogDebug("No configuration value 'TestTableStorageConfiguration:AccountName' provided; using local storage emulator.");
             }
 
-            BlobStorageConfiguration blobStorageConfiguration =
-                configuration.GetSection("TestBlobStorageConfiguration").Get<BlobStorageConfiguration>()
-                ?? new BlobStorageConfiguration();
+            LegacyV2BlobStorageConfiguration blobStorageConfiguration =
+                configuration.GetSection("TestBlobStorageConfiguration").Get<LegacyV2BlobStorageConfiguration>()
+                ?? new LegacyV2BlobStorageConfiguration();
 
             if (string.IsNullOrEmpty(blobStorageConfiguration.AccountName))
             {
                 logger.LogDebug("No configuration value 'TestBlobStorageConfiguration:AccountName' provided; using local storage emulator.");
             }
 
-            return new EnrollmentConfigurationItem[]
-            {
-                new EnrollmentTableStorageConfigurationItem
+            return new EnrollmentConfigurationEntry(
+                new Dictionary<string, ConfigurationItem>
                 {
-                    Key = "userNotificationStore",
-                    Configuration = tableStorageConfiguration,
+                    {
+                        "Marain:UserNotifications:TableConfiguration:UserNotificationsMarain:UserNotifications:TableConfiguration:UserNotifications",
+                        new LegacyV2TableStorageConfigurationItem { Configuration = tableStorageConfiguration }
+                    },
+                    {
+                        "Marain:UserNotifications:BlobContainerConfiguration:Templates",
+                        new LegacyV2BlobStorageConfigurationItem { Configuration = blobStorageConfiguration }
+                    },
                 },
-                new EnrollmentBlobStorageConfigurationItem
+                new Dictionary<string, EnrollmentConfigurationEntry>
                 {
-                    Key = "operationsStore",
-                    Configuration = blobStorageConfiguration,
-                },
-                new EnrollmentBlobStorageConfigurationItem
-                {
-                    Key = "userPreferencesStore",
-                    Configuration = blobStorageConfiguration,
-                },
-                new EnrollmentBlobStorageConfigurationItem
-                {
-                    Key = "templateStore",
-                    Configuration = blobStorageConfiguration,
-                },
-            };
+                    {
+                        // Operations
+                        "3633754ac4c9be44b55bfe791b1780f12429524fe7b6cc48a265a307407ec858",
+                        new EnrollmentConfigurationEntry(
+                            new Dictionary<string, ConfigurationItem>
+                            {
+                                {
+                                    "Marain:Operations:BlobContainerConfiguration:Operations",
+                                    new LegacyV2BlobStorageConfigurationItem { Configuration = blobStorageConfiguration }
+                                },
+                            },
+                            null)
+                    },
+                });
         }
     }
 }

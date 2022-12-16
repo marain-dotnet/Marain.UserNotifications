@@ -24,7 +24,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// </summary>
         public const string BlobContainerName = "templates";
         private const string TemplatesV2ConfigurationKey = "StorageConfiguration__" + BlobContainerName;
-        private const string TemplatesV3ConfigurationKey = "StorageConfigurationV3__" + BlobContainerName;
+        private const string TemplatesV3ConfigurationKey = "Marain:UserNotifications:BlobContainerConfiguration:Templates";
 
         private readonly ILogger logger;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
