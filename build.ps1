@@ -138,7 +138,8 @@ $SkipPublish = $false
 #
 $SolutionToBuild = (Resolve-Path (Join-Path $here ".\Solutions\Marain.UserNotifications.sln")).Path
 $ProjectsToPublish = @(
-    # "Solutions/MySolution/MyWebSite/MyWebSite.csproj"
+    "Solutions\Marain.UserNotifications.Hosting.AspNetCore\Marain.UserNotifications.Hosting.AspNetCore.csproj"
+    "Solutions\Marain.UserNotifications.Management.Host\Marain.UserNotifications.Management.Host.csproj"
 )
 $NuSpecFilesToPackage = @(
     # "Solutions/MySolution/MyProject/MyProject.nuspec"
@@ -164,9 +165,7 @@ task PreVersion {}
 task PostVersion {}
 task PreBuild {}
 task PostBuild {}
-task PreTest {
-    gci env:/ | ft -autosize | out-string | write-host
-}
+task PreTest {}
 task PostTest {}
 task PreTestReport {}
 task PostTestReport {}
