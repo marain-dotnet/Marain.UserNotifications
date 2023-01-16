@@ -12,7 +12,7 @@
     <RestoreLockedMode Condition="$(ContinuousIntegrationBuild) == 'true'">true</RestoreLockedMode>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.4" />
     <!--
     The reference to Microsoft.CodeAnalysis.CSharp is to prevent warnings from appearing for this project
     in Visual Studio 2022. With version 17.1.0, and with version 6.0.200 of the .NET SDK installed, Visual
