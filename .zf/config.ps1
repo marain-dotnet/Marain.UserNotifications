@@ -38,7 +38,7 @@ $ProjectsToPublish = @(
 )
 $NuSpecFilesToPackage = @()
 $NugetPublishSource = property ZF_NUGET_PUBLISH_SOURCE "$here/_local-nuget-feed"
-$IncludeAssembliesInCodeCoverage = "Corvus*Tenancy"
+$IncludeAssembliesInCodeCoverage = "Marain.UserNotifications*"
 $ExcludeAssembliesInCodeCoverage = ""
 
 
