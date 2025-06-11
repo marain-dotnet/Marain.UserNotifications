@@ -105,7 +105,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         public async Task<UserNotification> StoreAsync(UserNotification notification)
         {
             this.logger.LogDebug(
-                "Storing notification for user ",
+                "Storing notification for user {0}",
                 notification.UserId);
 
             await this.table.CreateIfNotExistsAsync().ConfigureAwait(false);

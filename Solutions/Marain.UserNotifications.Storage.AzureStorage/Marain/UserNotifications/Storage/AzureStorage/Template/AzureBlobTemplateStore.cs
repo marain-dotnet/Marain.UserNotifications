@@ -69,7 +69,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// <inheritdoc/>
         public async Task<T> CreateOrUpdate<T>(string notificationType, CommunicationType communicationType, string? eTag, T template)
         {
-            this.logger.LogDebug("CreateOrUpdate: Storing template for notification type ", notificationType);
+            this.logger.LogDebug("CreateOrUpdate: Storing template for notification type {0}", notificationType);
 
             // Gets the blob reference by the NotificationType
             BlobClient blockBlob = this.blobContainer.GetBlobClient(GetBlockBlobName(notificationType, communicationType));
@@ -96,7 +96,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
                     ex);
             }
 
-            this.logger.LogDebug("CreateOrUpdate: Notification template updated successfully ", notificationType);
+            this.logger.LogDebug("CreateOrUpdate: Notification template updated successfully {0}", notificationType);
 
             return template;
         }
