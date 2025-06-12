@@ -28,7 +28,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     [Binding]
     public class ClientLibrarySteps
@@ -593,7 +593,7 @@ namespace Marain.UserNotifications.Specs.Steps
             }
         }
 
-        private static CreateNotificationsRequest BuildCreateNotificationsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        private static CreateNotificationsRequest BuildCreateNotificationsRequestFrom(DataTableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray()!;
             string[] userIds = JArray.Parse(tableRow["UserIds"]).Select(token => token.Value<string>()).ToArray()!;
@@ -611,7 +611,7 @@ namespace Marain.UserNotifications.Specs.Steps
             };
         }
 
-        private static CreateNotificationForDeliveryChannelsRequest BuildCreateNotificationForDeliveryChannelsRequestFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        private static CreateNotificationForDeliveryChannelsRequest BuildCreateNotificationForDeliveryChannelsRequestFrom(DataTableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray()!;
             string[] userIds = JArray.Parse(tableRow["UserIds"]).Select(token => token.Value<string>()).ToArray()!;

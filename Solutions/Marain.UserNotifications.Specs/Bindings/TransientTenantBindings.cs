@@ -13,7 +13,7 @@ namespace Marain.UserNotifications.Specs.Bindings
     using Corvus.Storage.Azure.TableStorage.Tenancy;
     using Corvus.Tenancy;
     using Corvus.Testing.AzureFunctions;
-    using Corvus.Testing.AzureFunctions.SpecFlow;
+    using Corvus.Testing.AzureFunctions.ReqnRoll;
     using Corvus.Testing.SpecFlow;
 
     using Dynamitey.DynamicObjects;

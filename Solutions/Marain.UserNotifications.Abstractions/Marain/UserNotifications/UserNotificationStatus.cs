@@ -6,7 +6,7 @@ namespace Marain.UserNotifications
 {
     using System;
     using System.ComponentModel;
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     /// <summary>
     /// Represents the delivery/read status of the user notification for a specific delivery channel.

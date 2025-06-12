@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <RootNamespace>Marain.UserNotifications.Specs</RootNamespace>
@@ -14,33 +14,24 @@
     -->
     <NoWarn>SA0001;SA1204;SA1600;SA1602;CS1591</NoWarn>
     <RootNamespace>Marain.UserNotifications.Specs</RootNamespace>
-
   </PropertyGroup>
   <PropertyGroup>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <RestoreLockedMode Condition="$(ContinuousIntegrationBuild) == 'true'">true</RestoreLockedMode>
   </PropertyGroup>
+
   <ItemGroup>
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\ApiDeliveryChannelClient\MarkNotificationAsRead.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApiClient\CreateNotifications - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\ManagementApi\CreateNotifications - Copy.feature.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.2.5" />
-    <PackageReference Include="Corvus.Retry" Version="1.0.2" />
-    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow.NUnit" Version="2.0.0" />
-	 
-    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.4">
+    <PackageReference Include="Corvus.Configuration.TestEnvironment" Version="1.2.6" />
+    <PackageReference Include="Corvus.Retry" Version="1.0.7" />
+    <PackageReference Include="Corvus.Testing.AzureFunctions.ReqnRoll.NUnit" Version="5.0.0" />
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.18">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-	
-    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="3.1.0" />
-	
-    <PackageReference Include="Marain.TenantManagement.Azure.BlobStorage" Version="3.1.0" />
-	
-    <PackageReference Include="Marain.TenantManagement.Azure.TableStorage" Version="3.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.1.46">
+    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="3.1.2" />
+    <PackageReference Include="Marain.TenantManagement.Azure.BlobStorage" Version="3.1.2" />
+    <PackageReference Include="Marain.TenantManagement.Azure.TableStorage" Version="3.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -58,39 +49,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
-    <None Update="specflow.json">
+    <None Update="reqnroll.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ServiceManifests\" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="..\Marain.UserNotifications.Deployment\ServiceManifests\UserNotificationsServiceManifest.jsonc" Link="ServiceManifests\UserNotificationsServiceManifest.jsonc" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Features\ApiDeliveryChannelClient\MarkNotificationAsRead.feature.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
-    </Compile>
-    <Compile Update="Features\ManagementApiClient\CreateNotificationForDeliveryChannels.feature.cs">
-      <DependentUpon>CreateNotificationForDeliveryChannels.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\ManagementApi\CreateNotificationForDeliveryChannels.feature.cs">
-      <DependentUpon>CreateNotificationForDeliveryChannels.feature</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <SpecFlowFeatureFiles Update="Features\ApiDeliveryChannelClient\MarkNotificationAsRead.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Features\ManagementApiClient\CreateNotificationForDeliveryChannels.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Features\ManagementApi\CreateNotificationForDeliveryChannels.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </SpecFlowFeatureFiles>
-  </ItemGroup>
-</Project>
+ </Project>

@@ -341,4 +341,6 @@ coverage.cobertura.xml
 
 # Local build outputs
 _packages/
+_codeCoverage/
 *.sbom.*
+.zf/extensions/

@@ -7,7 +7,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
     using System;
     using System.Threading.Tasks;
     using Azure.Data.Tables;
-    using Corvus.Extensions.Json;
+    using Corvus.Json.Serialization;
     using Corvus.Storage.Azure.TableStorage.Tenancy;
     using Corvus.Tenancy;
     using Microsoft.Extensions.Logging;
@@ -26,24 +26,24 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         private const string TemplatesV3ConfigurationKey = "Marain:UserNotifications:TableConfiguration:UserNotifications";
 
         private readonly ILogger logger;
-        private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
+        private readonly IJsonSerializerOptionsProvider jsonSerializerOptionsProvider;
         private readonly ITableSourceWithTenantLegacyTransition tableFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TenantedAzureTableUserNotificationStoreFactory"/> class.
         /// </summary>
         /// <param name="tableFactory">The cloud table factory.</param>
-        /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
+        /// <param name="jsonSerializerOptionsProvider">The serialization options provider.</param>
         /// <param name="logger">The logger.</param>
         public TenantedAzureTableUserNotificationStoreFactory(
             ITableSourceWithTenantLegacyTransition tableFactory,
-            IJsonSerializerSettingsProvider serializerSettingsProvider,
+            IJsonSerializerOptionsProvider jsonSerializerOptionsProvider,
             ILogger<TenantedAzureTableUserNotificationStoreFactory> logger)
         {
             this.logger = logger
                 ?? throw new ArgumentNullException(nameof(logger));
-            this.serializerSettingsProvider = serializerSettingsProvider
-                ?? throw new ArgumentNullException(nameof(serializerSettingsProvider));
+            this.jsonSerializerOptionsProvider = jsonSerializerOptionsProvider
+                ?? throw new ArgumentNullException(nameof(jsonSerializerOptionsProvider));
             this.tableFactory = tableFactory
                 ?? throw new ArgumentNullException(nameof(tableFactory));
         }
@@ -56,7 +56,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
                     tenant, TemplatesV2ConfigurationKey, TemplatesV3ConfigurationKey, TableName).ConfigureAwait(false);
 
             // No need to cache these instances as they are lightweight wrappers around the container.
-            return new AzureTableUserNotificationStore(table, this.serializerSettingsProvider, this.logger);
+            return new AzureTableUserNotificationStore(table, this.jsonSerializerOptionsProvider, this.logger);
         }
     }
 }

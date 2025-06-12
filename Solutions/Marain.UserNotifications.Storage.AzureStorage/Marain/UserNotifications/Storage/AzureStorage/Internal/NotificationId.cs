@@ -6,7 +6,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
 {
     using System;
     using System.Text;
-    using Newtonsoft.Json;
+    using System.Text.Json;
 
     /// <summary>
     /// An internal helper class for working with notification Ids.
@@ -38,30 +38,30 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
         /// Creates a new instance of <see cref="NotificationId"/> from the provided string.
         /// </summary>
         /// <param name="serializedNotificationId">The serialized notification Id.</param>
-        /// <param name="serializerSettings">The <see cref="JsonSerializerSettings"/> that were used to create the Id.</param>
+        /// <param name="serializerOptions">The <see cref="JsonSerializerOptions"/> that were used to create the Id.</param>
         /// <returns>The deserialized <see cref="NotificationId"/>.</returns>
-        public static NotificationId FromString(string serializedNotificationId, JsonSerializerSettings serializerSettings)
+        public static NotificationId FromString(string serializedNotificationId, JsonSerializerOptions serializerOptions)
         {
             if (string.IsNullOrEmpty(serializedNotificationId))
             {
                 throw new ArgumentNullException(nameof(serializedNotificationId));
             }
 
-            if (serializerSettings is null)
+            if (serializerOptions is null)
             {
-                throw new ArgumentNullException(nameof(serializerSettings));
+                throw new ArgumentNullException(nameof(serializerOptions));
             }
 
             try
             {
                 string idJson = Encoding.UTF8.GetString(Convert.FromBase64String(serializedNotificationId));
-                return JsonConvert.DeserializeObject<NotificationId>(idJson, serializerSettings)!;
+                return JsonSerializer.Deserialize<NotificationId>(idJson, serializerOptions)!;
             }
             catch (Exception ex)
             {
                 // If an exception's thrown here it means that we either:
                 // - couldn't convert the input from a base64 string to a byte array
-                // - couldn't deserilize the resultant UTF8 string to a NotificationId.
+                // - couldn't deserialize the resultant UTF8 string to a NotificationId.
                 // Either way it's because the input was invalid, so throw an ArgumentException.
                 throw new ArgumentException(
                     "The supplied value is not valid notification Id.",
@@ -73,11 +73,11 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
         /// <summary>
         /// Converts the <see cref="NotificationId"/> into a serialized and encoded string.
         /// </summary>
-        /// <param name="serializerSettings">The <see cref="JsonSerializerSettings"/>.</param>
+        /// <param name="serializerOptions">The <see cref="JsonSerializerOptions"/>.</param>
         /// <returns>The notification Id as a string.</returns>
-        public string AsString(JsonSerializerSettings serializerSettings)
+        public string AsString(JsonSerializerOptions serializerOptions)
         {
-            string serializedValues = JsonConvert.SerializeObject(this, serializerSettings);
+            string serializedValues = JsonSerializer.Serialize(this, serializerOptions);
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedValues));
         }
     }

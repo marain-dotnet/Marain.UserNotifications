@@ -6,19 +6,24 @@ namespace Marain.UserNotifications.Specs.Bindings
 {
     using System;
     using System.Threading.Tasks;
+
     using Azure.Data.Tables;
+
     using Corvus.Configuration;
-    using Corvus.Extensions.Json;
+    using Corvus.Json.Serialization;
     using Corvus.Testing.SpecFlow;
+
     using Marain.Extensions.DependencyInjection;
     using Marain.Tenancy.Client;
     using Marain.UserNotifications.Client.ApiDeliveryChannel;
     using Marain.UserNotifications.Client.Management;
     using Marain.UserNotifications.Storage.AzureStorage;
+
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using TechTalk.SpecFlow;
+
+    using Reqnroll;
 
     [Binding]
     public static class UserNotificationsContainerBindings
@@ -45,9 +50,9 @@ namespace Marain.UserNotifications.Specs.Bindings
                     // Tenancy service client.
                     services.AddSingleton(sp =>
                     {
-                        TenancyClientOptions tenancyConfiguration = sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>();
+                        TenancyClientOptions? tenancyConfiguration = sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>();
 
-                        if (tenancyConfiguration?.TenancyServiceBaseUri == default)
+                        if (tenancyConfiguration?.TenancyServiceBaseUri is null)
                         {
                             throw new InvalidOperationException("Could not find a configuration value for TenancyClient:TenancyServiceBaseUri");
                         }
@@ -59,7 +64,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                     services.AddTenantProviderServiceClient(false);
 
                     // Token source, to provide authentication when accessing external services.
-                    string azureServicesAuthConnectionString = config["AzureServicesAuthConnectionString"];
+                    string azureServicesAuthConnectionString = config["AzureServicesAuthConnectionString"] ?? throw new InvalidOperationException("AzureServicesAuthConnectionString configuration is missing.");
                     services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
                     services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
@@ -129,7 +134,7 @@ namespace Marain.UserNotifications.Specs.Bindings
                         sp =>
                         {
                             IConfiguration config = sp.GetRequiredService<IConfiguration>();
-                            string connectionString = config["TestTableStorageConfiguration:AccountName"];
+                            string connectionString = config["TestTableStorageConfiguration:AccountName"] ?? throw new InvalidOperationException("TestTableStorageConfiguration:AccountName configuration is missing.");
                             TableServiceClient tableServiceClient = new(
                                 string.IsNullOrEmpty(connectionString)
                                     ? "UseDevelopmentStorage=true"
@@ -142,7 +147,7 @@ namespace Marain.UserNotifications.Specs.Bindings
 
                             return new AzureTableUserNotificationStore(
                                 table,
-                                sp.GetRequiredService<IJsonSerializerSettingsProvider>(),
+                                sp.GetRequiredService<IJsonSerializerOptionsProvider>(),
                                 sp.GetRequiredService<ILogger<AzureTableUserNotificationStore>>());
                         });
                 });

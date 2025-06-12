@@ -8,7 +8,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using System.Net;
     using Marain.UserNotifications.Client;
     using NUnit.Framework;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     [Binding]
     public class ExceptionSteps
