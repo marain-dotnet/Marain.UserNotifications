@@ -25,7 +25,7 @@ namespace Marain.UserNotifications.Management.Host.Helpers
         /// <returns>Delivery channel secret.</returns>
         public static async Task<string> GetDeliveryChannelSecretAsync(IConfiguration configuration, string deliveryChannelSecretUrl)
         {
-            string? azureConnectionString = configuration.GetValue<string>("AzureServicesAuthConnectionString");
+            string azureConnectionString = configuration.GetValue<string>("AzureServicesAuthConnectionString") ?? throw new InvalidOperationException("AzureServicesAuthConnectionString is missing");
             var azureCredentials = Corvus.Identity.ClientAuthentication.Azure.LegacyAzureServiceTokenProviderConnectionString.ToTokenCredential(azureConnectionString);
 
             Uri secretUri = new(deliveryChannelSecretUrl);

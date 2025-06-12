@@ -7,7 +7,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
     using System;
     using System.Threading.Tasks;
     using Azure.Storage.Blobs;
-    using Corvus.Extensions.Json;
+    using Corvus.Json.Serialization;
     using Corvus.Storage.Azure.BlobStorage.Tenancy;
     using Corvus.Tenancy;
     using Marain.NotificationTemplates;
@@ -27,24 +27,24 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         private const string TemplatesV3ConfigurationKey = "Marain:UserNotifications:BlobContainerConfiguration:Templates";
 
         private readonly ILogger logger;
-        private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
+        private readonly IJsonSerializerOptionsProvider jsonSerializerOptionsProvider;
         private readonly IBlobContainerSourceWithTenantLegacyTransition blobContainerFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="INotificationTemplateStore"/> class.
         /// </summary>
         /// <param name="blobContainerFactory">The cloud blob factory.</param>
-        /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
+        /// <param name="jsonSerializerOptionsProvider">The serialization options provider.</param>
         /// <param name="logger">The logger.</param>
         public TenantedAzureBlobTemplateStoreFactory(
             IBlobContainerSourceWithTenantLegacyTransition blobContainerFactory,
-            IJsonSerializerSettingsProvider serializerSettingsProvider,
+            IJsonSerializerOptionsProvider jsonSerializerOptionsProvider,
             ILogger<TenantedAzureBlobTemplateStoreFactory> logger)
         {
             this.logger = logger
                 ?? throw new ArgumentNullException(nameof(logger));
-            this.serializerSettingsProvider = serializerSettingsProvider
-                ?? throw new ArgumentNullException(nameof(serializerSettingsProvider));
+            this.jsonSerializerOptionsProvider = jsonSerializerOptionsProvider
+                ?? throw new ArgumentNullException(nameof(jsonSerializerOptionsProvider));
             this.blobContainerFactory = blobContainerFactory
                 ?? throw new ArgumentNullException(nameof(blobContainerFactory));
         }
@@ -52,12 +52,12 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// <inheritdoc/>
         public async Task<INotificationTemplateStore> GetTemplateStoreForTenantAsync(ITenant tenant)
         {
-            // Gets the blob container for the tenant or creates a new one if it does not exists
+            // Gets the blob container for the tenant or creates a new one if it does not exist
             BlobContainerClient blob = await this.blobContainerFactory.GetBlobContainerClientFromTenantAsync(
                 tenant, TemplatesV2ConfigurationKey, TemplatesV3ConfigurationKey, BlobContainerName).ConfigureAwait(false);
 
             // No need to cache these instances as they are lightweight wrappers around the container.
-            return new AzureBlobTemplateStore(blob, this.serializerSettingsProvider, this.logger);
+            return new AzureBlobTemplateStore(blob, this.jsonSerializerOptionsProvider, this.logger);
         }
     }
 }

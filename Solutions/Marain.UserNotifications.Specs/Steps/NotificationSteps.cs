@@ -17,7 +17,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using NUnit.Framework;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     [Binding]
     public class NotificationSteps

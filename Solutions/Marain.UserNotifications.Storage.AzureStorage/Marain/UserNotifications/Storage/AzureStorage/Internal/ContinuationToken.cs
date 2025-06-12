@@ -6,7 +6,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
 {
     using System;
     using System.Text;
-    using Newtonsoft.Json;
+    using System.Text.Json;
 
     /// <summary>
     /// A continuation token for a request to the user notifications table storage call.
@@ -52,22 +52,22 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
         /// Recreates a continuation token from its string representation.
         /// </summary>
         /// <param name="input">The string representation of the token.</param>
-        /// <param name="serializerSettings">The <see cref="JsonSerializerSettings"/> to use.</param>
+        /// <param name="serializerOptions">The <see cref="JsonSerializerOptions"/> to use.</param>
         /// <returns>The continuation token.</returns>
-        public static ContinuationToken FromString(string input, JsonSerializerSettings serializerSettings)
+        public static ContinuationToken FromString(string input, JsonSerializerOptions serializerOptions)
         {
             string serializedToken = Encoding.UTF8.GetString(Convert.FromBase64String(input));
-            return JsonConvert.DeserializeObject<ContinuationToken>(serializedToken, serializerSettings)!;
+            return JsonSerializer.Deserialize<ContinuationToken>(serializedToken, serializerOptions)!;
         }
 
         /// <summary>
         /// Returns a string representation of the token.
         /// </summary>
-        /// <param name="serializerSettings">The <see cref="JsonSerializerSettings"/> to use.</param>
+        /// <param name="serializerOptions">The <see cref="JsonSerializerOptions"/> to use.</param>
         /// <returns>A string representation of the token.</returns>
-        public string AsString(JsonSerializerSettings serializerSettings)
+        public string AsString(JsonSerializerOptions serializerOptions)
         {
-            string serializedToken = JsonConvert.SerializeObject(this, serializerSettings);
+            string serializedToken = JsonSerializer.Serialize(this, serializerOptions);
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedToken));
         }
     }

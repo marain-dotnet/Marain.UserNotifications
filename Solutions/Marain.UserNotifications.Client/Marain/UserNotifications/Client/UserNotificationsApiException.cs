@@ -6,7 +6,6 @@ namespace Marain.UserNotifications.Client
 {
     using System;
     using System.Net;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// An exception thrown by a UserNotifications API client.
@@ -30,18 +29,6 @@ namespace Marain.UserNotifications.Client
         /// <param name="inner">The underlying exception.</param>
         public UserNotificationsApiException(string message, Exception inner)
             : base(message, inner)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserNotificationsApiException"/> class.
-        /// </summary>
-        /// <param name="info">The serialization info.</param>
-        /// <param name="context">The streaming context.</param>
-        protected UserNotificationsApiException(
-          SerializationInfo info,
-          StreamingContext context)
-            : base(info, context)
         {
         }
 

@@ -8,16 +8,14 @@ namespace Marain.UserNotifications
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics;
-
+    using System.Text.Json;
     using Corvus.Json;
 
     using Marain.Helpers;
     using Marain.Models;
 
-    using Newtonsoft.Json;
-
     /// <summary>
-    /// A single notification targetted at a specific user.
+    /// A single notification targeted at a specific user.
     /// </summary>
     [DebuggerDisplay("'{NotificationType}' for user '{UserId}' with timestamp '{Timestamp}'")]
     public class UserNotification
@@ -107,11 +105,11 @@ namespace Marain.UserNotifications
         /// <see cref="Metadata"/>. It is normally used to determine whether a notification already exists in storage
         /// if the service receives the same request to create a notification multiple times.
         /// </summary>
-        /// <param name="serializerSettings">The JsonSerializerSettings that will be used.</param>
+        /// <param name="jsonSerializerOptions">The JsonSerializerOptions that will be used.</param>
         /// <returns>A hash for the notification.</returns>
-        public byte[] GetIdentityHash(JsonSerializerSettings serializerSettings)
+        public byte[] GetIdentityHash(JsonSerializerOptions jsonSerializerOptions)
         {
-            string propertiesJson = JsonConvert.SerializeObject(this.Properties, serializerSettings);
+            string propertiesJson = JsonSerializer.Serialize(this.Properties, jsonSerializerOptions);
             string fingerprint = $"{this.UserId}{this.Timestamp.ToUnixTimeMilliseconds()}{this.NotificationType}{propertiesJson}";
             return HashAlgorithmHelpers.GetSHA256Hash(fingerprint);
         }

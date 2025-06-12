@@ -14,7 +14,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Corvus.Testing.SpecFlow;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     [Binding]
     public class NotificationStoreSteps

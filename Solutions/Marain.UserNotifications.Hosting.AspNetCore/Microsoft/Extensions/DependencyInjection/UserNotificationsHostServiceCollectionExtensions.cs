@@ -4,6 +4,7 @@
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    using System;
     using System.Linq;
     using Corvus.Extensions.Json.Internal;
     using Marain.Operations.Client.OperationsControl;
@@ -43,9 +44,9 @@ namespace Microsoft.Extensions.DependencyInjection
             // Tenancy service client.
             services.AddSingleton(sp =>
             {
-                TenancyClientOptions tenancyConfiguration = sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>();
+                TenancyClientOptions? tenancyConfiguration = sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>();
 
-                if (tenancyConfiguration?.TenancyServiceBaseUri == default)
+                if (tenancyConfiguration?.TenancyServiceBaseUri is null)
                 {
                     throw new OpenApiServiceMismatchException("Could not find a configuration value for TenancyClient:TenancyServiceBaseUri");
                 }
@@ -59,10 +60,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddOperationsControlClient(
                 sp =>
                 {
-                    MarainOperationsControlClientOptions operationsConfiguration =
+                    MarainOperationsControlClientOptions? operationsConfiguration =
                         sp.GetRequiredService<IConfiguration>().GetSection("Operations").Get<MarainOperationsControlClientOptions>();
 
-                    if (operationsConfiguration?.OperationsControlServiceBaseUri == default)
+                    if (operationsConfiguration?.OperationsControlServiceBaseUri is null)
                     {
                         throw new OpenApiServiceMismatchException("Could not find a configuration value for Operations:OperationsControlServiceBaseUri");
                     }
@@ -71,7 +72,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
 
             // Token source, to provide authentication when accessing external services.
-            string azureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"];
+            string azureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"] ?? throw new InvalidOperationException("AzureServicesAuthConnectionString configuration is missing.");
             services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
             services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
@@ -111,7 +112,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddUserNotificationsManagementClient(
                 sp =>
                 {
-                    UserNotificationsManagementClientConfiguration managementClientConfiguration =
+                    UserNotificationsManagementClientConfiguration? managementClientConfiguration =
                         sp.GetRequiredService<IConfiguration>().GetSection("UserNotificationsManagementClient").Get<UserNotificationsManagementClientConfiguration>();
 
                     if (string.IsNullOrEmpty(managementClientConfiguration?.BaseUri))
@@ -133,7 +134,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <remarks>
         /// This is a modified version of the
         /// <see cref="JsonSerializerSettingsProviderServiceCollectionExtensions.AddJsonSerializerSettings(IServiceCollection)"/>
-        /// method that doesn't register the <see cref="DateTimeOffsetConverter"/>. We don't want that particuar
+        /// method that doesn't register the <see cref="DateTimeOffsetConverter"/>. We don't want that particular
         /// converter as we want the DateTimeOffset to be serialized in the standard way, as defined in RFC3339 section 5.6.
         /// </remarks>
         public static IServiceCollection AddOpenApiJsonSerializerSettings(

@@ -8,7 +8,7 @@ namespace Marain.UserNotifications.Specs
     using System.Linq;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     [Binding]
     public class JsonSteps

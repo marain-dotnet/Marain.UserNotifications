@@ -6,15 +6,15 @@ namespace Marain.UserNotifications.Storage.AzureStorage
 {
     using System;
     using System.Net;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using Azure;
     using Azure.Storage.Blobs;
     using Azure.Storage.Blobs.Models;
-    using Corvus.Extensions.Json;
+    using Corvus.Json.Serialization;
     using Marain.Models;
     using Marain.NotificationTemplates;
     using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// An implementation of <see cref="INotificationTemplateStore"/> over Azure Blob storage.
@@ -22,24 +22,24 @@ namespace Marain.UserNotifications.Storage.AzureStorage
     public class AzureBlobTemplateStore : INotificationTemplateStore
     {
         private readonly ILogger logger;
-        private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
+        private readonly IJsonSerializerOptionsProvider jsonSerializerOptionsProvider;
         private readonly BlobContainerClient blobContainer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureBlobTemplateStore"/> class.
         /// </summary>
         /// <param name="blobContainer">The blob container.</param>
-        /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
+        /// <param name="serializerOptionsProvider">The serialization settings provider.</param>
         /// <param name="logger">The logger.</param>
         public AzureBlobTemplateStore(
             BlobContainerClient blobContainer,
-            IJsonSerializerSettingsProvider serializerSettingsProvider,
+            IJsonSerializerOptionsProvider serializerOptionsProvider,
             ILogger logger)
         {
             this.logger = logger
                 ?? throw new ArgumentNullException(nameof(logger));
-            this.serializerSettingsProvider = serializerSettingsProvider
-                ?? throw new ArgumentNullException(nameof(serializerSettingsProvider));
+            this.jsonSerializerOptionsProvider = serializerOptionsProvider
+                ?? throw new ArgumentNullException(nameof(serializerOptionsProvider));
             this.blobContainer = blobContainer
                 ?? throw new ArgumentNullException(nameof(blobContainer));
         }
@@ -55,7 +55,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
                 // Download and convert the blob text into TemplateWrapper object
                 Response<BlobDownloadResult> response = await blob.DownloadContentAsync().ConfigureAwait(false);
                 string json = response.Value.Content.ToString();
-                T dynamicObject = JsonConvert.DeserializeObject<T>(json, this.serializerSettingsProvider.Instance)!;
+                T dynamicObject = JsonSerializer.Deserialize<T>(json, this.jsonSerializerOptionsProvider.Instance)!;
                 string etag = response.Value.Details.ETag.ToString("H");
                 return (dynamicObject, etag);
             }
@@ -74,8 +74,8 @@ namespace Marain.UserNotifications.Storage.AzureStorage
             // Gets the blob reference by the NotificationType
             BlobClient blockBlob = this.blobContainer.GetBlobClient(GetBlockBlobName(notificationType, communicationType));
 
-            // Serialise the TemplateWrapper object
-            string templateBlob = JsonConvert.SerializeObject(template, this.serializerSettingsProvider.Instance);
+            // Serialize the TemplateWrapper object
+            string templateBlob = JsonSerializer.Serialize(template, this.jsonSerializerOptionsProvider.Instance);
             BlobRequestConditions uploadConditions = string.IsNullOrWhiteSpace(eTag)
                 ? new BlobRequestConditions { IfNoneMatch = ETag.All }
                 : new BlobRequestConditions { IfMatch = new ETag(eTag) };

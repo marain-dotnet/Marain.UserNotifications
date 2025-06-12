@@ -7,11 +7,11 @@ namespace Marain.UserNotifications.Specs.Bindings
     using System;
     using System.Threading.Tasks;
     using Corvus.Testing.AzureFunctions;
-    using Corvus.Testing.AzureFunctions.SpecFlow;
+    using Corvus.Testing.AzureFunctions.ReqnRoll;
     using Corvus.Testing.SpecFlow;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     [Binding]
     public static class FunctionsApiBindings
@@ -34,12 +34,12 @@ namespace Marain.UserNotifications.Specs.Bindings
             functionConfiguration.EnvironmentVariables.Add("UserNotificationsApiDeliveryChannelClient:BaseUri", ApiDeliveryChannelBaseUri.ToString());
 
             return Task.WhenAll(
-                functionsController.StartFunctionsInstance(
+                functionsController.StartFunctionsInstanceAsync(
                     "Marain.UserNotifications.Management.Host",
                     ManagementApiPort,
                     "net6.0",
                     configuration: functionConfiguration),
-                functionsController.StartFunctionsInstance(
+                functionsController.StartFunctionsInstanceAsync(
                     "Marain.UserNotifications.ApiDeliveryChannel.Host",
                     ApiDeliveryChannelPort,
                     "net6.0",
@@ -55,13 +55,12 @@ namespace Marain.UserNotifications.Specs.Bindings
         }
 
         [AfterFeature("useApis")]
-        public static void StopManagementApi(FeatureContext featureContext)
+        public static async Task StopManagementApi(FeatureContext featureContext)
         {
-            featureContext.RunAndStoreExceptions(
-                () =>
+            await featureContext.RunAndStoreExceptionsAsync(async () =>
                 {
                     FunctionsController functionsController = FunctionsBindings.GetFunctionsController(featureContext);
-                    functionsController.TeardownFunctions();
+                    await functionsController.TeardownFunctionsAsync();
                 });
         }
     }

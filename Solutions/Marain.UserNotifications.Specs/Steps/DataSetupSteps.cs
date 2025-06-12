@@ -18,7 +18,7 @@ namespace Marain.UserNotifications.Specs.Steps
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     [Binding]
     public class DataSetupSteps
@@ -36,7 +36,7 @@ namespace Marain.UserNotifications.Specs.Steps
             this.serviceProvider = ContainerBindings.GetServiceProvider(featureContext);
         }
 
-        public static UserNotification BuildNotificationFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        public static UserNotification BuildNotificationFrom(DataTableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             string[] correlationIds = JArray.Parse(tableRow["CorrelationIds"]).Select(token => token.Value<string>()).ToArray()!;
             IPropertyBag properties = JsonConvert.DeserializeObject<IPropertyBag>(tableRow["PropertiesJson"], serializerSettings)!;
@@ -52,7 +52,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 new UserNotificationMetadata(correlationIds, null));
         }
 
-        public static WebPushTemplate BuildWebPushNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
+        public static WebPushTemplate BuildWebPushNotificationTemplateFrom(DataTableRow tableRow, string? eTag = null)
         {
             return new WebPushTemplate(
                 tableRow["notificationType"],
@@ -63,7 +63,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 eTag);
         }
 
-        public static EmailTemplate BuildEmailNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
+        public static EmailTemplate BuildEmailNotificationTemplateFrom(DataTableRow tableRow, string? eTag = null)
         {
             return new EmailTemplate(
                 tableRow["notificationType"],
@@ -72,7 +72,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 eTag);
         }
 
-        public static SmsTemplate BuildSmsNotificationTemplateFrom(TableRow tableRow, string? eTag = null)
+        public static SmsTemplate BuildSmsNotificationTemplateFrom(DataTableRow tableRow, string? eTag = null)
         {
             return new SmsTemplate(
                 tableRow["notificationType"],
@@ -80,7 +80,7 @@ namespace Marain.UserNotifications.Specs.Steps
                 tableRow.ContainsKey("eTag") ? tableRow["eTag"] : eTag);
         }
 
-        public static NotificationTemplate BuildNotificationTemplateFrom(TableRow tableRow, JsonSerializerSettings serializerSettings)
+        public static NotificationTemplate BuildNotificationTemplateFrom(DataTableRow tableRow, JsonSerializerSettings serializerSettings)
         {
             SmsTemplate? deserialisedSms = tableRow.ContainsKey("smsTemplate") ? JsonConvert.DeserializeObject<SmsTemplate>(tableRow["smsTemplate"], serializerSettings) : null;
             EmailTemplate? deserialisedEmail = tableRow.ContainsKey("emailTemplate") ? JsonConvert.DeserializeObject<EmailTemplate>(tableRow["emailTemplate"], serializerSettings) : null;

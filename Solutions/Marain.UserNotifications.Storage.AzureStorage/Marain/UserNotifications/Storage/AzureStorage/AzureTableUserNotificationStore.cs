@@ -12,9 +12,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
 
     using Azure;
     using Azure.Data.Tables;
-
-    using Corvus.Extensions.Json;
-
+    using Corvus.Json.Serialization;
     using Marain.UserNotifications;
     using Marain.UserNotifications.Storage.AzureStorage.Internal;
 
@@ -26,24 +24,24 @@ namespace Marain.UserNotifications.Storage.AzureStorage
     public class AzureTableUserNotificationStore : IUserNotificationStore
     {
         private readonly ILogger logger;
-        private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
+        private readonly IJsonSerializerOptionsProvider serializerOptionsProvider;
         private readonly TableClient table;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureTableUserNotificationStore"/> class.
         /// </summary>
         /// <param name="table">The underlying cloud table.</param>
-        /// <param name="serializerSettingsProvider">The serialization settings provider.</param>
+        /// <param name="serializerOptionsProvider">The serialization options provider.</param>
         /// <param name="logger">The logger.</param>
         public AzureTableUserNotificationStore(
             TableClient table,
-            IJsonSerializerSettingsProvider serializerSettingsProvider,
+            IJsonSerializerOptionsProvider serializerOptionsProvider,
             ILogger logger)
         {
             this.logger = logger
                 ?? throw new ArgumentNullException(nameof(logger));
-            this.serializerSettingsProvider = serializerSettingsProvider
-                ?? throw new ArgumentNullException(nameof(serializerSettingsProvider));
+            this.serializerOptionsProvider = serializerOptionsProvider
+                ?? throw new ArgumentNullException(nameof(serializerOptionsProvider));
             this.table = table
                 ?? throw new ArgumentNullException(nameof(table));
         }
@@ -55,7 +53,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
 
             if (!string.IsNullOrEmpty(sinceUserNotificationId))
             {
-                var decodedId = NotificationId.FromString(sinceUserNotificationId, this.serializerSettingsProvider.Instance);
+                var decodedId = NotificationId.FromString(sinceUserNotificationId, this.serializerOptionsProvider.Instance);
 
                 afterRowKey = decodedId.RowKey;
             }
@@ -67,7 +65,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         public Task<GetNotificationsResult> GetAsync(string userId, string continuationToken)
         {
             var requestContinuationToken =
-                ContinuationToken.FromString(continuationToken, this.serializerSettingsProvider.Instance);
+                ContinuationToken.FromString(continuationToken, this.serializerOptionsProvider.Instance);
 
             if (userId != requestContinuationToken.UserId)
             {
@@ -84,11 +82,11 @@ namespace Marain.UserNotifications.Storage.AzureStorage
         /// <inheritdoc/>
         public async Task<UserNotification> GetByIdAsync(string id)
         {
-            var notificationId = NotificationId.FromString(id, this.serializerSettingsProvider.Instance);
+            var notificationId = NotificationId.FromString(id, this.serializerOptionsProvider.Instance);
             try
             {
                 Response<UserNotificationTableEntity> result = await this.table.GetEntityAsync<UserNotificationTableEntity>(notificationId.PartitionKey, notificationId.RowKey).ConfigureAwait(false);
-                return result.Value.ToNotification(this.serializerSettingsProvider.Instance);
+                return result.Value.ToNotification(this.serializerOptionsProvider.Instance);
             }
             catch (RequestFailedException ex)
             {
@@ -121,7 +119,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
 
         private async Task<UserNotification> InsertAsync(UserNotification notification)
         {
-            var notificationEntity = UserNotificationTableEntity.FromNotification(notification, this.serializerSettingsProvider.Instance);
+            var notificationEntity = UserNotificationTableEntity.FromNotification(notification, this.serializerOptionsProvider.Instance);
 
             try
             {
@@ -133,7 +131,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
                     notificationEntity.ETag = result.Headers.ETag.Value;
                 }
 
-                return notificationEntity.ToNotification(this.serializerSettingsProvider.Instance);
+                return notificationEntity.ToNotification(this.serializerOptionsProvider.Instance);
             }
             catch (RequestFailedException ex)
             {
@@ -143,7 +141,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
 
         private async Task<UserNotification> UpdateAsync(UserNotification notification)
         {
-            var notificationEntity = UserNotificationTableEntity.FromNotification(notification, this.serializerSettingsProvider.Instance);
+            var notificationEntity = UserNotificationTableEntity.FromNotification(notification, this.serializerOptionsProvider.Instance);
 
             try
             {
@@ -154,7 +152,7 @@ namespace Marain.UserNotifications.Storage.AzureStorage
                     notificationEntity.ETag = result.Headers.ETag.Value;
                 }
 
-                return notificationEntity.ToNotification(this.serializerSettingsProvider.Instance);
+                return notificationEntity.ToNotification(this.serializerOptionsProvider.Instance);
             }
             catch (RequestFailedException ex)
             {
@@ -204,8 +202,8 @@ namespace Marain.UserNotifications.Storage.AzureStorage
                 : null;
 
             return new GetNotificationsResult(
-              results.Select(x => x.ToNotification(this.serializerSettingsProvider.Instance)).ToArray(),
-              responseContinuationToken?.AsString(this.serializerSettingsProvider.Instance));
+              results.Select(x => x.ToNotification(this.serializerOptionsProvider.Instance)).ToArray(),
+              responseContinuationToken?.AsString(this.serializerOptionsProvider.Instance));
         }
     }
 }

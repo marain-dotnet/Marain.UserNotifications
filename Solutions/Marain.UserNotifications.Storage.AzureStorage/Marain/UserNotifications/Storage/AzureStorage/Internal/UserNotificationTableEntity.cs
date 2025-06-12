@@ -6,10 +6,10 @@
 namespace Marain.UserNotifications.Storage.AzureStorage.Internal
 {
     using System;
+    using System.Text.Json;
     using Azure;
     using Azure.Data.Tables;
     using Corvus.Json;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Table storage specific version of a <see cref="UserNotification"/>.
@@ -86,9 +86,9 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
         /// Creates a new <see cref="UserNotificationTableEntity"/> from a <see cref="UserNotification"/>.
         /// </summary>
         /// <param name="source">The source notification.</param>
-        /// <param name="serializerSettings">The serialization settings.</param>
+        /// <param name="jsonSerializerOptions">The serialization settings.</param>
         /// <returns>A new <see cref="UserNotificationTableEntity"/>.</returns>
-        public static UserNotificationTableEntity FromNotification(UserNotification source, JsonSerializerSettings serializerSettings)
+        public static UserNotificationTableEntity FromNotification(UserNotification source, JsonSerializerOptions jsonSerializerOptions)
         {
             // We're going to use a "reversed" timestamp in the row key. Our standard query will be to get recent
             // notifications for a user in descending order of timestamp, potentially since the previous set of
@@ -97,10 +97,10 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
             // resulting partition scan will be able to complete as soon as it encounters a record with an earlier
             // timestamp, or when it hits the maximum requested items.
             long reversedTimestamp = long.MaxValue - source.Timestamp.ToUnixTimeMilliseconds();
-            string correlationIdsJson = JsonConvert.SerializeObject(source.Metadata.CorrelationIds, serializerSettings);
-            string propertiesJson = JsonConvert.SerializeObject(source.Properties, serializerSettings);
-            string channelDeliveryStatusesJson = JsonConvert.SerializeObject(source.ChannelStatuses, serializerSettings);
-            byte[] identityHash = source.GetIdentityHash(serializerSettings);
+            string correlationIdsJson = JsonSerializer.Serialize(source.Metadata.CorrelationIds, jsonSerializerOptions);
+            string propertiesJson = JsonSerializer.Serialize(source.Properties, jsonSerializerOptions);
+            string channelDeliveryStatusesJson = JsonSerializer.Serialize(source.ChannelStatuses, jsonSerializerOptions);
+            byte[] identityHash = source.GetIdentityHash(jsonSerializerOptions);
             string rowKey = $"{reversedTimestamp:D21}-{GetHexadecimalString(identityHash)}";
 
             return new UserNotificationTableEntity
@@ -119,14 +119,14 @@ namespace Marain.UserNotifications.Storage.AzureStorage.Internal
         /// <summary>
         /// Returns the entity as a <see cref="UserNotification"/>.
         /// </summary>
-        /// <param name="serializerSettings">The serialization settings.</param>
+        /// <param name="serializerOptions">The serialization settings.</param>
         /// <returns>The converted <see cref="UserNotification"/>.</returns>
-        public UserNotification ToNotification(JsonSerializerSettings serializerSettings)
+        public UserNotification ToNotification(JsonSerializerOptions serializerOptions)
         {
-            string[] correlationIds = JsonConvert.DeserializeObject<string[]>(this.CorrelationIdsJson, serializerSettings);
-            IPropertyBag properties = JsonConvert.DeserializeObject<IPropertyBag>(this.PropertiesJson, serializerSettings);
-            UserNotificationStatus[] channelDeliveryStatuses = JsonConvert.DeserializeObject<UserNotificationStatus[]>(this.ChannelDeliveryStatusesJson, serializerSettings);
-            string id = new NotificationId(this.PartitionKey, this.RowKey).AsString(serializerSettings);
+            string[] correlationIds = JsonSerializer.Deserialize<string[]>(this.CorrelationIdsJson, serializerOptions);
+            IPropertyBag properties = JsonSerializer.Deserialize<IPropertyBag>(this.PropertiesJson, serializerOptions);
+            UserNotificationStatus[] channelDeliveryStatuses = JsonSerializer.Deserialize<UserNotificationStatus[]>(this.ChannelDeliveryStatusesJson, serializerOptions);
+            string id = new NotificationId(this.PartitionKey, this.RowKey).AsString(serializerOptions);
 
             return new UserNotification(
                 id,
